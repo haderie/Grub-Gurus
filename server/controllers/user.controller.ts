@@ -60,6 +60,9 @@ const userController = (socket: FakeSOSocket) => {
       ...requestUser,
       dateJoined: new Date(),
       biography: requestUser.biography ?? '',
+      followers: requestUser.followers ?? [],
+      following: requestUser.following ?? [],
+      certified: false,
     };
 
     try {

@@ -32,8 +32,10 @@ const TagView = ({ t, clickTag }: TagProps) => {
         clickTag(t.name);
       }}>
       <div className='tagName'>{tag.name}</div>
+      <br />
       <div className='tagDescription'>{tag.description}</div>
-      <div>{t.qcnt} questions</div>
+      <br />
+      <div style={{ color: 'red' }}>{t.qcnt} questions</div>
     </div>
   );
 };

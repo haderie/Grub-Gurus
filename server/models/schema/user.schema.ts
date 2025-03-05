@@ -26,6 +26,22 @@ const userSchema: Schema = new Schema(
       type: String,
       default: '',
     },
+    certified: {
+      type: Boolean,
+      default: false,
+    },
+    followers: [
+      {
+        type: String,
+        ref: 'User,',
+      },
+    ],
+    following: [
+      {
+        type: String,
+        ref: 'User,',
+      },
+    ],
   },
   { collection: 'User' },
 );

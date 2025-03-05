@@ -21,6 +21,9 @@ export interface UserCredentials {
 export interface User extends UserCredentials {
   dateJoined: Date;
   biography?: string;
+  certified: boolean;
+  followers?: User[];
+  following?: User[];
 }
 
 /**
@@ -46,6 +49,9 @@ export interface UserRequest extends Request {
     username: string;
     password: string;
     biography?: string;
+    certified: boolean;
+    followers?: User[];
+    following?: User[];
   };
 }
 

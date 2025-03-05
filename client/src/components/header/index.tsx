@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, TextField } from '@mui/material';
+import { FaUserLarge } from 'react-icons/fa6';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import useUserContext from '../../hooks/useUserContext';
@@ -15,24 +17,36 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <div id='header' className='header'>
-      <div></div>
       <div className='title'>Fake Stack Overflow</div>
-      <input
+      <TextField
+        id='searchBar'
+        size='small'
+        placeholder='Search questions...'
+        value={val}
+        variant='outlined'
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+      {/* <input
         id='searchBar'
         placeholder='Search ...'
         type='text'
         value={val}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-      />
-      <button onClick={handleSignOut} className='logout-button'>
+      /> */}
+
+      <Button variant='contained' color='error' onClick={handleSignOut} className='logout-button'>
         Log out
-      </button>
-      <button
+      </Button>
+      <Button
+        variant='contained'
         className='view-profile-button'
         onClick={() => navigate(`/user/${currentUser.username}`)}>
-        View Profile
-      </button>
+        {currentUser.username}
+        <br />
+        <FaUserLarge />
+      </Button>
     </div>
   );
 };
