@@ -22,6 +22,7 @@ const mockUserJSONResponse = {
   _id: mockSafeUser._id.toString(),
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
+  certified: false,
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
@@ -50,6 +51,9 @@ describe('Test userController', () => {
         ...mockReqBody,
         biography: mockReqBody.biography,
         dateJoined: expect.any(Date),
+        certified: false,
+        followers: [],
+        following: [],
       });
     });
 
