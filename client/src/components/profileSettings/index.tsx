@@ -21,7 +21,6 @@ const ProfileSettings: React.FC = () => {
     selectedOption,
     showPassword,
     togglePasswordVisibility,
-    setSelectedOption,
     setEditBioMode,
     setNewBio,
     setNewPassword,
@@ -47,8 +46,8 @@ const ProfileSettings: React.FC = () => {
     setEditBioMode(true); // Close the ProfileEdit modal
     setNewBio(userData?.biography || '');
   };
+
   const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
-  console.log(selectedList);
   return (
     <div>
       {!editBioMode && (
@@ -83,14 +82,11 @@ const ProfileSettings: React.FC = () => {
                   <strong>Date Joined:</strong>{' '}
                   {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
                 </p>
-
-                {/* ---- Danger Zone (Delete User) ---- */}
               </>
             ) : (
               <p>No user data found. Make sure the username parameter is correct.</p>
             )}
 
-            {/* ---- Confirmation Modal for Delete ---- */}
             <div>
               <input
                 type='radio'
@@ -128,6 +124,7 @@ const ProfileSettings: React.FC = () => {
           </div>
         </div>
       )}
+      {/* ---- Edit section ---- */}
 
       <div className='page-container'>
         {editBioMode && canEditProfile && (
