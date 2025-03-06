@@ -66,7 +66,7 @@ const ProfileSettings: React.FC = () => {
               <>
                 <h4>General Information</h4>
                 <p>
-                  <strong>Username:</strong> {userData.username}
+                  <b>Username:</b> {userData.username}
                 </p>
                 <p>
                   <strong>Followers:</strong> {userData.followers?.length}
@@ -76,12 +76,9 @@ const ProfileSettings: React.FC = () => {
                 </p>
 
                 {/* ---- Biography Section ---- */}
-                {!editBioMode && (
-                  <p>
-                    <strong>Biography:</strong> {userData.biography || 'No biography yet.'}
-                  </p>
-                )}
-
+                <p>
+                  <strong>Biography:</strong> {userData.biography || 'No biography yet.'}
+                </p>
                 <p>
                   <strong>Date Joined:</strong>{' '}
                   {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
