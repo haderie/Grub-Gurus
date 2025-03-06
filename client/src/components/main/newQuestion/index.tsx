@@ -49,6 +49,19 @@ const NewQuestionPage = () => {
         setState={setTagNames}
         err={tagErr}
       />
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <input
+          type='checkbox'
+          id='allowMunchMaster'
+          // {checked=}
+        />
+        <label
+        // htmlFor='showPasswordToggle'
+        >
+          {' '}
+          Allow answers from MunchMaster
+        </label>
+      </div>
       <div className='btn_indicator_container'>
         <button
           className='form_postBtn'

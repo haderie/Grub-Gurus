@@ -3,6 +3,7 @@ import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import ProfileEdit from './profileEdit';
+import { User } from '../../types/types';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -17,15 +18,16 @@ const ProfileSettings: React.FC = () => {
     showConfirmation,
     pendingAction,
     canEditProfile,
+    selectedOption,
     showPassword,
     togglePasswordVisibility,
-
+    setSelectedOption,
     setEditBioMode,
     setNewBio,
     setNewPassword,
     setConfirmNewPassword,
     setShowConfirmation,
-
+    handleRadioChange,
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
@@ -45,7 +47,8 @@ const ProfileSettings: React.FC = () => {
     setEditBioMode(true); // Close the ProfileEdit modal
     setNewBio(userData?.biography || '');
   };
-
+  const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
+  console.log(selectedList);
   return (
     <div>
       {!editBioMode && (
@@ -91,9 +94,44 @@ const ProfileSettings: React.FC = () => {
             )}
 
             {/* ---- Confirmation Modal for Delete ---- */}
+            <div>
+              <input
+                type='radio'
+                name='followStatus'
+                id='followers'
+                value='followers'
+                checked={selectedOption === 'followers'}
+                onChange={handleRadioChange}
+              />
+              <label htmlFor='followers'>Followers</label>
+
+              <input
+                type='radio'
+                name='followStatus'
+                id='following'
+                value='following'
+                checked={selectedOption === 'following'}
+                onChange={handleRadioChange}
+              />
+              <label htmlFor='following'>Following</label>
+
+              {/* Display based on selected option */}
+              <div>
+                {selectedList && selectedList.length > 0 ? (
+                  <ul>
+                    {selectedList.map((user: User, index: number) => (
+                      <li key={index}>{user.username}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No {selectedOption} yet.</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
+
       <div className='page-container'>
         {editBioMode && canEditProfile && (
           <ProfileEdit
