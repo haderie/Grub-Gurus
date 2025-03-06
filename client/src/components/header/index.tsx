@@ -27,15 +27,6 @@ const Header = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      {/* <input
-        id='searchBar'
-        placeholder='Search ...'
-        type='text'
-        value={val}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-      /> */}
-
       <Button variant='contained' color='error' onClick={handleSignOut} className='logout-button'>
         Log out
       </Button>
