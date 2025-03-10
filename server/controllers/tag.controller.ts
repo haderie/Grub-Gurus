@@ -62,7 +62,7 @@ const tagController = () => {
   // Add appropriate HTTP verbs and their endpoints to the router.
   router.get('/getTagsWithQuestionNumber', getTagsWithQuestionNumber);
   router.get('/getTagByName/:name', getTagByName); // New endpoint to get tag by name
-  
+
   return router;
 };
 

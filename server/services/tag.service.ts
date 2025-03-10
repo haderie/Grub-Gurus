@@ -2,7 +2,6 @@ import { DatabaseQuestion, DatabaseTag, Question, Tag } from '../types/types';
 import QuestionModel from '../models/questions.model';
 import TagModel from '../models/tags.model';
 
-
 /**
  * Checks if given question contains any tags from the given list.
  *
@@ -123,5 +122,4 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
   } catch (error) {
     return { error: 'Error when constructing tag map' };
   }
-
 };

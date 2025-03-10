@@ -36,6 +36,12 @@ const useProfileSettings = () => {
   const canEditProfile =
     currentUser.username && userData?.username ? currentUser.username === userData.username : false;
 
+  const [selectedOption, setSelectedOption] = useState<'followers' | 'following'>('followers');
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value as 'followers' | 'following');
+  };
+
   useEffect(() => {
     if (!username) return;
 
@@ -158,7 +164,10 @@ const useProfileSettings = () => {
     setPendingAction,
     canEditProfile,
     showPassword,
+    selectedOption,
+    setSelectedOption,
     togglePasswordVisibility,
+    handleRadioChange,
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
