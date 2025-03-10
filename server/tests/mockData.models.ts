@@ -189,6 +189,17 @@ export const user: User = {
   password: 'password',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  followers: [],
+  following: [],
+};
+
+export const userFollowed: User = {
+  username: 'user2',
+  password: 'password',
+  dateJoined: new Date('2024-12-03'),
+  certified: false,
+  followers: [],
+  following: [],
 };
 
 export const safeUser: SafeDatabaseUser = {
@@ -196,4 +207,15 @@ export const safeUser: SafeDatabaseUser = {
   username: 'user1',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  followers: [],
+  following: [],
+};
+
+export const safeUserFollowed: SafeDatabaseUser = {
+  _id: new ObjectId(),
+  username: 'user2',
+  dateJoined: new Date('2024-12-03'),
+  certified: false,
+  followers: [],
+  following: [],
 };

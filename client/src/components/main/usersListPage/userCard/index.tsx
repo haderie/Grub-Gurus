@@ -11,6 +11,8 @@ import { SafeDatabaseUser } from '../../../../types/types';
 interface UserProps {
   user: SafeDatabaseUser;
   handleUserCardViewClickHandler: (user: SafeDatabaseUser) => void;
+  handleFollowUser: (username: string) => void;
+  isFollowed: boolean;
 }
 
 /**
@@ -21,7 +23,12 @@ interface UserProps {
  * @param user - The user object containing user details.
  */
 const UserCardView = (props: UserProps) => {
-  const { user, handleUserCardViewClickHandler } = props;
+  const { user, handleUserCardViewClickHandler, handleFollowUser, isFollowed } = props;
+
+  const handleFollowClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent card click
+    handleFollowUser(user.username); // Follow/unfollow the user
+  };
 
   return (
     <div className='user right_padding' onClick={() => handleUserCardViewClickHandler(user)}>
@@ -30,6 +37,7 @@ const UserCardView = (props: UserProps) => {
       </div>
       <div className='userStats'>
         <div>joined {new Date(user.dateJoined).toUTCString()}</div>
+        <button onClick={handleFollowClick}>{isFollowed ? 'Unfollow' : 'Follow'}</button>
       </div>
     </div>
   );

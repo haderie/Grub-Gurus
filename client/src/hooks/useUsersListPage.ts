@@ -15,6 +15,7 @@ const useUsersListPage = () => {
 
   const [userFilter, setUserFilter] = useState<string>('');
   const [userList, setUserList] = useState<SafeDatabaseUser[]>([]);
+  const [followedUsers, setFollowedUsers] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     /**
@@ -86,8 +87,27 @@ const useUsersListPage = () => {
     };
   }, [socket]);
 
+  const handleFollowUser = (username: string) => {
+    setFollowedUsers(prevFollowedUsers => {
+      const newFollowedUsers = new Set(prevFollowedUsers);
+      if (newFollowedUsers.has(username)) {
+        newFollowedUsers.delete(username); // Unfollow if already followed
+      } else {
+        newFollowedUsers.add(username); // Follow if not already followed
+      }
+      setUserList(prevUserList =>
+        prevUserList.map(user =>
+          user.username === username
+            ? { ...user, isFollowed: newFollowedUsers.has(username) }
+            : user,
+        ),
+      );
+      return newFollowedUsers;
+    });
+  };
+
   const filteredUserlist = userList.filter(user => user.username.includes(userFilter));
-  return { userList: filteredUserlist, setUserFilter };
+  return { userList: filteredUserlist, setUserFilter, followedUsers, handleFollowUser };
 };
 
 export default useUsersListPage;

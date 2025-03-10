@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import UserModel from '../../models/users.model';
 import {
   deleteUserByUsername,
+  followUserService,
   getUserByUsername,
   getUsersList,
   loginUser,
@@ -9,7 +10,7 @@ import {
   updateUser,
 } from '../../services/user.service';
 import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
-import { user, safeUser } from '../mockData.models';
+import { user, userFollowed, safeUser, safeUserFollowed } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require('mockingoose');
@@ -260,5 +261,44 @@ describe('updateUser', () => {
     const updatedError = await updateUser(user.username, biographyUpdates);
 
     expect('error' in updatedError).toBe(true);
+  });
+});
+
+describe('followUser', () => {
+  beforeEach(() => {
+    // Clean the mocks before each test
+    mockingoose.resetAll();
+  });
+
+  test('it should follow a user successfully', async () => {
+    mockingoose(UserModel).toReturn(safeUserFollowed, 'findOne');
+    const retrievedUser = (await getUserByUsername(userFollowed.username)) as SafeDatabaseUser;
+
+    const safeUpdatedUser: SafeDatabaseUser = {
+      _id: new mongoose.Types.ObjectId(),
+      username: user.username,
+      dateJoined: user.dateJoined,
+      certified: false,
+      followers: [],
+      following: [retrievedUser.username],
+    };
+
+    expect(retrievedUser.username).toEqual(userFollowed.username);
+    expect(retrievedUser.dateJoined).toEqual(userFollowed.dateJoined);
+
+    mockingoose(UserModel).toReturn(safeUpdatedUser, 'findOneAndUpdate');
+
+    /*
+    mockingoose(UserModel).toReturn(
+      { followers: [safeUser], ...safeUserFollowed },
+      'findOneAndUpdate',
+    ); */
+
+    const result = (await followUserService(
+      user.username,
+      userFollowed.username,
+    )) as SafeDatabaseUser;
+
+    expect(result.following).toEqual([safeUserFollowed.username]);
   });
 });

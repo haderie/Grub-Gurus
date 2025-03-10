@@ -6,9 +6,11 @@ import {
   UserByUsernameRequest,
   FakeSOSocket,
   UpdateBiographyRequest,
+  UpdateFollowRequest,
 } from '../types/types';
 import {
   deleteUserByUsername,
+  followUserService,
   getUserByUsername,
   getUsersList,
   loginUser,
@@ -239,6 +241,37 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Updates a user's following list.
+   * @param req The request containing the current user and new user to follow
+   * @param res The response containing the updated following list for the current user and updated follower list for the user followed
+   * @returns A promise resolving to void.
+   */
+  const updateFollowingList = async (req: UpdateFollowRequest, res: Response): Promise<void> => {
+    try {
+      const { username, userFollowed } = req.body;
+
+      if (username === userFollowed) {
+        throw Error('You cannot follow yourself');
+      }
+
+      const updatedUser = await followUserService(username, userFollowed);
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when following ${req.body.userFollowed}`);
+    }
+  };
+
   // Define routes for the user-related operations.
   router.post('/signup', createUser);
   router.post('/login', userLogin);
@@ -247,6 +280,9 @@ const userController = (socket: FakeSOSocket) => {
   router.get('/getUsers', getUsers);
   router.delete('/deleteUser/:username', deleteUser);
   router.patch('/updateBiography', updateBiography);
+
+  router.patch('/followUser', updateFollowingList);
+
   return router;
 };
 

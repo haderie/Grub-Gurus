@@ -22,8 +22,10 @@ export interface User extends UserCredentials {
   dateJoined: Date;
   biography?: string;
   certified: boolean;
-  followers?: User[];
-  following?: User[];
+  // followers?: SafeDatabaseUser[];
+  // following?: SafeDatabaseUser[];
+  followers?: string[];
+  following?: string[];
 }
 
 /**
@@ -50,8 +52,10 @@ export interface UserRequest extends Request {
     password: string;
     biography?: string;
     certified: boolean;
-    followers?: User[];
-    following?: User[];
+    //followers?: User[];
+    //following?: User[];
+    followers?: string[];
+    following?: string[];
   };
 }
 
@@ -93,5 +97,17 @@ export interface UpdateBiographyRequest extends Request {
   body: {
     username: string;
     biography: string;
+  };
+}
+
+/**
+ * Express request for following a new user.
+ * - `username`: The username whose following list is being updated.
+ * - `followingUsername`: The new user to be followed.
+ */
+export interface UpdateFollowRequest extends Request {
+  body: {
+    username: string;
+    userFollowed: string;
   };
 }
