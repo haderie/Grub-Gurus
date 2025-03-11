@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserCredentials, SafeDatabaseUser, User } from '../types/types';
+import { UserCredentials, SafeDatabaseUser } from '../types/types';
 import api from './config';
 
 const USER_API_URL = `${process.env.REACT_APP_SERVER_URL}/user`;
@@ -141,7 +141,6 @@ const followUser = async (
   if (res.status !== 200) {
     throw new Error('Error following user');
   }
-  console.log(res.data);
   return res.data;
 };
 

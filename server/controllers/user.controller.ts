@@ -7,6 +7,7 @@ import {
   FakeSOSocket,
   UpdateBiographyRequest,
   UpdateFollowRequest,
+  SafeDatabaseUser,
 } from '../types/types';
 import {
   deleteUserByUsername,
@@ -15,6 +16,7 @@ import {
   getUsersList,
   loginUser,
   saveUser,
+  unfollowUserService,
   updateUser,
 } from '../services/user.service';
 
@@ -255,16 +257,24 @@ const userController = (socket: FakeSOSocket) => {
         throw Error('You cannot follow yourself');
       }
 
-      const updatedUser = await followUserService(username, usernameFollowed);
+      const user = (await getUserByUsername(username)) as SafeDatabaseUser;
+
+      let updatedUser;
+
+      if (user.following?.includes(usernameFollowed)) {
+        updatedUser = await unfollowUserService(username, usernameFollowed);
+      } else {
+        updatedUser = await followUserService(username, usernameFollowed);
+      }
 
       if ('error' in updatedUser) {
         throw new Error(updatedUser.error);
       }
 
-      socket.emit('userUpdate', {
-        user: updatedUser,
-        type: 'updated',
-      });
+      // socket.emit('userUpdate', {
+      //   user: updatedUser,
+      //   type: 'updated',
+      // });
 
       res.status(200).json(updatedUser);
     } catch (error) {

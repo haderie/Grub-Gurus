@@ -10,7 +10,7 @@ import {
   updateUser,
 } from '../../services/user.service';
 import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
-import { user, userFollowed, safeUser, safeUserFollowed } from '../mockData.models';
+import { user, userFollowed, safeUser } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require('mockingoose');
@@ -280,7 +280,7 @@ describe('followUser', () => {
       dateJoined: user.dateJoined,
       certified: false,
       followers: [],
-      following: [userFollowed],
+      following: [],
     };
 
     // expect(retrievedUser.username).toEqual(userFollowed.username);

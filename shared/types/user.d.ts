@@ -54,8 +54,8 @@ export interface UserRequest extends Request {
     certified: boolean;
     // followers?: User[];
     // following?: User[];
-    // followers?: string[];
-    // following?: string[];
+    followers?: string[];
+    following?: string[];
   };
 }
 

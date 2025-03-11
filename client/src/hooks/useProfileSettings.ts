@@ -28,9 +28,6 @@ const useProfileSettings = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // const [followedUsers, setFollowedUsers] = useState<Set<string>>(new Set());
-  // const [userToFollow, setUserToFollow] = useState<string>('');
-
   // For delete-user confirmation modal
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
@@ -47,7 +44,6 @@ const useProfileSettings = () => {
     setSelectedOption(event.target.value as 'followers' | 'following');
   };
 
-
   useEffect(() => {
     if (!username) return;
 
@@ -56,7 +52,6 @@ const useProfileSettings = () => {
         setLoading(true);
         const data = await getUserByUsername(username);
         setUserData(data);
-
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -155,35 +150,22 @@ const useProfileSettings = () => {
   const handleUpdateFollowers = async () => {
     if (!username) return;
     try {
-      // setUserToFollow(username);
-      console.log(`user to follow:${username}`);
-      console.log(`current user: ${currentUser.username}`);
+      const updatedUser = await followUser(currentUser.username, username);
+      const followedUser = await getUserByUsername(username);
 
-      if (currentUser.followers?.includes(username)) {
-        setIsFollowing(true);
-      } else {
-        setIsFollowing(false);
-      }
+      setUserData(followedUser);
 
-      if (isFollowing) {
-        console.log(`Unfollowing ${username}`);
-        // TBA
-      } else {
-        // const userToFollow = await getUserByUsername(username);
-        await followUser(currentUser.username, username);
+      if (updatedUser.following?.includes(followedUser.username)) {
         setIsFollowing(true);
         setSuccessMessage(`${username} Followed!`);
+      } else {
+        setIsFollowing(false);
+        setSuccessMessage(`${username} Unfollowed :(`);
       }
-
-      // // Ensure state updates occur sequentially after the API call completes
-      // await new Promise(resolve => {
-      //   setUserData(updatedUser); // Update the user data
-      //   resolve(null); // Resolve the promise
-      // });
 
       setErrorMessage(null);
     } catch (error) {
-      setErrorMessage(`Failed to follow ${username}.`);
+      setErrorMessage(`Failed to follow/unfollow ${username}.`);
       setSuccessMessage(null);
     }
   };

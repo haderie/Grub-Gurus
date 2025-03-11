@@ -3,7 +3,6 @@ import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import ProfileEdit from './profileEdit';
-import { SafeDatabaseUser, User } from '../../types/types';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -54,7 +53,6 @@ const ProfileSettings: React.FC = () => {
   // );
 
   const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
-  console.log(selectedList);
   return (
     <div>
       {!editBioMode && (
