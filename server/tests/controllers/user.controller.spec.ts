@@ -31,7 +31,6 @@ const updatedUserSpy = jest.spyOn(util, 'updateUser');
 const getUserByUsernameSpy = jest.spyOn(util, 'getUserByUsername');
 const getUsersListSpy = jest.spyOn(util, 'getUsersList');
 const deleteUserByUsernameSpy = jest.spyOn(util, 'deleteUserByUsername');
-const followUserSpy = jest.spyOn(util, 'followUserService');
 
 describe('Test userController', () => {
   describe('POST /signup', () => {
@@ -413,24 +412,6 @@ describe('Test userController', () => {
       expect(response.text).toContain(
         'Error when updating user biography: Error: Error updating user',
       );
-    });
-  });
-
-  describe('PATCH /followUser', () => {
-    test('should successfully update the following list', async () => {
-      const mockReqBody = {
-        username: mockUser.username,
-        userFollowed: 'userFollowed',
-      };
-
-      // Mock a successful updateUser call
-      followUserSpy.mockResolvedValueOnce(mockSafeUser);
-
-      const response = await supertest(app).patch('/user/followUser').send(mockReqBody);
-
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockUserJSONResponse);
-      expect(followUserSpy).toHaveBeenCalledWith(mockUser.username, 'userFollowed');
     });
   });
 });

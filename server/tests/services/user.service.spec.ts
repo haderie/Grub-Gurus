@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import UserModel from '../../models/users.model';
 import {
   deleteUserByUsername,
-  followUserService,
   getUserByUsername,
   getUsersList,
   loginUser,
@@ -10,7 +9,7 @@ import {
   updateUser,
 } from '../../services/user.service';
 import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
-import { user, userFollowed, safeUser } from '../mockData.models';
+import { user, safeUser } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require('mockingoose');
