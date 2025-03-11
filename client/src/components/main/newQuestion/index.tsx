@@ -23,6 +23,20 @@ const NewQuestionPage = () => {
     postQuestion,
   } = useNewQuestion();
 
+  const predefinedTags = [
+    'DR-Gluten-free',
+    'DR-Vegetarian',
+    'DR-Vegan',
+    'DR-Halal',
+    'MT-Breakfast',
+    'MT-Lunch',
+    'MT-Dinner',
+    'MT-Snacks',
+    'SL-Beginner',
+    'SL-Intermediate',
+    'SL-Advanced',
+  ];
+
   return (
     <Form>
       <Input
@@ -41,27 +55,40 @@ const NewQuestionPage = () => {
         setState={setText}
         err={textErr}
       />
-      <Input
-        title={'Tags'}
-        hint={'Add keywords separated by whitespace'}
-        id={'formTagInput'}
-        val={tagNames}
-        setState={setTagNames}
-        err={tagErr}
-      />
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <input
-          type='checkbox'
-          id='allowMunchMaster'
-          // {checked=}
+
+      <div className='tag-container'>
+        <Input
+          title={'Tags'}
+          hint={'Add keywords separated by whitespace'}
+          id={'formTagInput'}
+          val={tagNames}
+          setState={setTagNames}
+          err={tagErr}
         />
-        <label
-        // htmlFor='showPasswordToggle'
-        >
-          {' '}
-          Allow answers from MunchMaster
-        </label>
+
+        {/* Show predefined tags as suggestions */}
+        {predefinedTags.length > 0 && (
+          <ul className='tag-suggestions'>
+            {predefinedTags.map(tag => (
+              <div key={tag} className='tag-item'>
+                <label>
+                  <input
+                    type='checkbox'
+                    checked={tagNames.includes(tag)}
+                    onChange={() => {
+                      setTagNames(prev =>
+                        prev.includes(tag) ? prev.replace(` ${tag}`, '') : `${prev} ${tag}`,
+                      );
+                    }}
+                  />
+                  {tag}
+                </label>
+              </div>
+            ))}
+          </ul>
+        )}
       </div>
+
       <div className='btn_indicator_container'>
         <button
           className='form_postBtn'
