@@ -5,6 +5,7 @@ import {
   deleteUser,
   resetPassword,
   updateBiography,
+  followUser,
 } from '../services/userService';
 import { SafeDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
@@ -27,6 +28,9 @@ const useProfileSettings = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // const [followedUsers, setFollowedUsers] = useState<Set<string>>(new Set());
+  // const [userToFollow, setUserToFollow] = useState<string>('');
+
   // For delete-user confirmation modal
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
@@ -37,10 +41,12 @@ const useProfileSettings = () => {
     currentUser.username && userData?.username ? currentUser.username === userData.username : false;
 
   const [selectedOption, setSelectedOption] = useState<'followers' | 'following'>('followers');
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value as 'followers' | 'following');
   };
+
 
   useEffect(() => {
     if (!username) return;
@@ -50,6 +56,7 @@ const useProfileSettings = () => {
         setLoading(true);
         const data = await getUserByUsername(username);
         setUserData(data);
+
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -59,7 +66,7 @@ const useProfileSettings = () => {
     };
 
     fetchUserData();
-  }, [username]);
+  }, [username, currentUser.username]);
 
   /**
    * Toggles the visibility of the password fields.
@@ -145,6 +152,42 @@ const useProfileSettings = () => {
     });
   };
 
+  const handleUpdateFollowers = async () => {
+    if (!username) return;
+    try {
+      // setUserToFollow(username);
+      console.log(`user to follow:${username}`);
+      console.log(`current user: ${currentUser.username}`);
+
+      if (currentUser.followers?.includes(username)) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
+
+      if (isFollowing) {
+        console.log(`Unfollowing ${username}`);
+        // TBA
+      } else {
+        // const userToFollow = await getUserByUsername(username);
+        await followUser(currentUser.username, username);
+        setIsFollowing(true);
+        setSuccessMessage(`${username} Followed!`);
+      }
+
+      // // Ensure state updates occur sequentially after the API call completes
+      // await new Promise(resolve => {
+      //   setUserData(updatedUser); // Update the user data
+      //   resolve(null); // Resolve the promise
+      // });
+
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage(`Failed to follow ${username}.`);
+      setSuccessMessage(null);
+    }
+  };
+
   return {
     userData,
     newPassword,
@@ -171,6 +214,8 @@ const useProfileSettings = () => {
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
+    handleUpdateFollowers,
+    isFollowing,
   };
 };
 

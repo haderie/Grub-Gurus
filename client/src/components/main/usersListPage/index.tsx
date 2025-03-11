@@ -20,7 +20,7 @@ interface UserListPageProps {
  * It includes a header with a search bar.
  */
 const UsersListPage = (props: UserListPageProps) => {
-  const { userList, setUserFilter, handleFollowUser } = useUsersListPage();
+  const { userList, setUserFilter } = useUsersListPage();
   const { handleUserSelect = null } = props;
   const navigate = useNavigate();
 
@@ -46,8 +46,6 @@ const UsersListPage = (props: UserListPageProps) => {
             user={user}
             key={user.username}
             handleUserCardViewClickHandler={handleUserCardViewClickHandler}
-            handleFollowUser={handleFollowUser}
-            isFollowed={false}
           />
         ))}
       </div>

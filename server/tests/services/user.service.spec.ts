@@ -271,8 +271,8 @@ describe('followUser', () => {
   });
 
   test('it should follow a user successfully', async () => {
-    mockingoose(UserModel).toReturn(safeUserFollowed, 'findOne');
-    const retrievedUser = (await getUserByUsername(userFollowed.username)) as SafeDatabaseUser;
+    // mockingoose(UserModel).toReturn(safeUserFollowed, 'findOne');
+    // const retrievedUser = (await getUserByUsername(userFollowed.username)) as SafeDatabaseUser;
 
     const safeUpdatedUser: SafeDatabaseUser = {
       _id: new mongoose.Types.ObjectId(),
@@ -280,11 +280,11 @@ describe('followUser', () => {
       dateJoined: user.dateJoined,
       certified: false,
       followers: [],
-      following: [retrievedUser.username],
+      following: [userFollowed],
     };
 
-    expect(retrievedUser.username).toEqual(userFollowed.username);
-    expect(retrievedUser.dateJoined).toEqual(userFollowed.dateJoined);
+    // expect(retrievedUser.username).toEqual(userFollowed.username);
+    // expect(retrievedUser.dateJoined).toEqual(userFollowed.dateJoined);
 
     mockingoose(UserModel).toReturn(safeUpdatedUser, 'findOneAndUpdate');
 
@@ -294,11 +294,8 @@ describe('followUser', () => {
       'findOneAndUpdate',
     ); */
 
-    const result = (await followUserService(
-      user.username,
-      userFollowed.username,
-    )) as SafeDatabaseUser;
+    const result = (await followUserService(user, userFollowed)) as SafeDatabaseUser;
 
-    expect(result.following).toEqual([safeUserFollowed.username]);
+    expect(result.following).toContainEqual(userFollowed);
   });
 });

@@ -158,8 +158,8 @@ export const updateUser = async (
 /**
  * Updates the current user's following list by following the selected user.
  *
- * @param {string} username - The username of the user to update.
- * @param {string} usernameFollowed - The new user to add to the following list.
+ * @param {User} user - The username of the user to update.
+ * @param {User} userFollowed - The new user to add to the following list.
  * @returns {Promise<UserResponse>} - Resolves with the updated follower list or an error message.
  */
 
@@ -172,20 +172,22 @@ export const followUserService = async (
       throw Error('Cannot follow yourself');
     }
 
-    const user = (await getUserByUsername(username)) as SafeDatabaseUser;
-    const userFollowed = (await getUserByUsername(usernameFollowed)) as SafeDatabaseUser;
+    // const user = (await getUserByUsername(username)) as SafeDatabaseUser;
+    // const userFollowed = (await getUserByUsername(usernameFollowed)) as SafeDatabaseUser;
 
-    if (!user || !userFollowed) {
-      throw Error('One or both users not found');
-    }
+    // if (!user || !userFollowed) {
+    //   throw Error('One or both users not found');
+    // }
     /*
         if (user.following?.includes(userFollowed)) {
           throw Error(`You already follow ${usernameFollowed}`);
         } */
 
-    const updatedUser: SafeDatabaseUser | null = await UserModel.findOneAndUpdate(
+    // const userToFollow = await getUserByUsername(usernameFollowed);
+
+    const updatedUser = await UserModel.findOneAndUpdate(
       { username },
-      { $push: { following: userFollowed.username } },
+      { $push: { following: usernameFollowed } },
       { new: true },
     ).select('-password');
 

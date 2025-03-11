@@ -22,8 +22,8 @@ export interface User extends UserCredentials {
   dateJoined: Date;
   biography?: string;
   certified: boolean;
-  // followers?: SafeDatabaseUser[];
-  // following?: SafeDatabaseUser[];
+  // followers?: User[];
+  // following?: User[];
   followers?: string[];
   following?: string[];
 }
@@ -52,10 +52,10 @@ export interface UserRequest extends Request {
     password: string;
     biography?: string;
     certified: boolean;
-    //followers?: User[];
-    //following?: User[];
-    followers?: string[];
-    following?: string[];
+    // followers?: User[];
+    // following?: User[];
+    // followers?: string[];
+    // following?: string[];
   };
 }
 
@@ -108,6 +108,6 @@ export interface UpdateBiographyRequest extends Request {
 export interface UpdateFollowRequest extends Request {
   body: {
     username: string;
-    userFollowed: string;
+    usernameFollowed: string;
   };
 }

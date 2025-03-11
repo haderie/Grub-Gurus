@@ -249,13 +249,13 @@ const userController = (socket: FakeSOSocket) => {
    */
   const updateFollowingList = async (req: UpdateFollowRequest, res: Response): Promise<void> => {
     try {
-      const { username, userFollowed } = req.body;
+      const { username, usernameFollowed } = req.body;
 
-      if (username === userFollowed) {
+      if (username === usernameFollowed) {
         throw Error('You cannot follow yourself');
       }
 
-      const updatedUser = await followUserService(username, userFollowed);
+      const updatedUser = await followUserService(username, usernameFollowed);
 
       if ('error' in updatedUser) {
         throw new Error(updatedUser.error);
@@ -268,7 +268,7 @@ const userController = (socket: FakeSOSocket) => {
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).send(`Error when following ${req.body.userFollowed}`);
+      res.status(500).send(`Error when following ${req.body.usernameFollowed}`);
     }
   };
 
