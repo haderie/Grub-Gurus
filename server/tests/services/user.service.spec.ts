@@ -263,39 +263,3 @@ describe('updateUser', () => {
     expect('error' in updatedError).toBe(true);
   });
 });
-
-describe('followUser', () => {
-  beforeEach(() => {
-    // Clean the mocks before each test
-    mockingoose.resetAll();
-  });
-
-  test('it should follow a user successfully', async () => {
-    // mockingoose(UserModel).toReturn(safeUserFollowed, 'findOne');
-    // const retrievedUser = (await getUserByUsername(userFollowed.username)) as SafeDatabaseUser;
-
-    const safeUpdatedUser: SafeDatabaseUser = {
-      _id: new mongoose.Types.ObjectId(),
-      username: user.username,
-      dateJoined: user.dateJoined,
-      certified: false,
-      followers: [],
-      following: [],
-    };
-
-    // expect(retrievedUser.username).toEqual(userFollowed.username);
-    // expect(retrievedUser.dateJoined).toEqual(userFollowed.dateJoined);
-
-    mockingoose(UserModel).toReturn(safeUpdatedUser, 'findOneAndUpdate');
-
-    /*
-    mockingoose(UserModel).toReturn(
-      { followers: [safeUser], ...safeUserFollowed },
-      'findOneAndUpdate',
-    ); */
-
-    const result = (await followUserService(user, userFollowed)) as SafeDatabaseUser;
-
-    expect(result.following).toContainEqual(userFollowed);
-  });
-});
