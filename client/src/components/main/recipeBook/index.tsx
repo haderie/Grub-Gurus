@@ -17,7 +17,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
       <div className='direct-message-container'>
         {/* Left Sidebar: Recipe Names */}
         <div className='chats-list'>
-          <h2 className='text-xl font-bold mb-4'>Recipes</h2>
+          <h2 className=''>Recipes</h2>
           <TextField
             id='searchBarss'
             size='small'
@@ -31,9 +31,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
             {recipes.map(recipe => (
               <li
                 key={recipe._id.toString()}
-                className={`chats-list-card p-2 cursor-pointer ${
-                  selectedRecipe?._id === recipe._id ? 'bg-gray-300' : 'hover:bg-gray-200'
-                }`}
+                className={`chats-list-card ${selectedRecipe?._id === recipe._id}`}
                 onClick={() => setSelectedRecipe(recipe)}>
                 <Button className='w-full text-left' onClick={() => setSelectedRecipe(recipe)}>
                   {recipe.name} {' | '} Likes: {recipe.numOfLikes}

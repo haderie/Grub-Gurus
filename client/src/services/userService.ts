@@ -124,6 +124,27 @@ const updateBiography = async (
 };
 
 /**
+ * Updates the user's biography.
+ * @param username The unique username of the user
+ * @param newBiography The new biography to set for this user
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updateRecipeBookPrivacy = async (
+  username: string,
+  newRecipeBookPublic: boolean,
+): Promise<SafeDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updateRecipeBookPrivacy`, {
+    username,
+    recipeBookPublic: newRecipeBookPublic,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error when updating biography');
+  }
+  return res.data;
+};
+
+/**
  * Follow a user by username
  * @param username - The unique username of the user
  * @param userToFollow - The username of the user to follow
@@ -164,4 +185,5 @@ export {
   resetPassword,
   updateBiography,
   followUser,
+  updateRecipeBookPrivacy,
 };

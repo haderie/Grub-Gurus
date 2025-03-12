@@ -33,6 +33,8 @@ const ProfileSettings: React.FC = () => {
     handleDeleteUser,
     handleUpdateFollowers,
     isFollowing,
+    isRecipePublic,
+    toggleRecipeBookVisibility,
   } = useProfileSettings();
 
   const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
@@ -54,10 +56,6 @@ const ProfileSettings: React.FC = () => {
     setNewBio(userData?.biography || '');
   };
 
-  // const isFollowing = userData?.following?.some(
-  //   (followedUsername: string) => followedUsername === username,
-  // );
-
   const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
   return (
     <div>
@@ -65,6 +63,8 @@ const ProfileSettings: React.FC = () => {
         <div className='page-container'>
           <div className='profile-card'>
             <h2>Profile</h2>
+            <h2>Recipe Book status {userData?.recipeBookPublic ? 'Public' : 'private'}</h2>
+
             {/* ---- Follow / Unfollow Button ---- */}
             {!canEditProfile && (
               <Button variant='contained' onClick={handleUpdateFollowers}>
@@ -72,9 +72,14 @@ const ProfileSettings: React.FC = () => {
               </Button>
             )}
             {canEditProfile && (
-              <Button variant='contained' onClick={handleEditProfileClick}>
-                Edit Profile
-              </Button>
+              <>
+                <Button variant='contained' onClick={handleEditProfileClick}>
+                  Edit Profile
+                </Button>
+                <Button variant='contained' onClick={toggleRecipeBookVisibility}>
+                  {isRecipePublic ? 'Public' : 'Private'}
+                </Button>
+              </>
             )}
             {successMessage && <p className='success-message'>{successMessage}</p>}
             {errorMessage && <p className='error-message'>{errorMessage}</p>}
@@ -168,12 +173,15 @@ const ProfileSettings: React.FC = () => {
           handleDeleteUser={handleDeleteUser}
         />
       )}
-      <div style={{ textAlign: 'center' }}>
-        {/* Recipe Book Section */}
-        <h3>Recipe Book</h3>
-      </div>
-
-      <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
+      {(isRecipePublic || canEditProfile) && (
+        <>
+          <div style={{ textAlign: 'center' }}>
+            {/* Recipe Book Section */}
+            <h3>Recipe Book</h3>
+          </div>
+          <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
+        </>
+      )}
     </div>
   );
 };

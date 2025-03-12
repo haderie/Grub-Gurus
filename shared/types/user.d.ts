@@ -22,10 +22,9 @@ export interface User extends UserCredentials {
   dateJoined: Date;
   biography?: string;
   certified: boolean;
-  // followers?: User[];
-  // following?: User[];
   followers?: string[];
   following?: string[];
+  recipeBookPublic: boolean;
 }
 
 /**
@@ -52,10 +51,9 @@ export interface UserRequest extends Request {
     password: string;
     biography?: string;
     certified: boolean;
-    // followers?: User[];
-    // following?: User[];
     followers?: string[];
     following?: string[];
+    recipeBookPublic: boolean;
   };
 }
 
@@ -97,6 +95,18 @@ export interface UpdateBiographyRequest extends Request {
   body: {
     username: string;
     biography: string;
+  };
+}
+
+/**
+ * Express request for updating a user's recipeBook privacy status.
+ * - `username`: The username whose recipeBook privacy status is being updated (body).
+ * - `recipeBookPublic`: The new privacy status (true for public, false for private).
+ */
+export interface UpdateRecipeBookPrivacy extends Request {
+  body: {
+    username: string;
+    recipeBookPublic: boolean;
   };
 }
 
