@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLoginContext from './useLoginContext';
+import useUserContext from './useUserContext';
 
 /**
  * Custom hook to manage the state and logic for a header input field.
@@ -17,6 +18,7 @@ import useLoginContext from './useLoginContext';
 const useHeader = () => {
   const navigate = useNavigate();
   const { setUser } = useLoginContext();
+  const { user: currentUser } = useUserContext();
 
   const [val, setVal] = useState<string>('');
 
@@ -47,6 +49,23 @@ const useHeader = () => {
   };
 
   /**
+   * Handles the 'Enter' key press event to perform a search action.
+   * Constructs a search query and navigates to the search results page.
+   *
+   * @param e - The keyboard event object.
+   */
+  const handleKeyDownRecipe = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      const searchParams = new URLSearchParams();
+      searchParams.set('search', val);
+
+      navigate(`/user/${currentUser.username}/?${searchParams.toString()}`);
+    }
+  };
+
+  /**
    * Signs the user out by clearing the user context and navigating to the landing page.
    */
   const handleSignOut = () => {
@@ -60,6 +79,7 @@ const useHeader = () => {
     handleInputChange,
     handleKeyDown,
     handleSignOut,
+    handleKeyDownRecipe,
   };
 };
 

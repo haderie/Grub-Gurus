@@ -41,6 +41,11 @@ const recipeSchema: Schema = new Schema(
       default: '',
     },
 
+    instructions: {
+      type: String,
+      default: '',
+    },
+
     video: {
       type: String,
       default: null,

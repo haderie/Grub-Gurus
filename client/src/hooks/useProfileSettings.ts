@@ -7,7 +7,6 @@ import {
   updateBiography,
   followUser,
 } from '../services/userService';
-import { getRecipeByUsername } from '../services/recipeService';
 
 import { SafeDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';

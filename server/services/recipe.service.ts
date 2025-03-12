@@ -1,16 +1,30 @@
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
 
-import {
-  DatabaseUser,
-  SafeDatabaseUser,
-  User,
-  UserCredentials,
-  UserResponse,
-  UsersResponse,
-  RecipeResponse,
-  Recipe,
-} from '../types/types';
+import { SafeDatabaseUser, Recipe, PopulatedDatabaseRecipe } from '../types/types';
+import { parseKeyword, parseTags } from '../utils/parse.util';
+import { checkTagInRecipe } from './tag.service';
+
+// const recipes: PopulatedDatabaseRecipe | null = await RecipeModel.find({
+//   user: user._id,
+// }).populate<{
+//   tags: DatabaseTag[];
+//   user: DatabaseUser[];
+// }>([
+//   { path: 'tags', model: TagModel },
+//   { path: 'user', model: UserModel },
+// ]);
+
+/**
+ * Filters questions by the user who asked them.
+ * @param {PopulatedDatabaseQuestion[]} qlist - The list of questions
+ * @param {string} askedBy - The username to filter by
+ * @returns {PopulatedDatabaseQuestion[]} - Filtered questions
+ */
+export const filterQuestionsByAskedBy = (
+  qlist: PopulatedDatabaseRecipe[],
+  askedBy: string,
+): PopulatedDatabaseRecipe[] => qlist.filter(q => q.user.username === askedBy);
 
 /**
  * Retrieves a user from the database by their username.
@@ -35,23 +49,60 @@ export const getRecipeByUsername = async (username: string) => {
   }
 };
 
-/// FILLER
-/**
- * Retrieves all users from the database.
- * Users documents are returned in the order in which they were created, oldest to newest.
- *
- * @returns {Promise<UsersResponse>} - Resolves with the found user objects (without the passwords) or an error message.
- */
-export const getUsersList = async (): Promise<UsersResponse> => {
-  try {
-    const users: SafeDatabaseUser[] = await RecipeModel.find().select('-password');
+// /**
+//  * Retrieves a user from the database by their username.
+//  *
+//  * @param {string} username - The username of the user to find.
+//  * @returns {Promise<RecipeResponse>} - Resolves with the found user object (without the password) or an error message.
+//  */
+// export const filterRecipeByUsername = async (
+//   username: string,
+// ): Promise<PopulatedDatabaseRecipe[]> => {
+//   try {
+//     // const user = await UserModel.findOne({ username });
+//     const user: SafeDatabaseUser | null = await UserModel.findOne({ username })
+//       .select('-password')
+//       .lean();
 
-    if (!users) {
-      throw Error('Users could not be retrieved');
+//     if (!user) {
+//       throw new Error('User not found');
+//     }
+
+//     const recipes = await RecipeModel.find({ user: user._id });
+//     // return user;
+//     return recipes;
+//   } catch (error) {
+//     return { error: `Error occurred when finding recipes: ${error}` };
+//   }
+// };
+
+/**
+ * Filters questions by search string containing tags and/or keywords.
+ * @param {PopulatedDatabaseRecipe[]} qlist - The list of recipes
+ * @param {string} search - The search string
+ * @returns {PopulatedDatabaseRecipe[]} - Filtered list of recipe
+ */
+export const filterRecipeBySearch = (
+  rlist: PopulatedDatabaseRecipe[],
+  search: string,
+): PopulatedDatabaseRecipe[] => {
+  const searchTags = parseTags(search);
+  const searchKeyword = parseKeyword(search);
+
+  return rlist.filter((r: Recipe) => {
+    if (searchKeyword.length === 0 && searchTags.length === 0) {
+      return true;
     }
 
-    return users;
-  } catch (error) {
-    throw Error(`Error occurred when finding user: ${error}`);
-  }
+    if (searchKeyword.length === 0) {
+      return checkTagInRecipe(r, searchTags);
+    }
+
+    // if (searchTags.length === 0) {
+    //   return checkKeywordInQuestion(q, searchKeyword);
+    // }
+
+    return checkTagInRecipe(r, searchTags);
+    // checkKeywordInQuestion(q, searchKeyword) ||
+  });
 };

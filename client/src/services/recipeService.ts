@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { UserCredentials, SafeDatabaseUser } from '../types/types';
 import api from './config';
 
 const RECIPE_API_URL = `${process.env.REACT_APP_SERVER_URL}/recipe`;
@@ -16,6 +14,24 @@ const getRecipeByUsername = async (username: string) => {
   }
   return res.data;
 };
+
+// /**
+//  * Function to get questions by filter.
+//  *
+//  * @param order - The order in which to fetch questions. Default is 'newest'.
+//  * @param search - The search term to filter questions. Default is an empty string.
+//  * @throws Error if there is an issue fetching or filtering questions.
+//  */
+// const getRecipeByFilter = async (
+//   order: string = 'newest',
+//   search: string = '',
+// ): Promise<PopulatedDatabaseRecipe[]> => {
+//   const res = await api.get(`${RECIPE_API_URL}/getRecipe?order=${order}&search=${search}`);
+//   if (res.status !== 200) {
+//     throw new Error('Error when fetching or filtering questions');
+//   }
+//   return res.data;
+// };
 
 // eslint-disable-next-line import/prefer-default-export
 export { getRecipeByUsername };

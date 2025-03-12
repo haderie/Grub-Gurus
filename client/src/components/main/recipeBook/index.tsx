@@ -1,19 +1,58 @@
+import { useState } from 'react';
+import { Button, TextField } from '@mui/material';
 import RecipeCard from '../recipeCard/index';
 import { DatabaseRecipe } from '../../../types/types';
+import useHeader from '../../../hooks/useHeader';
+import './index.css';
 
-const RecipeBook = ({ recipes }: { recipes: DatabaseRecipe[] }) => {
-  if (recipes.length === 0) {
-    return <p>No recipes available.</p>;
-  }
+interface RecipeBookProps {
+  recipes: DatabaseRecipe[];
+}
 
+const RecipeBook = ({ recipes }: RecipeBookProps) => {
+  const [selectedRecipe, setSelectedRecipe] = useState<DatabaseRecipe | null>(null);
+  const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
   return (
-    <div className='recipe-book'>
-      <div className='recipe-list'>
-        {recipes.map(recipe => (
-          <RecipeCard key={recipe._id.toString()} recipe={recipe} />
-        ))}
+    <>
+      <div className='direct-message-container'>
+        {/* Left Sidebar: Recipe Names */}
+        <div className='chats-list'>
+          <h2 className='text-xl font-bold mb-4'>Recipes</h2>
+          <TextField
+            id='searchBarss'
+            size='small'
+            placeholder='Search recipes...'
+            value={val}
+            variant='outlined'
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDownRecipe}
+          />
+          <div className=''>
+            {recipes.map(recipe => (
+              <li
+                key={recipe._id.toString()}
+                className={`chats-list-card p-2 cursor-pointer ${
+                  selectedRecipe?._id === recipe._id ? 'bg-gray-300' : 'hover:bg-gray-200'
+                }`}
+                onClick={() => setSelectedRecipe(recipe)}>
+                <Button className='w-full text-left' onClick={() => setSelectedRecipe(recipe)}>
+                  {recipe.name} {' | '} Likes: {recipe.numOfLikes}
+                </Button>
+              </li>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Section: Recipe Details */}
+        <div className='chat-container'>
+          {selectedRecipe ? (
+            <RecipeCard recipe={selectedRecipe} />
+          ) : (
+            <p>Select a recipe to view details.</p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,7 @@
 import { ObjectId } from 'mongodb';
+import { Request } from 'express';
+import { DatabaseTag, Tag } from './tag';
+import { DatabaseUser } from './user';
 
 /**
  * Represents a recipe.
@@ -18,8 +21,9 @@ export interface Recipe {
   privacyPublic: boolean;
   ingredients: string[];
   description: string;
+  instructions: string;
   video?: string;
-  tags?: string[];
+  tags: Tag[];
   cookTime: number;
   numOfLikes: number;
   views: string[];
@@ -33,6 +37,7 @@ export interface Recipe {
 export interface RecipeData {
   name: string;
   likes: number;
+  views: string[];
 }
 
 export type RecipeResponse = Recipe | { error: string };
@@ -42,12 +47,37 @@ export interface RecipeByUsernameRequest extends Request {
     username: string;
   };
 }
-
 /**
  * Represents a recipe stored in the database with a unique identifier.
  * - `_id`: The unique identifier for the recipe.
  * - Includes all properties of `Recipe`.
  */
-export interface DatabaseRecipe extends Recipe {
+export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
   _id: ObjectId;
+  user: ObjectId; // Fully populated user object
+  tags: ObjectId[]; // Fully populated tags
+}
+/**
+ * Represents a fully populated recipe from the database.
+ * - `user`: The full `User` object instead of just an ID.
+ * - `tags`: An array of populated `DatabaseTag` objects.
+ */
+export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | 'tags'> {
+  user: DatabaseUser; // Fully populated user object
+  tags: DatabaseTag[]; // Fully populated tags
+}
+
+/**
+ * Interface for the request query to find questions using a search string.
+ * - `order`: The order in which to sort the questions.
+ * - `search`: The search string used to find questions.
+ */
+export interface FindRecipeRequest extends Request {
+  params: {
+    username: string;
+  };
+  query: {
+    order: OrderType;
+    search: string;
+  };
 }

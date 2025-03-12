@@ -139,43 +139,41 @@ const ProfileSettings: React.FC = () => {
               </div>
             </div>
           </div>
-          <div>
-            {/* Recipe Book Section */}
-            <h3>Recipe Book</h3>
-            {recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}
-          </div>
         </div>
       )}
-
       {/* ---- Edit section ---- */}
 
-      <div className='page-container'>
-        {editBioMode && canEditProfile && (
-          <ProfileEdit
-            userData={userData}
-            loading={loading}
-            editBioMode={editBioMode}
-            newBio={newBio}
-            newPassword={newPassword}
-            confirmNewPassword={confirmNewPassword}
-            successMessage={successMessage}
-            errorMessage={errorMessage}
-            showConfirmation={showConfirmation}
-            pendingAction={pendingAction}
-            canEditProfile={canEditProfile}
-            showPassword={showPassword}
-            togglePasswordVisibility={togglePasswordVisibility}
-            setEditBioMode={setEditBioMode}
-            setNewBio={setNewBio}
-            setNewPassword={setNewPassword}
-            setConfirmNewPassword={setConfirmNewPassword}
-            setShowConfirmation={setShowConfirmation}
-            handleResetPassword={handleResetPassword}
-            handleUpdateBiography={handleUpdateBiography}
-            handleDeleteUser={handleDeleteUser}
-          />
-        )}
+      {editBioMode && canEditProfile && (
+        <ProfileEdit
+          userData={userData}
+          loading={loading}
+          editBioMode={editBioMode}
+          newBio={newBio}
+          newPassword={newPassword}
+          confirmNewPassword={confirmNewPassword}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          showConfirmation={showConfirmation}
+          pendingAction={pendingAction}
+          canEditProfile={canEditProfile}
+          showPassword={showPassword}
+          togglePasswordVisibility={togglePasswordVisibility}
+          setEditBioMode={setEditBioMode}
+          setNewBio={setNewBio}
+          setNewPassword={setNewPassword}
+          setConfirmNewPassword={setConfirmNewPassword}
+          setShowConfirmation={setShowConfirmation}
+          handleResetPassword={handleResetPassword}
+          handleUpdateBiography={handleUpdateBiography}
+          handleDeleteUser={handleDeleteUser}
+        />
+      )}
+      <div style={{ textAlign: 'center' }}>
+        {/* Recipe Book Section */}
+        <h3>Recipe Book</h3>
       </div>
+
+      <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
     </div>
   );
 };
