@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import useUserContext from './useUserContext';
 import { DatabaseMessage, Message, MessageUpdatePayload } from '../types/types';
 import { addMessage, getMessages } from '../services/messageService';
 
 // Constants for utilizing the Hugging Face AI model
-const API_KEY = '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';
-const MODEL_NAME = 'flax-community/t5-recipe-generation';
+// const API_KEY = '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';
+// const MODEL_NAME = 'flax-community/t5-recipe-generation';
 
 /**
  * A helper function to extract the list of ingredients from the user's message to a list of strings the AI model can use.
@@ -14,10 +14,10 @@ const MODEL_NAME = 'flax-community/t5-recipe-generation';
  * @param message - The message the user provides to the AI model.
  * @returns The list of ingredients extracted as a list of strings.
  */
-const extractIngredients = (message: string): string[] => {
-  const ingredientsRegex = /(\b\w+\b)(?=,|\.)/g;
-  return message.match(ingredientsRegex) || [];
-};
+// const extractIngredients = (message: string): string[] => {
+// const ingredientsRegex = /(\b\w+\b)(?=,|\.)/g;
+//  return message.match(ingredientsRegex) || [];
+//};
 
 /**
  * Calls the Hugging Face API to get a response for the given message.
@@ -25,6 +25,7 @@ const extractIngredients = (message: string): string[] => {
  * @param message - The user's message to send to Hugging Face
  * @returns - The AI-generated response.
  */
+/**
 const getAIResponse = async (message: string): Promise<string> => {
   const url = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
 
@@ -44,6 +45,7 @@ const getAIResponse = async (message: string): Promise<string> => {
     return 'The Munch Master could not understand your message :(';
   }
 };
+*/
 
 /**
  * Custom hook that handles the logic for the messaging page.
