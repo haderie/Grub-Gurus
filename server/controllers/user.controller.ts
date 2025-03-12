@@ -47,7 +47,7 @@ const userController = (socket: FakeSOSocket) => {
     req.body.username.trim() !== '' &&
     req.body.biography !== undefined;
 
-      /**
+  /**
    * Validates that the request body contains all required fields to update the user privacy setting.
    * @param req The incoming request containing user data.
    * @returns `true` if the body contains valid user fields; otherwise, `false`.
@@ -57,7 +57,7 @@ const userController = (socket: FakeSOSocket) => {
     req.body.username !== undefined &&
     req.body.username.trim() !== '' &&
     req.body.privacySetting !== undefined &&
-    (req.body.privacySetting == "Private" || req.body.privacySetting == "Public");
+    (req.body.privacySetting === 'Private' || req.body.privacySetting === 'Public');
 
   /**
    * Handles the creation of a new user account.
@@ -295,37 +295,38 @@ const userController = (socket: FakeSOSocket) => {
       res.status(500).send(`Error when following ${req.body.usernameFollowed}`);
     }
   };
-    /**
+
+  /**
    * Updates a user's privacy setting.
    * @param req The request containing the username and privacy setting in the body.
    * @param res The response, either confirming the update or returning an error.
    * @returns A promise resolving to void.
    */
-    const updatePrivacy = async (req: UpdatePrivacyRequest, res: Response): Promise<void> => {
-      try {
-        if (!isUpdatePrivacyRequestValid(req)) {
-          res.status(400).send('Invalid user body');
-          return;
-        }
-  
-        const { username, privacySetting } = req.body;
-       
-        const updatedUser = await updateUser(username, { privacySetting });
-      
-        if ('error' in updatedUser) {
-          throw new Error(updatedUser.error);
-        }
-  
-        socket.emit('userUpdate', {
-          user: updatedUser,
-          type: 'updated',
-        });
-  
-        res.status(200).json(updatedUser);
-      } catch (error) {
-        res.status(500).send(`Error when updating user privacy setting: ${error}`);
+  const updatePrivacy = async (req: UpdatePrivacyRequest, res: Response): Promise<void> => {
+    try {
+      if (!isUpdatePrivacyRequestValid(req)) {
+        res.status(400).send('Invalid user body');
+        return;
       }
-    };
+
+      const { username, privacySetting } = req.body;
+
+      const updatedUser = await updateUser(username, { privacySetting });
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when updating user privacy setting: ${error}`);
+    }
+  };
 
 
 

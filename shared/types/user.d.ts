@@ -26,7 +26,7 @@ export interface User extends UserCredentials {
   // following?: User[];
   followers?: string[];
   following?: string[];
-  privacySetting: "Public" | "Private";
+  privacySetting: 'Public' | 'Private';
 }
 
 /**
@@ -57,7 +57,7 @@ export interface UserRequest extends Request {
     following?: string[];
     // followers?: User[];
     // following?: User[];
-    privacySetting: "Public" | "Private";
+    privacySetting: 'Public' | 'Private';
   };
 }
 
@@ -122,6 +122,6 @@ export interface UpdateFollowRequest extends Request {
 export interface UpdatePrivacyRequest extends Request {
   body: {
     username: string;
-    privacySetting: "Public" | "Private";
+    privacySetting: 'Public' | 'Private';
   };
 }

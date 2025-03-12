@@ -48,7 +48,7 @@ const userSchema: Schema = new Schema(
       type: String,
       enum: ['Public', 'Private'],
       default: 'Public',
-    }
+    },
   },
   { collection: 'User' },
 );
