@@ -31,6 +31,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       certified: result.certified,
       followers: result.followers,
       following: result.following,
+      privacySetting: result.privacySetting,
     };
 
     return safeUser;

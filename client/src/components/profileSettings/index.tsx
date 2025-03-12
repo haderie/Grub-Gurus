@@ -19,18 +19,21 @@ const ProfileSettings: React.FC = () => {
     canEditProfile,
     selectedOption,
     showPassword,
+    privacySetting,
     togglePasswordVisibility,
     setEditBioMode,
     setNewBio,
     setNewPassword,
     setConfirmNewPassword,
     setShowConfirmation,
+    setPrivacySetting,
     handleRadioChange,
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
     handleUpdateFollowers,
     isFollowing,
+    handleUpdatePrivacy,
   } = useProfileSettings();
 
   if (loading) {
@@ -77,6 +80,9 @@ const ProfileSettings: React.FC = () => {
                 <h4>General Information</h4>
                 <p>
                   <b>Username:</b> {userData.username}
+                </p>
+                <p>
+                  <strong>Account Privacy:</strong> {privacySetting}
                 </p>
                 <p>
                   <strong>Followers:</strong> {userData.followers?.length}
@@ -144,6 +150,7 @@ const ProfileSettings: React.FC = () => {
             loading={loading}
             editBioMode={editBioMode}
             newBio={newBio}
+            privacySetting={privacySetting}
             newPassword={newPassword}
             confirmNewPassword={confirmNewPassword}
             successMessage={successMessage}
@@ -158,9 +165,11 @@ const ProfileSettings: React.FC = () => {
             setNewPassword={setNewPassword}
             setConfirmNewPassword={setConfirmNewPassword}
             setShowConfirmation={setShowConfirmation}
+            setPrivacySetting={setPrivacySetting}
             handleResetPassword={handleResetPassword}
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
+            handleUpdatePrivacy={handleUpdatePrivacy}
           />
         )}
       </div>

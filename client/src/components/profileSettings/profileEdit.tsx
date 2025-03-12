@@ -9,6 +9,7 @@ const ProfileEdit = ({
   newBio,
   newPassword,
   confirmNewPassword,
+  privacySetting,
   successMessage,
   errorMessage,
   showConfirmation,
@@ -22,10 +23,12 @@ const ProfileEdit = ({
   setNewPassword,
   setConfirmNewPassword,
   setShowConfirmation,
+  setPrivacySetting,
 
   handleResetPassword,
   handleUpdateBiography,
   handleDeleteUser,
+  handleUpdatePrivacy,
 }: {
   userData: SafeDatabaseUser | null;
   loading: boolean;
@@ -33,6 +36,7 @@ const ProfileEdit = ({
   newBio: string;
   newPassword: string;
   confirmNewPassword: string;
+  privacySetting: 'Public' | 'Private';
   successMessage: string | null;
   errorMessage: string | null;
   showConfirmation: boolean;
@@ -46,10 +50,12 @@ const ProfileEdit = ({
   setNewPassword: React.Dispatch<React.SetStateAction<string>>;
   setConfirmNewPassword: React.Dispatch<React.SetStateAction<string>>;
   setShowConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
+  setPrivacySetting: React.Dispatch<React.SetStateAction<'Public' | 'Private'>>;
 
   handleResetPassword: () => void;
   handleUpdateBiography: () => void;
   handleDeleteUser: () => void;
+  handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
 }) => {
   const handleCloseProfileEdit = () => {
     setEditBioMode(false);
@@ -69,6 +75,20 @@ const ProfileEdit = ({
           <p>
             <strong>Username:</strong> {userData.username}
           </p>
+          <p>
+            <strong>Account Privacy:</strong> {privacySetting}
+          </p>
+          {/* ---- Account Privacy Section ---- */}
+          {editBioMode && canEditProfile && (
+            <button
+              onClick={() => {
+                const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
+                setPrivacySetting(newSetting);
+                handleUpdatePrivacy(newSetting);
+              }}>
+              {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
+            </button>
+          )}
           <p>
             <strong>Followers:</strong> {userData.followers?.length}
           </p>

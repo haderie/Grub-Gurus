@@ -6,6 +6,7 @@ import {
   resetPassword,
   updateBiography,
   followUser,
+  updatePrivacy,
 } from '../services/userService';
 import { SafeDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
@@ -25,6 +26,7 @@ const useProfileSettings = () => {
   const [loading, setLoading] = useState(false);
   const [editBioMode, setEditBioMode] = useState(false);
   const [newBio, setNewBio] = useState('');
+  const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>('Public');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -166,6 +168,25 @@ const useProfileSettings = () => {
       setErrorMessage(null);
     } catch (error) {
       setErrorMessage(`Failed to follow/unfollow ${username}.`);
+    }
+  }
+
+  /**
+   * Handler for updating the privacy setting of the user
+   */
+  const handleUpdatePrivacy = async (newSetting: 'Public' | 'Private') => {
+    if (!username) return;
+    try {
+      setPrivacySetting(newSetting);
+      const updatedUser = await updatePrivacy(username, newSetting);
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+      setSuccessMessage('Account privacy updated!');
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage('Failed to update privacy setting.');
       setSuccessMessage(null);
     }
   };
@@ -174,6 +195,8 @@ const useProfileSettings = () => {
     userData,
     newPassword,
     confirmNewPassword,
+    privacySetting,
+    setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,
     loading,
@@ -198,6 +221,7 @@ const useProfileSettings = () => {
     handleDeleteUser,
     handleUpdateFollowers,
     isFollowing,
+    handleUpdatePrivacy,
   };
 };
 
