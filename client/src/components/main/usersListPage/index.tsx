@@ -36,6 +36,7 @@ const UsersListPage = (props: UserListPageProps) => {
       navigate(`/user/${user.username}`);
     }
   };
+
   return (
     <div className='user-card-container'>
       <UsersListHeader userCount={userList.length} setUserFilter={setUserFilter} />

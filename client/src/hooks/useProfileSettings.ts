@@ -5,6 +5,7 @@ import {
   deleteUser,
   resetPassword,
   updateBiography,
+  followUser,
 } from '../services/userService';
 import { SafeDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
@@ -37,6 +38,7 @@ const useProfileSettings = () => {
     currentUser.username && userData?.username ? currentUser.username === userData.username : false;
 
   const [selectedOption, setSelectedOption] = useState<'followers' | 'following'>('followers');
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(event.target.value as 'followers' | 'following');
@@ -59,7 +61,7 @@ const useProfileSettings = () => {
     };
 
     fetchUserData();
-  }, [username]);
+  }, [username, currentUser.username]);
 
   /**
    * Toggles the visibility of the password fields.
@@ -145,6 +147,29 @@ const useProfileSettings = () => {
     });
   };
 
+  const handleUpdateFollowers = async () => {
+    if (!username) return;
+    try {
+      const updatedUser = await followUser(currentUser.username, username);
+      const followedUser = await getUserByUsername(username);
+
+      setUserData(followedUser);
+
+      if (updatedUser.following?.includes(followedUser.username)) {
+        setIsFollowing(true);
+        setSuccessMessage(`${username} Followed!`);
+      } else {
+        setIsFollowing(false);
+        setSuccessMessage(`${username} Unfollowed :(`);
+      }
+
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage(`Failed to follow/unfollow ${username}.`);
+      setSuccessMessage(null);
+    }
+  };
+
   return {
     userData,
     newPassword,
@@ -171,6 +196,8 @@ const useProfileSettings = () => {
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
+    handleUpdateFollowers,
+    isFollowing,
   };
 };
 

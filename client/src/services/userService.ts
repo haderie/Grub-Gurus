@@ -123,6 +123,38 @@ const updateBiography = async (
   return res.data;
 };
 
+/**
+ * Follow a user by username
+ * @param username - The unique username of the user
+ * @param userToFollow - The username of the user to follow
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const followUser = async (
+  username: string,
+  usernameToFollow: string,
+): Promise<SafeDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/followUser`, {
+    username,
+    usernameFollowed: usernameToFollow,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error following user');
+  }
+  return res.data;
+};
+
+// /**
+//  * Unfollow a user by username
+//  * @param username - The username of the user to unfollow
+//  */
+// const unfollowUser = async (username: string): Promise<void> => {
+//   const res = await api.patch(`${USER_API_URL}/unfollowUser`, { username });
+//   if (res.status !== 200) {
+//     throw new Error('Error unfollowing user');
+//   }
+// };
+
 export {
   getUsers,
   getUserByUsername,
@@ -131,4 +163,5 @@ export {
   deleteUser,
   resetPassword,
   updateBiography,
+  followUser,
 };

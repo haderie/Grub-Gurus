@@ -3,7 +3,6 @@ import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import ProfileEdit from './profileEdit';
-import { User } from '../../types/types';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -30,6 +29,8 @@ const ProfileSettings: React.FC = () => {
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
+    handleUpdateFollowers,
+    isFollowing,
   } = useProfileSettings();
 
   if (loading) {
@@ -47,6 +48,10 @@ const ProfileSettings: React.FC = () => {
     setNewBio(userData?.biography || '');
   };
 
+  // const isFollowing = userData?.following?.some(
+  //   (followedUsername: string) => followedUsername === username,
+  // );
+
   const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
   return (
     <div>
@@ -54,6 +59,12 @@ const ProfileSettings: React.FC = () => {
         <div className='page-container'>
           <div className='profile-card'>
             <h2>Profile</h2>
+            {/* ---- Follow / Unfollow Button ---- */}
+            {!canEditProfile && (
+              <Button variant='contained' onClick={handleUpdateFollowers}>
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </Button>
+            )}
             {canEditProfile && (
               <Button variant='contained' onClick={handleEditProfileClick}>
                 Edit Profile
@@ -112,8 +123,8 @@ const ProfileSettings: React.FC = () => {
               <div>
                 {selectedList && selectedList.length > 0 ? (
                   <ul>
-                    {selectedList.map((user: User, index: number) => (
-                      <li key={index}>{user.username}</li>
+                    {selectedList.map((username: string, index: number) => (
+                      <li key={index}>{username}</li>
                     ))}
                   </ul>
                 ) : (
