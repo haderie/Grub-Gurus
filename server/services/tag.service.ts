@@ -1,4 +1,4 @@
-import { DatabaseQuestion, DatabaseTag, Question, Tag } from '../types/types';
+import { DatabaseQuestion, DatabaseTag, Question, Recipe, Tag } from '../types/types';
 import QuestionModel from '../models/questions.model';
 import TagModel from '../models/tags.model';
 
@@ -11,6 +11,26 @@ import TagModel from '../models/tags.model';
  * @returns {boolean} - `true` if any tag is present in the question, `false` otherwise
  */
 export const checkTagInQuestion = (q: Question, taglist: string[]): boolean => {
+  for (const tagname of taglist) {
+    for (const tag of q.tags) {
+      if (tagname === tag.name) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+/**
+ * Checks if given question contains any tags from the given list.
+ *
+ * @param {Recipe} q - The question to check
+ * @param {string[]} taglist - The list of tags to check for
+ *
+ * @returns {boolean} - `true` if any tag is present in the question, `false` otherwise
+ */
+export const checkTagInRecipe = (q: Recipe, taglist: string[]): boolean => {
   for (const tagname of taglist) {
     for (const tag of q.tags) {
       if (tagname === tag.name) {

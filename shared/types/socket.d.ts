@@ -2,6 +2,7 @@ import { PopulatedDatabaseAnswer } from './answer';
 import { PopulatedDatabaseChat } from './chat';
 import { DatabaseMessage } from './message';
 import { PopulatedDatabaseQuestion } from './question';
+import { PopulatedDatabaseRecipe } from './recipe';
 import { SafeDatabaseUser } from './user';
 import { BaseMove, GameInstance, GameInstanceID, GameMove, GameState } from './game';
 
@@ -126,6 +127,7 @@ export interface ServerToClientEvents {
   questionUpdate: (question: PopulatedDatabaseQuestion) => void;
   answerUpdate: (result: AnswerUpdatePayload) => void;
   viewsUpdate: (question: PopulatedDatabaseQuestion) => void;
+  recipeViewsUpdate: (recipe: PopulatedDatabaseRecipe) => void;
   voteUpdate: (vote: VoteUpdatePayload) => void;
   commentUpdate: (comment: CommentUpdatePayload) => void;
   messageUpdate: (message: MessageUpdatePayload) => void;

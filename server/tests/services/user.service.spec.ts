@@ -196,6 +196,7 @@ describe('updateUser', () => {
     username: user.username,
     dateJoined: user.dateJoined,
     certified: false,
+    recipeBookPublic: false,
   };
 
   const updates: Partial<User> = {

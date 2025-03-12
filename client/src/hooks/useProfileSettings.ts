@@ -6,7 +6,9 @@ import {
   resetPassword,
   updateBiography,
   followUser,
+  updateRecipeBookPrivacy,
 } from '../services/userService';
+
 import { SafeDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
 
@@ -24,6 +26,8 @@ const useProfileSettings = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [editBioMode, setEditBioMode] = useState(false);
+  const [isRecipePublic, setIsRecipePublic] = useState(currentUser.recipeBookPublic);
+
   const [newBio, setNewBio] = useState('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -61,13 +65,29 @@ const useProfileSettings = () => {
     };
 
     fetchUserData();
-  }, [username, currentUser.username]);
+  }, [username, currentUser.username, currentUser.recipeBookPublic]);
 
   /**
    * Toggles the visibility of the password fields.
    */
   const togglePasswordVisibility = () => {
     setShowPassword(prevState => !prevState);
+  };
+
+  /**
+   * Toggles the visibility of the recipe Book.
+   */
+  const toggleRecipeBookVisibility = async () => {
+    if (!username) return;
+
+    const updatedUser = await updateRecipeBookPrivacy(username, !isRecipePublic);
+
+    // Ensure state updates occur sequentially after the API call completes
+    await new Promise(resolve => {
+      setUserData(updatedUser); // Update the user data
+      resolve(null); // Resolve the promise
+    });
+    setIsRecipePublic(prevState => !prevState);
   };
 
   /**
@@ -198,6 +218,9 @@ const useProfileSettings = () => {
     handleDeleteUser,
     handleUpdateFollowers,
     isFollowing,
+    isRecipePublic,
+    setIsRecipePublic,
+    toggleRecipeBookVisibility,
   };
 };
 

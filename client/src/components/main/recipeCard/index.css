@@ -1,0 +1,36 @@
+.recipe-card {
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.recipe-header h1 {
+  font-weight: bold;
+  margin: 0;
+}
+
+.recipe-likes {
+  color: gray;
+}
+
+.recipe-description {
+  margin-top: 10px;
+  color: #444;
+}
+
+.recipe-ingredients {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.recipe-video a {
+  color: blue;
+  text-decoration: underline;
+}
