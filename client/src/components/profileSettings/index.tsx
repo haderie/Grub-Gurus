@@ -85,7 +85,7 @@ const ProfileSettings: React.FC = () => {
                   <b>Username:</b> {userData.username}
                 </p>
                 <p>
-                  <strong>Account Privacy:</strong> {privacySetting}
+                  <strong>Account Privacy:</strong> {userData.privacySetting}
                 </p>
                 <p>
                   <strong>Followers:</strong> {userData.followers?.length}

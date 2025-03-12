@@ -87,11 +87,11 @@ const ProfileEdit = ({
           {/* ---- Account Privacy Section ---- */}
           {editBioMode && canEditProfile && (
             <button
-              onClick={() => {
+              onClick={async () => {
                 const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
                 setPrivacySetting(newSetting);
-                handleUpdatePrivacy(newSetting);
-                handleCheckPrivacy();
+                await handleUpdatePrivacy(newSetting);
+                await handleCheckPrivacy();
               }}>
               {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
             </button>

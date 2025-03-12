@@ -150,22 +150,26 @@ const useProfileSettings = () => {
     });
   };
 
+  /**
+   *
+   *
+   */
   const handleCheckPrivacy = async () => {
     if (!username) return;
     try {
       const targetUser = await getUserByUsername(username);
       const targetUserFollowers = targetUser.followers;
+      if (targetUser.privacySetting === 'Public') {
+        setShowLists(true);
+      }
       if (
-        privacySetting === 'Private' &&
+        targetUser.privacySetting === 'Private' &&
         targetUserFollowers?.find(name => name === currentUser.username)
       ) {
         setShowLists(true);
       }
-      if (privacySetting === 'Public') {
-        setShowLists(true);
-      }
       if (
-        privacySetting === 'Private' &&
+        targetUser.privacySetting === 'Private' &&
         !targetUserFollowers?.find(name => name === currentUser.username)
       ) {
         setShowLists(false);
