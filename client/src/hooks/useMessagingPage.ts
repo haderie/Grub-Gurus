@@ -17,7 +17,7 @@ import { addMessage, getMessages } from '../services/messageService';
 // const extractIngredients = (message: string): string[] => {
 // const ingredientsRegex = /(\b\w+\b)(?=,|\.)/g;
 //  return message.match(ingredientsRegex) || [];
-//};
+// };
 
 /**
  * Calls the Hugging Face API to get a response for the given message.
