@@ -9,6 +9,7 @@ const mockUser: User = {
   password: 'password',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  recipeBookPublic: false,
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -16,6 +17,7 @@ const mockSafeUser: SafeDatabaseUser = {
   username: 'user1',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  recipeBookPublic: false,
 };
 
 const mockUserJSONResponse = {
@@ -23,6 +25,7 @@ const mockUserJSONResponse = {
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
   certified: false,
+  recipeBookPublic: false,
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
@@ -54,6 +57,7 @@ describe('Test userController', () => {
         certified: false,
         followers: [],
         following: [],
+        recipeBookPublic: false,
       });
     });
 
