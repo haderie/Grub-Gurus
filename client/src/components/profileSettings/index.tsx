@@ -3,6 +3,8 @@ import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import ProfileEdit from './profileEdit';
+import useUserRecipes from '../../hooks/useUserRecipes';
+import RecipeBook from '../main/recipeBook';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -33,7 +35,9 @@ const ProfileSettings: React.FC = () => {
     isFollowing,
   } = useProfileSettings();
 
-  if (loading) {
+  const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
+
+  if (loading || recipesLoading) {
     return (
       <div className='page-container'>
         <div className='profile-card'>
@@ -42,6 +46,8 @@ const ProfileSettings: React.FC = () => {
       </div>
     );
   }
+
+  if (loading) return <h2>Loading user data...</h2>;
 
   const handleEditProfileClick = () => {
     setEditBioMode(true); // Close the ProfileEdit modal
@@ -133,8 +139,14 @@ const ProfileSettings: React.FC = () => {
               </div>
             </div>
           </div>
+          <div>
+            {/* Recipe Book Section */}
+            <h3>Recipe Book</h3>
+            {recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}
+          </div>
         </div>
       )}
+
       {/* ---- Edit section ---- */}
 
       <div className='page-container'>

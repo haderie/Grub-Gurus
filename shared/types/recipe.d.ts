@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb';
  * - `numOfLikes`: The number of likes received.
  */
 export interface Recipe {
-  user: ObjectId;
+  user: User;
   name: string;
   privacyPublic: boolean;
   ingredients: string[];
@@ -22,6 +22,7 @@ export interface Recipe {
   tags?: string[];
   cookTime: number;
   numOfLikes: number;
+  views: string[];
 }
 
 /**
@@ -32,6 +33,14 @@ export interface Recipe {
 export interface RecipeData {
   name: string;
   likes: number;
+}
+
+export type RecipeResponse = Recipe | { error: string };
+
+export interface RecipeByUsernameRequest extends Request {
+  params: {
+    username: string;
+  };
 }
 
 /**

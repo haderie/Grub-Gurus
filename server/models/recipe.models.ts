@@ -3,14 +3,14 @@ import recipeSchema from './schema/recipe.schema';
 import { DatabaseRecipe } from '../types/types';
 
 /**
- * Mongoose model for the `Tag` collection.
+ * Mongoose model for the `Recipe` collection.
  *
- * This model is created using the `Tag` interface and the `tagSchema`, representing the
- * `Tag` collection in the MongoDB database, and provides an interface for interacting with
- * the stored tags.
+ * This model is created using the `DatabaseRecipe` interface and the `recipeSchema`, representing the
+ * `Recipe` collection in the MongoDB database, and provides an interface for interacting with
+ * stored recipes.
  *
- * @type {Model<DatabaseTag>}
+ * @type {Model<DatabaseRecipe>}
  */
-const TagModel: Model<DatabaseRecipe> = mongoose.model<DatabaseRecipe>('Recipe', recipeSchema);
+const RecipeModel: Model<DatabaseRecipe> = mongoose.model<DatabaseRecipe>('Recipe', recipeSchema);
 
-export default TagModel;
+export default RecipeModel;

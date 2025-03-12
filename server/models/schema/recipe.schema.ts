@@ -57,6 +57,7 @@ const recipeSchema: Schema = new Schema(
       type: Number,
       default: 0,
     },
+    numOfViews: [{ type: String }],
   },
   { collection: 'Recipe', timestamps: true },
 );
