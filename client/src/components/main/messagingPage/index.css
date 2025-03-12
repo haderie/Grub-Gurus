@@ -41,6 +41,12 @@
   background-color: #fff;
 }
 
+.textarea-explanation {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
+}
+
 .message-textbox {
   flex: 1;
   padding: 10px;
@@ -81,4 +87,22 @@
   border-radius: 4px;
   display: inline-block; /* Prevents it from stretching unnecessarily */
   white-space: nowrap; /* Prevents wrapping of the message */
+}
+
+.ai-response-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ai-response-checkbox label {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Styling for the checkbox */
+.ai-response-checkbox input[type="checkbox"] {
+  margin-right: 10px;
 }
