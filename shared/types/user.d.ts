@@ -115,10 +115,10 @@ export interface UpdateFollowRequest extends Request {
 }
 
 /**
-* Express request for updating a user's privacy setting.
-* `username`: The username whose privacy setting is being updated (body).
-* `privacySetting`: The new privacy setting to be set (body).
-*/
+ * Express request for updating a user's privacy setting.
+ * `username`: The username whose privacy setting is being updated (body).
+ * `privacySetting`: The new privacy setting to be set (body).
+ */
 export interface UpdatePrivacyRequest extends Request {
   body: {
     username: string;
