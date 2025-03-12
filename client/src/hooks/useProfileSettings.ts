@@ -85,7 +85,6 @@ const useProfileSettings = () => {
     // Ensure state updates occur sequentially after the API call completes
     await new Promise(resolve => {
       setUserData(updatedUser); // Update the user data
-      // setEditBioMode(false); // Exit edit mode
       resolve(null); // Resolve the promise
     });
     setIsRecipePublic(prevState => !prevState);

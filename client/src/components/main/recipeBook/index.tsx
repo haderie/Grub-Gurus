@@ -14,9 +14,9 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
   const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
   return (
     <>
-      <div className='direct-message-container'>
+      <div className='recipe-container'>
         {/* Left Sidebar: Recipe Names */}
-        <div className='chats-list'>
+        <div className='recipe-list'>
           <h2 className=''>Recipes</h2>
           <TextField
             id='searchBarss'
@@ -31,7 +31,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
             {recipes.map(recipe => (
               <li
                 key={recipe._id.toString()}
-                className={`chats-list-card ${selectedRecipe?._id === recipe._id}`}
+                className={`recipe-list-card ${selectedRecipe?._id === recipe._id}`}
                 onClick={() => setSelectedRecipe(recipe)}>
                 <Button className='w-full text-left' onClick={() => setSelectedRecipe(recipe)}>
                   {recipe.name} {' | '} Likes: {recipe.numOfLikes}
@@ -42,7 +42,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
         </div>
 
         {/* Right Section: Recipe Details */}
-        <div className='chat-container'>
+        <div className='recipe-container'>
           {selectedRecipe ? (
             <RecipeCard recipe={selectedRecipe} />
           ) : (

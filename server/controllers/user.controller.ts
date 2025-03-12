@@ -246,8 +246,8 @@ const userController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Updates a user's biography.
-   * @param req The request containing the username and biography in the body.
+   * Updates a user's recipeBook privacy status.
+   * @param req The request containing the username and recipeBookPublic boolean in the body.
    * @param res The response, either confirming the update or returning an error.
    * @returns A promise resolving to void.
    */
@@ -279,7 +279,7 @@ const userController = (socket: FakeSOSocket) => {
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).send(`Error when updating user biography: ${error}`);
+      res.status(500).send(`Error when updating user recipeBook privacy status: ${error}`);
     }
   };
 

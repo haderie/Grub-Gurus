@@ -1,35 +1,35 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { DatabaseRecipe } from '../types/types';
-import { getRecipeByUsername } from '../services/recipeService';
+import { getRecipesByUsername } from '../services/recipeService';
 import useUserContext from './useUserContext';
 
 const useUserRecipes = (username: string) => {
   const { socket } = useUserContext();
 
-  const [searchParams] = useSearchParams();
-  const [search, setSearch] = useState<string>('');
+  // const [searchParams] = useSearchParams();
+  // const [search, setSearch] = useState<string>('');
   const [recipes, setRecipes] = useState<DatabaseRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // let pageTitle = 'All Rec';
-    let searchString = '';
+  // IF SEARCH IS TO BE IMPLEMENTED
+  // useEffect(() => {
+  //   // let pageTitle = 'All Rec';
+  //   let searchString = '';
 
-    const searchQuery = searchParams.get('search');
-    const tagQuery = searchParams.get('tag');
+  //   const searchQuery = searchParams.get('search');
+  //   const tagQuery = searchParams.get('tag');
 
-    if (searchQuery) {
-      // pageTitle = 'Search Results';
-      searchString = searchQuery;
-    } else if (tagQuery) {
-      // pageTitle = tagQuery;
-      searchString = `[${tagQuery}]`;
-    }
+  //   if (searchQuery) {
+  //     // pageTitle = 'Search Results';
+  //     searchString = searchQuery;
+  //   } else if (tagQuery) {
+  //     // pageTitle = tagQuery;
+  //     searchString = `[${tagQuery}]`;
+  //   }
 
-    setSearch(searchString);
-  }, [searchParams]);
+  //   setSearch(searchString);
+  // }, [searchParams]);
 
   useEffect(() => {
     if (!username) {
@@ -40,7 +40,7 @@ const useUserRecipes = (username: string) => {
 
     const fetchRecipes = async () => {
       try {
-        const response = await getRecipeByUsername(username);
+        const response = await getRecipesByUsername(username);
         setRecipes(response);
       } catch (err) {
         setError('Failed to load recipes.');
@@ -67,7 +67,8 @@ const useUserRecipes = (username: string) => {
     // return () => {
     //   socket.off('recipeViewsUpdate', handleViewsUpdate);
     // };
-  }, [username, search, socket]);
+  }, [username, socket]);
+  // search ^ in dependency
 
   return { recipes, loading, error };
 };

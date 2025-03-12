@@ -1,15 +1,20 @@
 import express, { Request, Response } from 'express';
-import { getRecipeByUsername } from '../services/recipe.service';
+import { getRecipesByUsername } from '../services/recipe.service';
 import { FakeSOSocket } from '../types/types';
 
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
 
-  // Get recipes by username
-  const getRecipe = async (req: Request, res: Response): Promise<void> => {
+  /**
+   * Retrieves a recipe by the username of the user.
+   * @param req The request containing the username as a route parameter.
+   * @param res The response, either returning the recipes or an error.
+   * @returns A promise resolving to void.
+   */
+  const getRecipes = async (req: Request, res: Response): Promise<void> => {
     try {
       const { username } = req.params;
-      const recipes = await getRecipeByUsername(username);
+      const recipes = await getRecipesByUsername(username);
       res.status(200).json(recipes);
     } catch (error) {
       res.status(500).json({ message: error || 'Error fetching recipes' });
@@ -46,7 +51,7 @@ const recipeController = (socket: FakeSOSocket) => {
   //   }
   // };
 
-  router.get('/getrecipe/:username', getRecipe);
+  router.get('/getrecipes/:username', getRecipes);
 
   return router;
 };

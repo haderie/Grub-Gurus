@@ -69,8 +69,8 @@ export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | '
 
 /**
  * Interface for the request query to find questions using a search string.
- * - `order`: The order in which to sort the questions.
- * - `search`: The search string used to find questions.
+ * - `order`: The order in which to sort the recipe.
+ * - `search`: The search string used to find recipe.
  */
 export interface FindRecipeRequest extends Request {
   params: {

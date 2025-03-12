@@ -49,7 +49,7 @@ const useHeader = () => {
   };
 
   /**
-   * Handles the 'Enter' key press event to perform a search action.
+   * Handles the 'Enter' key press event to perform a search action for recipe.
    * Constructs a search query and navigates to the search results page.
    *
    * @param e - The keyboard event object.

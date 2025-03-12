@@ -126,7 +126,7 @@ const updateBiography = async (
 /**
  * Updates the user's biography.
  * @param username The unique username of the user
- * @param newBiography The new biography to set for this user
+ * @param newRecipeBookPublic The new boolean indicating recipeBookPrivacy status
  * @returns A promise resolving to the updated user
  * @throws Error if the request fails
  */

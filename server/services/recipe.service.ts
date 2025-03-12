@@ -32,7 +32,7 @@ export const filterQuestionsByAskedBy = (
  * @param {string} username - The username of the user to find.
  * @returns {Promise<RecipeResponse>} - Resolves with the found user object (without the password) or an error message.
  */
-export const getRecipeByUsername = async (username: string) => {
+export const getRecipesByUsername = async (username: string) => {
   try {
     // const user = await UserModel.findOne({ username });
     const user: SafeDatabaseUser | null = await UserModel.findOne({ username }).select('-password');
