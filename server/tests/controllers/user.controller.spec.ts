@@ -25,6 +25,8 @@ const mockUserJSONResponse = {
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
   certified: false,
+  privacySetting: 'Public',
+  
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
@@ -56,6 +58,7 @@ describe('Test userController', () => {
         certified: false,
         followers: [],
         following: [],
+        privacySetting: 'Public',
       });
     });
 
