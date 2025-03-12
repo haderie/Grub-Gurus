@@ -14,7 +14,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
   const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
   return (
     <>
-      <div className='recipe-container'>
+      <div className='total-recipe-container'>
         {/* Left Sidebar: Recipe Names */}
         <div className='recipe-list'>
           <h2 className=''>Recipes</h2>
