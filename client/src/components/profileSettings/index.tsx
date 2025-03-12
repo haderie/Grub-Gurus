@@ -15,6 +15,7 @@ const ProfileSettings: React.FC = () => {
     successMessage,
     errorMessage,
     showConfirmation,
+    showLists,
     pendingAction,
     canEditProfile,
     selectedOption,
@@ -24,6 +25,7 @@ const ProfileSettings: React.FC = () => {
     setEditBioMode,
     setNewBio,
     setNewPassword,
+    setShowLists,
     setConfirmNewPassword,
     setShowConfirmation,
     setPrivacySetting,
@@ -34,6 +36,7 @@ const ProfileSettings: React.FC = () => {
     handleUpdateFollowers,
     isFollowing,
     handleUpdatePrivacy,
+    handleCheckPrivacy,
   } = useProfileSettings();
 
   if (loading) {
@@ -125,8 +128,22 @@ const ProfileSettings: React.FC = () => {
               />
               <label htmlFor='following'>Following</label>
 
+              {showLists && (
+                <div>
+                  {selectedList && selectedList.length > 0 ? (
+                    <ul>
+                      {selectedList.map((username: string, index: number) => (
+                        <li key={index}>{username}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No {selectedOption} yet.</p>
+                  )}
+                </div>
+              )}
+
               {/* Display based on selected option */}
-              <div>
+              {/* <div>
                 {selectedList && selectedList.length > 0 ? (
                   <ul>
                     {selectedList.map((username: string, index: number) => (
@@ -136,7 +153,7 @@ const ProfileSettings: React.FC = () => {
                 ) : (
                   <p>No {selectedOption} yet.</p>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -151,6 +168,7 @@ const ProfileSettings: React.FC = () => {
             editBioMode={editBioMode}
             newBio={newBio}
             privacySetting={privacySetting}
+            showLists={showLists}
             newPassword={newPassword}
             confirmNewPassword={confirmNewPassword}
             successMessage={successMessage}
@@ -166,10 +184,12 @@ const ProfileSettings: React.FC = () => {
             setConfirmNewPassword={setConfirmNewPassword}
             setShowConfirmation={setShowConfirmation}
             setPrivacySetting={setPrivacySetting}
+            setShowLists={setShowLists}
             handleResetPassword={handleResetPassword}
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
             handleUpdatePrivacy={handleUpdatePrivacy}
+            handleCheckPrivacy={handleCheckPrivacy}
           />
         )}
       </div>

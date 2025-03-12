@@ -17,6 +17,7 @@ const ProfileEdit = ({
   canEditProfile,
   showPassword,
   togglePasswordVisibility,
+  showLists,
 
   setEditBioMode,
   setNewBio,
@@ -24,11 +25,13 @@ const ProfileEdit = ({
   setConfirmNewPassword,
   setShowConfirmation,
   setPrivacySetting,
+  setShowLists,
 
   handleResetPassword,
   handleUpdateBiography,
   handleDeleteUser,
   handleUpdatePrivacy,
+  handleCheckPrivacy,
 }: {
   userData: SafeDatabaseUser | null;
   loading: boolean;
@@ -37,6 +40,7 @@ const ProfileEdit = ({
   newPassword: string;
   confirmNewPassword: string;
   privacySetting: 'Public' | 'Private';
+  showLists: boolean;
   successMessage: string | null;
   errorMessage: string | null;
   showConfirmation: boolean;
@@ -51,11 +55,13 @@ const ProfileEdit = ({
   setConfirmNewPassword: React.Dispatch<React.SetStateAction<string>>;
   setShowConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   setPrivacySetting: React.Dispatch<React.SetStateAction<'Public' | 'Private'>>;
+  setShowLists: React.Dispatch<React.SetStateAction<boolean>>;
 
   handleResetPassword: () => void;
   handleUpdateBiography: () => void;
   handleDeleteUser: () => void;
   handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
+  handleCheckPrivacy: () => void;
 }) => {
   const handleCloseProfileEdit = () => {
     setEditBioMode(false);
@@ -85,6 +91,7 @@ const ProfileEdit = ({
                 const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
                 setPrivacySetting(newSetting);
                 handleUpdatePrivacy(newSetting);
+                handleCheckPrivacy();
               }}>
               {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
             </button>
