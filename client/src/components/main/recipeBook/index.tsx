@@ -1,4 +1,3 @@
-import useRecipes from '../../../hooks/useRecipes';
 import RecipeCard from '../recipeCard/index';
 import { DatabaseRecipe } from '../../../types/types';
 

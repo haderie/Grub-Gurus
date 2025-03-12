@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { DatabaseRecipe } from '../types/types';
 import { getRecipeByUsername } from '../services/recipeService';
 
-const useUserRecipes = (userId: string) => {
+const useUserRecipes = (username: string) => {
   const [recipes, setRecipes] = useState<DatabaseRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log(userId);
-    if (!userId) {
+    console.log(username);
+    if (!username) {
       setRecipes([]);
       setLoading(false);
       return;
@@ -18,7 +17,7 @@ const useUserRecipes = (userId: string) => {
 
     const fetchRecipes = async () => {
       try {
-        const response = await getRecipeByUsername(userId);
+        const response = await getRecipeByUsername(username);
         setRecipes(response);
       } catch (err) {
         setError('Failed to load recipes.');
@@ -28,7 +27,7 @@ const useUserRecipes = (userId: string) => {
     };
 
     fetchRecipes();
-  }, [userId]);
+  }, [username]);
 
   return { recipes, loading, error };
 };

@@ -17,7 +17,6 @@ import UsersListPage from './main/usersListPage';
 import ProfileSettings from './profileSettings';
 import AllGamesPage from './main/games/allGamesPage';
 import GamePage from './main/games/gamePage';
-import RecipeBook from './main/recipeBook';
 
 const ProtectedRoute = ({
   user,
