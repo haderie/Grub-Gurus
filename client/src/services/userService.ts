@@ -176,6 +176,29 @@ const followUser = async (
 //   }
 // };
 
+/**
+ * Updates the user's privacy settings.
+ * @param username - The username of the user
+ * @param privacySetting - The new privacy setting
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updatePrivacy = async (
+  username: string,
+  privacySetting: 'Public' | 'Private',
+): Promise<SafeDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updatePrivacy`, {
+    username,
+    privacySetting,
+  });
+
+  if (res.status !== 200) {
+    throw new Error('Error when updating privacy setting');
+  }
+
+  return res.data;
+};
+
 export {
   getUsers,
   getUserByUsername,
@@ -185,5 +208,6 @@ export {
   resetPassword,
   updateBiography,
   followUser,
+  updatePrivacy,
   updateRecipeBookPrivacy,
 };

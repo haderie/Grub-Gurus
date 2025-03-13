@@ -9,6 +9,7 @@ const mockUser: User = {
   password: 'password',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  privacySetting: 'Public',
   recipeBookPublic: false,
 };
 
@@ -17,6 +18,7 @@ const mockSafeUser: SafeDatabaseUser = {
   username: 'user1',
   dateJoined: new Date('2024-12-03'),
   certified: false,
+  privacySetting: 'Public',
   recipeBookPublic: false,
 };
 
@@ -25,6 +27,7 @@ const mockUserJSONResponse = {
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
   certified: false,
+  privacySetting: 'Public',
   recipeBookPublic: false,
 };
 
@@ -57,6 +60,7 @@ describe('Test userController', () => {
         certified: false,
         followers: [],
         following: [],
+        privacySetting: 'Public',
         recipeBookPublic: false,
       });
     });

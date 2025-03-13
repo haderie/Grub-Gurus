@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
@@ -17,27 +17,42 @@ const ProfileSettings: React.FC = () => {
     successMessage,
     errorMessage,
     showConfirmation,
+    showLists,
     pendingAction,
     canEditProfile,
     selectedOption,
     showPassword,
+    privacySetting,
     togglePasswordVisibility,
     setEditBioMode,
     setNewBio,
     setNewPassword,
+    setShowLists,
     setConfirmNewPassword,
     setShowConfirmation,
+    setPrivacySetting,
     handleRadioChange,
     handleResetPassword,
     handleUpdateBiography,
     handleDeleteUser,
     handleUpdateFollowers,
     isFollowing,
+    handleUpdatePrivacy,
+    handleCheckPrivacy,
     isRecipePublic,
     toggleRecipeBookVisibility,
   } = useProfileSettings();
 
   const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
+  useEffect(() => {
+    const checkPrivacy = async () => {
+      if (userData) {
+        await handleCheckPrivacy();
+      }
+    };
+
+    checkPrivacy();
+  }, [userData, handleCheckPrivacy]);
 
   if (loading || recipesLoading) {
     return (
@@ -48,9 +63,6 @@ const ProfileSettings: React.FC = () => {
       </div>
     );
   }
-
-  if (loading) return <h2>Loading user data...</h2>;
-
   const handleEditProfileClick = () => {
     setEditBioMode(true); // Close the ProfileEdit modal
     setNewBio(userData?.biography || '');
@@ -90,6 +102,9 @@ const ProfileSettings: React.FC = () => {
                   <b>Username:</b> {userData.username}
                 </p>
                 <p>
+                  <strong>Account Privacy:</strong> {userData.privacySetting}
+                </p>
+                <p>
                   <strong>Followers:</strong> {userData.followers?.length}
                 </p>
                 <p>
@@ -119,7 +134,6 @@ const ProfileSettings: React.FC = () => {
                 onChange={handleRadioChange}
               />
               <label htmlFor='followers'>Followers</label>
-
               <input
                 type='radio'
                 name='followStatus'
@@ -129,9 +143,21 @@ const ProfileSettings: React.FC = () => {
                 onChange={handleRadioChange}
               />
               <label htmlFor='following'>Following</label>
-
+              {(canEditProfile || showLists) && (
+                <div>
+                  {selectedList && selectedList.length > 0 ? (
+                    <ul>
+                      {selectedList.map((username: string, index: number) => (
+                        <li key={index}>{username}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No {selectedOption} yet.</p>
+                  )}
+                </div>
+              )}
               {/* Display based on selected option */}
-              <div>
+              {/* <div>
                 {selectedList && selectedList.length > 0 ? (
                   <ul>
                     {selectedList.map((username: string, index: number) => (
@@ -141,7 +167,7 @@ const ProfileSettings: React.FC = () => {
                 ) : (
                   <p>No {selectedOption} yet.</p>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -171,6 +197,12 @@ const ProfileSettings: React.FC = () => {
           handleResetPassword={handleResetPassword}
           handleUpdateBiography={handleUpdateBiography}
           handleDeleteUser={handleDeleteUser}
+          privacySetting={privacySetting}
+          setPrivacySetting={setPrivacySetting}
+          showLists={showLists}
+          setShowLists={setShowLists}
+          handleUpdatePrivacy={handleUpdatePrivacy}
+          handleCheckPrivacy={handleCheckPrivacy}
         />
       )}
       {(isRecipePublic || canEditProfile) && (

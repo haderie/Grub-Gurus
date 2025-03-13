@@ -29,6 +29,7 @@ export interface User extends UserCredentials {
   certified: boolean;
   followers?: string[];
   following?: string[];
+  privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
 }
 
@@ -64,6 +65,7 @@ export interface UserRequest extends Request {
     certified: boolean;
     followers?: string[];
     following?: string[];
+    privacySetting: 'Public' | 'Private';
     recipeBookPublic: boolean;
   };
 }
@@ -130,5 +132,17 @@ export interface UpdateFollowRequest extends Request {
   body: {
     username: string;
     usernameFollowed: string;
+  };
+}
+
+/**
+ * Express request for updating a user's privacy setting.
+ * `username`: The username whose privacy setting is being updated (body).
+ * `privacySetting`: The new privacy setting to be set (body).
+ */
+export interface UpdatePrivacyRequest extends Request {
+  body: {
+    username: string;
+    privacySetting: 'Public' | 'Private';
   };
 }

@@ -6,6 +6,7 @@ import {
   resetPassword,
   updateBiography,
   followUser,
+  updatePrivacy,
   updateRecipeBookPrivacy,
 } from '../services/userService';
 
@@ -29,6 +30,8 @@ const useProfileSettings = () => {
   const [isRecipePublic, setIsRecipePublic] = useState(currentUser.recipeBookPublic);
 
   const [newBio, setNewBio] = useState('');
+  const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>('Public');
+  const [showLists, setShowLists] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -167,6 +170,41 @@ const useProfileSettings = () => {
     });
   };
 
+  /**
+   *
+   *
+   */
+  const handleCheckPrivacy = async () => {
+    if (!username) return;
+    try {
+      const targetUser = await getUserByUsername(username);
+      const targetUserFollowers = targetUser.followers;
+
+      if (targetUser.username === currentUser.username) {
+        setShowLists(true);
+      }
+
+      if (targetUser.privacySetting === 'Public') {
+        setShowLists(true);
+      }
+      if (
+        targetUser.privacySetting === 'Private' &&
+        targetUserFollowers?.find(name => name === currentUser.username)
+      ) {
+        setShowLists(true);
+      }
+      if (
+        targetUser.privacySetting === 'Private' &&
+        !targetUserFollowers?.find(name => name === currentUser.username)
+      ) {
+        setShowLists(false);
+      }
+    } catch (error) {
+      setErrorMessage('Failed to check if this user follows the target user.');
+      setSuccessMessage(null);
+    }
+  };
+
   const handleUpdateFollowers = async () => {
     if (!username) return;
     try {
@@ -186,6 +224,25 @@ const useProfileSettings = () => {
       setErrorMessage(null);
     } catch (error) {
       setErrorMessage(`Failed to follow/unfollow ${username}.`);
+    }
+  };
+
+  /**
+   * Handler for updating the privacy setting of the user
+   */
+  const handleUpdatePrivacy = async (newSetting: 'Public' | 'Private') => {
+    if (!username) return;
+    try {
+      setPrivacySetting(newSetting);
+      const updatedUser = await updatePrivacy(username, newSetting);
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+      setSuccessMessage('Account privacy updated!');
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage('Failed to update privacy setting.');
       setSuccessMessage(null);
     }
   };
@@ -194,6 +251,10 @@ const useProfileSettings = () => {
     userData,
     newPassword,
     confirmNewPassword,
+    privacySetting,
+    showLists,
+    setShowLists,
+    setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,
     loading,
@@ -217,7 +278,9 @@ const useProfileSettings = () => {
     handleUpdateBiography,
     handleDeleteUser,
     handleUpdateFollowers,
+    handleCheckPrivacy,
     isFollowing,
+    handleUpdatePrivacy,
     isRecipePublic,
     setIsRecipePublic,
     toggleRecipeBookVisibility,

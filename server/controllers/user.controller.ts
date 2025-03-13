@@ -8,6 +8,7 @@ import {
   UpdateBiographyRequest,
   UpdateFollowRequest,
   SafeDatabaseUser,
+  UpdatePrivacyRequest,
   UpdateRecipeBookPrivacy,
 } from '../types/types';
 import {
@@ -48,6 +49,18 @@ const userController = (socket: FakeSOSocket) => {
     req.body.biography !== undefined;
 
   /**
+   * Validates that the request body contains all required fields to update the user privacy setting.
+   * @param req The incoming request containing user data.
+   * @returns `true` if the body contains valid user fields; otherwise, `false`.
+   */
+  const isUpdatePrivacyRequestValid = (req: UpdatePrivacyRequest): boolean =>
+    req.body !== undefined &&
+    req.body.username !== undefined &&
+    req.body.username.trim() !== '' &&
+    req.body.privacySetting !== undefined &&
+    (req.body.privacySetting === 'Private' || req.body.privacySetting === 'Public');
+
+  /**
    * Handles the creation of a new user account.
    * @param req The request containing username, email, and password in the body.
    * @param res The response, either returning the created user or an error.
@@ -67,6 +80,7 @@ const userController = (socket: FakeSOSocket) => {
       biography: requestUser.biography ?? '',
       followers: requestUser.followers ?? [],
       following: requestUser.following ?? [],
+      privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
     };
@@ -322,6 +336,38 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Updates a user's privacy setting.
+   * @param req The request containing the username and privacy setting in the body.
+   * @param res The response, either confirming the update or returning an error.
+   * @returns A promise resolving to void.
+   */
+  const updatePrivacy = async (req: UpdatePrivacyRequest, res: Response): Promise<void> => {
+    try {
+      if (!isUpdatePrivacyRequestValid(req)) {
+        res.status(400).send('Invalid user body');
+        return;
+      }
+
+      const { username, privacySetting } = req.body;
+
+      const updatedUser = await updateUser(username, { privacySetting });
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when updating user privacy setting: ${error}`);
+    }
+  };
+
   // Define routes for the user-related operations.
   router.post('/signup', createUser);
   router.post('/login', userLogin);
@@ -332,7 +378,7 @@ const userController = (socket: FakeSOSocket) => {
   router.patch('/updateBiography', updateBiography);
   router.patch('/updateRecipeBookPrivacy', updateRecipeBookPrivacy);
   router.patch('/followUser', updateFollowingList);
-
+  router.patch('/updatePrivacy', updatePrivacy);
   return router;
 };
 
