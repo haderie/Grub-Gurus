@@ -47,7 +47,7 @@ const ProfileSettings: React.FC = () => {
     };
 
     checkPrivacy();
-  }, [userData]);
+  }, [userData, handleCheckPrivacy]);
 
   if (loading) {
     return (
