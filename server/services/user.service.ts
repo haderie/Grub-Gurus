@@ -32,6 +32,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       followers: result.followers,
       following: result.following,
       privacySetting: result.privacySetting,
+      recipeBookPublic: result.recipeBookPublic,
     };
 
     return safeUser;
@@ -48,10 +49,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
  */
 export const getUserByUsername = async (username: string): Promise<UserResponse> => {
   try {
-    const user: SafeDatabaseUser | null = await UserModel.findOne({ username })
-      .select('-password')
-      .populate('followers', 'username')
-      .populate('following', 'username');
+    const user: SafeDatabaseUser | null = await UserModel.findOne({ username }).select('-password');
     if (!user) {
       throw Error('User not found');
     }

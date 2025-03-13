@@ -34,6 +34,11 @@ const userSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
+    recipeBookPublic: {
+      type: Boolean,
+      default: false,
+    },
+
     followers: [
       {
         type: String,

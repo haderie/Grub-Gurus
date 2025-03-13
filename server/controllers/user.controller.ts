@@ -9,6 +9,7 @@ import {
   UpdateFollowRequest,
   SafeDatabaseUser,
   UpdatePrivacyRequest,
+  UpdateRecipeBookPrivacy,
 } from '../types/types';
 import {
   deleteUserByUsername,
@@ -79,8 +80,9 @@ const userController = (socket: FakeSOSocket) => {
       biography: requestUser.biography ?? '',
       followers: requestUser.followers ?? [],
       following: requestUser.following ?? [],
-      certified: false,
       privacySetting: 'Public',
+      certified: requestUser.certified ?? false,
+      recipeBookPublic: requestUser.recipeBookPublic ?? false,
     };
 
     try {
@@ -258,6 +260,44 @@ const userController = (socket: FakeSOSocket) => {
   };
 
   /**
+   * Updates a user's recipeBook privacy status.
+   * @param req The request containing the username and recipeBookPublic boolean in the body.
+   * @param res The response, either confirming the update or returning an error.
+   * @returns A promise resolving to void.
+   */
+  const updateRecipeBookPrivacy = async (
+    req: UpdateRecipeBookPrivacy,
+    res: Response,
+  ): Promise<void> => {
+    try {
+      // if (!isUpdateBiographyBodyValid(req)) {
+      //   res.status(400).send('Invalid user body');
+      //   return;
+      // }
+
+      // Validate that request has username and biography
+      const { username, recipeBookPublic } = req.body;
+
+      // Call the same updateUser(...) service used by resetPassword
+      const updatedUser = await updateUser(username, { recipeBookPublic });
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      // Emit socket event for real-time updates
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when updating user recipeBook privacy status: ${error}`);
+    }
+  };
+
+  /**
    * Updates a user's following list.
    * @param req The request containing the current user and new user to follow
    * @param res The response containing the updated following list for the current user and updated follower list for the user followed
@@ -336,6 +376,7 @@ const userController = (socket: FakeSOSocket) => {
   router.get('/getUsers', getUsers);
   router.delete('/deleteUser/:username', deleteUser);
   router.patch('/updateBiography', updateBiography);
+  router.patch('/updateRecipeBookPrivacy', updateRecipeBookPrivacy);
   router.patch('/followUser', updateFollowingList);
   router.patch('/updatePrivacy', updatePrivacy);
   return router;
