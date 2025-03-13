@@ -40,9 +40,13 @@ const ProfileSettings: React.FC = () => {
   } = useProfileSettings();
 
   useEffect(() => {
-    if (userData) {
-      handleCheckPrivacy();
-    }
+    const checkPrivacy = async () => {
+      if (userData) {
+        await handleCheckPrivacy();
+      }
+    };
+
+    checkPrivacy();
   }, [userData]);
 
   if (loading) {
