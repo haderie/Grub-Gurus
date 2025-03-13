@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
@@ -39,6 +39,12 @@ const ProfileSettings: React.FC = () => {
     handleCheckPrivacy,
   } = useProfileSettings();
 
+  useEffect(() => {
+    if (userData) {
+      handleCheckPrivacy();
+    }
+  }, [userData]);
+
   if (loading) {
     return (
       <div className='page-container'>
@@ -48,7 +54,6 @@ const ProfileSettings: React.FC = () => {
       </div>
     );
   }
-
   const handleEditProfileClick = () => {
     setEditBioMode(true); // Close the ProfileEdit modal
     setNewBio(userData?.biography || '');
@@ -117,7 +122,6 @@ const ProfileSettings: React.FC = () => {
                 onChange={handleRadioChange}
               />
               <label htmlFor='followers'>Followers</label>
-
               <input
                 type='radio'
                 name='followStatus'
@@ -127,8 +131,7 @@ const ProfileSettings: React.FC = () => {
                 onChange={handleRadioChange}
               />
               <label htmlFor='following'>Following</label>
-
-              {showLists && (
+              {(canEditProfile || showLists) && (
                 <div>
                   {selectedList && selectedList.length > 0 ? (
                     <ul>
@@ -141,7 +144,6 @@ const ProfileSettings: React.FC = () => {
                   )}
                 </div>
               )}
-
               {/* Display based on selected option */}
               {/* <div>
                 {selectedList && selectedList.length > 0 ? (

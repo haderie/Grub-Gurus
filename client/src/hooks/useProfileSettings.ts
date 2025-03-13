@@ -159,6 +159,11 @@ const useProfileSettings = () => {
     try {
       const targetUser = await getUserByUsername(username);
       const targetUserFollowers = targetUser.followers;
+
+      if (targetUser.username === currentUser.username) {
+        setShowLists(true);
+      }
+
       if (targetUser.privacySetting === 'Public') {
         setShowLists(true);
       }
