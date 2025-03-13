@@ -197,6 +197,12 @@ const ProfileSettings: React.FC = () => {
           handleResetPassword={handleResetPassword}
           handleUpdateBiography={handleUpdateBiography}
           handleDeleteUser={handleDeleteUser}
+          privacySetting={privacySetting}
+          setPrivacySetting={setPrivacySetting}
+          showLists={showLists}
+          setShowLists={setShowLists}
+          handleUpdatePrivacy={handleUpdatePrivacy}
+          handleCheckPrivacy={handleCheckPrivacy}
         />
       )}
       {(isRecipePublic || canEditProfile) && (
