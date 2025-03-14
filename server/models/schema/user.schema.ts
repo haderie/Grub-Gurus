@@ -30,16 +30,14 @@ const userSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
-    followers: [
-      {
-        type: String,
-      },
-    ],
-    following: [
-      {
-        type: String,
-      },
-    ],
+    followers: {
+      type: [String],
+      default: [],
+    },
+    following: {
+      type: [String],
+      default: [],
+    },
   },
   { collection: 'User' },
 );

@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import UserModel from '../../models/users.model';
 import {
   deleteUserByUsername,
+  followUserService,
   getUserByUsername,
   getUsersList,
   loginUser,
@@ -9,7 +10,7 @@ import {
   updateUser,
 } from '../../services/user.service';
 import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
-import { user, safeUser } from '../mockData.models';
+import { user, safeUser, userFollowed } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require('mockingoose');
@@ -196,6 +197,8 @@ describe('updateUser', () => {
     username: user.username,
     dateJoined: user.dateJoined,
     certified: false,
+    followers: [],
+    following: [],
   };
 
   const updates: Partial<User> = {
@@ -260,5 +263,117 @@ describe('updateUser', () => {
     const updatedError = await updateUser(user.username, biographyUpdates);
 
     expect('error' in updatedError).toBe(true);
+  });
+});
+
+describe('followUserService', () => {
+  test('a followed user should appear in the current users following', async () => {
+    const mockFindOneReturn = jest.fn();
+
+    mockFindOneReturn.mockImplementation(params => {
+      if (params.getQuery().username === userFollowed.username) {
+        return userFollowed;
+      }
+
+      return user;
+    });
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const mockFindOneAndUpdateReturn = jest.fn();
+
+    mockFindOneAndUpdateReturn.mockImplementation(params => {
+      if (params.getQuery().username === userFollowed.username) {
+        return { ...userFollowed, followers: ['user1'] };
+      }
+
+      return { ...user, following: ['user2'] };
+    });
+    mockingoose(UserModel).toReturn(mockFindOneAndUpdateReturn, 'findOneAndUpdate');
+
+    const updatedUser = await followUserService(user.username, userFollowed.username);
+
+    if ('error' in updatedUser) {
+      expect(true).toBe(false); // this should not happen, so fail the test
+    } else {
+      expect(updatedUser.following).toContainEqual(userFollowed.username);
+    }
+
+    mockFindOneReturn.mockRestore();
+    mockFindOneAndUpdateReturn.mockRestore();
+  });
+
+  test('should throw an error when trying to follow yourself', async () => {
+    const username = 'user1';
+    const usernameFollowed = 'user1';
+
+    const result = await followUserService(username, usernameFollowed);
+
+    expect(result).toEqual({
+      error: 'Error while following user: user1: Error: Cannot follow yourself',
+    });
+  });
+
+  test('should throw an error if one or both users do not exist', async () => {
+    const mockFindOneReturn = jest.fn();
+
+    mockFindOneReturn.mockImplementation(params => null);
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const username = 'user1';
+    const usernameFollowed = 'nullUser';
+
+    const result = await followUserService(username, usernameFollowed);
+
+    expect(result).toEqual({
+      error: 'Error while following user: nullUser: Error: One or both users not found',
+    });
+    mockFindOneReturn.mockRestore();
+  });
+
+  test('should throw an error if the user is already following the selected user', async () => {
+    const mockFindOneReturn = jest.fn();
+
+    mockFindOneReturn.mockImplementation(params => {
+      if (params.getQuery().username === userFollowed.username) {
+        return { ...userFollowed, followers: ['user1'] };
+      }
+      return { ...user, following: ['user2'] };
+    });
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const result = await followUserService(user.username, userFollowed.username);
+
+    expect(result).toEqual({
+      error: 'Error while following user: user2: Error: You already follow user2',
+    });
+
+    mockFindOneReturn.mockRestore();
+  });
+
+  test('should throw an error if updating the database fails', async () => {
+    const mockFindOneReturn = jest.fn();
+
+    mockFindOneReturn.mockImplementation(params => {
+      if (params.getQuery().username === userFollowed.username) {
+        return userFollowed;
+      }
+
+      return user;
+    });
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const mockFindOneAndUpdateReturn = jest.fn();
+
+    mockFindOneAndUpdateReturn.mockImplementation(params => null);
+    mockingoose(UserModel).toReturn(mockFindOneAndUpdateReturn, 'findOneAndUpdate');
+
+    const result = await followUserService(user.username, userFollowed.username);
+
+    expect(result).toEqual({
+      error: 'Error while following user: user2: Error: Error updating following and followers',
+    });
+
+    mockFindOneReturn.mockRestore();
+    mockFindOneAndUpdateReturn.mockRestore();
   });
 });

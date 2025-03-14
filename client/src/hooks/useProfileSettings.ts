@@ -52,6 +52,7 @@ const useProfileSettings = () => {
         setLoading(true);
         const data = await getUserByUsername(username);
         setUserData(data);
+        setIsFollowing(data.followers.includes(currentUser.username));
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
