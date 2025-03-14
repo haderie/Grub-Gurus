@@ -27,6 +27,8 @@ const mockUserJSONResponse = {
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
   certified: false,
+  followers: [],
+  following: [],
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
