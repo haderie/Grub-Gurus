@@ -27,8 +27,8 @@ export interface User extends UserCredentials {
   dateJoined: Date;
   biography?: string;
   certified: boolean;
-  followers?: string[];
-  following?: string[];
+  followers: string[];
+  following: string[];
   privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
 }
@@ -63,8 +63,9 @@ export interface UserRequest extends Request {
     password: string;
     biography?: string;
     certified: boolean;
-    followers?: string[];
-    following?: string[];
+
+    followers: string[];
+    following: string[];
     privacySetting: 'Public' | 'Private';
     recipeBookPublic: boolean;
   };

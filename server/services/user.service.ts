@@ -171,14 +171,14 @@ export const followUserService = async (
       throw Error('Cannot follow yourself');
     }
 
-    const user = (await getUserByUsername(username)) as SafeDatabaseUser;
-    const userFollowed = (await getUserByUsername(usernameFollowed)) as SafeDatabaseUser;
+    const user = await getUserByUsername(username);
+    const userFollowed = await getUserByUsername(usernameFollowed);
 
-    if (!user || !userFollowed) {
+    if ('error' in user || 'error' in userFollowed) {
       throw Error('One or both users not found');
     }
 
-    if (user.following?.includes(usernameFollowed)) {
+    if (user.following.includes(usernameFollowed)) {
       throw Error(`You already follow ${usernameFollowed}`);
     }
 
@@ -200,7 +200,7 @@ export const followUserService = async (
 
     return updatedUser;
   } catch (error) {
-    return { error: `Error while following user: ${usernameFollowed}` };
+    return { error: `Error while following user: ${usernameFollowed}: ${error}` };
   }
 };
 

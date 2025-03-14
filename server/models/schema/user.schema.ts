@@ -34,21 +34,18 @@ const userSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
+    followers: {
+      type: [String],
+      default: [],
+    },
+    following: {
+      type: [String],
+      default: [],
+    },
     recipeBookPublic: {
       type: Boolean,
       default: false,
     },
-
-    followers: [
-      {
-        type: String,
-      },
-    ],
-    following: [
-      {
-        type: String,
-      },
-    ],
     privacySetting: {
       type: String,
       enum: ['Public', 'Private'],
