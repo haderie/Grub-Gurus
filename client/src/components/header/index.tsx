@@ -17,7 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <div id='header' className='header'>
-      <div className='title'>Fake Stack Overflow</div>
+      <div className='title'>Grub Gurus</div>
       <TextField
         id='searchBar'
         size='small'

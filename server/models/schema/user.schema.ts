@@ -8,6 +8,10 @@ import { Schema } from 'mongoose';
  * - `username`: The username of the user.
  * - `password`: The encrypted password securing the user's account.
  * - `dateJoined`: The date the user joined the platform.
+ * - 'biography': The biography of the user.
+ * - 'certified': true if the user is a certified user, otherwise false.
+ * - 'followers': represents the array of Users that follow this user.
+ * - 'following': represents the array of Users this user follows.
  */
 const userSchema: Schema = new Schema(
   {
@@ -37,6 +41,14 @@ const userSchema: Schema = new Schema(
     following: {
       type: [String],
       default: [],
+    recipeBookPublic: {
+      type: Boolean,
+      default: false,
+    },
+    privacySetting: {
+      type: String,
+      enum: ['Public', 'Private'],
+      default: 'Public',
     },
   },
   { collection: 'User' },

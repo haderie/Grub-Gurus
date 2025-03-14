@@ -7,7 +7,15 @@ import MessageCard from '../messageCard';
  * and provides functionality to send and receive messages.
  */
 const MessagingPage = () => {
-  const { messages, newMessage, setNewMessage, handleSendMessage, error } = useMessagingPage();
+  const {
+    messages,
+    newMessage,
+    setNewMessage,
+    handleSendMessage,
+    error,
+    aiResponseChecked,
+    setAiResponseChecked,
+  } = useMessagingPage();
 
   return (
     <div className='chat-room'>
@@ -18,6 +26,17 @@ const MessagingPage = () => {
         {messages.map(message => (
           <MessageCard key={String(message._id)} message={message} />
         ))}
+      </div>
+      <div className='ai-response-checkbox'>
+        <input
+          type='checkbox'
+          id='aiResponse'
+          checked={aiResponseChecked}
+          onChange={e => setAiResponseChecked(e.target.checked)}
+        />
+        <label htmlFor='aiResponse'>
+          List ingredients you have, and the Munch Master will provide a recipe!
+        </label>
       </div>
       <div className='message-input'>
         <textarea
