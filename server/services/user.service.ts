@@ -201,7 +201,6 @@ export const followUserService = async (
 
     return updatedUser;
   } catch (error) {
-    console.log(error)
     return { error: `Error while following user: ${usernameFollowed}: ${error}` };
   }
 };
