@@ -332,7 +332,7 @@ const userController = (socket: FakeSOSocket) => {
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).send(`Error when following ${req.body.usernameFollowed}`);
+      res.status(500).send(`Error when following ${req.body.usernameFollowed}: ${error}`);
     }
   };
 

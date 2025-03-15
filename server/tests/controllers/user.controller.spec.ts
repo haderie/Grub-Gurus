@@ -15,6 +15,7 @@ const mockUser: User = {
   recipeBookPublic: false,
 };
 
+
 const mockSafeUser: SafeDatabaseUser = {
   _id: new mongoose.Types.ObjectId(),
   username: 'user1',
@@ -24,6 +25,11 @@ const mockSafeUser: SafeDatabaseUser = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+};
+
+const mockUpdatedUser = {
+  ...mockSafeUser,
+  following: ['user2'],
 };
 
 const mockUserJSONResponse = {
@@ -43,6 +49,10 @@ const updatedUserSpy = jest.spyOn(util, 'updateUser');
 const getUserByUsernameSpy = jest.spyOn(util, 'getUserByUsername');
 const getUsersListSpy = jest.spyOn(util, 'getUsersList');
 const deleteUserByUsernameSpy = jest.spyOn(util, 'deleteUserByUsername');
+
+const followUserServiceSpy = jest.spyOn(util, 'followUserService');
+const unfollowUserServiceSpy = jest.spyOn(util, 'unfollowUserService');
+
 
 describe('Test userController', () => {
   describe('POST /signup', () => {
@@ -426,6 +436,74 @@ describe('Test userController', () => {
       expect(response.text).toContain(
         'Error when updating user biography: Error: Error updating user',
       );
+    });
+  });
+
+  describe('PATCH /followUser', () => {
+    test('should successfully follow a user', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      followUserServiceSpy.mockResolvedValueOnce(mockUpdatedUser);
+
+      const response = await supertest(app).patch('/user/followUser').send({
+        username: 'user1',
+        usernameFollowed: 'user2',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.following).toContainEqual('user2');
+      expect(followUserServiceSpy).toHaveBeenCalledWith('user1', 'user2');
+    });
+
+    test('should successfully unfollow a user', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce({ ...mockSafeUser, following: ['user2'] });
+      unfollowUserServiceSpy.mockResolvedValueOnce(mockSafeUser);
+
+      const response = await supertest(app).patch('/user/followUser').send({
+        username: 'user1',
+        usernameFollowed: 'user2',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.followers).toEqual([]);
+      expect(unfollowUserServiceSpy).toHaveBeenCalledWith('user1', 'user2');
+    });
+
+    test('should return 500 error when trying to follow yourself', async () => {
+      const response = await supertest(app).patch('/user/followUser').send({
+        username: 'user1',
+        usernameFollowed: 'user1',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain(
+        'Error when following user1: Error: You cannot follow yourself',
+      );
+    });
+
+    test('should return 500 error if follow service fails', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      followUserServiceSpy.mockResolvedValueOnce({ error: 'Database error' });
+
+      const response = await supertest(app).patch('/user/followUser').send({
+        username: 'user1',
+        usernameFollowed: 'user2',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when following user2: Error: Database error');
+    });
+
+    test('should return 500 error if failure', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      followUserServiceSpy.mockRejectedValueOnce(new Error());
+
+      const response = await supertest(app).patch('/user/followUser').send({
+        username: 'user1',
+        usernameFollowed: 'user2',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when following user2: Error');
     });
   });
 });
