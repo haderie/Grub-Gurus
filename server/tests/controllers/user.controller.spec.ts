@@ -15,7 +15,6 @@ const mockUser: User = {
   recipeBookPublic: false,
 };
 
-
 const mockSafeUser: SafeDatabaseUser = {
   _id: new mongoose.Types.ObjectId(),
   username: 'user1',
@@ -52,7 +51,6 @@ const deleteUserByUsernameSpy = jest.spyOn(util, 'deleteUserByUsername');
 
 const followUserServiceSpy = jest.spyOn(util, 'followUserService');
 const unfollowUserServiceSpy = jest.spyOn(util, 'unfollowUserService');
-
 
 describe('Test userController', () => {
   describe('POST /signup', () => {
