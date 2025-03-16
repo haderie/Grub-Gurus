@@ -40,6 +40,23 @@ export interface RecipeData {
   views: string[];
 }
 
+export interface RecipePost {
+  title: string;
+  ingredients: string[];
+  instructions: string;
+  video?: string;
+  cookTime: number;
+}
+/**
+ * Represents additional recipe data used for calendar.
+ * - `start`: The start of when the recipe will be made.
+ * - `end`: The end of when the recipe will be made.
+ */
+export interface RecipeEvent extends RecipePost {
+  start: Date;
+  end: Date;
+}
+
 export type RecipeResponse = Recipe | { error: string };
 
 export interface RecipeByUsernameRequest extends Request {
