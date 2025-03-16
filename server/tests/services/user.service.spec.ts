@@ -7,6 +7,7 @@ import {
   getUsersList,
   loginUser,
   saveUser,
+  unfollowUserService,
   updateUser,
 } from '../../services/user.service';
 import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
@@ -373,6 +374,101 @@ describe('followUserService', () => {
 
     expect(result).toEqual({
       error: 'Error while following user: user2: Error: Error updating following and followers',
+    });
+
+    mockFindOneReturn.mockRestore();
+    mockFindOneAndUpdateReturn.mockRestore();
+  });
+});
+
+describe('followUserService', () => {
+  test('should return updated user with new following list when unfollow is successful', async () => {
+    const mockFindOneReturn = jest.fn();
+    mockFindOneReturn.mockImplementation(params => {
+      if (params.getQuery().username === 'user1') {
+        return { ...user, following: ['user2'] }; // user1 is following user2
+      }
+      return { ...userFollowed, followers: ['user1'] };
+    });
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const mockFindOneAndUpdateReturn = jest.fn();
+    mockFindOneAndUpdateReturn.mockImplementation(params => {
+      if (params.getQuery().username === 'user1') {
+        return { ...user, following: [] }; // user1 no longer follows anyone
+      }
+      return { ...userFollowed, followers: [] }; // user2 no longer has followers
+    });
+    mockingoose(UserModel).toReturn(mockFindOneAndUpdateReturn, 'findOneAndUpdate');
+
+    const updatedUser = await unfollowUserService(user.username, userFollowed.username);
+
+    if ('error' in updatedUser) {
+      expect(true).toBe(false); // this should not happen, so fail the test
+    } else {
+      expect(updatedUser.following).not.toContainEqual(userFollowed.username);
+    }
+
+    mockFindOneReturn.mockRestore();
+    mockFindOneAndUpdateReturn.mockRestore();
+  });
+
+  test('should throw an error when trying to unfollow yourself', async () => {
+    const result = await unfollowUserService(user.username, user.username);
+
+    expect(result).toEqual({
+      error: 'Error while unfollowing user: user1: Error: Cannot unfollow yourself',
+    });
+  });
+
+  test('should throw an error if one or both users do not exist', async () => {
+    const mockFindOneReturn = jest.fn();
+    mockFindOneReturn.mockImplementation(params => null);
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const nullUser = 'nullUser';
+
+    const result = await unfollowUserService(user.username, nullUser);
+
+    expect(result).toEqual({
+      error: 'Error while unfollowing user: nullUser: Error: One or both users not found',
+    });
+
+    mockFindOneReturn.mockRestore();
+  });
+
+  test('should throw an error if the user is not following the selected user', async () => {
+    const mockFindOneReturn = jest.fn();
+    mockFindOneReturn.mockImplementation(params => {
+      if (params.getQuery().username === 'user1') {
+        return user; // user1 is not following anyone
+      }
+      return userFollowed;
+    });
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const result = await unfollowUserService(user.username, userFollowed.username);
+
+    expect(result).toEqual({
+      error: `Error while unfollowing user: user2: Error: You cannot unfollow ${userFollowed.username}, you do not follow them`,
+    });
+
+    mockFindOneReturn.mockRestore();
+  });
+
+  test('should throw an error if updating the database fails', async () => {
+    const mockFindOneReturn = jest.fn();
+    mockFindOneReturn.mockImplementation(params => ({ ...user, following: ['user2'] }));
+    mockingoose(UserModel).toReturn(mockFindOneReturn, 'findOne');
+
+    const mockFindOneAndUpdateReturn = jest.fn();
+    mockFindOneAndUpdateReturn.mockImplementation(params => null);
+    mockingoose(UserModel).toReturn(mockFindOneAndUpdateReturn, 'findOneAndUpdate');
+
+    const result = await unfollowUserService(user.username, userFollowed.username);
+
+    expect(result).toEqual({
+      error: 'Error while unfollowing user: user2: Error: Error updating following and followers',
     });
 
     mockFindOneReturn.mockRestore();
