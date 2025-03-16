@@ -28,6 +28,7 @@ describe('POST /addAnswer', () => {
       ansBy: 'dummyUserId',
       ansDateTime: new Date('2024-06-03'),
       comments: [],
+      isUserCertified: false,
     };
     saveAnswerSpy.mockResolvedValueOnce(mockAnswer);
 
@@ -168,6 +169,7 @@ describe('POST /addAnswer', () => {
       ansBy: 'dummyUserId',
       ansDateTime: new Date('2024-06-03'),
       comments: [],
+      isUserCertified: false,
     };
 
     saveAnswerSpy.mockResolvedValueOnce(mockAnswer);
@@ -195,6 +197,7 @@ describe('POST /addAnswer', () => {
       ansBy: 'dummyUserId',
       ansDateTime: new Date('2024-06-03'),
       comments: [],
+      isUserCertified: false,
     };
 
     const mockQuestion = {
