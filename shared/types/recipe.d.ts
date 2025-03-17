@@ -17,7 +17,7 @@ import { DatabaseUser } from './user';
  */
 export interface Recipe {
   user: User;
-  name: string;
+  title: string;
   privacyPublic: boolean;
   ingredients: string[];
   description: string;
@@ -29,30 +29,37 @@ export interface Recipe {
   views: string[];
 }
 
-/**
- * Represents minimal recipe data used for summaries.
- * - `name`: The title of the recipe.
- * - `likes`: The number of likes received.
- */
-export interface RecipeData {
-  name: string;
-  likes: number;
-  views: string[];
-}
-
-export interface RecipePost {
+/*
+export interface Recipe {
   title: string;
   ingredients: string[];
   instructions: string;
   video?: string;
   cookTime: number;
 }
+
+export interface RecipePost extends Recipe {
+  privacyPublic: boolean;
+  description: string;
+  tags: Tag[];
+  numOfLikes: number;
+  views: string[];
+}
+*/
+
 /**
- * Represents additional recipe data used for calendar.
- * - `start`: The start of when the recipe will be made.
- * - `end`: The end of when the recipe will be made.
+ * Represents minimal recipe data used for summaries.
+ * - `name`: The title of the recipe.
+ * - `likes`: The number of likes received.
  */
-export interface RecipeEvent extends RecipePost {
+export interface RecipeData {
+  title: string;
+  likes: number;
+  views: string[];
+}
+
+export interface RecipeCalendarEvent
+  extends Omit<Recipe, 'user' | 'tags' | 'numOfLikes' | 'privacyPublic' | 'views' | 'description'> {
   start: Date;
   end: Date;
 }

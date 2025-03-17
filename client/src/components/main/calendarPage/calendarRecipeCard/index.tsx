@@ -1,5 +1,5 @@
 import React from 'react';
-import { DatabaseRecipe } from '../../../types/types';
+import { RecipeCalendarEvent } from '../../../../types/types';
 import './index.css';
 
 /**
@@ -7,13 +7,11 @@ import './index.css';
  *
  * @param recipe: The recipe object to display.
  */
-const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
+const CalendarRecipeCard = ({ recipe }: { recipe: RecipeCalendarEvent }) => (
   <div className='recipe-card'>
     <div className='recipe-header'>
       <h1>{recipe.title}</h1>
-      <span className='recipe-likes'>Likes: {recipe.numOfLikes}</span>
     </div>
-    <p className='recipe-description'>{recipe.description}</p>
 
     <h3>Cooking Time:</h3>
     <p>{recipe.cookTime} minutes</p>
@@ -39,4 +37,4 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
   </div>
 );
 
-export default RecipeCard;
+export default CalendarRecipeCard;
