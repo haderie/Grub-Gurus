@@ -1,9 +1,25 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { validateHyperlink } from '../tool';
 import { addQuestion } from '../services/questionService';
 import useUserContext from './useUserContext';
-import { Question } from '../types/types';
+import { Question, YouTubeVideo } from '../types/types';
+
+// interface YouTubeVideo {
+//   id: {
+//     videoId: string;
+//   };
+//   snippet: {
+//     title: string;
+//     description: string;
+//     thumbnails: {
+//       default: {
+//         url: string;
+//       };
+//     };
+//   };
+// }
 
 /**
  * Custom hook to handle question submission and form validation
@@ -24,10 +40,15 @@ const useNewQuestion = () => {
   const [tagNames, setTagNames] = useState<string>('');
   const [videoUrl, setVideoUrl] = useState<string>('');
 
+  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search input
+  const [videoResults, setVideoResults] = useState<YouTubeVideo[]>([]); // Store video search results
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [titleErr, setTitleErr] = useState<string>('');
   const [textErr, setTextErr] = useState<string>('');
   const [tagErr, setTagErr] = useState<string>('');
   const [videoUrlErr, setVideoUrlErr] = useState<string>('');
+  const [searchError, setSearchError] = useState<string>(''); // Error state for search
 
   /**
    * Validates if the provided URL is a YouTube video URL.
@@ -98,6 +119,41 @@ const useNewQuestion = () => {
   };
 
   /**
+   * Search YouTube for videos based on the search term.
+   */
+  const searchYouTube = useCallback(async () => {
+    if (!searchTerm) return;
+    setLoading(true);
+    setSearchError('');
+
+    try {
+      const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+        params: {
+          part: 'snippet',
+          maxResults: 10,
+          q: searchTerm,
+          key: 'AIzaSyADiL5NSZ4JHnw0dGjhk1ajfzjyl1CI3PQ',
+        },
+      });
+      setVideoResults(response.data.items);
+      setLoading(false);
+    } catch (err) {
+      setSearchError('Error fetching YouTube videos. Please try again.');
+      setLoading(false);
+    }
+  }, [searchTerm]);
+
+  /**
+   * Selects a video and saves the video URL.
+   * @param {string} videoId - The YouTube video ID.
+   */
+  const selectVideo = (videoId: string) => {
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    setVideoUrl(url);
+    setVideoResults([]); // Clear results after selection
+  };
+
+  /**
    * Function to post a question to the server.
    *
    * @returns title - The current value of the title input.
@@ -146,6 +202,14 @@ const useNewQuestion = () => {
     videoUrl,
     setVideoUrl,
     videoUrlErr,
+    searchTerm,
+    setSearchTerm,
+    videoResults,
+    setVideoResults,
+    searchError,
+    searchYouTube,
+    selectVideo,
+    loading,
   };
 };
 

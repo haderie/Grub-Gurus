@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import { validateHyperlink } from '../tool';
 import addAnswer from '../services/answerService';
 import useUserContext from './useUserContext';
-import { Answer } from '../types/types';
+import { Answer, YouTubeVideo } from '../types/types';
 
 /**
  * Custom hook for managing the state and logic of an answer submission form.
@@ -23,6 +24,10 @@ const useAnswerForm = () => {
   const [questionID, setQuestionID] = useState<string>('');
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoUrlErr, setVideoUrlErr] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search input
+  const [videoResults, setVideoResults] = useState<YouTubeVideo[]>([]); // Store video search results
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchError, setSearchError] = useState<string>(''); // Error state for search
 
   useEffect(() => {
     if (!qid) {
@@ -90,6 +95,41 @@ const useAnswerForm = () => {
     }
   };
 
+  /**
+   * Search YouTube for videos based on the search term.
+   */
+  const searchYouTube = useCallback(async () => {
+    if (!searchTerm) return;
+    setLoading(true);
+    setSearchError('');
+
+    try {
+      const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+        params: {
+          part: 'snippet',
+          maxResults: 10,
+          q: searchTerm,
+          key: 'AIzaSyADiL5NSZ4JHnw0dGjhk1ajfzjyl1CI3PQ',
+        },
+      });
+      setVideoResults(response.data.items);
+      setLoading(false);
+    } catch (err) {
+      setSearchError('Error fetching YouTube videos. Please try again.');
+      setLoading(false);
+    }
+  }, [searchTerm]);
+
+  /**
+   * Selects a video and saves the video URL.
+   * @param {string} videoId - The YouTube video ID.
+   */
+  const selectVideo = (videoId: string) => {
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    setVideoUrl(url);
+    setVideoResults([]); // Clear results after selection
+  };
+
   return {
     text,
     textErr,
@@ -98,6 +138,14 @@ const useAnswerForm = () => {
     videoUrl,
     setVideoUrl,
     videoUrlErr,
+    searchTerm,
+    setSearchTerm,
+    videoResults,
+    setVideoResults,
+    searchError,
+    searchYouTube,
+    selectVideo,
+    loading,
   };
 };
 
