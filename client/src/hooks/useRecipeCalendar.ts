@@ -38,7 +38,6 @@ const useRecipeCalendar = () => {
             end: recipe.end,
           }));
           setEvents(fetchedRecipes);
-          console.log(fetchedRecipes);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Error fetching recipes:', error);
