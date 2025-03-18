@@ -22,10 +22,23 @@ const useNewQuestion = () => {
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [tagNames, setTagNames] = useState<string>('');
+  const [videoUrl, setVideoUrl] = useState<string>('');
 
   const [titleErr, setTitleErr] = useState<string>('');
   const [textErr, setTextErr] = useState<string>('');
   const [tagErr, setTagErr] = useState<string>('');
+  const [videoUrlErr, setVideoUrlErr] = useState<string>('');
+
+  /**
+   * Validates if the provided URL is a YouTube video URL.
+   * @param {string} url - The URL to validate.
+   * @returns {boolean} - Returns true if it's a valid YouTube URL, otherwise false.
+   */
+  const validateYouTubeURL = (url: string) => {
+    const regex =
+      /^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|e\/|watch\?v%3D)[\w-]+(&[^\s]*)?$/;
+    return regex.test(url);
+  };
 
   /**
    * Function to validate the form before submitting the question.
@@ -74,6 +87,13 @@ const useNewQuestion = () => {
       }
     }
 
+    if (videoUrl && !validateYouTubeURL(videoUrl)) {
+      setVideoUrlErr('Please provide a valid YouTube URL');
+      isValid = false;
+    } else {
+      setVideoUrlErr('');
+    }
+
     return isValid;
   };
 
@@ -102,6 +122,7 @@ const useNewQuestion = () => {
       downVotes: [],
       views: [],
       comments: [],
+      youtubeVideoUrl: videoUrl,
     };
 
     const res = await addQuestion(question);
@@ -122,6 +143,9 @@ const useNewQuestion = () => {
     textErr,
     tagErr,
     postQuestion,
+    videoUrl,
+    setVideoUrl,
+    videoUrlErr,
   };
 };
 

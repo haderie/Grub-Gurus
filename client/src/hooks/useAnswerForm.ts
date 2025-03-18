@@ -21,6 +21,8 @@ const useAnswerForm = () => {
   const [text, setText] = useState<string>('');
   const [textErr, setTextErr] = useState<string>('');
   const [questionID, setQuestionID] = useState<string>('');
+  const [videoUrl, setVideoUrl] = useState<string>('');
+  const [videoUrlErr, setVideoUrlErr] = useState<string>('');
 
   useEffect(() => {
     if (!qid) {
@@ -33,6 +35,17 @@ const useAnswerForm = () => {
   }, [qid, navigate]);
 
   /**
+   * Validates if the provided URL is a YouTube video URL.
+   * @param {string} url - The URL to validate.
+   * @returns {boolean} - Returns true if it's a valid YouTube URL, otherwise false.
+   * */
+  const validateYouTubeURL = (url: string) => {
+    const regex =
+      /^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|e\/|watch\?v%3D)[\w-]+(&[^\s]*)?$/;
+    return regex.test(url);
+  };
+
+  /**
    * Function to post an answer to a question.
    * It validates the answer text and posts the answer if it is valid.
    */
@@ -42,6 +55,13 @@ const useAnswerForm = () => {
     if (!text) {
       setTextErr('Answer text cannot be empty');
       isValid = false;
+    }
+
+    if (videoUrl && !validateYouTubeURL(videoUrl)) {
+      setVideoUrlErr('Please provide a valid YouTube URL');
+      isValid = false;
+    } else {
+      setVideoUrlErr('');
     }
 
     // Hyperlink validation
@@ -59,6 +79,7 @@ const useAnswerForm = () => {
       ansBy: user.username,
       ansDateTime: new Date(),
       comments: [],
+      youtubeVideoUrl: videoUrl,
     };
 
     const res = await addAnswer(questionID, answer);
@@ -74,6 +95,9 @@ const useAnswerForm = () => {
     textErr,
     setText,
     postAnswer,
+    videoUrl,
+    setVideoUrl,
+    videoUrlErr,
   };
 };
 

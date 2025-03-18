@@ -21,6 +21,9 @@ const NewQuestionPage = () => {
     textErr,
     tagErr,
     postQuestion,
+    videoUrl,
+    setVideoUrl,
+    videoUrlErr,
   } = useNewQuestion();
 
   const predefinedTags = [
@@ -54,6 +57,16 @@ const NewQuestionPage = () => {
         val={text}
         setState={setText}
         err={textErr}
+      />
+
+      <TextArea
+        title={'Attach Video (Optional)'}
+        hint={'Paste the URL of the Youtube video'}
+        id={'formTextInput'}
+        val={videoUrl}
+        setState={setVideoUrl}
+        err={videoUrlErr}
+        mandatory={false}
       />
 
       <div className='tag-container'>

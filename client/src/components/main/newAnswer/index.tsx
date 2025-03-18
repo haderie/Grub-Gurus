@@ -8,7 +8,8 @@ import useAnswerForm from '../../../hooks/useAnswerForm';
  * NewAnswerPage component allows users to submit an answer to a specific question.
  */
 const NewAnswerPage = () => {
-  const { text, textErr, setText, postAnswer } = useAnswerForm();
+  const { text, textErr, setText, postAnswer, videoUrl, setVideoUrl, videoUrlErr } =
+    useAnswerForm();
 
   return (
     <Form>
@@ -18,6 +19,16 @@ const NewAnswerPage = () => {
         val={text}
         setState={setText}
         err={textErr}
+      />
+
+      <TextArea
+        title={'Attach Video (Optional)'}
+        hint={'Paste the URL of the Youtube video'}
+        id={'formTextInput'}
+        val={videoUrl}
+        setState={setVideoUrl}
+        err={videoUrlErr}
+        mandatory={false}
       />
       <div className='btn_indicator_container'>
         <button className='form_postBtn' onClick={postAnswer}>
