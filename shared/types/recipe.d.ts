@@ -40,8 +40,6 @@ export interface RecipeData {
   views: string[];
 }
 
-export type RecipeResponse = Recipe | { error: string };
-
 export interface RecipeByUsernameRequest extends Request {
   params: {
     username: string;
@@ -57,6 +55,9 @@ export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
   user: ObjectId; // Fully populated user object
   tags: ObjectId[]; // Fully populated tags
 }
+
+export type RecipeResponse = DatabaseRecipe | { error: string };
+
 /**
  * Represents a fully populated recipe from the database.
  * - `user`: The full `User` object instead of just an ID.
@@ -67,6 +68,12 @@ export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | '
   tags: DatabaseTag[]; // Fully populated tags
 }
 
+/* Interface for the request body when adding a new recipe.
+ * - `body`: The question being added.
+ */
+export interface AddRecipeRequest extends Request {
+  body: Recipe;
+}
 /**
  * Interface for the request query to find questions using a search string.
  * - `order`: The order in which to sort the recipe.

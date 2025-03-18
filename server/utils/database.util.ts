@@ -1,11 +1,13 @@
 import {
   DatabaseComment,
   DatabaseMessage,
+  DatabaseRecipe,
   DatabaseTag,
   DatabaseUser,
   MessageInChat,
   PopulatedDatabaseAnswer,
   PopulatedDatabaseChat,
+  PopulatedDatabasePost,
   PopulatedDatabaseQuestion,
 } from '../types/types';
 import AnswerModel from '../models/answers.model';
@@ -15,6 +17,8 @@ import CommentModel from '../models/comments.model';
 import ChatModel from '../models/chat.model';
 import UserModel from '../models/users.model';
 import MessageModel from '../models/messages.model';
+import PostModel from '../models/posts.model';
+import RecipeModel from '../models/recipe.models';
 
 /**
  * Fetches and populates a question document with its related tags, answers, and comments.
@@ -36,6 +40,20 @@ const populateQuestion = async (questionID: string): Promise<PopulatedDatabaseQu
     },
     { path: 'comments', model: CommentModel },
   ]);
+
+  return result;
+};
+
+/**
+ * Fetches and populates a post document with its related recipe.
+ *
+ * @param {string} postID - The ID of the post to fetch.
+ * @returns {Promise<PopulatedDatabasePost | null>} - The populated post document, or null if not found.
+ */
+const populatePost = async (postID: string): Promise<PopulatedDatabasePost | null> => {
+  const result = await PostModel.findOne({ _id: postID }).populate<{
+    recipe: DatabaseRecipe;
+  }>({ path: 'recipe', model: RecipeModel });
 
   return result;
 };
@@ -117,9 +135,13 @@ const populateChat = async (chatID: string): Promise<PopulatedDatabaseChat | nul
 // eslint-disable-next-line import/prefer-default-export
 export const populateDocument = async (
   id: string,
-  type: 'question' | 'answer' | 'chat',
+  type: 'question' | 'answer' | 'chat' | 'post',
 ): Promise<
-  PopulatedDatabaseAnswer | PopulatedDatabaseChat | PopulatedDatabaseQuestion | { error: string }
+  | PopulatedDatabaseAnswer
+  | PopulatedDatabaseChat
+  | PopulatedDatabaseQuestion
+  | PopulatedDatabasePost
+  | { error: string }
 > => {
   try {
     if (!id) {
@@ -137,6 +159,9 @@ export const populateDocument = async (
         break;
       case 'chat':
         result = await populateChat(id);
+        break;
+      case 'post':
+        result = await populatePost(id);
         break;
       default:
         throw new Error('Invalid type provided.');

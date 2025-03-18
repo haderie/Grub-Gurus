@@ -1,9 +1,24 @@
 import express, { Request, Response } from 'express';
-import { getRecipesByUsername } from '../services/recipe.service';
-import { FakeSOSocket } from '../types/types';
+import { getRecipesByUsername, saveRecipe } from '../services/recipe.service';
+import { AddRecipeRequest, FakeSOSocket } from '../types/types';
 
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
+
+  /**
+   * Retrieves a recipe by the username of the user.
+   * @param req The request containing the username as a route parameter.
+   * @param res The response, either returning the recipes or an error.
+   * @returns A promise resolving to void.
+   */
+  const addRecipe = async (req: AddRecipeRequest, res: Response): Promise<void> => {
+    try {
+      const recipes = await saveRecipe(req.body);
+      res.status(200).json(recipes);
+    } catch (error) {
+      res.status(500).json({ message: error || 'Error adding recipes' });
+    }
+  };
 
   /**
    * Retrieves a recipe by the username of the user.
@@ -52,6 +67,7 @@ const recipeController = (socket: FakeSOSocket) => {
   // };
 
   router.get('/getrecipes/:username', getRecipes);
+  router.post('/addRecipe', addRecipe);
 
   return router;
 };

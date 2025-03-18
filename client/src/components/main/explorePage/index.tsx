@@ -1,30 +1,32 @@
-/**
- * TAG CODE KEPT IN FOR NOW
- */
 import React from 'react';
 import './index.css';
-import TagView from './tag';
-import useTagPage from '../../../hooks/useTagPage';
-import AskQuestionButton from '../askQuestionButton';
+import useRecipePage from '../../../hooks/useRecipePage';
+import RecipeCard from '../recipeCard';
+import PostRecipeButton from '../postRecipeButton';
 
 /**
  * Represents the TagPage component which displays a list of tags
  * and provides functionality to handle tag clicks and ask a new question.
  */
 const ExplorePage = () => {
-  const { tlist, clickTag } = useTagPage();
+  const { qlist } = useRecipePage();
 
+  console.log(qlist[0]);
   return (
     <>
       <div className='space_between right_padding'>
-        <div className='bold_title'>{tlist.length} Tags</div>
-        <div className='bold_title'>All Tags</div>
-        <AskQuestionButton />
+        <div className='bold_title'>All Recipes</div>
+        <PostRecipeButton />
       </div>
-      <div className='tag_list right_padding'>
-        {tlist.map(t => (
-          <TagView key={t.name} t={t} clickTag={clickTag} />
-        ))}
+      <div id='question_list' className='question_list'>
+        {qlist.map(q =>
+          q ? (
+            <div key={String(q._id)} className='recipe-item'>
+              <RecipeCard recipe={q.recipe} />
+              <p></p>
+            </div>
+          ) : null,
+        )}
       </div>
     </>
   );

@@ -18,6 +18,7 @@ import ProfileSettings from './profileSettings';
 import AllGamesPage from './main/games/allGamesPage';
 import GamePage from './main/games/gamePage';
 import ExplorePage from './main/explorePage';
+import NewRecipe from './main/newRecipe';
 
 const ProtectedRoute = ({
   user,
@@ -64,6 +65,7 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='/question/:qid' element={<AnswerPage />} />
             <Route path='/new/question' element={<NewQuestionPage />} />
             <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
+            <Route path='/new/recipePost' element={<NewRecipe />} />
             <Route path='/users' element={<UsersListPage />} />
             <Route path='/user/:username' element={<ProfileSettings />} />
             <Route path='/games' element={<AllGamesPage />} />
