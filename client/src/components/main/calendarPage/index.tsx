@@ -10,13 +10,13 @@ const localizer = momentLocalizer(moment);
 
 const RecipeCalendar: React.FC = () => {
   const {
-    events,
-    recipe,
+    recipeState,
     selectedDate,
     selectedTime,
     showForm,
     selectedRecipe,
-    setRecipe,
+    events,
+    setRecipeState,
     setSelectedTime,
     handleSelectSlot,
     handleAddRecipe,
@@ -51,8 +51,8 @@ const RecipeCalendar: React.FC = () => {
           <input
             type='text'
             placeholder='Enter your recipe title'
-            value={recipe.title}
-            onChange={e => setRecipe({ ...recipe, title: e.target.value })}
+            value={recipeState.title}
+            onChange={e => setRecipeState({ ...recipeState, title: e.target.value })}
             style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
           />
           {/* Time Picker */}
@@ -68,10 +68,10 @@ const RecipeCalendar: React.FC = () => {
           <input
             type='text'
             placeholder='Enter your ingredients (comma separated)'
-            value={recipe.ingredients.join(', ')}
+            value={recipeState.ingredients.join(', ')}
             onChange={e =>
-              setRecipe({
-                ...recipe,
+              setRecipeState({
+                ...recipeState,
                 ingredients: e.target.value.split(',').map(ing => ing.trim()),
               })
             }
@@ -82,8 +82,8 @@ const RecipeCalendar: React.FC = () => {
           <input
             type='text'
             placeholder='Enter your instructions'
-            value={recipe.instructions}
-            onChange={e => setRecipe({ ...recipe, instructions: e.target.value })}
+            value={recipeState.instructions}
+            onChange={e => setRecipeState({ ...recipeState, instructions: e.target.value })}
             style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
           />
           {/* Cook Time */}
@@ -91,12 +91,12 @@ const RecipeCalendar: React.FC = () => {
           <input
             type='text'
             placeholder='Enter your cooktime in minutes'
-            value={recipe.cookTime}
-            onChange={e => setRecipe({ ...recipe, cookTime: Number(e.target.value) })}
+            value={recipeState.cookTime}
+            onChange={e => setRecipeState({ ...recipeState, cookTime: Number(e.target.value) })}
             style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
           />
           <br />
-          <button onClick={handleAddRecipe} disabled={!recipe.title}>
+          <button onClick={handleAddRecipe} disabled={!recipeState.title}>
             Add Recipe to Calendar
           </button>
           <button onClick={() => setShowForm(false)}>Cancel</button>

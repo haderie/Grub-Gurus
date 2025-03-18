@@ -20,7 +20,7 @@ const recipeSchema: Schema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User' },
 
-    name: {
+    title: {
       type: String,
       required: true,
     },
