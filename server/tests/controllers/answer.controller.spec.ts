@@ -69,6 +69,7 @@ describe('POST /addAnswer', () => {
       ansBy: 'dummyUserId',
       ansDateTime: mockAnswer.ansDateTime.toISOString(),
       comments: [],
+      isUserCertified: false,
     });
   });
 
