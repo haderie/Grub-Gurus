@@ -6,7 +6,7 @@ import { DatabaseUser } from './user';
 /**
  * Represents a recipe.
  * - `user`: The ID of the user who created the recipe.
- * - `name`: The title of the recipe.
+ * - `title`: The title of the recipe.
  * - `privacyPublic`: Indicates whether the recipe is public or private.
  * - `ingredients`: An array of ingredient names.
  * - `description`: A detailed description of the recipe.
@@ -29,27 +29,9 @@ export interface Recipe {
   views: string[];
 }
 
-/*
-export interface Recipe {
-  title: string;
-  ingredients: string[];
-  instructions: string;
-  video?: string;
-  cookTime: number;
-}
-
-export interface RecipePost extends Recipe {
-  privacyPublic: boolean;
-  description: string;
-  tags: Tag[];
-  numOfLikes: number;
-  views: string[];
-}
-*/
-
 /**
  * Represents minimal recipe data used for summaries.
- * - `name`: The title of the recipe.
+ * - `title`: The title of the recipe.
  * - `likes`: The number of likes received.
  */
 export interface RecipeData {
@@ -58,13 +40,17 @@ export interface RecipeData {
   views: string[];
 }
 
-export interface RecipeCalendarEvent
-  extends Omit<Recipe, 'user' | 'tags' | 'numOfLikes' | 'privacyPublic' | 'views' | 'description'> {
+/**
+ * Represents recipe data used for calendar.
+ * - `start`: Start of recipe cooking.
+ * - `end`: End of recipe cooking.
+ */
+export interface RecipeCalendarEvent extends Recipe {
   start: Date;
   end: Date;
 }
 
-export type RecipeResponse = Recipe | { error: string };
+export type RecipeResponse = DatabaseRecipe | { error: string };
 
 export interface RecipeByUsernameRequest extends Request {
   params: {
@@ -76,11 +62,13 @@ export interface RecipeByUsernameRequest extends Request {
  * - `_id`: The unique identifier for the recipe.
  * - Includes all properties of `Recipe`.
  */
+
 export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
   _id: ObjectId;
-  user: ObjectId; // Fully populated user object
+  user: ObjectID; // Fully populated user object
   tags: ObjectId[]; // Fully populated tags
 }
+
 /**
  * Represents a fully populated recipe from the database.
  * - `user`: The full `User` object instead of just an ID.
@@ -104,4 +92,8 @@ export interface FindRecipeRequest extends Request {
     order: OrderType;
     search: string;
   };
+}
+
+export interface AddRecipeRequest extends Request {
+  body: Recipe;
 }
