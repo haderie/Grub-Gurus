@@ -16,7 +16,6 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.numOfLikes !== undefined &&
     recipe.views !== undefined;
 
-
   /**
    * Retrieves a recipe by the username of the user.
    * @param req The request containing the username as a route parameter.

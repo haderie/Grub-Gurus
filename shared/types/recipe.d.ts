@@ -99,7 +99,3 @@ export interface FindRecipeRequest extends Request {
     search: string;
   };
 }
-
-export interface AddRecipeRequest extends Request {
-  body: Recipe;
-}
