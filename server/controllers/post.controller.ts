@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { AddPostRequest, FakeSOSocket, PopulatedDatabasePost, Posts } from '../types/types';
+import { FakeSOSocket, PopulatedDatabasePost, Posts } from '../types/types';
 import { getPostList, savePost } from '../services/post.service';
 import { populateDocument } from '../utils/database.util';
 import { saveRecipe } from '../services/recipe.service';

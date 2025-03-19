@@ -10,7 +10,7 @@ import './index.css';
 const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
   <div className='recipe-card'>
     <div className='recipe-header'>
-      <h1>{recipe.name}</h1>
+      <h1>{recipe.title}</h1>
       <span className='recipe-likes'>Likes: {recipe.numOfLikes}</span>
     </div>
     <p className='recipe-description'>{recipe.description}</p>
@@ -20,9 +20,9 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
 
     <h3>Ingredients:</h3>
     <ul className='recipe-ingredients'>
-      {/* {recipe.ingredients.map((ingredient, index) => (
+      {recipe.ingredients.map((ingredient, index) => (
         <li key={index}>{ingredient}</li>
-      ))} */}
+      ))}
     </ul>
 
     <h3>Instructions:</h3>

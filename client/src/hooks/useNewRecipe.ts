@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateHyperlink } from '../tool';
-import { addQuestion } from '../services/questionService';
 import useUserContext from './useUserContext';
-import { Posts, Question, Recipe } from '../types/types';
+import { Recipe } from '../types/types';
 import { addPost } from '../services/postService';
 
 /**
@@ -21,8 +20,11 @@ const useNewRecipe = () => {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const [title, setTitle] = useState<string>('');
-  const [text, setText] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [instructions, setInstructions] = useState<string>('');
+  const [ingredientNames, setIngredientNames] = useState<string>('');
   const [tagNames, setTagNames] = useState<string>('');
+  const [cookTime, setCookTime] = useState<number>(0);
 
   const [titleErr, setTitleErr] = useState<string>('');
   const [textErr, setTextErr] = useState<string>('');
@@ -46,10 +48,10 @@ const useNewRecipe = () => {
       setTitleErr('');
     }
 
-    if (!text) {
+    if (!description) {
       setTextErr('Question text cannot be empty');
       isValid = false;
-    } else if (!validateHyperlink(text)) {
+    } else if (!validateHyperlink(description)) {
       setTextErr('Invalid hyperlink format.');
       isValid = false;
     } else {
@@ -75,6 +77,16 @@ const useNewRecipe = () => {
       }
     }
 
+    const ingredientnames = ingredientNames
+      .split(' , ')
+      .filter(ingredientName => ingredientName.trim() !== '');
+    if (ingredientnames.length === 0) {
+      setTagErr('Should have at least 1 ingredient');
+      isValid = false;
+    } else {
+      setTagErr('');
+    }
+
     return isValid;
   };
 
@@ -92,15 +104,19 @@ const useNewRecipe = () => {
       description: 'user added tag',
     }));
 
+    const ingredients = ingredientNames
+      .split(' , ')
+      .filter(ingredientName => ingredientName.trim() !== '');
+
     const recipe: Recipe = {
-      name: title,
-      description: text,
+      title,
+      description,
       tags,
       user,
       privacyPublic: false,
-      ingredients: [],
-      instructions: '',
-      cookTime: 10,
+      ingredients,
+      instructions,
+      cookTime,
       numOfLikes: 0,
       views: [],
     };
@@ -115,10 +131,16 @@ const useNewRecipe = () => {
   return {
     title,
     setTitle,
-    text,
-    setText,
+    description,
+    instructions,
+    ingredientNames,
+    setDescription,
+    setInstructions,
+    setIngredientNames,
     tagNames,
     setTagNames,
+    cookTime,
+    setCookTime,
     titleErr,
     textErr,
     tagErr,

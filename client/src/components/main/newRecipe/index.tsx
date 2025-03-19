@@ -2,15 +2,22 @@ import useNewRecipe from '../../../hooks/useNewRecipe';
 import Form from '../baseComponents/form';
 import Input from '../baseComponents/input';
 import TextArea from '../baseComponents/textarea';
+import './index.css';
 
 const NewRecipe = () => {
   const {
     title,
     setTitle,
-    text,
-    setText,
+    description,
+    instructions,
+    ingredientNames,
+    setDescription,
+    setInstructions,
+    setIngredientNames,
     tagNames,
     setTagNames,
+    cookTime,
+    setCookTime,
     titleErr,
     textErr,
     tagErr,
@@ -43,30 +50,41 @@ const NewRecipe = () => {
       />
       <TextArea
         title={'Recipe description'}
-        hint={'Add basic information'}
+        hint={'Add basic description of recipe'}
         id={'formTextInput'}
-        val={text}
-        setState={setText}
+        val={description}
+        setState={setDescription}
         err={textErr}
       />
 
       <TextArea
         title={'Recipe Ingredients'}
-        hint={'Add basic information'}
+        hint={'Add keywords separated by whitespace and comma, e.g. hi , bye'}
         id={'formTextInput'}
-        val={text}
-        setState={setText}
+        val={ingredientNames}
+        setState={setIngredientNames}
         err={textErr}
       />
 
       <TextArea
         title={'Recipe Instructions'}
-        hint={'Add basic information'}
+        hint={'Add instructions for the recipe'}
         id={'formTextInput'}
-        val={text}
-        setState={setText}
+        val={instructions}
+        setState={setInstructions}
         err={textErr}
       />
+      <div className='input_title'>{'Cook time*'}</div>
+      {<div className='input_hint'>{'Add cook time number'}</div>}
+      <input
+        type='number'
+        title='Recipe CookTime'
+        id={'formTextInput'}
+        className='input_input'
+        value={cookTime === 0 ? '' : cookTime}
+        onChange={e => setCookTime(e.target.value ? Number(e.target.value) : 0)}
+      />
+      {textErr && <div className='input_error'>{textErr}</div>}
 
       <div className='tag-container'>
         <Input

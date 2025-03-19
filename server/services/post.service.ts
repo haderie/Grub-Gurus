@@ -1,13 +1,6 @@
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
-import {
-  DatabasePost,
-  Posts,
-  PostResponse,
-  PostsResponse,
-  PopulatedDatabasePost,
-  DatabaseRecipe,
-} from '../types/types';
+import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe } from '../types/types';
 
 /**
  * Saves a new question to the database.

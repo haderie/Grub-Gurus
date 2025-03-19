@@ -17,7 +17,7 @@ import { DatabaseUser } from './user';
  */
 export interface Recipe {
   user: User;
-  name: string;
+  title: string;
   privacyPublic: boolean;
   ingredients: string[];
   description: string;
@@ -35,7 +35,7 @@ export interface Recipe {
  * - `likes`: The number of likes received.
  */
 export interface RecipeData {
-  name: string;
+  title: string;
   likes: number;
   views: string[];
 }
