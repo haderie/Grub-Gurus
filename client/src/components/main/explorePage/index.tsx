@@ -11,7 +11,6 @@ import PostRecipeButton from '../postRecipeButton';
 const ExplorePage = () => {
   const { qlist } = useRecipePage();
 
-  console.log(qlist[0]);
   return (
     <>
       <div className='space_between right_padding'>

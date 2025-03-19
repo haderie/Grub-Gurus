@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PopulatedDatabasePost, PostsResponse } from '../types/types';
+import { PopulatedDatabasePost } from '../types/types';
 import { getPosts } from '../services/postService';
 
 const useRecipePage = () => {
@@ -12,7 +12,6 @@ const useRecipePage = () => {
     const fetchData = async () => {
       try {
         const res = await getPosts();
-        console.log(res);
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console
