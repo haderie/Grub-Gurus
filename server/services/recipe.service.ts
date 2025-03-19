@@ -127,3 +127,41 @@ export const filterRecipeBySearch = (
     // checkKeywordInQuestion(q, searchKeyword) ||
   });
 };
+
+/**
+ * Filters questions by search string containing tags and/or keywords.
+ * @param {Partial<Recipe>} recipeData - The data to be provided to create a recipe in the database
+ * @returns {Promise<Recipe>} - Promise for a new recipe to be created
+ */
+export const createRecipe = async (recipeData: Recipe): Promise<RecipeResponse> => {
+  try {
+    const result: DatabaseRecipe = await RecipeModel.create(recipeData);
+
+    if (!result) {
+      throw Error('Failed to create recipe');
+    }
+    return result;
+  } catch (error) {
+    return { error: `Error occurred when saving recipe: ${error}` };
+  }
+};
+
+/**
+ * Retrieves a recipe from the database by the ID.
+ *
+ * @param {string} recipeID - The username of the user to find.
+ * @returns {Promise<UserResponse>} - Resolves with the found user object (without the password) or an error message.
+ */
+export const getRecipeByID = async (recipeID: string): Promise<RecipeResponse> => {
+  try {
+    const recipe: DatabaseRecipe | null = await RecipeModel.findOne({ recipeID });
+
+    if (!recipe) {
+      throw Error('Recipe not found');
+    }
+
+    return recipe;
+  } catch (error) {
+    return { error: `Error occurred when finding recipe: ${error}` };
+  }
+};

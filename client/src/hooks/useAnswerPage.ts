@@ -12,6 +12,38 @@ import addComment from '../services/commentService';
 import { getQuestionById } from '../services/questionService';
 
 /**
+ * Gets the newest answer from a list, sorted by the answer date in descending order with certified having priority.
+ *
+ * @param {PopulatedDatabaseAnswer[]} alist - The list of answers to sort
+ *
+ * @returns {PopulatedDatabaseAnswer[]} - The sorted list of answers by certified status date, with certified first sorted by newest first then non-certified by newest
+ */
+function sortAnswersByNewestAndCertified(
+  alist: PopulatedDatabaseAnswer[],
+): PopulatedDatabaseAnswer[] {
+  alist.sort((a, b) => {
+    // If one of the answers has a certified user and the other does, put the certified answer first
+    if (a.isUserCertified && !b.isUserCertified) {
+      return -1;
+    }
+    if (!a.isUserCertified && b.isUserCertified) {
+      return 1;
+    }
+
+    // If both answers have the same type of user (certified or non-certified), sort based on which is newer
+    if (a.ansDateTime > b.ansDateTime) {
+      return -1;
+    }
+    if (a.ansDateTime < b.ansDateTime) {
+      return 1;
+    }
+
+    return 0;
+  });
+  return alist;
+}
+
+/**
  * Custom hook for managing the answer page's state, navigation, and real-time updates.
  *
  * @returns questionID - The current question ID retrieved from the URL parameters.
@@ -102,7 +134,10 @@ const useAnswerPage = () => {
         setQuestion(prevQuestion =>
           prevQuestion
             ? // Creates a new Question object with the new answer appended to the end
-              { ...prevQuestion, answers: [...prevQuestion.answers, answer] }
+              {
+                ...prevQuestion,
+                answers: sortAnswersByNewestAndCertified([...prevQuestion.answers, answer]),
+              }
             : prevQuestion,
         );
       }

@@ -1,24 +1,21 @@
 import express, { Request, Response } from 'express';
-import { getRecipesByUsername, saveRecipe } from '../services/recipe.service';
-import { AddRecipeRequest, FakeSOSocket } from '../types/types';
+import { getRecipesByUsername, createRecipe } from '../services/recipe.service';
+import { AddRecipeRequest, FakeSOSocket, Recipe } from '../types/types';
 
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
 
-  /**
-   * Retrieves a recipe by the username of the user.
-   * @param req The request containing the username as a route parameter.
-   * @param res The response, either returning the recipes or an error.
-   * @returns A promise resolving to void.
-   */
-  const addRecipe = async (req: AddRecipeRequest, res: Response): Promise<void> => {
-    try {
-      const recipes = await saveRecipe(req.body);
-      res.status(200).json(recipes);
-    } catch (error) {
-      res.status(500).json({ message: error || 'Error adding recipes' });
-    }
-  };
+  const isRecipeRequestBodyValid = (recipe: Recipe): boolean =>
+    recipe.user !== undefined &&
+    recipe.title !== undefined &&
+    recipe.privacyPublic !== undefined &&
+    recipe.ingredients !== undefined &&
+    recipe.description !== undefined &&
+    recipe.instructions !== undefined &&
+    recipe.cookTime !== undefined &&
+    recipe.numOfLikes !== undefined &&
+    recipe.views !== undefined;
+
 
   /**
    * Retrieves a recipe by the username of the user.
@@ -65,6 +62,31 @@ const recipeController = (socket: FakeSOSocket) => {
   //     }
   //   }
   // };
+
+  /**
+   * Handles the creation of a new recipe.
+   * @param req The request containing username, email, and password in the body.
+   * @param res The response, either returning the created user or an error.
+   * @returns A promise resolving to void.
+   */
+  const addRecipe = async (req: AddRecipeRequest, res: Response): Promise<void> => {
+    if (!isRecipeRequestBodyValid(req.body)) {
+      res.status(400).send('Invalid recipe body');
+      return;
+    }
+
+    try {
+      const result = await createRecipe(req.body);
+
+      if ('error' in result) {
+        throw new Error(result.error);
+      }
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).send(`Error when saving recipe: ${error}`);
+    }
+  };
 
   router.get('/getrecipes/:username', getRecipes);
   router.post('/addRecipe', addRecipe);

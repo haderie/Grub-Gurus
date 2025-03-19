@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DatabaseRecipe } from '../types/types';
 import { getRecipesByUsername } from '../services/recipeService';
 import useUserContext from './useUserContext';
+import { getUserByUsername } from '../services/userService';
 
 const useUserRecipes = (username: string) => {
   const { socket } = useUserContext();
@@ -41,6 +42,10 @@ const useUserRecipes = (username: string) => {
     const fetchRecipes = async () => {
       try {
         const response = await getRecipesByUsername(username);
+        if (response.length > 1) {
+          const theUser = await getUserByUsername(username);
+          theUser.certified = true;
+        }
         setRecipes(response);
       } catch (err) {
         setError('Failed to load recipes.');

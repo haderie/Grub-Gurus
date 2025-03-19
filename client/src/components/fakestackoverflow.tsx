@@ -17,6 +17,7 @@ import UsersListPage from './main/usersListPage';
 import ProfileSettings from './profileSettings';
 import AllGamesPage from './main/games/allGamesPage';
 import GamePage from './main/games/gamePage';
+import CalendarPage from './main/calendarPage';
 import ExplorePage from './main/explorePage';
 import NewRecipe from './main/newRecipe';
 
@@ -70,6 +71,8 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='/user/:username' element={<ProfileSettings />} />
             <Route path='/games' element={<AllGamesPage />} />
             <Route path='/games/:gameID' element={<GamePage />} />
+
+            <Route path='/calendar' element={<CalendarPage />} />
           </Route>
         }
       </Routes>

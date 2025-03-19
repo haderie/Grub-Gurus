@@ -381,7 +381,7 @@ describe('followUserService', () => {
   });
 });
 
-describe('followUserService', () => {
+describe('unfollowUserService', () => {
   test('should return updated user with new following list when unfollow is successful', async () => {
     const mockFindOneReturn = jest.fn();
     mockFindOneReturn.mockImplementation(params => {

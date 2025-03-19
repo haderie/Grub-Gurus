@@ -59,6 +59,7 @@ const useAnswerForm = () => {
       ansBy: user.username,
       ansDateTime: new Date(),
       comments: [],
+      isUserCertified: user.certified,
     };
 
     const res = await addAnswer(questionID, answer);
