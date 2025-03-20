@@ -1,6 +1,6 @@
 import axios from 'axios';
 import api from './config';
-import { PopulatedDatabaseRecipe, Recipe } from '../types/types';
+import { PopulatedDatabaseRecipe, Recipe, RecipeCalendarEvent } from '../types/types';
 
 const RECIPE_API_URL = `${process.env.REACT_APP_SERVER_URL}/recipe`;
 
@@ -57,4 +57,24 @@ const addRecipe = async (recipe: Recipe): Promise<PopulatedDatabaseRecipe> => {
   }
 };
 
-export { getRecipesByUsername, addRecipe };
+/**
+ * Sends a POST request to create a new calendar recipe.
+ *
+ * @param recipe - The recipe to be created.
+ * @returns {Promise<Recipe>} The newly created recipe object.
+ * @throws {Error} If an error occurs when creating a recipe.
+ */
+const addCalendarRecipe = async (recipe: RecipeCalendarEvent): Promise<PopulatedDatabaseRecipe> => {
+  try {
+    const res = await api.post(`${RECIPE_API_URL}/addRecipe`, recipe);
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(`Error while adding recipe: ${error.response.data}`);
+    } else {
+      throw new Error('Error while adding recipe');
+    }
+  }
+};
+
+export { getRecipesByUsername, addRecipe, addCalendarRecipe };

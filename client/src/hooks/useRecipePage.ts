@@ -7,7 +7,7 @@ const useRecipePage = () => {
 
   useEffect(() => {
     /**
-     * Function to fetch questions based on the filter and update the question list.
+     * Function to fetch posts based on the filter and update the question list.
      */
     const fetchData = async () => {
       try {
@@ -21,6 +21,7 @@ const useRecipePage = () => {
 
     fetchData();
   }, []);
+
   return { qlist };
 };
 export default useRecipePage;

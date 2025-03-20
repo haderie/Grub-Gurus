@@ -119,6 +119,7 @@ const useNewRecipe = () => {
       cookTime,
       numOfLikes: 0,
       views: [],
+      addedToCalendar: false,
     };
 
     const res = await addPost(recipe);

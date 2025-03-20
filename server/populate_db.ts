@@ -118,6 +118,7 @@ async function commentCreate(
  * @param ansBy The username of the user who wrote the answer.
  * @param ansDateTime The date and time when the answer was created.
  * @param comments The comments that have been added to the answer.
+ * @param isUserCertified Designation of if the user is certified.
  * @returns A Promise that resolves to the created Answer document.
  * @throws An error if any of the parameters are invalid.
  */
@@ -126,14 +127,16 @@ async function answerCreate(
   ansBy: string,
   ansDateTime: Date,
   comments: Comment[],
+  isUserCertified: boolean,
 ): Promise<DatabaseAnswer> {
-  if (text === '' || ansBy === '' || ansDateTime == null || comments == null)
+  if (text === '' || ansBy === '' || ansDateTime == null || comments == null || isUserCertified == null)
     throw new Error('Invalid Answer Format');
   const answerDetail: Answer = {
     text: text,
     ansBy: ansBy,
     ansDateTime: ansDateTime,
     comments: comments,
+    isUserCertified: isUserCertified,
   };
   return await AnswerModel.create(answerDetail);
 }
@@ -331,14 +334,14 @@ const populate = async () => {
     const c11 = await commentCreate(C11_TEXT, 'Joji John', new Date('2023-03-18T01:02:15'));
     const c12 = await commentCreate(C12_TEXT, 'abaya', new Date('2023-04-10T14:28:01'));
 
-    const a1 = await answerCreate(A1_TXT, 'hamkalo', new Date('2023-11-20T03:24:42'), [c1]);
-    const a2 = await answerCreate(A2_TXT, 'azad', new Date('2023-11-23T08:24:00'), [c2]);
-    const a3 = await answerCreate(A3_TXT, 'abaya', new Date('2023-11-18T09:24:00'), [c3]);
-    const a4 = await answerCreate(A4_TXT, 'alia', new Date('2023-11-12T03:30:00'), [c4]);
-    const a5 = await answerCreate(A5_TXT, 'sana', new Date('2023-11-01T15:24:19'), [c5]);
-    const a6 = await answerCreate(A6_TXT, 'abhi3241', new Date('2023-02-19T18:20:59'), [c6]);
-    const a7 = await answerCreate(A7_TXT, 'mackson3332', new Date('2023-02-22T17:19:00'), [c7]);
-    const a8 = await answerCreate(A8_TXT, 'ihba001', new Date('2023-03-22T21:17:53'), [c8]);
+    const a1 = await answerCreate(A1_TXT, 'hamkalo', new Date('2023-11-20T03:24:42'), [c1], false);
+    const a2 = await answerCreate(A2_TXT, 'azad', new Date('2023-11-23T08:24:00'), [c2], false);
+    const a3 = await answerCreate(A3_TXT, 'abaya', new Date('2023-11-18T09:24:00'), [c3], false);
+    const a4 = await answerCreate(A4_TXT, 'alia', new Date('2023-11-12T03:30:00'), [c4], false);
+    const a5 = await answerCreate(A5_TXT, 'sana', new Date('2023-11-01T15:24:19'), [c5], false);
+    const a6 = await answerCreate(A6_TXT, 'abhi3241', new Date('2023-02-19T18:20:59'), [c6], false);
+    const a7 = await answerCreate(A7_TXT, 'mackson3332', new Date('2023-02-22T17:19:00'), [c7], false);
+    const a8 = await answerCreate(A8_TXT, 'ihba001', new Date('2023-03-22T21:17:53'), [c8], false);
 
     await questionCreate(
       Q1_DESC,
