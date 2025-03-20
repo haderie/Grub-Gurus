@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import { DatabaseRecipe } from '../../../types/types';
 import './index.css';
 
@@ -29,12 +30,16 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
     <ul className='recipe-ingredients'>{recipe.instructions}</ul>
 
     {recipe.video && (
-      <div className='recipe-video'>
-        <h3>Video Tutorial:</h3>
-        <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
-          Watch Video
-        </a>
-      </div>
+      <ReactPlayer
+        url={recipe.video}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
     )}
   </div>
 );

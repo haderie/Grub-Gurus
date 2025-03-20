@@ -27,7 +27,6 @@ const CalendarRecipeCard = ({ recipe }: { recipe: RecipeCalendarEvent }) => (
     <h3>Instructions:</h3>
     <ul className='recipe-ingredients'>{recipe.instructions}</ul>
 
-    <h3>Watch Video:</h3>
     {recipe.video && (
       <ReactPlayer
         url={recipe.video}
