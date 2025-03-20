@@ -1,11 +1,7 @@
-/**
- * TAG PAGE KEPT IN FOR NOW
- */
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTagsWithQuestionNumber } from '../services/tagService';
-import { TagData } from '../types/types';
+import { PopulatedDatabasePost, TagData } from '../types/types';
+import { getPosts } from '../services/postService';
 
 /**
  * Custom hook for managing the tag page's state and navigation.
@@ -15,35 +11,25 @@ import { TagData } from '../types/types';
  */
 const useExplorePage = () => {
   const navigate = useNavigate();
-  const [tlist, setTlist] = useState<TagData[]>([]);
+  const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
 
-  /**
-   * Function to navigate to the home page with the specified tag as a search parameter.
-   *
-   * @param tagName - The name of the tag to be added to the search parameters.
-   */
-  const clickTag = (tagName: string) => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('tag', tagName);
-
-    navigate(`/home?${searchParams.toString()}`);
-  };
 
   useEffect(() => {
+    /**
+     * Function to fetch questions based on the filter and update the question list.
+     */
     const fetchData = async () => {
       try {
-        const res = await getTagsWithQuestionNumber();
-        setTlist(res || []);
-      } catch (e) {
+        const res = await getPosts();
+        setQlist(res);
+      } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(e);
+        console.log(error);
       }
     };
 
     fetchData();
   }, []);
-
-  return { tlist, clickTag };
+  return { qlist };
 };
-
 export default useExplorePage;

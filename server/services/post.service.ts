@@ -28,7 +28,7 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
   try {
     const posts = await PostModel.find().populate<{
       recipe: DatabaseRecipe;
-    }>([{ path: 'recipe', model: RecipeModel }]);
+    }>([{ path: 'recipe', model: RecipeModel }]).sort({createdAt: -1});
 
     if (!posts) {
       throw Error('Posts could not be retrieved');

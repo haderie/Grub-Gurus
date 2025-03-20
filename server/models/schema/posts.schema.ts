@@ -11,7 +11,8 @@ const postsSchema: Schema = new Schema(
   {
     recipe: { type: Schema.Types.ObjectId, ref: 'Recipe' },
   },
-  { collection: 'Posts' },
+  { collection: 'Posts', timestamps: true, },
+
 );
 
 export default postsSchema;

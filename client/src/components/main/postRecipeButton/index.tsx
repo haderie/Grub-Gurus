@@ -22,7 +22,7 @@ const PostRecipeButton = () => {
       onClick={() => {
         handleNewQuestion();
       }}>
-      Post a Recipe
+      Create Post
     </button>
   );
 };

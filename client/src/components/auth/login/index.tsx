@@ -20,7 +20,7 @@ const Login = () => {
 
   return (
     <div className='container'>
-      <h2>Welcome to FakeStackOverflow!</h2>
+      <h2>Welcome to Grub Gurus!</h2>
       <h3>Please login to continue.</h3>
       <form onSubmit={handleSubmit}>
         <h4>Please enter your username.</h4>
@@ -58,7 +58,7 @@ const Login = () => {
       </form>
       {err && <p className='error-message'>{err}</p>}
       <Link to='/signup' className='signup-link'>
-        Don&apos;t have an account? Sign up here.
+        Don&apos;t have an account? Sign up here!
       </Link>
     </div>
   );
