@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import { RecipeCalendarEvent } from '../../../../types/types';
 import './index.css';
 
@@ -25,7 +26,7 @@ const CalendarRecipeCard = ({ recipe }: { recipe: RecipeCalendarEvent }) => (
 
     <h3>Instructions:</h3>
     <ul className='recipe-ingredients'>{recipe.instructions}</ul>
-
+    {/* 
     {recipe.video && (
       <div className='recipe-video'>
         <h3>Video Tutorial:</h3>
@@ -33,6 +34,20 @@ const CalendarRecipeCard = ({ recipe }: { recipe: RecipeCalendarEvent }) => (
           Watch Video
         </a>
       </div>
+    )} */}
+
+    <h3>Watch Video:</h3>
+    {recipe.video && (
+      <ReactPlayer
+        url={recipe.video}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
     )}
   </div>
 );
