@@ -8,6 +8,7 @@ import { Recipe } from './recipe';
  */
 export interface Posts {
   recipe: Recipe;
+  youtubeVideoUrl?: string;
 }
 
 export interface AddPostRequest extends Request {
