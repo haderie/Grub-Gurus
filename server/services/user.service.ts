@@ -218,14 +218,18 @@ export const unfollowUserService = async (
 ): Promise<UserResponse> => {
   try {
     if (username === usernameUnfollowed) {
-      throw Error('Cannot follow yourself');
+      throw Error('Cannot unfollow yourself');
     }
 
-    const user = (await getUserByUsername(username)) as SafeDatabaseUser;
-    const userUnfollowed = (await getUserByUsername(usernameUnfollowed)) as SafeDatabaseUser;
+    const user = await getUserByUsername(username);
+    const userUnfollowed = await getUserByUsername(usernameUnfollowed);
 
-    if (!user || !userUnfollowed) {
+    if ('error' in user || 'error' in userUnfollowed) {
       throw Error('One or both users not found');
+    }
+
+    if (!user.following.includes(usernameUnfollowed)) {
+      throw Error(`You cannot unfollow ${usernameUnfollowed}, you do not follow them`);
     }
 
     const updatedUser = await UserModel.findOneAndUpdate(
@@ -246,6 +250,6 @@ export const unfollowUserService = async (
 
     return updatedUser;
   } catch (error) {
-    return { error: `Error while unfollowing user: ${usernameUnfollowed}` };
+    return { error: `Error while unfollowing user: ${usernameUnfollowed}: ${error}` };
   }
 };

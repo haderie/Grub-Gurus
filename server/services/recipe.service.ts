@@ -1,7 +1,13 @@
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
 
-import { SafeDatabaseUser, Recipe, PopulatedDatabaseRecipe } from '../types/types';
+import {
+  SafeDatabaseUser,
+  Recipe,
+  PopulatedDatabaseRecipe,
+  DatabaseRecipe,
+  RecipeResponse,
+} from '../types/types';
 import { parseKeyword, parseTags } from '../utils/parse.util';
 import { checkTagInRecipe } from './tag.service';
 
@@ -14,6 +20,21 @@ import { checkTagInRecipe } from './tag.service';
 //   { path: 'tags', model: TagModel },
 //   { path: 'user', model: UserModel },
 // ]);
+
+/**
+ * Saves a new question to the database.
+ * @param {Post} recipe - The question to save
+ * @returns {Promise<PostResponse>} - The saved question or error message
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const saveRecipe = async (recipe: Recipe): Promise<RecipeResponse> => {
+  try {
+    const result: DatabaseRecipe = await RecipeModel.create(recipe);
+    return result;
+  } catch (error) {
+    return { error: `Error when saving a recipe ${error}` };
+  }
+};
 
 /**
  * Filters questions by the user who asked them.
@@ -105,4 +126,42 @@ export const filterRecipeBySearch = (
     return checkTagInRecipe(r, searchTags);
     // checkKeywordInQuestion(q, searchKeyword) ||
   });
+};
+
+/**
+ * Filters questions by search string containing tags and/or keywords.
+ * @param {Partial<Recipe>} recipeData - The data to be provided to create a recipe in the database
+ * @returns {Promise<Recipe>} - Promise for a new recipe to be created
+ */
+export const createRecipe = async (recipeData: Recipe): Promise<RecipeResponse> => {
+  try {
+    const result: DatabaseRecipe = await RecipeModel.create(recipeData);
+
+    if (!result) {
+      throw Error('Failed to create recipe');
+    }
+    return result;
+  } catch (error) {
+    return { error: `Error occurred when saving recipe: ${error}` };
+  }
+};
+
+/**
+ * Retrieves a recipe from the database by the ID.
+ *
+ * @param {string} recipeID - The username of the user to find.
+ * @returns {Promise<UserResponse>} - Resolves with the found user object (without the password) or an error message.
+ */
+export const getRecipeByID = async (recipeID: string): Promise<RecipeResponse> => {
+  try {
+    const recipe: DatabaseRecipe | null = await RecipeModel.findOne({ recipeID });
+
+    if (!recipe) {
+      throw Error('Recipe not found');
+    }
+
+    return recipe;
+  } catch (error) {
+    return { error: `Error occurred when finding recipe: ${error}` };
+  }
 };

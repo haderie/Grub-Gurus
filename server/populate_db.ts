@@ -58,6 +58,7 @@ import {
 } from './data/posts_strings';
 import CommentModel from './models/comments.model';
 import UserModel from './models/users.model';
+import RecipeModel from './models/recipe.models';
 
 // Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
 const userArgs = process.argv.slice(2);
@@ -199,9 +200,46 @@ async function userCreate(
     password,
     dateJoined,
     biography: biography ?? '',
+    certified: false,
+    followers: [],
+    following: [],
+    privacySetting: 'Public',
+    recipeBookPublic: false,
   };
 
   return await UserModel.create(userDetail);
+}
+
+async function recipeCreate(
+  user: DatabaseUser,
+  title: string,
+  privacyPublic: boolean,
+  ingredients: string[],
+  description: string,
+  instructions: string,
+  video: string | null,
+  tags: DatabaseTag[],
+  cookTime: number,
+) {
+  if (!user || !title || !ingredients.length || cookTime < 0) {
+    throw new Error('Invalid Recipe Data');
+  }
+
+  const recipe = new RecipeModel({
+    user,
+    title,
+    privacyPublic,
+    ingredients,
+    description,
+    instructions,
+    video,
+    tags,
+    cookTime,
+    numOfLikes: 0,
+    numOfViews: [],
+  });
+
+  return await RecipeModel.create(recipe);
 }
 
 /**
