@@ -79,6 +79,12 @@ export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | '
   tags: DatabaseTag[]; // Fully populated tags
 }
 
+/* Interface for the request body when adding a new recipe.
+ * - `body`: The question being added.
+ */
+export interface AddRecipeRequest extends Request {
+  body: Recipe;
+}
 /**
  * Interface for the request query to find questions using a search string.
  * - `order`: The order in which to sort the recipe.
@@ -92,8 +98,4 @@ export interface FindRecipeRequest extends Request {
     order: OrderType;
     search: string;
   };
-}
-
-export interface AddRecipeRequest extends Request {
-  body: Recipe;
 }

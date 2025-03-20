@@ -88,7 +88,6 @@ const recipeController = (socket: FakeSOSocket) => {
   };
 
   router.get('/getrecipes/:username', getRecipes);
-
   router.post('/addRecipe', addRecipe);
 
   return router;

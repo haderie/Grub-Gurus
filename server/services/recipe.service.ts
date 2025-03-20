@@ -22,6 +22,21 @@ import { checkTagInRecipe } from './tag.service';
 // ]);
 
 /**
+ * Saves a new question to the database.
+ * @param {Post} recipe - The question to save
+ * @returns {Promise<PostResponse>} - The saved question or error message
+ */
+// eslint-disable-next-line import/prefer-default-export
+export const saveRecipe = async (recipe: Recipe): Promise<RecipeResponse> => {
+  try {
+    const result: DatabaseRecipe = await RecipeModel.create(recipe);
+    return result;
+  } catch (error) {
+    return { error: `Error when saving a recipe ${error}` };
+  }
+};
+
+/**
  * Filters questions by the user who asked them.
  * @param {PopulatedDatabaseQuestion[]} qlist - The list of questions
  * @param {string} askedBy - The username to filter by
