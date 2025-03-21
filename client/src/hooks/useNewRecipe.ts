@@ -179,8 +179,6 @@ const useNewRecipe = () => {
       ingredients,
       instructions,
       cookTime,
-      numOfLikes: 0,
-      views: [],
       video: videoUrl,
     };
 

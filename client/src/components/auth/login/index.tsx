@@ -21,9 +21,9 @@ const Login = () => {
   return (
     <div className='container'>
       <h2>Welcome to Grub Gurus!</h2>
-      <h3>Please login to continue.</h3>
+      <h3>Sign in to discover and share delicious recipes.</h3>
       <form onSubmit={handleSubmit}>
-        <h4>Please enter your username.</h4>
+        <h4>Username:</h4>
         <input
           type='text'
           value={username}
@@ -33,7 +33,7 @@ const Login = () => {
           className='input-text'
           id='username-input'
         />
-        <h4>Please enter your password.</h4>
+        <h4>Password:</h4>
         <input
           type={showPassword ? 'text' : 'password'}
           value={password}

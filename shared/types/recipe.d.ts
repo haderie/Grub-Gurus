@@ -25,8 +25,6 @@ export interface Recipe {
   video?: string;
   tags: Tag[];
   cookTime: number;
-  numOfLikes: number;
-  views: string[];
 }
 
 /**
@@ -36,8 +34,6 @@ export interface Recipe {
  */
 export interface RecipeData {
   title: string;
-  likes: number;
-  views: string[];
 }
 
 /**

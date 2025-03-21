@@ -34,7 +34,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
                 className={`recipe-list-card ${selectedRecipe?._id === recipe._id}`}
                 onClick={() => setSelectedRecipe(recipe)}>
                 <Button className='w-full text-left' onClick={() => setSelectedRecipe(recipe)}>
-                  {recipe.title} {' | '} Likes: {recipe.numOfLikes}
+                  {recipe.title}
                 </Button>
               </li>
             ))}

@@ -7,12 +7,18 @@ import { Recipe } from './recipe';
  * - `description`: A brief description of the tag's purpose or usage.
  */
 export interface Posts {
+  username: string;
   recipe: Recipe;
-  youtubeVideoUrl?: string;
+  text?: string;
+  video?: string;
+  datePosted: Date;
+  likes: string[];
+  saves: string[];
+  
 }
 
 export interface AddPostRequest extends Request {
-  body: Recipe;
+  body: Omit<Posts, 'datePosted'>;
 }
 
 /**
@@ -23,6 +29,10 @@ export interface AddPostRequest extends Request {
 export interface DatabasePost extends Omit<Posts, 'recipe'> {
   _id: ObjectId;
   recipe: ObjectId;
+  username: string;
+  datePosted: Date;
+  likes: string[];
+  saves: string[];
 }
 
 /**
@@ -44,5 +54,9 @@ export type PostsResponse = DatabasePost[] | { error: string };
  * - `comments`: An array of populated `DatabaseComment` objects.
  */
 export interface PopulatedDatabasePost extends Omit<DatabasePost, 'recipe'> {
+  username: string;
   recipe: PopulatedDatabaseRecipe;
+  datePosted: Date;
+  likes: string[];
+  saves: string[];
 }

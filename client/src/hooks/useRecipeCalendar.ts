@@ -31,8 +31,6 @@ const useRecipeCalendar = () => {
     privacyPublic: true,
     description: '',
     tags: [],
-    numOfLikes: 0,
-    views: [],
   });
 
   useEffect(() => {
@@ -90,8 +88,6 @@ const useRecipeCalendar = () => {
         privacyPublic: true,
         description: '',
         tags: [],
-        numOfLikes: 0,
-        views: [],
         video: videoUrl,
       };
 
@@ -123,8 +119,6 @@ const useRecipeCalendar = () => {
         privacyPublic: true,
         description: '',
         tags: [],
-        numOfLikes: 0,
-        views: [],
       });
       setSelectedTime('12:00');
     }

@@ -12,9 +12,7 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.ingredients !== undefined &&
     recipe.description !== undefined &&
     recipe.instructions !== undefined &&
-    recipe.cookTime !== undefined &&
-    recipe.numOfLikes !== undefined &&
-    recipe.views !== undefined;
+    recipe.cookTime !== undefined;
 
   /**
    * Retrieves a recipe by the username of the user.

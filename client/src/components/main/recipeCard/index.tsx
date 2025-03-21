@@ -12,7 +12,6 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => (
   <div className='recipe-card'>
     <div className='recipe-header'>
       <h1>{recipe.title}</h1>
-      <span className='recipe-likes'>Likes: {recipe.numOfLikes}</span>
     </div>
     <p className='recipe-description'>{recipe.description}</p>
 

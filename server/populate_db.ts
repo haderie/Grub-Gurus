@@ -134,6 +134,7 @@ async function answerCreate(
     ansBy: ansBy,
     ansDateTime: ansDateTime,
     comments: comments,
+    isUserCertified: false
   };
   return await AnswerModel.create(answerDetail);
 }
@@ -235,8 +236,6 @@ async function recipeCreate(
     video,
     tags,
     cookTime,
-    numOfLikes: 0,
-    numOfViews: [],
   });
 
   return await RecipeModel.create(recipe);
