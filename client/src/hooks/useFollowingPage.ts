@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PopulatedDatabasePost } from '../types/types';
-import { getPosts } from '../services/postService';
+import { getFollowingPosts } from '../services/postService';
 
 /**
  * Custom hook for managing the tag page's state and navigation.
@@ -19,7 +19,7 @@ const useFollowingPage = () => {
      */
     const fetchData = async () => {
       try {
-        const res = await getPosts();
+        const res = await getFollowingPosts();
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console

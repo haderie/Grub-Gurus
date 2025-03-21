@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { FakeSOSocket, PopulatedDatabasePost } from '../types/types';
-import { getPostList, savePost } from '../services/post.service';
+import { FakeSOSocket, PopulatedDatabasePost, UserByUsernameRequest } from '../types/types';
+import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { populateDocument } from '../utils/database.util';
 import { saveRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
@@ -76,9 +76,30 @@ const postController = (socket: FakeSOSocket) => {
     }
   };
 
+   /**
+   * Retrieves all users from the database.
+   * @param res The response, either returning the users or an error.
+   * @returns A promise resolving to void.
+   */
+   const getFollowingPosts = async (req: UserByUsernameRequest, res: Response): Promise<void> => {
+    try {
+      const { username } = req.params;
+      const users = await getFollowingPostList(username);
+
+      if ('error' in users) {
+        throw Error('error posting');
+      }
+
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).send(`Error when getting posts from users that you follow: ${error}`);
+    }
+  };
+
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
-
+  router.get('getFollowingPosts', getFollowingPosts);
+  
   return router;
 };
 export default postController;

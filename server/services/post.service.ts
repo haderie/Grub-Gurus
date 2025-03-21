@@ -1,6 +1,7 @@
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
 import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe } from '../types/types';
+import { getUserByUsername } from './user.service';
 
 /**
  * Saves a new question to the database.
@@ -37,5 +38,37 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
     return posts;
   } catch (error) {
     throw Error(`Posts could not be retrieved ${error}`);
+  }
+};
+
+/**
+ * Retrieves all users from the database.
+ * Users documents are returned in the order in which they were created, oldest to newest.
+ *
+ * @returns {Promise<UsersResponse>} - Resolves with the found user objects (without the passwords) or an error message.
+ */
+export const getFollowingPostList = async (username: string): Promise<PopulatedDatabasePost[]> => {
+  try {
+    // Fetch the logged-in user's data to get the list of users they follow
+    const user = await getUserByUsername(username);
+
+    if ('error' in user) {
+      throw new Error('User not found');
+    }
+
+    const followingUserIds = user.following; // Assuming `following` is an array of user IDs that the logged-in user follows
+
+    // Find posts only from users that the logged-in user follows
+    const posts = await PostModel.find({ username: { $in: followingUserIds } })
+      .populate<{ recipe: DatabaseRecipe }>([{ path: 'recipe', model: RecipeModel }])
+      .sort({ createdAt: -1 }); // Optionally, you can add sorting here
+
+    if (!posts) {
+      throw new Error('Posts could not be retrieved');
+    }
+
+    return posts;
+  } catch (error) {
+    throw new Error(`Posts could not be retrieved: ${error}`);
   }
 };

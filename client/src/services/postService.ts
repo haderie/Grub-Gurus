@@ -34,4 +34,19 @@ const getPosts = async (): Promise<PopulatedDatabasePost[]> => {
   return res.data;
 };
 
-export { addPost, getPosts };
+/**
+ * Function to get posts from users that you follow.
+ *
+ * @throws Error if there is an issue fetching posts.
+ */
+const getFollowingPosts = async (): Promise<PopulatedDatabasePost[]> => {
+  const res = await api.get(`${POST_API_URL}/getFollowingPosts`);
+
+  if (res.status !== 200) {
+    throw new Error('Error while fetching posts');
+  }
+
+  return res.data;
+};
+
+export { addPost, getPosts, getFollowingPosts };

@@ -31,6 +31,7 @@ export interface User extends UserCredentials {
   following: string[];
   privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
+  postsCreated: Post[];
 }
 
 /**
@@ -64,11 +65,11 @@ export interface UserRequest extends Request {
     password: string;
     biography?: string;
     certified: boolean;
-
     followers: string[];
     following: string[];
     privacySetting: 'Public' | 'Private';
     recipeBookPublic: boolean;
+    postsCreated: Post[];
   };
 }
 
