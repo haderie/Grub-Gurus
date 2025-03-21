@@ -16,6 +16,8 @@ const RecipeCalendar: React.FC = () => {
     showForm,
     selectedRecipe,
     events,
+    selectedColor,
+    setSelectedColor,
     setRecipeState,
     setSelectedTime,
     handleSelectSlot,
@@ -37,6 +39,9 @@ const RecipeCalendar: React.FC = () => {
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleEventClick}
         style={{ border: '1px solid #ddd', borderRadius: '5px' }}
+        eventPropGetter={event => ({
+          style: { backgroundColor: event.color || '#3788d8', color: 'white' },
+        })}
       />
 
       {/* Recipe Selection Form (Modal) */}
@@ -93,6 +98,14 @@ const RecipeCalendar: React.FC = () => {
             placeholder='Enter your cooktime in minutes'
             value={recipeState.cookTime}
             onChange={e => setRecipeState({ ...recipeState, cookTime: Number(e.target.value) })}
+            style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
+          />
+          {/* Color Picker */}
+          <label>Select a Color for Your Recipe:</label>
+          <input
+            type='color'
+            value={selectedColor}
+            onChange={e => setSelectedColor(e.target.value)}
             style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
           />
           <br />

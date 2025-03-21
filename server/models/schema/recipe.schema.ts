@@ -79,6 +79,10 @@ const recipeSchema: Schema = new Schema(
       },
       default: null,
     },
+    color: {
+      type: String,
+      default: '#ff0000',
+    },
   },
   { collection: 'Recipe', timestamps: true },
 );

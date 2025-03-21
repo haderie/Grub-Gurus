@@ -12,6 +12,7 @@ const useAddRecipeToCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); // Default to today
   const [selectedTime, setSelectedTime] = useState<string>('12:00');
+  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
 
   const addRecipeToCalendar = async (recipe: DatabaseRecipe) => {
     const [hours, minutes] = selectedTime.split(':').map(Number);
@@ -34,6 +35,7 @@ const useAddRecipeToCalendar = () => {
       addedToCalendar: true,
       start: eventStart,
       end: eventEnd,
+      color: selectedColor,
     };
 
     try {
@@ -42,7 +44,7 @@ const useAddRecipeToCalendar = () => {
 
       setEvents((prevEvents: RecipeCalendarEvent[]) => [
         ...prevEvents,
-        { ...savedRecipe, start: eventStart, end: eventEnd },
+        { ...savedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
       ]);
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -59,6 +61,8 @@ const useAddRecipeToCalendar = () => {
     showModal,
     selectedDate,
     selectedTime,
+    selectedColor,
+    setSelectedColor,
     handleConfirm,
     addRecipeToCalendar,
     setShowModal,

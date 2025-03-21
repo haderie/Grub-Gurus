@@ -49,6 +49,7 @@ export interface RecipeData {
 export interface RecipeCalendarEvent extends Recipe {
   start: Date;
   end: Date;
+  color: string;
 }
 
 export type RecipeResponse = DatabaseRecipe | { error: string };

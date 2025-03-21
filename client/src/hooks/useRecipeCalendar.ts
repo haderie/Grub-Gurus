@@ -12,6 +12,7 @@ const useRecipeCalendar = () => {
   const [selectedTime, setSelectedTime] = useState<string>('12:00'); // Default to 12:00 PM
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeCalendarEvent | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
 
   const [recipeState, setRecipeState] = useState<Recipe>({
     user: user.username,
@@ -78,6 +79,7 @@ const useRecipeCalendar = () => {
         addedToCalendar: recipeState.addedToCalendar,
         start: eventStart,
         end: eventEnd,
+        color: selectedColor,
       };
 
       try {
@@ -92,6 +94,7 @@ const useRecipeCalendar = () => {
           addedToCalendar: true,
           start: eventStart,
           end: eventEnd,
+          color: selectedColor,
         };
         setEvents(prevEvents => [...prevEvents, newEvent]);
       } catch (error) {
@@ -132,6 +135,7 @@ const useRecipeCalendar = () => {
     selectedRecipe,
     showForm,
     selectedTime,
+    selectedColor,
     setSelectedRecipe,
     handleSelectSlot,
     handleAddRecipe,
@@ -141,6 +145,7 @@ const useRecipeCalendar = () => {
     handleEventClick,
     closeRecipeCard,
     setEvents,
+    setSelectedColor,
   };
 };
 export default useRecipeCalendar;

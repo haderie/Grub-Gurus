@@ -12,6 +12,8 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => {
     showModal,
     selectedDate,
     selectedTime,
+    selectedColor,
+    setSelectedColor,
     handleConfirm,
     setShowModal,
     setSelectedDate,
@@ -69,6 +71,12 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => {
               type='time'
               value={selectedTime}
               onChange={e => setSelectedTime(e.target.value)}
+            />
+            <label>Recipe Color:</label>
+            <input
+              type='color'
+              value={selectedColor}
+              onChange={e => setSelectedColor(e.target.value)}
             />
             <button onClick={() => handleConfirm(recipe)}>Confirm</button>
             <button onClick={() => setShowModal(false)}>Cancel</button>
