@@ -102,11 +102,18 @@ const RecipeCalendar: React.FC = () => {
           />
           {/* Color Picker */}
           <label>Select a Color for Your Recipe:</label>
+          <br />
           <input
             type='color'
             value={selectedColor}
             onChange={e => setSelectedColor(e.target.value)}
-            style={{ padding: '8px', marginBottom: '10px', width: '100%' }}
+            style={{
+              width: '60px',
+              marginTop: '2%',
+              cursor: 'pointer',
+              border: 'none',
+              backgroundColor: selectedColor,
+            }}
           />
           <br />
           <button onClick={handleAddRecipe} disabled={!recipeState.title}>
