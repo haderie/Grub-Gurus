@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Recipe, RecipeCalendarEvent } from '../types/types';
-import { addRecipe, getRecipesByUsername } from '../services/recipeService';
+import { addCalendarRecipe, getRecipesByUsername } from '../services/recipeService';
 import useUserContext from './useUserContext';
 
 const useRecipeCalendar = () => {
@@ -12,6 +12,7 @@ const useRecipeCalendar = () => {
   const [selectedTime, setSelectedTime] = useState<string>('12:00'); // Default to 12:00 PM
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeCalendarEvent | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
 
   const [recipeState, setRecipeState] = useState<Recipe>({
     user: user.username,
@@ -24,6 +25,7 @@ const useRecipeCalendar = () => {
     tags: [],
     numOfLikes: 0,
     views: [],
+    addedToCalendar: true,
   });
 
   useEffect(() => {
@@ -32,11 +34,13 @@ const useRecipeCalendar = () => {
         try {
           const res = await getRecipesByUsername(user.username);
           // console.log(res);
-          const fetchedRecipes: RecipeCalendarEvent[] = res.map((recipe: RecipeCalendarEvent) => ({
-            ...recipe,
-            start: recipe.start, // Ensure correct date format
-            end: recipe.end,
-          }));
+          const fetchedRecipes: RecipeCalendarEvent[] = res
+            .filter((recipe: RecipeCalendarEvent) => recipe.addedToCalendar)
+            .map((recipe: RecipeCalendarEvent) => ({
+              ...recipe,
+              start: recipe.start, // Ensure correct date format
+              end: recipe.end,
+            }));
           setEvents(fetchedRecipes);
         } catch (error) {
           // eslint-disable-next-line no-console
@@ -72,10 +76,14 @@ const useRecipeCalendar = () => {
         tags: [],
         numOfLikes: 0,
         views: [],
+        addedToCalendar: recipeState.addedToCalendar,
+        start: eventStart,
+        end: eventEnd,
+        color: selectedColor,
       };
 
       try {
-        const savedRecipe = await addRecipe(newRecipe);
+        const savedRecipe = await addCalendarRecipe(newRecipe);
 
         if (!savedRecipe._id) {
           throw new Error('Recipe did not receive an _id');
@@ -83,8 +91,10 @@ const useRecipeCalendar = () => {
 
         const newEvent: RecipeCalendarEvent = {
           ...savedRecipe,
+          addedToCalendar: true,
           start: eventStart,
           end: eventEnd,
+          color: selectedColor,
         };
         setEvents(prevEvents => [...prevEvents, newEvent]);
       } catch (error) {
@@ -104,6 +114,7 @@ const useRecipeCalendar = () => {
         tags: [],
         numOfLikes: 0,
         views: [],
+        addedToCalendar: true,
       });
       setSelectedTime('12:00');
     }
@@ -124,6 +135,7 @@ const useRecipeCalendar = () => {
     selectedRecipe,
     showForm,
     selectedTime,
+    selectedColor,
     setSelectedRecipe,
     handleSelectSlot,
     handleAddRecipe,
@@ -132,6 +144,8 @@ const useRecipeCalendar = () => {
     setSelectedTime,
     handleEventClick,
     closeRecipeCard,
+    setEvents,
+    setSelectedColor,
   };
 };
 export default useRecipeCalendar;

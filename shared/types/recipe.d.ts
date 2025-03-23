@@ -27,6 +27,7 @@ export interface Recipe {
   cookTime: number;
   numOfLikes: number;
   views: string[];
+  addedToCalendar: boolean;
 }
 
 /**
@@ -48,6 +49,7 @@ export interface RecipeData {
 export interface RecipeCalendarEvent extends Recipe {
   start: Date;
   end: Date;
+  color: string;
 }
 
 export type RecipeResponse = DatabaseRecipe | { error: string };
@@ -80,11 +82,29 @@ export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | '
 }
 
 /* Interface for the request body when adding a new recipe.
- * - `body`: The question being added.
+ * - `body`: The recipe being added.
  */
 export interface AddRecipeRequest extends Request {
   body: Recipe;
 }
+
+/* Interface for the request body when adding a new calendar recipe.
+ * - `body`: The calendar recipe being added.
+ */
+export interface AddCalendarRecipeRequest extends Request {
+  body: RecipeCalendarEvent;
+}
+
+export interface UpdateCalendarRecipeRequest extends Request {
+  body: {
+    recipeID: ObjectId;
+    addedToCalendar: boolean;
+    start: Date;
+    end: Date;
+    color: string;
+  };
+}
+
 /**
  * Interface for the request query to find questions using a search string.
  * - `order`: The order in which to sort the recipe.

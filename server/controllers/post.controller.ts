@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { FakeSOSocket, PopulatedDatabasePost } from '../types/types';
 import { getPostList, savePost } from '../services/post.service';
 import { populateDocument } from '../utils/database.util';
-import { saveRecipe } from '../services/recipe.service';
+import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 
 const postController = (socket: FakeSOSocket) => {
@@ -30,7 +30,7 @@ const postController = (socket: FakeSOSocket) => {
       // }
 
       // Save the recipe first
-      const savedRecipe = await saveRecipe(recipeWithTags);
+      const savedRecipe = await createRecipe(recipeWithTags);
 
       if ('error' in savedRecipe) {
         throw new Error(savedRecipe.error);

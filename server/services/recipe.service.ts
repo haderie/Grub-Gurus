@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
 
@@ -7,6 +8,7 @@ import {
   PopulatedDatabaseRecipe,
   DatabaseRecipe,
   RecipeResponse,
+  RecipeCalendarEvent,
 } from '../types/types';
 import { parseKeyword, parseTags } from '../utils/parse.util';
 import { checkTagInRecipe } from './tag.service';
@@ -20,21 +22,6 @@ import { checkTagInRecipe } from './tag.service';
 //   { path: 'tags', model: TagModel },
 //   { path: 'user', model: UserModel },
 // ]);
-
-/**
- * Saves a new question to the database.
- * @param {Post} recipe - The question to save
- * @returns {Promise<PostResponse>} - The saved question or error message
- */
-// eslint-disable-next-line import/prefer-default-export
-export const saveRecipe = async (recipe: Recipe): Promise<RecipeResponse> => {
-  try {
-    const result: DatabaseRecipe = await RecipeModel.create(recipe);
-    return result;
-  } catch (error) {
-    return { error: `Error when saving a recipe ${error}` };
-  }
-};
 
 /**
  * Filters questions by the user who asked them.
@@ -129,8 +116,8 @@ export const filterRecipeBySearch = (
 };
 
 /**
- * Filters questions by search string containing tags and/or keywords.
- * @param {Partial<Recipe>} recipeData - The data to be provided to create a recipe in the database
+ * Create a new recipe
+ * @param {Recipe} recipeData - The data to be provided to create a recipe in the database
  * @returns {Promise<Recipe>} - Promise for a new recipe to be created
  */
 export const createRecipe = async (recipeData: Recipe): Promise<RecipeResponse> => {
@@ -143,6 +130,47 @@ export const createRecipe = async (recipeData: Recipe): Promise<RecipeResponse> 
     return result;
   } catch (error) {
     return { error: `Error occurred when saving recipe: ${error}` };
+  }
+};
+
+/**
+ * Create a new calendar recipe
+ * @param {RecipeCalendarEvent} recipeData - The data to be provided to create a calendar recipe in the database
+ * @returns {Promise<Recipe>} - Promise for a new recipe to be created
+ */
+export const createCalendarRecipe = async (
+  recipeData: RecipeCalendarEvent,
+): Promise<RecipeResponse> => {
+  try {
+    const result: DatabaseRecipe = await RecipeModel.create(recipeData);
+
+    if (!result) {
+      throw Error('Failed to create recipe');
+    }
+    return result;
+  } catch (error) {
+    return { error: `Error occurred when saving recipe: ${error}` };
+  }
+};
+
+export const updateRecipeToCalendarRecipe = async (
+  recipeID: ObjectId,
+  calendarData: Partial<RecipeCalendarEvent>,
+): Promise<RecipeResponse> => {
+  try {
+    const updatedRecipe: DatabaseRecipe | null = await RecipeModel.findOneAndUpdate(
+      { _id: recipeID },
+      { $set: calendarData },
+      { new: true },
+    );
+
+    if (!updatedRecipe) {
+      throw new Error('Recipe not found or update failed');
+    }
+
+    return updatedRecipe;
+  } catch (error) {
+    return { error: `Error occurred when updating recipe: ${error}` };
   }
 };
 
