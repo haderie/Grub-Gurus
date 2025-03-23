@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useState } from 'react';
 import { DatabaseRecipe, RecipeCalendarEvent } from '../types/types';
-import { addCalendarRecipe, updateRecipeForCalendar } from '../services/recipeService';
+import { updateRecipeForCalendar } from '../services/recipeService';
 import useRecipeCalendar from './useRecipeCalendar';
 import useUserContext from './useUserContext';
 
