@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ObjectId } from 'mongodb';
 import api from './config';
 import { PopulatedDatabaseRecipe, Recipe, RecipeCalendarEvent } from '../types/types';
 
@@ -77,4 +78,37 @@ const addCalendarRecipe = async (recipe: RecipeCalendarEvent): Promise<Populated
   }
 };
 
-export { getRecipesByUsername, addRecipe, addCalendarRecipe };
+/**
+ * Sends a PUT request to update an existing recipe to be a calendar recipe.
+ *
+ * @param recipeID - The ID of the recipe to update.
+ * @param calendarData - The calendar-specific fields to be added.
+ * @returns {Promise<PopulatedDatabaseRecipe>} - The updated recipe.
+ * @throws {Error} If an error occurs when updating the recipe.
+ */
+const updateRecipeForCalendar = async (
+  recipeID: ObjectId,
+  addedToCalendar: boolean,
+  start: Date,
+  end: Date,
+  color: string,
+): Promise<PopulatedDatabaseRecipe> => {
+  try {
+    const res = await api.patch(`${RECIPE_API_URL}/updateRecipeForCalendar`, {
+      recipeID,
+      addedToCalendar,
+      start,
+      end,
+      color,
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(`Error while updating recipe: ${error.response.data}`);
+    } else {
+      throw new Error('Error while updating recipe');
+    }
+  }
+};
+
+export { getRecipesByUsername, addRecipe, addCalendarRecipe, updateRecipeForCalendar };

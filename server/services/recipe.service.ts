@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
 
@@ -149,6 +150,27 @@ export const createCalendarRecipe = async (
     return result;
   } catch (error) {
     return { error: `Error occurred when saving recipe: ${error}` };
+  }
+};
+
+export const updateRecipeToCalendarRecipe = async (
+  recipeID: ObjectId,
+  calendarData: Partial<RecipeCalendarEvent>,
+): Promise<RecipeResponse> => {
+  try {
+    const updatedRecipe: DatabaseRecipe | null = await RecipeModel.findOneAndUpdate(
+      { _id: recipeID },
+      { $set: calendarData },
+      { new: true },
+    );
+
+    if (!updatedRecipe) {
+      throw new Error('Recipe not found or update failed');
+    }
+
+    return updatedRecipe;
+  } catch (error) {
+    return { error: `Error occurred when updating recipe: ${error}` };
   }
 };
 

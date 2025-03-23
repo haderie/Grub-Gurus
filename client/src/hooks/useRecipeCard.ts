@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useState } from 'react';
 import { DatabaseRecipe, RecipeCalendarEvent } from '../types/types';
-import { addCalendarRecipe } from '../services/recipeService';
+import { addCalendarRecipe, updateRecipeForCalendar } from '../services/recipeService';
 import useRecipeCalendar from './useRecipeCalendar';
 import useUserContext from './useUserContext';
 
@@ -21,7 +21,7 @@ const useAddRecipeToCalendar = () => {
       .add(recipe.cookTime || 60, 'minutes')
       .toDate();
 
-    const newRecipe = {
+    const updatedRecipeData = {
       user,
       title: recipe.title,
       ingredients: recipe.ingredients,
@@ -39,12 +39,26 @@ const useAddRecipeToCalendar = () => {
     };
 
     try {
-      const savedRecipe = await addCalendarRecipe(newRecipe);
-      if (!savedRecipe._id) throw new Error('Recipe did not receive an _id');
+      // const savedRecipe = await addCalendarRecipe(newRecipe);
+      // if (!savedRecipe._id) throw new Error('Recipe did not receive an _id');
+
+      // setEvents((prevEvents: RecipeCalendarEvent[]) => [
+      //   ...prevEvents,
+      //   { ...savedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
+      // ]);
+      const updatedRecipe = await updateRecipeForCalendar(
+        recipe._id,
+        updatedRecipeData.addedToCalendar,
+        updatedRecipeData.start,
+        updatedRecipeData.end,
+        updatedRecipeData.color,
+      );
+
+      if (!updatedRecipe._id) throw new Error('Failed to update recipe.');
 
       setEvents((prevEvents: RecipeCalendarEvent[]) => [
         ...prevEvents,
-        { ...savedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
+        { ...updatedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
       ]);
     } catch (error) {
       // eslint-disable-next-line no-console

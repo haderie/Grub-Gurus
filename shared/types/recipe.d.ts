@@ -95,6 +95,16 @@ export interface AddCalendarRecipeRequest extends Request {
   body: RecipeCalendarEvent;
 }
 
+export interface UpdateCalendarRecipeRequest extends Request {
+  body: {
+    recipeID: ObjectId;
+    addedToCalendar: boolean;
+    start: Date;
+    end: Date;
+    color: string;
+  };
+}
+
 /**
  * Interface for the request query to find questions using a search string.
  * - `order`: The order in which to sort the recipe.
