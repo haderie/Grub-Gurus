@@ -1,57 +1,74 @@
 import express, { Request, Response } from 'express';
-import { FakeSOSocket, PopulatedDatabasePost, UserByUsernameRequest } from '../types/types';
+import { AddPostRequest, DatabasePost, DatabaseRecipe, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, UserByUsernameRequest } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { populateDocument } from '../utils/database.util';
 import { saveRecipe } from '../services/recipe.service';
-import { processTags } from '../services/tag.service';
+import { processRecipeTags, processTags } from '../services/tag.service';
+import RecipeModel from '../models/recipe.models';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
   /**
-   * Adds a new question to the database. The question is first validated and then saved.
-   * If the tags are invalid or saving the question fails, the HTTP response status is updated.
+   * Adds a new post to the database. The post is first validated and then saved.
+   * If the tags are invalid or saving the post fails, the HTTP response status is updated.
    *
-   * @param req The AddQuestionRequest object containing the question data.
+   * @param req The AddPostRequest object containing the post data.
    * @param res The HTTP response object used to send back the result of the operation.
    *
    * @returns A Promise that resolves to void.
    */
-  const addPost = async (req: Request, res: Response): Promise<void> => {
+  const addPost = async (req: AddPostRequest, res: Response): Promise<void> => {
+    const post: Posts = req.body; // Destructure the post fields from the request body
     try {
-      const recipe = req.body; // Expecting a single recipe object
-
       const recipeWithTags = {
-        ...recipe,
-        tags: await processTags(recipe.tags),
+        ...post.recipe,
+        tags: await processTags(post.recipe.tags),
       };
-
-      // if (recipeWithTags.tags.length === 0) {
-      //   throw new Error('Invalid tags');
-      // }
-
-      // Save the recipe first
+  
+      // Step 3: Save the recipe to the database
       const savedRecipe = await saveRecipe(recipeWithTags);
-
+  
       if ('error' in savedRecipe) {
-        throw new Error(savedRecipe.error);
+        throw new Error(savedRecipe.error); // Handle errors in saving recipe
       }
 
-      // Save the post with the single recipe
-      const result = await savePost(savedRecipe);
+      const populatedRecipe = await RecipeModel.findById(savedRecipe._id)
+        .populate('tags');
 
-      if ('error' in result) {
-        throw new Error(result.error);
+      if (!populatedRecipe) {
+        throw new Error('Recipe not found');
       }
 
-      // Populate the new post
-      const populatedPost = await populateDocument(result._id.toString(), 'post');
-
-      if ('error' in populatedPost) {
-        throw new Error(populatedPost.error);
+      const convertFromDatabaseRecipe: Recipe = {
+        user: populatedRecipe.user,
+        title: populatedRecipe.title,
+        privacyPublic: populatedRecipe.privacyPublic,
+        ingredients: populatedRecipe.ingredients,
+        description: populatedRecipe.description,
+        instructions: populatedRecipe.instructions,
+        tags: await processRecipeTags(populatedRecipe.tags),
+        cookTime: populatedRecipe.cookTime,
+      }
+  
+      // Step 4: Create the post object and save it to the database
+      const newPost: Posts = {
+        username: post.username,
+        recipe: convertFromDatabaseRecipe, 
+        text: post.text,
+        datePosted: post.datePosted,
+        likes: post.likes,
+        saves: post.saves,
+      };
+  
+      const savedPost = await savePost(newPost);
+  
+      if ('error' in savedPost) {
+        throw new Error(savedPost.error); // Handle errors in saving post
       }
 
-      socket.emit('postUpdate', populatedPost as PopulatedDatabasePost);
-      res.json(populatedPost);
+      socket.emit('postUpdate', savedPost as PopulatedDatabasePost);
+
+      res.json(savedPost);
     } catch (err) {
       res.status(500).send(`Error when saving post: ${err instanceof Error ? err.message : err}`);
     }
@@ -64,13 +81,13 @@ const postController = (socket: FakeSOSocket) => {
    */
   const getPosts = async (_: Request, res: Response): Promise<void> => {
     try {
-      const users = await getPostList();
-
-      if ('error' in users) {
+      const posts = await getPostList();
+      posts
+      if ('error' in posts) {
         throw Error('error posting');
       }
 
-      res.status(200).json(users);
+      res.status(200).json(posts);
     } catch (error) {
       res.status(500).send(`Error when getting Posts: ${error}`);
     }

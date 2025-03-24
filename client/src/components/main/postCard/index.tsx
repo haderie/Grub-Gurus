@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactPlayer from 'react-player';
 import './index.css';
 import { DatabaseRecipe } from '@fake-stack-overflow/shared';
 import RecipeCard from '../recipeCard';
@@ -17,7 +16,6 @@ interface PostCardProps {
   username: string;
   recipe: DatabaseRecipe;
   text?: string;
-  video?: string;
   datePosted: Date;
   likes: string[];
   saves: string[];
@@ -34,7 +32,8 @@ interface PostCardProps {
  * @param meta Additional metadata related to the question.
  */
 const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
-  // Use the custom hook to handle like/save logic
+  console.log('PostCard received username:', post.username);
+
   const { likes, saves, handleLike, handleSave } = usePostCard(
     post.likes,
     post.saves,
@@ -47,18 +46,6 @@ const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
       <RecipeCard recipe={post.recipe} />
 
       {post.text && <p className='post-text'>{post.text}</p>}
-
-      {post.video && (
-        <ReactPlayer
-          url={post.video}
-          width='50%'
-          height='auto'
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
-          }}
-        />
-      )}
 
       {/* Likes & Saves */}
       <div className='post-actions'>

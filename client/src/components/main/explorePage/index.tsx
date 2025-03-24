@@ -10,6 +10,7 @@ import PostCard from '../postCard';
  */
 const ExplorePage = () => {
   const { qlist } = useExplorePage();
+  console.log(qlist); // Add this line to see the structure of qlist
 
   return (
     <>

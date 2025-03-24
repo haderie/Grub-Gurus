@@ -12,6 +12,7 @@ import { getPosts } from '../services/postService';
 const useExplorePage = () => {
   const navigate = useNavigate();
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
+  
 
 
   useEffect(() => {
@@ -21,6 +22,7 @@ const useExplorePage = () => {
     const fetchData = async () => {
       try {
         const res = await getPosts();
+        console.log("posts", res);
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console

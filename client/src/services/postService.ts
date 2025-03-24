@@ -1,4 +1,4 @@
-import { PopulatedDatabasePost, Recipe } from '../types/types';
+import { PopulatedDatabasePost, Posts, Recipe } from '../types/types';
 import api from './config';
 
 const POST_API_URL = `${process.env.REACT_APP_SERVER_URL}/posts`;
@@ -9,7 +9,7 @@ const POST_API_URL = `${process.env.REACT_APP_SERVER_URL}/posts`;
  * @param q - The question object to add.
  * @throws Error if there is an issue creating the new question.
  */
-const addPost = async (q: Recipe): Promise<PopulatedDatabasePost> => {
+const addPost = async (q: Posts): Promise<PopulatedDatabasePost> => {
   const res = await api.post(`${POST_API_URL}/addPost`, q);
 
   if (res.status !== 200) {

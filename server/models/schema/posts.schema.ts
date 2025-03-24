@@ -12,7 +12,6 @@ const postsSchema: Schema = new Schema(
     username: { type: String },
     recipe: { type: Schema.Types.ObjectId, ref: 'Recipe' },
     text: { type: String },
-    video: { type: String },
     datePosted: { type: Date, default: Date.now },
     likes: {type: [String], default: []},
     saves: {type: [String], default: []},

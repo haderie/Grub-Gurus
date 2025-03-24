@@ -1,18 +1,20 @@
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
-import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe } from '../types/types';
+import UserModel from '../models/users.model';
+import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe, Posts } from '../types/types';
 import { getUserByUsername } from './user.service';
 
 /**
- * Saves a new question to the database.
- * @param {Post} post - The question to save
- * @returns {Promise<PostResponse>} - The saved question or error message
+ * Saves a new post to the database.
+ * @param {Posts} post - The post to save, including username, recipe, text, video, etc.
+ * @returns {Promise<PostResponse>} - The saved post or error message
  */
-// eslint-disable-next-line import/prefer-default-export
-export const savePost = async (recipe: DatabaseRecipe): Promise<PostResponse> => {
+export const savePost = async (post: Posts): Promise<PostResponse> => {
   try {
-    const result: DatabasePost = await PostModel.create({ recipe });
-
+    const result: DatabasePost = await PostModel.create(post);
+    await UserModel.findByIdAndUpdate(result.username, {
+      $push: { postsCreated: result }, 
+    });
     return result;
   } catch (error) {
     return { error: 'Error when saving a post' };
@@ -20,16 +22,14 @@ export const savePost = async (recipe: DatabaseRecipe): Promise<PostResponse> =>
 };
 
 /**
- * Retrieves all users from the database.
- * Users documents are returned in the order in which they were created, oldest to newest.
- *
- * @returns {Promise<UsersResponse>} - Resolves with the found user objects (without the passwords) or an error message.
+ * Retrieves all posts from the database and populates the recipe field.
+ * @returns {Promise<PopulatedDatabasePost[]>} - Resolves with the populated post objects or an error message.
  */
 export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
   try {
-    const posts = await PostModel.find().populate<{
-      recipe: DatabaseRecipe;
-    }>([{ path: 'recipe', model: RecipeModel }]).sort({createdAt: -1});
+    const posts = await PostModel.find()
+      .populate<{ recipe: DatabaseRecipe }>([{ path: 'recipe', model: RecipeModel }])
+      .sort({ createdAt: -1 });
 
     if (!posts) {
       throw Error('Posts could not be retrieved');
@@ -37,15 +37,15 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
 
     return posts;
   } catch (error) {
-    throw Error(`Posts could not be retrieved ${error}`);
+    throw new Error(`Posts could not be retrieved: ${error}`);
   }
 };
 
+
 /**
- * Retrieves all users from the database.
- * Users documents are returned in the order in which they were created, oldest to newest.
- *
- * @returns {Promise<UsersResponse>} - Resolves with the found user objects (without the passwords) or an error message.
+ * Retrieves posts from users that the logged-in user follows.
+ * @param username The logged-in user's username.
+ * @returns {Promise<PopulatedDatabasePost[]>} - Resolves with the populated posts from followed users.
  */
 export const getFollowingPostList = async (username: string): Promise<PopulatedDatabasePost[]> => {
   try {
