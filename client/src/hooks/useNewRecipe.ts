@@ -4,7 +4,6 @@ import axios from 'axios';
 import { validateHyperlink } from '../tool';
 import useUserContext from './useUserContext';
 import { Recipe, YouTubeVideo } from '../types/types';
-import { addPost } from '../services/postService';
 import { addRecipe } from '../services/recipeService';
 
 /**

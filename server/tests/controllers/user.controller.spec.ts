@@ -13,6 +13,7 @@ const mockUser: User = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  postsCreated: []
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -24,6 +25,7 @@ const mockSafeUser: SafeDatabaseUser = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  postsCreated: []
 };
 
 const mockUpdatedUser = {

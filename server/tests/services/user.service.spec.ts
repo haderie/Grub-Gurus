@@ -202,6 +202,7 @@ describe('updateUser', () => {
     following: [],
     privacySetting: 'Public',
     recipeBookPublic: false,
+    postsCreated: []
   };
 
   const updates: Partial<User> = {

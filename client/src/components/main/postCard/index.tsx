@@ -32,8 +32,6 @@ interface PostCardProps {
  * @param meta Additional metadata related to the question.
  */
 const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
-  console.log('PostCard received username:', post.username);
-
   const { likes, saves, handleLike, handleSave } = usePostCard(
     post.likes,
     post.saves,

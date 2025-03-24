@@ -1,4 +1,4 @@
-import { PopulatedDatabasePost, Posts, Recipe } from '../types/types';
+import { PopulatedDatabasePost, Posts } from '../types/types';
 import api from './config';
 
 const POST_API_URL = `${process.env.REACT_APP_SERVER_URL}/posts`;

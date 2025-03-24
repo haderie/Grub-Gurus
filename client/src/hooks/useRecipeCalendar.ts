@@ -54,17 +54,6 @@ const useRecipeCalendar = () => {
     }
   }, [user.username]); // Fetch recipes when userId changes
 
-  /**
-   * Validates if the provided URL is a YouTube video URL.
-   * @param {string} url - The URL to validate.
-   * @returns {boolean} - Returns true if it's a valid YouTube URL, otherwise false.
-   */
-  const validateYouTubeURL = (url: string) => {
-    const regex =
-      /^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|e\/|watch\?v%3D)[\w-]+(&[^\s]*)?$/;
-    return regex.test(url);
-  };
-
   const handleSelectSlot = ({ start }: { start: Date }) => {
     setSelectedDate(start);
     setSelectedTime('12:00');
@@ -153,6 +142,7 @@ const useRecipeCalendar = () => {
       setLoading(false);
     } catch (err) {
       setSearchError('Error fetching YouTube videos. Please try again.');
+      setVideoUrlErr('Could not fetch video');
       setLoading(false);
     }
   }, [searchTerm]);

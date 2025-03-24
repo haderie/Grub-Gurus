@@ -14,16 +14,12 @@ const NewAnswerPage = () => {
     textErr,
     setText,
     postAnswer,
-    videoUrl,
     setVideoUrl,
-    videoUrlErr,
     searchTerm,
     setSearchTerm,
     videoResults,
     setVideoResults,
-    searchError,
     searchYouTube,
-    selectVideo,
     loading,
   } = useAnswerForm();
 

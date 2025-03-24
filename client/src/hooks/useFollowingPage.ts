@@ -10,7 +10,6 @@ import { getFollowingPosts } from '../services/postService';
  * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
  */
 const useFollowingPage = () => {
-  const navigate = useNavigate();
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
 
   useEffect(() => {
