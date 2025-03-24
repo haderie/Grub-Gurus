@@ -34,13 +34,18 @@ const RecipeCalendar: React.FC = () => {
         events={events}
         startAccessor='start'
         endAccessor='end'
-        views={['month', 'week', 'day', 'agenda']}
+        views={['month', 'week', 'day']}
         selectable={!showForm}
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleEventClick}
-        style={{ border: '1px solid #ddd', borderRadius: '5px' }}
+        style={{ border: '1px solid #4caf50', borderRadius: '5px', backgroundColor: '#e8f5e9' }}
         eventPropGetter={event => ({
-          style: { backgroundColor: event.color || '#3788d8', color: 'white' },
+          style: {
+            backgroundColor: event.color || '#4caf50',
+            color: 'white',
+            borderRadius: '4px',
+            border: 'none',
+          },
         })}
       />
 
