@@ -1,10 +1,15 @@
 import express, { Request, Response } from 'express';
-import { AddPostRequest, DatabaseRecipe, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, RecipeForPost, UserByUsernameRequest } from '../types/types';
+import {
+  AddPostRequest,
+  DatabaseRecipe,
+  FakeSOSocket,
+  Posts,
+  RecipeForPost,
+  UserByUsernameRequest
+} from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { saveRecipe } from '../services/recipe.service';
-import { processRecipeTags, processTags } from '../services/tag.service';
-import RecipeModel from '../models/recipe.models';
-import TagModel from '../models/tags.model';
+import { processTags } from '../services/tag.service';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -58,12 +63,13 @@ const postController = (socket: FakeSOSocket) => {
         likes: post.likes,
         saves: post.saves,
       };
-  
+
 
       const savedPost = await savePost(newPost);
       if ('error' in savedPost) {
         throw new Error(savedPost.error);
       }
+      socket.emit('postUpdate', savedPost)
       res.json(savedPost);
     } catch (error) {
       res.status(500).send(`Error when saving post: ${error}`);
@@ -78,7 +84,6 @@ const postController = (socket: FakeSOSocket) => {
   const getPosts = async (_: Request, res: Response): Promise<void> => {
     try {
       const posts = await getPostList();
-      posts
       if ('error' in posts) {
         throw Error('Error getting posts');
       }
@@ -89,12 +94,12 @@ const postController = (socket: FakeSOSocket) => {
     }
   };
 
-   /**
-   * Retrieves all users from the database.
-   * @param res The response, either returning the users or an error.
-   * @returns A promise resolving to void.
-   */
-   const getFollowingPosts = async (req: UserByUsernameRequest, res: Response): Promise<void> => {
+  /**
+  * Retrieves all users from the database.
+  * @param res The response, either returning the users or an error.
+  * @returns A promise resolving to void.
+  */
+  const getFollowingPosts = async (req: UserByUsernameRequest, res: Response): Promise<void> => {
     try {
       const { username } = req.params;
       const users = await getFollowingPostList(username);
@@ -112,7 +117,7 @@ const postController = (socket: FakeSOSocket) => {
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
   router.get('/getFollowingPosts', getFollowingPosts);
-  
+
   return router;
 };
 export default postController;

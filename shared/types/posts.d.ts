@@ -14,7 +14,6 @@ export interface Posts {
   datePosted: Date;
   likes: string[];
   saves: string[];
-  
 }
 
 export interface AddPostRequest extends Request {

@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '@fake-stack-overflow/shared';
+import { PopulatedDatabasePost } from '@fake-stack-overflow/shared';
 import RecipeCard from '../recipeCard';
 import usePostCard from '../../../hooks/usePostCard';
 
@@ -33,7 +33,6 @@ const PostView = ({ post }: PostCardProps) => {
     post.username,
     post._id,
   );
-  console.log(post);
 
   const formattedDate = new Date(post.datePosted).toLocaleString();
 

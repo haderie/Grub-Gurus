@@ -29,10 +29,6 @@ const NewPost = () => {
     setVideoResults,
     searchYouTube,
     loading,
-    likes,
-    setLikes,
-    saves,
-    setSaves,
     postText,
     setPostText,
   } = useNewPost();

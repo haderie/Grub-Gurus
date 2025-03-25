@@ -2,7 +2,13 @@ import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
 import TagModel from '../models/tags.model';
 import UserModel from '../models/users.model';
-import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe, Posts, Recipe, RecipeForPost, RecipeResponse } from '../types/types';
+import {
+  DatabasePost,
+  PostResponse,
+  PopulatedDatabasePost,
+  DatabaseRecipe,
+  Posts
+} from '../types/types';
 import { getUserByUsername } from './user.service';
 
 /**
@@ -16,7 +22,7 @@ export const savePost = async (post: Posts): Promise<PostResponse> => {
     await UserModel.findOneAndUpdate(
       { username: result.username },
       { $push: { postsCreated: result } },
-      { new: true }
+      { new: true },
     );
 
     return result;
@@ -32,14 +38,14 @@ export const savePost = async (post: Posts): Promise<PostResponse> => {
 export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
   try {
     const posts = await PostModel.find()
-    .populate<{ recipe: DatabaseRecipe }>([
-      {
-        path: 'recipe',
-        model: RecipeModel,
-        populate: { path: 'tags', model: TagModel }
-      }
-    ])
-    .sort({ createdAt: -1 });
+      .populate<{ recipe: DatabaseRecipe }>([
+        {
+          path: 'recipe',
+          model: RecipeModel,
+          populate: { path: 'tags', model: TagModel }
+        }
+      ])
+      .sort({ createdAt: -1 });
 
 
     if (!posts) {

@@ -13,8 +13,8 @@ const postsSchema: Schema = new Schema(
     recipe: { type: Schema.Types.ObjectId, ref: 'Recipe' },
     text: { type: String },
     datePosted: { type: Date, default: Date.now },
-    likes: {type: [String], default: []},
-    saves: {type: [String], default: []},
+    likes: { type: [String], default: [] },
+    saves: { type: [String], default: [] },
   },
   { collection: 'Posts', timestamps: true, },
 

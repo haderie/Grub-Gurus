@@ -198,8 +198,6 @@ const useNewPost = () => {
       text: postText,
     };
 
-    console.log('Post being added', post);
-
     const res = await addPost(post);
     console.log(res);
 

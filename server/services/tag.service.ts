@@ -1,8 +1,12 @@
-import { DatabaseQuestion, DatabaseRecipe, DatabaseTag, PopulatedDatabaseRecipe, Question, Recipe, Tag } from '../types/types';
+import { ObjectId } from 'mongodb';
+import { 
+  DatabaseQuestion, 
+  DatabaseTag, 
+  Question, 
+  Recipe, 
+  Tag } from '../types/types';
 import QuestionModel from '../models/questions.model';
 import TagModel from '../models/tags.model';
-import RecipeModel from '../models/recipe.models';
-import { ObjectId } from 'mongodb';
 
 /**
  * Checks if given question contains any tags from the given list.
@@ -145,7 +149,6 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return { error: 'Error when constructing tag map' };
   }
 };
-
 
 export const processRecipeTags = async (tagIds: ObjectId[]): Promise<Tag[]> => {
   try {

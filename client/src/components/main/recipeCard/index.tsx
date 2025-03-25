@@ -10,8 +10,6 @@ import './index.css';
  * @param recipe: The recipe object to display.
  */
 const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
-  const navigate = useNavigate();
-
   if (!recipe) {
     return <div>Loading...</div>;
   }
