@@ -16,18 +16,6 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
     return <div>Loading...</div>;
   }
 
-  /**
-   * Function to navigate to the home page with the specified tag as a search parameter.
-   *
-   * @param tagName - The name of the tag to be added to the search parameters.
-   */
-  const clickTag = (tagName: string) => {
-    const searchParams = new URLSearchParams();
-    searchParams.set('tag', tagName);
-
-    navigate(`/home?${searchParams.toString()}`);
-  };
-
   return (
     <div className='recipe-card'>
       <div className='recipe-header'>
@@ -64,15 +52,9 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
       <h3>Tags:</h3>
       <div className='recipe-tags'>
         {recipe.tags.map(tag => (
-          <button
-            key={String(tag._id)}
-            className='recipe_tag_button'
-            onClick={e => {
-              e.stopPropagation();
-              clickTag(tag.name);
-            }}>
+          <div key={String(tag._id)} className='tag-box'>
             {tag.name}
-          </button>
+          </div>
         ))}
       </div>
     </div>

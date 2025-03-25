@@ -14,7 +14,7 @@ const FollowingPage = () => {
   return (
     <>
       <div className='space_between right_padding'>
-        <div className='bold_title'>All Posts</div>
+        <div className='bold_title'>Following</div>
         <CreatePostButton />
       </div>
       <div id='post_list' className='post_list'>

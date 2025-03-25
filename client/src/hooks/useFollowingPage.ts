@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { PopulatedDatabasePost } from '../types/types';
 import { getFollowingPosts } from '../services/postService';
 
@@ -13,9 +12,6 @@ const useFollowingPage = () => {
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
 
   useEffect(() => {
-    /**
-     * Function to fetch questions based on the filter and update the question list.
-     */
     const fetchData = async () => {
       try {
         const res = await getFollowingPosts();

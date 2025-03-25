@@ -21,16 +21,15 @@ const postController = (socket: FakeSOSocket) => {
     const post: Posts = req.body; // Destructure the post fields from the request body
     try {
       const tagIds = await Promise.all(
-        post.recipe.tags.map(async (tagName: string) => {
-          let tag = await TagModel.findOne({ name: tagName });
+        post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
+          let tag = await TagModel.findOne({ name: tagObject.name });
           if (!tag) {
             tag = new TagModel({ 
-              name: tagName,
-              description: '',
+              name: tagObject.name,
+              description: tagObject.description || '',
             });
             await tag.save();
           }
-
           return tag._id;
         })
       );

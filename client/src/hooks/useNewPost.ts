@@ -175,6 +175,8 @@ const useNewPost = () => {
       .split(' , ')
       .filter(ingredientName => ingredientName.trim() !== '');
 
+    const userPosting = await getUserByUsername(user.username);
+
     const newRecipe: Recipe = {
       title,
       description,
@@ -187,8 +189,6 @@ const useNewPost = () => {
       video: videoUrl,
     };
 
-    const userPosting = await getUserByUsername(user.username);
-
     const post: Posts = {
       username: userPosting.username,
       recipe: newRecipe,
@@ -197,6 +197,8 @@ const useNewPost = () => {
       saves,
       text: postText,
     };
+
+    console.log('Post being added', post);
 
     const res = await addPost(post);
 

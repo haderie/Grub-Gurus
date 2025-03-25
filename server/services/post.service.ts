@@ -69,19 +69,18 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
  */
 export const getFollowingPostList = async (username: string): Promise<PopulatedDatabasePost[]> => {
   try {
-    // Fetch the logged-in user's data to get the list of users they follow
     const user = await getUserByUsername(username);
 
     if ('error' in user) {
       throw new Error('User not found');
     }
 
-    const followingUserIds = user.following; // Assuming `following` is an array of user IDs that the logged-in user follows
+    const followingUserIds = user.following;
 
     // Find posts only from users that the logged-in user follows
     const posts = await PostModel.find({ username: { $in: followingUserIds } })
       .populate<{ recipe: DatabaseRecipe }>([{ path: 'recipe', model: RecipeModel }])
-      .sort({ createdAt: -1 }); // Optionally, you can add sorting here
+      .sort({ createdAt: -1 });
 
     if (!posts) {
       throw new Error('Posts could not be retrieved');
