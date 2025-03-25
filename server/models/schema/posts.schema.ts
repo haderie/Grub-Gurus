@@ -17,7 +17,6 @@ const postsSchema: Schema = new Schema(
     saves: { type: [String], default: [] },
   },
   { collection: 'Posts', timestamps: true },
-
 );
 
 export default postsSchema;
