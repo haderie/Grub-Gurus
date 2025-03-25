@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
 import { Recipe, RecipeCalendarEvent, YouTubeVideo } from '../types/types';
-import { addCalendarRecipe, addRecipe, getRecipesByUsername } from '../services/recipeService';
+import { addCalendarRecipe, getRecipesByUsername } from '../services/recipeService';
 
 import useUserContext from './useUserContext';
 
@@ -33,7 +33,6 @@ const useRecipeCalendar = () => {
     privacyPublic: true,
     description: '',
     tags: [],
-    views: [],
     addedToCalendar: true,
   });
 
@@ -121,7 +120,6 @@ const useRecipeCalendar = () => {
         privacyPublic: true,
         description: '',
         tags: [],
-        views: [],
         addedToCalendar: true,
       });
       setSelectedTime('12:00');

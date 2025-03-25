@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { useState } from 'react';
-import { DatabaseRecipe, RecipeCalendarEvent } from '../types/types';
+import { PopulatedDatabaseRecipe, RecipeCalendarEvent } from '../types/types';
 import { updateRecipeForCalendar } from '../services/recipeService';
 import useRecipeCalendar from './useRecipeCalendar';
 import useUserContext from './useUserContext';
@@ -14,7 +14,7 @@ const useAddRecipeToCalendar = () => {
   const [selectedTime, setSelectedTime] = useState<string>('12:00');
   const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
 
-  const addRecipeToCalendar = async (recipe: DatabaseRecipe) => {
+  const addRecipeToCalendar = async (recipe: PopulatedDatabaseRecipe) => {
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const eventStart = moment(selectedDate).set({ hour: hours, minute: minutes }).toDate();
     const eventEnd = moment(eventStart)
@@ -66,7 +66,7 @@ const useAddRecipeToCalendar = () => {
     }
   };
 
-  const handleConfirm = (recipe: DatabaseRecipe) => {
+  const handleConfirm = (recipe: PopulatedDatabaseRecipe) => {
     addRecipeToCalendar(recipe);
     setShowModal(false);
   };

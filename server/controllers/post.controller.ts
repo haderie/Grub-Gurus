@@ -8,7 +8,7 @@ import {
   UserByUsernameRequest,
 } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
-import { saveRecipe } from '../services/recipe.service';
+import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 
 const postController = (socket: FakeSOSocket) => {
@@ -49,7 +49,7 @@ const postController = (socket: FakeSOSocket) => {
       //   tags: tagIds,
       // };
 
-      const savedRecipe = (await saveRecipe(recipeWithTags)) as DatabaseRecipe;
+      const savedRecipe = (await createRecipe(recipeWithTags)) as DatabaseRecipe;
 
       if ('error' in savedRecipe) {
         throw new Error('Cannot save recipe');

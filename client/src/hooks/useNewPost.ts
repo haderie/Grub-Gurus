@@ -187,6 +187,7 @@ const useNewPost = () => {
       instructions,
       cookTime,
       video: videoUrl,
+      addedToCalendar: false,
     };
 
     const post: Posts = {

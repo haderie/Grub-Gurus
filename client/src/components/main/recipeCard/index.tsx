@@ -21,7 +21,7 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
     setSelectedDate,
     setSelectedTime,
   } = useRecipeCard();
-    if (!recipe) {
+  if (!recipe) {
     return <div>Loading...</div>;
   }
 
@@ -66,13 +66,12 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
           </div>
         ))}
       </div>
-        <div className='recipe-video'>
-          <h3>Video Tutorial:</h3>
-          <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
-            Watch Video
-          </a>
-        </div>
-      )}
+      <div className='recipe-video'>
+        <h3>Video Tutorial:</h3>
+        <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
+          Watch Video
+        </a>
+      </div>
 
       {/* Add to Calendar Button */}
       <button className='add-to-calendar-btn' onClick={() => setShowModal(true)}>
