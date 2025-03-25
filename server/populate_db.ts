@@ -206,6 +206,7 @@ async function userCreate(
     following: [],
     privacySetting: 'Public',
     recipeBookPublic: false,
+    postsCreated: [],
   };
 
   return await UserModel.create(userDetail);

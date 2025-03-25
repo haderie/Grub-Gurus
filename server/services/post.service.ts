@@ -12,15 +12,6 @@ import { getUserByUsername } from './user.service';
  */
 export const savePost = async (post: Posts): Promise<PostResponse> => {
   try {
-    // const newPost: Posts = {
-    //   username: post.username,
-    //   recipe: recipeAttached._id,
-    //   text: post.text,
-    //   datePosted: post.datePosted,
-    //   likes: post.likes,
-    //   saves: post.saves,
-    // };
-
     const result: DatabasePost = await PostModel.create(post);
     await UserModel.findOneAndUpdate(
       { username: result.username },

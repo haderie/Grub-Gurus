@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { AddPostRequest, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, RecipeForPost, UserByUsernameRequest } from '../types/types';
+import { AddPostRequest, DatabaseRecipe, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, RecipeForPost, UserByUsernameRequest } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { saveRecipe } from '../services/recipe.service';
 import { processRecipeTags, processTags } from '../services/tag.service';
@@ -20,28 +20,39 @@ const postController = (socket: FakeSOSocket) => {
   const addPost = async (req: AddPostRequest, res: Response): Promise<void> => {
     const post: Posts = req.body; // Destructure the post fields from the request body
     try {
-      const tagIds = await Promise.all(
-        post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
-          let tag = await TagModel.findOne({ name: tagObject.name });
-          if (!tag) {
-            tag = new TagModel({ 
-              name: tagObject.name,
-              description: tagObject.description || '',
-            });
-            await tag.save();
-          }
-          return tag._id;
-        })
-      );
+      // const tagIds = await Promise.all(
+      //   post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
+      //     let tag = await TagModel.findOne({ name: tagObject.name });
+      //     if (!tag) {
+      //       tag = new TagModel({ 
+      //         name: tagObject.name,
+      //         description: tagObject.description || '',
+      //       });
+      //       await tag.save();
+      //     }
+      //     return tag._id;
+      //   })
+      // );
 
       const recipeWithTags: RecipeForPost = {
         ...post.recipe,
-        tags: tagIds,
+        tags: await processTags(post.recipe.tags),
       };
+
+      // const recipeWithTags: DatabaseRecipe = {
+      //   ...post.recipe,
+      //   tags: tagIds,
+      // };
+
+      const savedRecipe = await saveRecipe(recipeWithTags) as DatabaseRecipe;
+
+      if ('error' in savedRecipe) {
+        throw new Error('Cannot save recipe');
+      }
 
       const newPost: Posts = {
         username: post.username,
-        recipe: recipeWithTags,
+        recipe: savedRecipe._id,
         text: post.text,
         datePosted: post.datePosted,
         likes: post.likes,
@@ -51,7 +62,7 @@ const postController = (socket: FakeSOSocket) => {
 
       const savedPost = await savePost(newPost);
       if ('error' in savedPost) {
-        throw new Error(savedPost.error); // Handle errors in saving the post
+        throw new Error(savedPost.error);
       }
       res.json(savedPost);
     } catch (error) {
