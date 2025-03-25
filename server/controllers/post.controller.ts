@@ -115,7 +115,7 @@ const postController = (socket: FakeSOSocket) => {
 
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
-  router.get('/getFollowingPosts', getFollowingPosts);
+  router.get('/getFollowingPosts/:username', getFollowingPosts);
 
   return router;
 };
