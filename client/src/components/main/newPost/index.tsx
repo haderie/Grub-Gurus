@@ -1,34 +1,37 @@
-import React from 'react';
-import useNewQuestion from '../../../hooks/useNewQuestion';
+import useNewPost from '../../../hooks/useNewPost';
 import Form from '../baseComponents/form';
 import Input from '../baseComponents/input';
 import TextArea from '../baseComponents/textarea';
 import './index.css';
 
-/**
- * NewQuestionPage component allows users to submit a new question with a title,
- * description, tags, and username.
- */
-const NewQuestionPage = () => {
+const NewPost = () => {
   const {
     title,
     setTitle,
-    text,
-    setText,
+    description,
+    instructions,
+    ingredientNames,
+    setDescription,
+    setInstructions,
+    setIngredientNames,
     tagNames,
     setTagNames,
+    cookTime,
+    setCookTime,
     titleErr,
     textErr,
     tagErr,
-    postQuestion,
+    createPost,
     setVideoUrl,
     searchTerm,
     setSearchTerm,
     videoResults,
+    setVideoResults,
     searchYouTube,
     loading,
-    setVideoResults,
-  } = useNewQuestion();
+    postText,
+    setPostText,
+  } = useNewPost();
 
   const predefinedTags = [
     'DR-Gluten-free',
@@ -47,25 +50,25 @@ const NewQuestionPage = () => {
   return (
     <Form>
       <Input
-        title={'Question Title'}
-        hint={'Limit title to 100 characters or less'}
+        title={'Recipe Title'}
+        hint={'Limit title to 100 characters or less.'}
         id={'formTitleInput'}
         val={title}
         setState={setTitle}
         err={titleErr}
       />
       <TextArea
-        title={'Question Text'}
-        hint={'Add details'}
+        title={'Recipe Description'}
+        hint={'Add basic description of recipe.'}
         id={'formTextInput'}
-        val={text}
-        setState={setText}
+        val={description}
+        setState={setDescription}
         err={textErr}
       />
 
       <Input
         title={'Attach Video (Optional)'}
-        hint={'Search for a YouTube video'}
+        hint={'Search for a YouTube video.'}
         id={'videoSearchInput'}
         val={searchTerm}
         setState={setSearchTerm}
@@ -93,6 +96,36 @@ const NewQuestionPage = () => {
           ))}
         </div>
       )}
+
+      <TextArea
+        title={'Recipe Ingredients'}
+        hint={'Add keywords separated by whitespace and comma, e.g. sugar , water.'}
+        id={'formTextInput'}
+        val={ingredientNames}
+        setState={setIngredientNames}
+        err={textErr}
+      />
+
+      <TextArea
+        title={'Recipe Instructions'}
+        hint={'Add instructions for the recipe.'}
+        id={'formTextInput'}
+        val={instructions}
+        setState={setInstructions}
+        err={textErr}
+      />
+      <div className='input_title'>{'Cook Time*'}</div>
+      {<div className='input_hint'>{'Add cook time in minutes.'}</div>}
+      <input
+        type='number'
+        title='Recipe CookTime'
+        id={'formTextInput'}
+        className='input_input'
+        value={cookTime === 0 ? '' : cookTime}
+        onChange={e => setCookTime(e.target.value ? Number(e.target.value) : 0)}
+      />
+      {textErr && <div className='input_error'>{textErr}</div>}
+
       <div className='tag-container'>
         <Input
           title={'Tags'}
@@ -126,13 +159,23 @@ const NewQuestionPage = () => {
         )}
       </div>
 
+      <TextArea
+        title={'Post Text (Optional)'}
+        hint={'Add a caption for your post!'}
+        id={'formTextInput'}
+        val={postText}
+        setState={setPostText}
+        err={textErr}
+        mandatory={false}
+      />
+
       <div className='btn_indicator_container'>
         <button
           className='form_postBtn'
           onClick={() => {
-            postQuestion();
+            createPost();
           }}>
-          Post Question
+          Create Post
         </button>
         <div className='mandatory_indicator'>* indicates mandatory fields</div>
       </div>
@@ -140,4 +183,4 @@ const NewQuestionPage = () => {
   );
 };
 
-export default NewQuestionPage;
+export default NewPost;

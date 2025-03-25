@@ -1,4 +1,6 @@
-import { DatabaseRecipe } from '../../../types/types';
+import React from 'react';
+import ReactPlayer from 'react-player';
+import { PopulatedDatabaseRecipe } from '../../../types/types';
 import './index.css';
 import useRecipeCard from '../../../hooks/useRecipeCard';
 
@@ -7,7 +9,7 @@ import useRecipeCard from '../../../hooks/useRecipeCard';
  *
  * @param recipe: The recipe object to display.
  */
-const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => {
+const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
   const {
     showModal,
     selectedDate,
@@ -19,12 +21,14 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => {
     setSelectedDate,
     setSelectedTime,
   } = useRecipeCard();
+  if (!recipe) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='recipe-card'>
       <div className='recipe-header'>
         <h1>{recipe.title}</h1>
-        <span className='recipe-likes'>Likes: {recipe.numOfLikes}</span>
       </div>
       <p className='recipe-description'>{recipe.description}</p>
 
@@ -42,13 +46,32 @@ const RecipeCard = ({ recipe }: { recipe: DatabaseRecipe }) => {
       <ul className='recipe-ingredients'>{recipe.instructions}</ul>
 
       {recipe.video && (
-        <div className='recipe-video'>
-          <h3>Video Tutorial:</h3>
-          <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
-            Watch Video
-          </a>
-        </div>
+        <ReactPlayer
+          url={recipe.video}
+          width='50%'
+          height='auto'
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            border: '2px solid red', // Temporary border to see if it's being rendered
+          }}
+        />
       )}
+
+      <h3>Tags:</h3>
+      <div className='recipe-tags'>
+        {recipe.tags.map(tag => (
+          <div key={String(tag._id)} className='tag-box'>
+            {tag.name}
+          </div>
+        ))}
+      </div>
+      <div className='recipe-video'>
+        <h3>Video Tutorial:</h3>
+        <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
+          Watch Video
+        </a>
+      </div>
 
       {/* Add to Calendar Button */}
       <button className='add-to-calendar-btn' onClick={() => setShowModal(true)}>

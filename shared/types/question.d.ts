@@ -37,6 +37,7 @@ export interface Question {
   upVotes: string[];
   downVotes: string[];
   comments: Comment[];
+  youtubeVideoUrl?: string;
 }
 
 /**
@@ -51,6 +52,7 @@ export interface DatabaseQuestion extends Omit<Question, 'tags' | 'answers' | 'c
   tags: ObjectId[];
   answers: ObjectId[];
   comments: ObjectId[];
+  youtubeVideoUrl?: string;
 }
 
 /**
@@ -64,6 +66,7 @@ export interface PopulatedDatabaseQuestion
   tags: DatabaseTag[];
   answers: PopulatedDatabaseAnswer[];
   comments: DatabaseComment[];
+  youtubeVideoUrl?: string;
 }
 
 /**

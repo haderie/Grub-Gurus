@@ -14,6 +14,7 @@ export interface Answer {
   ansBy: string;
   ansDateTime: Date;
   comments: Comment[];
+  youtubeVideoUrl?: string;
   isUserCertified: boolean;
 }
 
@@ -25,6 +26,7 @@ export interface Answer {
 export interface DatabaseAnswer extends Omit<Answer, 'comments'> {
   _id: ObjectId;
   comments: ObjectId[];
+  youtubeVideoUrl?: string;
 }
 
 /**
@@ -33,6 +35,7 @@ export interface DatabaseAnswer extends Omit<Answer, 'comments'> {
  */
 export interface PopulatedDatabaseAnswer extends Omit<DatabaseAnswer, 'comments'> {
   comments: DatabaseComment[];
+  youtubeVideoUrl?: string;
 }
 
 /**

@@ -129,7 +129,13 @@ async function answerCreate(
   comments: Comment[],
   isUserCertified: boolean,
 ): Promise<DatabaseAnswer> {
-  if (text === '' || ansBy === '' || ansDateTime == null || comments == null || isUserCertified == null)
+  if (
+    text === '' ||
+    ansBy === '' ||
+    ansDateTime == null ||
+    comments == null ||
+    isUserCertified == null
+  )
     throw new Error('Invalid Answer Format');
   const answerDetail: Answer = {
     text: text,
@@ -208,6 +214,7 @@ async function userCreate(
     following: [],
     privacySetting: 'Public',
     recipeBookPublic: false,
+    postsCreated: [],
   };
 
   return await UserModel.create(userDetail);
@@ -238,8 +245,6 @@ async function recipeCreate(
     video,
     tags,
     cookTime,
-    numOfLikes: 0,
-    numOfViews: [],
   });
 
   return await RecipeModel.create(recipe);
@@ -340,7 +345,13 @@ const populate = async () => {
     const a4 = await answerCreate(A4_TXT, 'alia', new Date('2023-11-12T03:30:00'), [c4], false);
     const a5 = await answerCreate(A5_TXT, 'sana', new Date('2023-11-01T15:24:19'), [c5], false);
     const a6 = await answerCreate(A6_TXT, 'abhi3241', new Date('2023-02-19T18:20:59'), [c6], false);
-    const a7 = await answerCreate(A7_TXT, 'mackson3332', new Date('2023-02-22T17:19:00'), [c7], false);
+    const a7 = await answerCreate(
+      A7_TXT,
+      'mackson3332',
+      new Date('2023-02-22T17:19:00'),
+      [c7],
+      false,
+    );
     const a8 = await answerCreate(A8_TXT, 'ihba001', new Date('2023-03-22T21:17:53'), [c8], false);
 
     await questionCreate(

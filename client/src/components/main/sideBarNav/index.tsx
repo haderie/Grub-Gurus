@@ -9,10 +9,16 @@ import { NavLink, useLocation } from 'react-router-dom';
  */
 const SideBarNav = () => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [showExploreOptions, setShowExploreOptions] = useState<boolean>(false);
+
   const location = useLocation();
 
   const toggleOptions = () => {
     setShowOptions(!showOptions);
+  };
+
+  const toggleExploreOptions = () => {
+    setShowExploreOptions(!showExploreOptions);
   };
 
   const isActiveOption = (path: string) =>
@@ -26,12 +32,29 @@ const SideBarNav = () => {
         className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
         Questions
       </NavLink>
+
       <NavLink
         to='/explore'
         id='menu_explore'
-        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
+        onClick={toggleExploreOptions}>
         Explore
       </NavLink>
+      {showExploreOptions && (
+        <div className='additional-options'>
+          <NavLink
+            to='/explore'
+            className={`menu_button message-options ${isActiveOption('/explore')}`}>
+            All Posts
+          </NavLink>
+          <NavLink
+            to='/explore/following'
+            className={`menu_button message-options ${isActiveOption('/explore/following')}`}>
+            Following
+          </NavLink>
+        </div>
+      )}
+
       <NavLink
         to='/tags'
         id='menu_tag'

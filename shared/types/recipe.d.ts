@@ -25,8 +25,6 @@ export interface Recipe {
   video?: string;
   tags: Tag[];
   cookTime: number;
-  numOfLikes: number;
-  views: string[];
   addedToCalendar: boolean;
 }
 
@@ -37,8 +35,6 @@ export interface Recipe {
  */
 export interface RecipeData {
   title: string;
-  likes: number;
-  views: string[];
 }
 
 /**
@@ -118,4 +114,8 @@ export interface FindRecipeRequest extends Request {
     order: OrderType;
     search: string;
   };
+}
+
+export interface RecipeForPost extends Recipe {
+  _id: ObjectId;
 }

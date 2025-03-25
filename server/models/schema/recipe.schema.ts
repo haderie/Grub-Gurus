@@ -58,12 +58,6 @@ const recipeSchema: Schema = new Schema(
       type: Number,
       required: true,
     },
-
-    numOfLikes: {
-      type: Number,
-      default: 0,
-    },
-    numOfViews: [{ type: String }],
     addedToCalendar: { type: Boolean, default: false },
     start: {
       type: Date,

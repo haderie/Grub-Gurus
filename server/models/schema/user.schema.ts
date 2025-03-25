@@ -51,6 +51,11 @@ const userSchema: Schema = new Schema(
       enum: ['Public', 'Private'],
       default: 'Public',
     },
+    postsCreated: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Post',
+      default: [],
+    },
   },
   { collection: 'User' },
 );

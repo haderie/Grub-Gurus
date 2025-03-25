@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { Recipe } from './recipe';
+import { Request } from 'express';
 
 /**
  * Represents a tag used for categorizing content.
@@ -7,11 +7,16 @@ import { Recipe } from './recipe';
  * - `description`: A brief description of the tag's purpose or usage.
  */
 export interface Posts {
+  username: string;
   recipe: Recipe;
+  text?: string;
+  datePosted: Date;
+  likes: string[];
+  saves: string[];
 }
 
 export interface AddPostRequest extends Request {
-  body: Recipe;
+  body: Posts;
 }
 
 /**
@@ -22,6 +27,10 @@ export interface AddPostRequest extends Request {
 export interface DatabasePost extends Omit<Posts, 'recipe'> {
   _id: ObjectId;
   recipe: ObjectId;
+  username: string;
+  datePosted: Date;
+  likes: string[];
+  saves: string[];
 }
 
 /**

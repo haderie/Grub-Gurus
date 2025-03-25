@@ -21,6 +21,7 @@ const answerSchema: Schema = new Schema(
       type: Date,
     },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    youtubeVideoUrl: { type: String },
   },
   { collection: 'Answer' },
 );
