@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { TbChefHat } from 'react-icons/tb';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
@@ -27,17 +27,16 @@ const Header = () => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      <Button variant='contained' color='error' onClick={handleSignOut} className='logout-button'>
+      <button color='error' onClick={handleSignOut} className='logout-button'>
         Log out
-      </Button>
-      <Button
-        variant='contained'
+      </button>
+      <button
         className='view-profile-button'
         onClick={() => navigate(`/user/${currentUser.username}`)}>
         {currentUser.username}
         <br />
         <TbChefHat />
-      </Button>
+      </button>
     </div>
   );
 };

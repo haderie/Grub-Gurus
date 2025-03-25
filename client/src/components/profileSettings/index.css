@@ -2,7 +2,7 @@
    using padding instead of forced vertical centering */
 .page-container {
   width: 100%;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   background: #f7f7f7;
   display: flex;
   justify-content: center; /* horizontally center the card */
@@ -12,6 +12,7 @@
 
 /* A card-like container that holds the actual profile content */
 .profile-card {
+  position: relative; /* Enables absolute positioning inside */
   width: 100%;
   max-width: 600px; /* limit the card width */
   max-height: 700px;
@@ -50,6 +51,23 @@
   line-height: 1.4;
   color: #666;
   text-align: left;
+}
+
+.edit-profile-btn {
+  position: absolute;
+  top: 10px; /* Adjust distance from top */
+  right: 10px; /* Adjust distance from right */
+  background-color: #ff5500;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-profile-btn:hover {
+  background-color: #b30300;
 }
 
 /* The input styles remain similar to your existing design; 

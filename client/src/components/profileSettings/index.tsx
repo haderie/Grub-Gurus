@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.css';
-import { Button } from '@mui/material';
+import { FaRegUserCircle } from 'react-icons/fa';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import ProfileEdit from './profileEdit';
 import useUserRecipes from '../../hooks/useUserRecipes';
@@ -75,22 +75,21 @@ const ProfileSettings: React.FC = () => {
         <div className='page-container'>
           <div className='profile-card'>
             <h2>Profile</h2>
+            <FaRegUserCircle />
             <h2>Recipe Book status {userData?.recipeBookPublic ? 'Public' : 'private'}</h2>
 
-            {/* ---- Follow / Unfollow Button ---- */}
+            {/* ---- Follow / Unfollow button ---- */}
             {!canEditProfile && (
-              <Button variant='contained' onClick={handleUpdateFollowers}>
-                {isFollowing ? 'Unfollow' : 'Follow'}
-              </Button>
+              <button onClick={handleUpdateFollowers}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
             )}
             {canEditProfile && (
               <>
-                <Button variant='contained' onClick={handleEditProfileClick}>
+                <button className='edit-profile-btn' onClick={handleEditProfileClick}>
                   Edit Profile
-                </Button>
-                <Button variant='contained' onClick={toggleRecipeBookVisibility}>
-                  {isRecipePublic ? 'Public' : 'Private'}
-                </Button>
+                </button>
+                <button onClick={toggleRecipeBookVisibility}>
+                  {isRecipePublic ? 'Make Private' : 'Make Public'}
+                </button>
               </>
             )}
             {successMessage && <p className='success-message'>{successMessage}</p>}
@@ -173,38 +172,39 @@ const ProfileSettings: React.FC = () => {
         </div>
       )}
       {/* ---- Edit section ---- */}
-
-      {editBioMode && canEditProfile && (
-        <ProfileEdit
-          userData={userData}
-          loading={loading}
-          editBioMode={editBioMode}
-          newBio={newBio}
-          newPassword={newPassword}
-          confirmNewPassword={confirmNewPassword}
-          successMessage={successMessage}
-          errorMessage={errorMessage}
-          showConfirmation={showConfirmation}
-          pendingAction={pendingAction}
-          canEditProfile={canEditProfile}
-          showPassword={showPassword}
-          togglePasswordVisibility={togglePasswordVisibility}
-          setEditBioMode={setEditBioMode}
-          setNewBio={setNewBio}
-          setNewPassword={setNewPassword}
-          setConfirmNewPassword={setConfirmNewPassword}
-          setShowConfirmation={setShowConfirmation}
-          handleResetPassword={handleResetPassword}
-          handleUpdateBiography={handleUpdateBiography}
-          handleDeleteUser={handleDeleteUser}
-          privacySetting={privacySetting}
-          setPrivacySetting={setPrivacySetting}
-          showLists={showLists}
-          setShowLists={setShowLists}
-          handleUpdatePrivacy={handleUpdatePrivacy}
-          handleCheckPrivacy={handleCheckPrivacy}
-        />
-      )}
+      <div className='page-container'>
+        {editBioMode && canEditProfile && (
+          <ProfileEdit
+            userData={userData}
+            loading={loading}
+            editBioMode={editBioMode}
+            newBio={newBio}
+            newPassword={newPassword}
+            confirmNewPassword={confirmNewPassword}
+            successMessage={successMessage}
+            errorMessage={errorMessage}
+            showConfirmation={showConfirmation}
+            pendingAction={pendingAction}
+            canEditProfile={canEditProfile}
+            showPassword={showPassword}
+            togglePasswordVisibility={togglePasswordVisibility}
+            setEditBioMode={setEditBioMode}
+            setNewBio={setNewBio}
+            setNewPassword={setNewPassword}
+            setConfirmNewPassword={setConfirmNewPassword}
+            setShowConfirmation={setShowConfirmation}
+            handleResetPassword={handleResetPassword}
+            handleUpdateBiography={handleUpdateBiography}
+            handleDeleteUser={handleDeleteUser}
+            privacySetting={privacySetting}
+            setPrivacySetting={setPrivacySetting}
+            showLists={showLists}
+            setShowLists={setShowLists}
+            handleUpdatePrivacy={handleUpdatePrivacy}
+            handleCheckPrivacy={handleCheckPrivacy}
+          />
+        )}
+      </div>
       {(isRecipePublic || canEditProfile) && (
         <>
           <div style={{ textAlign: 'center' }}>
