@@ -21,6 +21,7 @@ import CalendarPage from './main/calendarPage';
 import ExplorePage from './main/explorePage';
 import NewRecipe from './main/newRecipe';
 import FollowingPage from './main/followingPage';
+import NewPost from './main/newPost';
 
 const ProtectedRoute = ({
   user,
@@ -69,11 +70,11 @@ const FakeStackOverflow = ({ socket }: { socket: FakeSOSocket | null }) => {
             <Route path='/new/question' element={<NewQuestionPage />} />
             <Route path='/new/answer/:qid' element={<NewAnswerPage />} />
             <Route path='/new/recipePost' element={<NewRecipe />} />
+            <Route path='/new/post' element={<NewPost />} />
             <Route path='/users' element={<UsersListPage />} />
             <Route path='/user/:username' element={<ProfileSettings />} />
             <Route path='/games' element={<AllGamesPage />} />
             <Route path='/games/:gameID' element={<GamePage />} />
-
             <Route path='/calendar' element={<CalendarPage />} />
           </Route>
         }

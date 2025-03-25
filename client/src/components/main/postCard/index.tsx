@@ -32,18 +32,27 @@ interface PostCardProps {
  * @param meta Additional metadata related to the question.
  */
 const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
+  console.log('Received post:', post);
   const { likes, saves, handleLike, handleSave } = usePostCard(
     post.likes,
     post.saves,
     post.username,
   );
 
+  console.log(post.text);
+  const formattedDate = new Date(post.datePosted).toLocaleString();
+
   return (
     <div className='post-card'>
       <h3 className='username'>@{post.username}</h3>
       <RecipeCard recipe={post.recipe} />
 
-      {post.text && <p className='post-text'>{post.text}</p>}
+      {post.text ? (
+        <p className='post-text'>{post.text}</p>
+      ) : (
+        <p className='post-text'>No description available</p>
+      )}
+      <p className='date-posted'>Posted on {formattedDate}</p>
 
       {/* Likes & Saves */}
       <div className='post-actions'>

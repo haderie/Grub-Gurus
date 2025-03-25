@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PopulatedDatabasePost, TagData } from '../types/types';
+import { PopulatedDatabasePost } from '../types/types';
 import { getPosts } from '../services/postService';
 
 /**
@@ -10,10 +9,7 @@ import { getPosts } from '../services/postService';
  * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
  */
 const useExplorePage = () => {
-  const navigate = useNavigate();
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
-  
-
 
   useEffect(() => {
     /**
@@ -22,7 +18,6 @@ const useExplorePage = () => {
     const fetchData = async () => {
       try {
         const res = await getPosts();
-        console.log("posts", res);
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console

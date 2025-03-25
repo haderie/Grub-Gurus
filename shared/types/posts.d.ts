@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
-import { Recipe } from './recipe';
-import {Request} from './express';
+import { DatabaseRecipe } from './recipe';
+import { Request } from './express';
 
 /**
  * Represents a tag used for categorizing content.
@@ -18,14 +18,7 @@ export interface Posts {
 }
 
 export interface AddPostRequest extends Request {
-  body: {
-    username: string;
-    recipe: Recipe;
-    text?: string;
-    datePosted: Date;
-    likes: string[];
-    saves: string[];
-  }
+  body: Posts;
 }
 
 /**
@@ -61,9 +54,5 @@ export type PostsResponse = DatabasePost[] | { error: string };
  * - `comments`: An array of populated `DatabaseComment` objects.
  */
 export interface PopulatedDatabasePost extends Omit<DatabasePost, 'recipe'> {
-  username: string;
-  recipe: PopulatedDatabaseRecipe;
-  datePosted: Date;
-  likes: string[];
-  saves: string[];
+  recipe: DatabaseRecipe;
 }

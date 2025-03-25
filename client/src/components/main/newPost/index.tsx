@@ -1,4 +1,4 @@
-import useNewRecipe from '../../../hooks/useNewRecipe';
+import useNewPost from '../../../hooks/useNewPost';
 import Form from '../baseComponents/form';
 import Input from '../baseComponents/input';
 import TextArea from '../baseComponents/textarea';
@@ -21,19 +21,21 @@ const NewPost = () => {
     titleErr,
     textErr,
     tagErr,
-    postRecipe,
-    videoUrl,
+    createPost,
     setVideoUrl,
-    videoUrlErr,
     searchTerm,
     setSearchTerm,
     videoResults,
-    searchError,
-    searchYouTube,
-    selectVideo,
-    loading,
     setVideoResults,
-  } = useNewRecipe();
+    searchYouTube,
+    loading,
+    likes,
+    setLikes,
+    saves,
+    setSaves,
+    postText,
+    setPostText,
+  } = useNewPost();
 
   const predefinedTags = [
     'DR-Gluten-free',
@@ -53,15 +55,15 @@ const NewPost = () => {
     <Form>
       <Input
         title={'Recipe Title'}
-        hint={'Limit title to 100 characters or less'}
+        hint={'Limit title to 100 characters or less.'}
         id={'formTitleInput'}
         val={title}
         setState={setTitle}
         err={titleErr}
       />
       <TextArea
-        title={'Recipe description'}
-        hint={'Add basic description of recipe'}
+        title={'Recipe Description'}
+        hint={'Add basic description of recipe.'}
         id={'formTextInput'}
         val={description}
         setState={setDescription}
@@ -70,7 +72,7 @@ const NewPost = () => {
 
       <Input
         title={'Attach Video (Optional)'}
-        hint={'Search for a YouTube video'}
+        hint={'Search for a YouTube video.'}
         id={'videoSearchInput'}
         val={searchTerm}
         setState={setSearchTerm}
@@ -101,7 +103,7 @@ const NewPost = () => {
 
       <TextArea
         title={'Recipe Ingredients'}
-        hint={'Add keywords separated by whitespace and comma, e.g. hi , bye'}
+        hint={'Add keywords separated by whitespace and comma, e.g. sugar , water.'}
         id={'formTextInput'}
         val={ingredientNames}
         setState={setIngredientNames}
@@ -110,14 +112,14 @@ const NewPost = () => {
 
       <TextArea
         title={'Recipe Instructions'}
-        hint={'Add instructions for the recipe'}
+        hint={'Add instructions for the recipe.'}
         id={'formTextInput'}
         val={instructions}
         setState={setInstructions}
         err={textErr}
       />
-      <div className='input_title'>{'Cook time*'}</div>
-      {<div className='input_hint'>{'Add cook time number'}</div>}
+      <div className='input_title'>{'Cook Time*'}</div>
+      {<div className='input_hint'>{'Add cook time in minutes'}</div>}
       <input
         type='number'
         title='Recipe CookTime'
@@ -161,13 +163,23 @@ const NewPost = () => {
         )}
       </div>
 
+      <TextArea
+        title={'Post Text (Optional)'}
+        hint={'Add a caption for your post!'}
+        id={'formTextInput'}
+        val={postText}
+        setState={setPostText}
+        err={textErr}
+        mandatory={false}
+      />
+
       <div className='btn_indicator_container'>
         <button
           className='form_postBtn'
           onClick={() => {
-            postRecipe();
+            createPost();
           }}>
-          Post Recipe
+          Create Post
         </button>
         <div className='mandatory_indicator'>* indicates mandatory fields</div>
       </div>

@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import { AddPostRequest, DatabasePost, DatabaseRecipe, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, UserByUsernameRequest } from '../types/types';
+import { AddPostRequest, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, UserByUsernameRequest } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
-import { populateDocument } from '../utils/database.util';
 import { saveRecipe } from '../services/recipe.service';
 import { processRecipeTags, processTags } from '../services/tag.service';
 import RecipeModel from '../models/recipe.models';
+import TagModel from '../models/tags.model';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -20,54 +20,30 @@ const postController = (socket: FakeSOSocket) => {
   const addPost = async (req: AddPostRequest, res: Response): Promise<void> => {
     const post: Posts = req.body; // Destructure the post fields from the request body
     try {
+      const tagIds = await Promise.all(
+        post.recipe.tags.map(async (tagName: string) => {
+          let tag = await TagModel.findOne({ name: tagName });
+          if (!tag) {
+            tag = new TagModel({ 
+              name: tagName,
+              description: '',
+            });
+            await tag.save();
+          }
+
+          return tag._id;
+        })
+      );
+
       const recipeWithTags = {
         ...post.recipe,
-        tags: await processTags(post.recipe.tags),
+        tags: tagIds,
       };
-  
-      // Step 3: Save the recipe to the database
-      const savedRecipe = await saveRecipe(recipeWithTags);
-  
-      if ('error' in savedRecipe) {
-        throw new Error(savedRecipe.error); // Handle errors in saving recipe
-      }
 
-      const populatedRecipe = await RecipeModel.findById(savedRecipe._id)
-        .populate('tags');
-
-      if (!populatedRecipe) {
-        throw new Error('Recipe not found');
-      }
-
-      const convertFromDatabaseRecipe: Recipe = {
-        user: populatedRecipe.user,
-        title: populatedRecipe.title,
-        privacyPublic: populatedRecipe.privacyPublic,
-        ingredients: populatedRecipe.ingredients,
-        description: populatedRecipe.description,
-        instructions: populatedRecipe.instructions,
-        tags: await processRecipeTags(populatedRecipe.tags),
-        cookTime: populatedRecipe.cookTime,
-      }
-  
-      // Step 4: Create the post object and save it to the database
-      const newPost: Posts = {
-        username: post.username,
-        recipe: convertFromDatabaseRecipe, 
-        text: post.text,
-        datePosted: post.datePosted,
-        likes: post.likes,
-        saves: post.saves,
-      };
-  
-      const savedPost = await savePost(newPost);
-  
+      const savedPost = await savePost(post, recipeWithTags);
       if ('error' in savedPost) {
-        throw new Error(savedPost.error); // Handle errors in saving post
+        throw new Error(savedPost.error); // Handle errors in saving the post
       }
-
-      socket.emit('postUpdate', savedPost as PopulatedDatabasePost);
-
       res.json(savedPost);
     } catch (err) {
       res.status(500).send(`Error when saving post: ${err instanceof Error ? err.message : err}`);
@@ -115,7 +91,7 @@ const postController = (socket: FakeSOSocket) => {
 
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
-  router.get('getFollowingPosts', getFollowingPosts);
+  router.get('/getFollowingPosts', getFollowingPosts);
   
   return router;
 };

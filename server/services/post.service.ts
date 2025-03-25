@@ -6,18 +6,30 @@ import { getUserByUsername } from './user.service';
 
 /**
  * Saves a new post to the database.
- * @param {Posts} post - The post to save, including username, recipe, text, video, etc.
+ * @param {Partial<Posts>} post - The post to save, including username, recipe, text, video, etc.
  * @returns {Promise<PostResponse>} - The saved post or error message
  */
-export const savePost = async (post: Posts): Promise<PostResponse> => {
+export const savePost = async (post: Posts, recipeAttached: any): Promise<PostResponse> => {
   try {
-    const result: DatabasePost = await PostModel.create(post);
-    await UserModel.findByIdAndUpdate(result.username, {
-      $push: { postsCreated: result }, 
-    });
+    const newPost: Posts = {
+      username: post.username,
+      recipe: recipeAttached.id,
+      text: post.text,
+      datePosted: post.datePosted,
+      likes: post.likes,
+      saves: post.saves,
+    };
+
+    const result: DatabasePost = await PostModel.create(newPost);
+    await UserModel.findOneAndUpdate(
+      { username: result.username },
+      { $push: { postsCreated: result } },
+      { new: true }
+    );
+
     return result;
   } catch (error) {
-    return { error: 'Error when saving a post' };
+    throw new Error(`Post could not be saved: ${error}`);
   }
 };
 

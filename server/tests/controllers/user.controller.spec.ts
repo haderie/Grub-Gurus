@@ -40,6 +40,7 @@ const mockUserJSONResponse = {
   certified: false,
   followers: [],
   following: [],
+  postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
 };
@@ -68,14 +69,14 @@ describe('Test userController', () => {
       const response = await supertest(app).post('/user/signup').send(mockReqBody);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography });
+      expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography});
       expect(saveUserSpy).toHaveBeenCalledWith({
         ...mockReqBody,
         biography: mockReqBody.biography,
-        dateJoined: expect.any(Date),
         certified: false,
         followers: [],
         following: [],
+        postsCreated: [],
         privacySetting: 'Public',
         recipeBookPublic: false,
       });

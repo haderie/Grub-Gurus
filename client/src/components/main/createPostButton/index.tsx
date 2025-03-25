@@ -13,7 +13,7 @@ const CreatePostButton = () => {
    * Function to handle navigation to the "New Question" page.
    */
   const handleNewPost = () => {
-    navigate('/new/recipePost');
+    navigate('/new/post');
   };
 
   return (

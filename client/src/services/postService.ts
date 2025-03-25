@@ -10,6 +10,7 @@ const POST_API_URL = `${process.env.REACT_APP_SERVER_URL}/posts`;
  * @throws Error if there is an issue creating the new question.
  */
 const addPost = async (q: Posts): Promise<PopulatedDatabasePost> => {
+  console.log('Adding Post:', q);
   const res = await api.post(`${POST_API_URL}/addPost`, q);
 
   if (res.status !== 200) {
@@ -30,6 +31,7 @@ const getPosts = async (): Promise<PopulatedDatabasePost[]> => {
   if (res.status !== 200) {
     throw new Error('Error while fetching posts');
   }
+  console.log('Fetched Posts:', res.data);
 
   return res.data;
 };

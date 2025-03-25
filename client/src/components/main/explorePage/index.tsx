@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import useExplorePage from '../../../hooks/useRecipePage';
+import useExplorePage from '../../../hooks/useExplorePage';
 import CreatePostButton from '../createPostButton';
 import PostCard from '../postCard';
 
@@ -10,7 +10,6 @@ import PostCard from '../postCard';
  */
 const ExplorePage = () => {
   const { qlist } = useExplorePage();
-  
   return (
     <>
       <div className='space_between right_padding'>
