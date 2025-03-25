@@ -180,6 +180,8 @@ const useNewRecipe = () => {
       instructions,
       cookTime,
       video: videoUrl,
+      views: [],
+      addedToCalendar: false,
     };
 
     const res = await addRecipe(recipe);

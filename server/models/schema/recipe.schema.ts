@@ -1,3 +1,4 @@
+import { Recipe } from '@fake-stack-overflow/shared';
 import { Schema } from 'mongoose';
 
 /**
@@ -56,6 +57,25 @@ const recipeSchema: Schema = new Schema(
     cookTime: {
       type: Number,
       required: true,
+    },
+    addedToCalendar: { type: Boolean, default: false },
+    start: {
+      type: Date,
+      required(this: Recipe) {
+        return this.addedToCalendar;
+      },
+      default: null,
+    },
+    end: {
+      type: Date,
+      required(this: Recipe) {
+        return this.addedToCalendar;
+      },
+      default: null,
+    },
+    color: {
+      type: String,
+      default: '#ff0000',
     },
   },
   { collection: 'Recipe', timestamps: true },

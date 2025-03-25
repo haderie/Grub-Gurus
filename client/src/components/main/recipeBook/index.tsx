@@ -12,6 +12,7 @@ interface RecipeBookProps {
 const RecipeBook = ({ recipes }: RecipeBookProps) => {
   const [selectedRecipe, setSelectedRecipe] = useState<PopulatedDatabaseRecipe | null>(null);
   const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
+
   return (
     <>
       <div className='total-recipe-container'>

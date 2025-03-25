@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@mui/material';
-import { FaUserLarge } from 'react-icons/fa6';
+import { TbChefHat } from 'react-icons/tb';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import useUserContext from '../../hooks/useUserContext';
@@ -36,7 +36,7 @@ const Header = () => {
         onClick={() => navigate(`/user/${currentUser.username}`)}>
         {currentUser.username}
         <br />
-        <FaUserLarge />
+        <TbChefHat />
       </Button>
     </div>
   );

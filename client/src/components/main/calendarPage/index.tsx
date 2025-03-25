@@ -17,6 +17,8 @@ const RecipeCalendar: React.FC = () => {
     showForm,
     selectedRecipe,
     events,
+    selectedColor,
+    setSelectedColor,
     setRecipeState,
     setSelectedTime,
     handleSelectSlot,
@@ -40,11 +42,19 @@ const RecipeCalendar: React.FC = () => {
         events={events}
         startAccessor='start'
         endAccessor='end'
-        views={['month', 'week', 'day', 'agenda']}
+        views={['month', 'week', 'day']}
         selectable={!showForm}
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleEventClick}
-        style={{ border: '1px solid #ddd', borderRadius: '5px' }}
+        style={{ border: '1px solid #4caf50', borderRadius: '5px', backgroundColor: '#e8f5e9' }}
+        eventPropGetter={event => ({
+          style: {
+            backgroundColor: event.color || '#4caf50',
+            color: 'white',
+            borderRadius: '4px',
+            border: 'none',
+          },
+        })}
       />
 
       {/* Recipe Selection Form (Modal) */}
@@ -134,6 +144,21 @@ const RecipeCalendar: React.FC = () => {
               ))}
             </div>
           )}
+          {/* Color Picker */}
+          <label>Select a Color for Your Recipe:</label>
+          <br />
+          <input
+            type='color'
+            value={selectedColor}
+            onChange={e => setSelectedColor(e.target.value)}
+            style={{
+              width: '60px',
+              marginTop: '2%',
+              cursor: 'pointer',
+              border: 'none',
+              backgroundColor: selectedColor,
+            }}
+          />
           <br />
           <button onClick={handleAddRecipe} disabled={!recipeState.title}>
             Add Recipe to Calendar

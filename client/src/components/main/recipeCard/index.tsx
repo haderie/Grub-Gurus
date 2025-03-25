@@ -2,6 +2,7 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import { PopulatedDatabaseRecipe } from '../../../types/types';
 import './index.css';
+import useRecipeCard from '../../../hooks/useRecipeCard';
 
 /**
  * RecipeCard component displays a single recipe with its name, views, and ingredients.
@@ -9,7 +10,18 @@ import './index.css';
  * @param recipe: The recipe object to display.
  */
 const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
-  if (!recipe) {
+  const {
+    showModal,
+    selectedDate,
+    selectedTime,
+    selectedColor,
+    setSelectedColor,
+    handleConfirm,
+    setShowModal,
+    setSelectedDate,
+    setSelectedTime,
+  } = useRecipeCard();
+    if (!recipe) {
     return <div>Loading...</div>;
   }
 
@@ -54,6 +66,57 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
           </div>
         ))}
       </div>
+        <div className='recipe-video'>
+          <h3>Video Tutorial:</h3>
+          <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
+            Watch Video
+          </a>
+        </div>
+      )}
+
+      {/* Add to Calendar Button */}
+      <button className='add-to-calendar-btn' onClick={() => setShowModal(true)}>
+        Add to Calendar
+      </button>
+
+      {/* Modal for Date and Time Selection */}
+      {showModal && (
+        <div className='modal'>
+          <div className='modal-content'>
+            <h2>Select Date & Time</h2>
+            <label>Date:</label>
+            <input
+              type='date'
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+            />
+            <label>Time:</label>
+            <input
+              type='time'
+              value={selectedTime}
+              onChange={e => setSelectedTime(e.target.value)}
+            />
+            {/* Color Picker */}
+            <label>Select a Color for Your Recipe:</label>
+            <br />
+            <input
+              type='color'
+              value={selectedColor}
+              onChange={e => setSelectedColor(e.target.value)}
+              style={{
+                width: '60px',
+                marginTop: '2%',
+                cursor: 'pointer',
+                border: 'none',
+                backgroundColor: selectedColor,
+              }}
+            />
+            <br />
+            <button onClick={() => handleConfirm(recipe)}>Confirm</button>
+            <button onClick={() => setShowModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

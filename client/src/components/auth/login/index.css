@@ -56,15 +56,15 @@ form {
 }
 
 .input-text:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(0, 255, 26, 0.5);
 }
 
 /* Button styles */
 .login-button {
   padding: 12px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #4caf50;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -73,18 +73,18 @@ form {
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #2f8632;
 }
 
 .login-button:active {
-  background-color: #003f7f;
+  background-color: #2f8632;
 }
 
 /* Signup link styles */
 .signup-link {
   margin-top: 30px; /* Increased spacing */
   font-size: 14px;
-  color: #007bff;
+  color: #2f8632;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s;
@@ -92,7 +92,7 @@ form {
 }
 
 .signup-link:hover {
-  color: #0056b3;
+  color: #2f8632;
   text-decoration: underline;
 }
 
