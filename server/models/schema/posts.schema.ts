@@ -16,7 +16,7 @@ const postsSchema: Schema = new Schema(
     likes: { type: [String], default: [] },
     saves: { type: [String], default: [] },
   },
-  { collection: 'Posts', timestamps: true, },
+  { collection: 'Posts', timestamps: true },
 
 );
 

@@ -43,7 +43,7 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
           path: 'recipe',
           model: RecipeModel,
           populate: { path: 'tags', model: TagModel },
-        }
+        },
       ])
       .sort({ createdAt: -1 });
 

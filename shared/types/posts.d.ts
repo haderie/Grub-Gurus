@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb';
-import { DatabaseRecipe } from './recipe';
 import { Request } from 'express';
 
 /**

@@ -1,10 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { 
-  DatabaseQuestion, 
-  DatabaseTag, 
-  Question, 
-  Recipe, 
-  Tag } from '../types/types';
+import { DatabaseQuestion, DatabaseTag, Question, Recipe, Tag } from '../types/types';
 import QuestionModel from '../models/questions.model';
 import TagModel from '../models/tags.model';
 
