@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DatabaseRecipe } from '../types/types';
+import { PopulatedDatabaseRecipe } from '../types/types';
 import { getRecipesByUsername } from '../services/recipeService';
 import useUserContext from './useUserContext';
 import { getUserByUsername } from '../services/userService';
@@ -9,7 +9,7 @@ const useUserRecipes = (username: string) => {
 
   // const [searchParams] = useSearchParams();
   // const [search, setSearch] = useState<string>('');
-  const [recipes, setRecipes] = useState<DatabaseRecipe[]>([]);
+  const [recipes, setRecipes] = useState<PopulatedDatabaseRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

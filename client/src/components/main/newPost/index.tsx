@@ -119,7 +119,7 @@ const NewPost = () => {
         err={textErr}
       />
       <div className='input_title'>{'Cook Time*'}</div>
-      {<div className='input_hint'>{'Add cook time in minutes'}</div>}
+      {<div className='input_hint'>{'Add cook time in minutes.'}</div>}
       <input
         type='number'
         title='Recipe CookTime'

@@ -5,6 +5,7 @@ import { validateHyperlink } from '../tool';
 import useUserContext from './useUserContext';
 import { Posts, Recipe, YouTubeVideo } from '../types/types';
 import { addPost } from '../services/postService';
+import { getUserByUsername } from '../services/userService';
 
 /**
  * Custom hook to handle question submission and form validation
@@ -186,8 +187,10 @@ const useNewPost = () => {
       video: videoUrl,
     };
 
+    const userPosting = await getUserByUsername(user.username);
+
     const post: Posts = {
-      username: user.username,
+      username: userPosting.username,
       recipe: newRecipe,
       datePosted: new Date(),
       likes,

@@ -95,3 +95,7 @@ export interface FindRecipeRequest extends Request {
     search: string;
   };
 }
+
+export interface RecipeForPost extends Recipe {
+  _id: ObjectId,
+}

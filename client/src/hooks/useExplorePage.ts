@@ -19,6 +19,7 @@ const useExplorePage = () => {
       try {
         const res = await getPosts();
         setQlist(res);
+        console.log('API response:', res);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);

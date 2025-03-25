@@ -54,5 +54,5 @@ export type PostsResponse = DatabasePost[] | { error: string };
  * - `comments`: An array of populated `DatabaseComment` objects.
  */
 export interface PopulatedDatabasePost extends Omit<DatabasePost, 'recipe'> {
-  recipe: DatabaseRecipe;
+  recipe: PopulatedDatabaseRecipe;
 }

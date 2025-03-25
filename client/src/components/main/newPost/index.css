@@ -8,3 +8,62 @@ input[type='number']::-webkit-outer-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+/* Style for the tag container */
+.tag-container {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Input styling (for the tags input field) */
+.tag-container input[type='text'] {
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* Suggestions list */
+.tag-suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Each tag item (checkbox) styling */
+.tag-item {
+  margin-right: 8px;
+  margin-bottom: 5px;
+  font-size: 16px;  /* Small font for the tag */
+  display: flex;
+  align-items: center;
+}
+
+/* Styling for the label inside the tag item */
+.tag-item label {
+  display: flex;
+  align-items: center;
+  font-size: 12px; /* Smaller font size */
+}
+
+/* Make checkboxes smaller */
+.tag-item input[type='checkbox'] {
+  width: 12px;
+  height: 12px;
+  margin-right: 4px; /* Smaller space between checkbox and label */
+}
+
+/* Optional: Make the selected checkbox slightly more noticeable */
+.tag-item input[type='checkbox']:checked + span {
+  font-weight: bold;
+}
+
+/* Optional: Hover effect for each tag item */
+.tag-item label:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

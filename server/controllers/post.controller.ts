@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { AddPostRequest, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, UserByUsernameRequest } from '../types/types';
+import { AddPostRequest, FakeSOSocket, PopulatedDatabasePost, Posts, Recipe, RecipeForPost, UserByUsernameRequest } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { saveRecipe } from '../services/recipe.service';
 import { processRecipeTags, processTags } from '../services/tag.service';
@@ -35,18 +35,28 @@ const postController = (socket: FakeSOSocket) => {
         })
       );
 
-      const recipeWithTags = {
+      const recipeWithTags: RecipeForPost = {
         ...post.recipe,
         tags: tagIds,
       };
 
-      const savedPost = await savePost(post, recipeWithTags);
+      const newPost: Posts = {
+        username: post.username,
+        recipe: recipeWithTags,
+        text: post.text,
+        datePosted: post.datePosted,
+        likes: post.likes,
+        saves: post.saves,
+      };
+  
+
+      const savedPost = await savePost(newPost);
       if ('error' in savedPost) {
         throw new Error(savedPost.error); // Handle errors in saving the post
       }
       res.json(savedPost);
-    } catch (err) {
-      res.status(500).send(`Error when saving post: ${err instanceof Error ? err.message : err}`);
+    } catch (error) {
+      res.status(500).send(`Error when saving post: ${error}`);
     }
   };
 
@@ -60,7 +70,7 @@ const postController = (socket: FakeSOSocket) => {
       const posts = await getPostList();
       posts
       if ('error' in posts) {
-        throw Error('error posting');
+        throw Error('Error getting posts');
       }
 
       res.status(200).json(posts);

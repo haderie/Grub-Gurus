@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { DatabaseRecipe } from '@fake-stack-overflow/shared';
+import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '@fake-stack-overflow/shared';
 import RecipeCard from '../recipeCard';
 import usePostCard from '../../../hooks/usePostCard';
 
@@ -13,12 +13,7 @@ import usePostCard from '../../../hooks/usePostCard';
  * - meta - Additional metadata related to the question, such as the date and time it was asked.
  */
 interface PostCardProps {
-  username: string;
-  recipe: DatabaseRecipe;
-  text?: string;
-  datePosted: Date;
-  likes: string[];
-  saves: string[];
+  post: PopulatedDatabasePost;
 }
 
 /**
@@ -31,15 +26,14 @@ interface PostCardProps {
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
  */
-const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
-  console.log('Received post:', post);
+const PostView = ({ post }: PostCardProps) => {
   const { likes, saves, handleLike, handleSave } = usePostCard(
     post.likes,
     post.saves,
     post.username,
   );
+  console.log(post);
 
-  console.log(post.text);
   const formattedDate = new Date(post.datePosted).toLocaleString();
 
   return (
@@ -63,4 +57,4 @@ const PostCard: React.FC<{ post: PostCardProps }> = ({ post }) => {
   );
 };
 
-export default PostCard;
+export default PostView;

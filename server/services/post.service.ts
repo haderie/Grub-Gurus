@@ -1,7 +1,8 @@
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
+import TagModel from '../models/tags.model';
 import UserModel from '../models/users.model';
-import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe, Posts } from '../types/types';
+import { DatabasePost, PostResponse, PopulatedDatabasePost, DatabaseRecipe, Posts, Recipe, RecipeForPost, RecipeResponse } from '../types/types';
 import { getUserByUsername } from './user.service';
 
 /**
@@ -9,18 +10,18 @@ import { getUserByUsername } from './user.service';
  * @param {Partial<Posts>} post - The post to save, including username, recipe, text, video, etc.
  * @returns {Promise<PostResponse>} - The saved post or error message
  */
-export const savePost = async (post: Posts, recipeAttached: any): Promise<PostResponse> => {
+export const savePost = async (post: Posts): Promise<PostResponse> => {
   try {
-    const newPost: Posts = {
-      username: post.username,
-      recipe: recipeAttached.id,
-      text: post.text,
-      datePosted: post.datePosted,
-      likes: post.likes,
-      saves: post.saves,
-    };
+    // const newPost: Posts = {
+    //   username: post.username,
+    //   recipe: recipeAttached._id,
+    //   text: post.text,
+    //   datePosted: post.datePosted,
+    //   likes: post.likes,
+    //   saves: post.saves,
+    // };
 
-    const result: DatabasePost = await PostModel.create(newPost);
+    const result: DatabasePost = await PostModel.create(post);
     await UserModel.findOneAndUpdate(
       { username: result.username },
       { $push: { postsCreated: result } },
@@ -40,8 +41,15 @@ export const savePost = async (post: Posts, recipeAttached: any): Promise<PostRe
 export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
   try {
     const posts = await PostModel.find()
-      .populate<{ recipe: DatabaseRecipe }>([{ path: 'recipe', model: RecipeModel }])
-      .sort({ createdAt: -1 });
+    .populate<{ recipe: DatabaseRecipe }>([
+      {
+        path: 'recipe',
+        model: RecipeModel,
+        populate: { path: 'tags', model: TagModel }
+      }
+    ])
+    .sort({ createdAt: -1 });
+
 
     if (!posts) {
       throw Error('Posts could not be retrieved');

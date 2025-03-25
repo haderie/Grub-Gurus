@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import RecipeCard from '../recipeCard/index';
-import { DatabaseRecipe } from '../../../types/types';
+import { PopulatedDatabaseRecipe } from '../../../types/types';
 import useHeader from '../../../hooks/useHeader';
 import './index.css';
 
 interface RecipeBookProps {
-  recipes: DatabaseRecipe[];
+  recipes: PopulatedDatabaseRecipe[];
 }
 
 const RecipeBook = ({ recipes }: RecipeBookProps) => {
-  const [selectedRecipe, setSelectedRecipe] = useState<DatabaseRecipe | null>(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<PopulatedDatabaseRecipe | null>(null);
   const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
   return (
     <>

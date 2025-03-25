@@ -22,7 +22,7 @@ const CreatePostButton = () => {
       onClick={() => {
         handleNewPost();
       }}>
-      Create Post
+      Create New Post
     </button>
   );
 };
