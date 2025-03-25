@@ -31,6 +31,7 @@ const PostView = ({ post }: PostCardProps) => {
     post.likes,
     post.saves,
     post.username,
+    post._id,
   );
   console.log(post);
 

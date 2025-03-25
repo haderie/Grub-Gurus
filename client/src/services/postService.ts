@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { PopulatedDatabasePost, Posts } from '../types/types';
 import api from './config';
 
@@ -48,4 +49,24 @@ const getFollowingPosts = async (): Promise<PopulatedDatabasePost[]> => {
   return res.data;
 };
 
-export { addPost, getPosts, getFollowingPosts };
+const likePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
+  const res = await api.post(`${POST_API_URL}/likePost`);
+
+  if (res.status !== 200) {
+    throw new Error('Error while liking post');
+  }
+
+  return res.data;
+};
+
+const savePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
+  const res = await api.post(`${POST_API_URL}/savePost`);
+
+  if (res.status !== 200) {
+    throw new Error('Error while saving post');
+  }
+
+  return res.data;
+};
+
+export { addPost, getPosts, getFollowingPosts, likePost, savePost };
