@@ -39,8 +39,8 @@ const getPosts = async (): Promise<PopulatedDatabasePost[]> => {
  *
  * @throws Error if there is an issue fetching posts.
  */
-const getFollowingPosts = async (): Promise<PopulatedDatabasePost[]> => {
-  const res = await api.get(`${POST_API_URL}/getFollowingPosts`);
+const getFollowingPosts = async (username: string): Promise<PopulatedDatabasePost[]> => {
+  const res = await api.get(`${POST_API_URL}/getFollowingPosts/${username}`);
 
   if (res.status !== 200) {
     throw new Error('Error while fetching posts');
