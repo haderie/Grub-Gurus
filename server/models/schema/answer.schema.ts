@@ -21,6 +21,9 @@ const answerSchema: Schema = new Schema(
       type: Date,
     },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    isUserCertified: {
+      type: Boolean,
+    },
   },
   { collection: 'Answer' },
 );
