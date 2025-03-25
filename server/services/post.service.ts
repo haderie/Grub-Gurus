@@ -7,7 +7,7 @@ import {
   PostResponse,
   PopulatedDatabasePost,
   DatabaseRecipe,
-  Posts
+  Posts,
 } from '../types/types';
 import { getUserByUsername } from './user.service';
 
@@ -42,11 +42,10 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
         {
           path: 'recipe',
           model: RecipeModel,
-          populate: { path: 'tags', model: TagModel }
+          populate: { path: 'tags', model: TagModel },
         }
       ])
       .sort({ createdAt: -1 });
-
 
     if (!posts) {
       throw Error('Posts could not be retrieved');
@@ -57,7 +56,6 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
     throw new Error(`Posts could not be retrieved: ${error}`);
   }
 };
-
 
 /**
  * Retrieves posts from users that the logged-in user follows.

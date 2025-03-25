@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import { useNavigate } from 'react-router-dom';
 import { PopulatedDatabaseRecipe } from '../../../types/types';
 import './index.css';
 

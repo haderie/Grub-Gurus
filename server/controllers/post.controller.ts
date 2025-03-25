@@ -5,7 +5,7 @@ import {
   FakeSOSocket,
   Posts,
   RecipeForPost,
-  UserByUsernameRequest
+  UserByUsernameRequest,
 } from '../types/types';
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { saveRecipe } from '../services/recipe.service';
@@ -29,7 +29,7 @@ const postController = (socket: FakeSOSocket) => {
       //   post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
       //     let tag = await TagModel.findOne({ name: tagObject.name });
       //     if (!tag) {
-      //       tag = new TagModel({ 
+      //       tag = new TagModel({
       //         name: tagObject.name,
       //         description: tagObject.description || '',
       //       });
@@ -49,7 +49,7 @@ const postController = (socket: FakeSOSocket) => {
       //   tags: tagIds,
       // };
 
-      const savedRecipe = await saveRecipe(recipeWithTags) as DatabaseRecipe;
+      const savedRecipe = (await saveRecipe(recipeWithTags)) as DatabaseRecipe;
 
       if ('error' in savedRecipe) {
         throw new Error('Cannot save recipe');
@@ -64,12 +64,11 @@ const postController = (socket: FakeSOSocket) => {
         saves: post.saves,
       };
 
-
       const savedPost = await savePost(newPost);
       if ('error' in savedPost) {
         throw new Error(savedPost.error);
       }
-      socket.emit('postUpdate', savedPost)
+      socket.emit('postUpdate', savedPost);
       res.json(savedPost);
     } catch (error) {
       res.status(500).send(`Error when saving post: ${error}`);
@@ -95,10 +94,10 @@ const postController = (socket: FakeSOSocket) => {
   };
 
   /**
-  * Retrieves all users from the database.
-  * @param res The response, either returning the users or an error.
-  * @returns A promise resolving to void.
-  */
+   * Retrieves all users from the database.
+   * @param res The response, either returning the users or an error.
+   * @returns A promise resolving to void.
+   */
   const getFollowingPosts = async (req: UserByUsernameRequest, res: Response): Promise<void> => {
     try {
       const { username } = req.params;

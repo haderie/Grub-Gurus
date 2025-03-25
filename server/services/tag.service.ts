@@ -157,6 +157,7 @@ export const processRecipeTags = async (tagIds: ObjectId[]): Promise<Tag[]> => {
 
     return tags; // Return the found tags (which should be Tag objects)
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error processing tags:', error);
     return [];
   }

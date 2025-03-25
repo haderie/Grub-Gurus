@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { DatabaseRecipe } from './recipe';
-import { Request } from './express';
+import { Request } from 'express';
 
 /**
  * Represents a tag used for categorizing content.

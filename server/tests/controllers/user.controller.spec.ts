@@ -13,7 +13,7 @@ const mockUser: User = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
-  postsCreated: []
+  postsCreated: [],
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -25,7 +25,7 @@ const mockSafeUser: SafeDatabaseUser = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
-  postsCreated: []
+  postsCreated: [],
 };
 
 const mockUpdatedUser = {
@@ -69,7 +69,7 @@ describe('Test userController', () => {
       const response = await supertest(app).post('/user/signup').send(mockReqBody);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography});
+      expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography });
       // expect(saveUserSpy).toHaveBeenCalledWith({
       //   ...mockReqBody,
       //   biography: mockReqBody.biography,

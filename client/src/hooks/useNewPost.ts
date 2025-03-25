@@ -199,8 +199,6 @@ const useNewPost = () => {
     };
 
     const res = await addPost(post);
-    console.log(res);
-
     if (res && res._id) {
       navigate('/explore');
     }
