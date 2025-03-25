@@ -1,59 +1,77 @@
 import express, { Request, Response } from 'express';
-import { FakeSOSocket, PopulatedDatabasePost } from '../types/types';
-import { getPostList, savePost } from '../services/post.service';
-import { populateDocument } from '../utils/database.util';
+import {
+  AddPostRequest,
+  DatabaseRecipe,
+  FakeSOSocket,
+  Posts,
+  RecipeForPost,
+  UserByUsernameRequest,
+} from '../types/types';
+import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
   /**
-   * Adds a new question to the database. The question is first validated and then saved.
-   * If the tags are invalid or saving the question fails, the HTTP response status is updated.
+   * Adds a new post to the database. The post is first validated and then saved.
+   * If the tags are invalid or saving the post fails, the HTTP response status is updated.
    *
-   * @param req The AddQuestionRequest object containing the question data.
+   * @param req The AddPostRequest object containing the post data.
    * @param res The HTTP response object used to send back the result of the operation.
    *
    * @returns A Promise that resolves to void.
    */
-  const addPost = async (req: Request, res: Response): Promise<void> => {
+  const addPost = async (req: AddPostRequest, res: Response): Promise<void> => {
+    const post: Posts = req.body; // Destructure the post fields from the request body
     try {
-      const recipe = req.body; // Expecting a single recipe object
+      // const tagIds = await Promise.all(
+      //   post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
+      //     let tag = await TagModel.findOne({ name: tagObject.name });
+      //     if (!tag) {
+      //       tag = new TagModel({
+      //         name: tagObject.name,
+      //         description: tagObject.description || '',
+      //       });
+      //       await tag.save();
+      //     }
+      //     return tag._id;
+      //   })
+      // );
 
-      const recipeWithTags = {
-        ...recipe,
-        tags: await processTags(recipe.tags),
+      const recipeWithTags: RecipeForPost = {
+        ...post.recipe,
+        tags: await processTags(post.recipe.tags),
       };
 
-      // if (recipeWithTags.tags.length === 0) {
-      //   throw new Error('Invalid tags');
-      // }
+      // const recipeWithTags: DatabaseRecipe = {
+      //   ...post.recipe,
+      //   tags: tagIds,
+      // };
 
-      // Save the recipe first
-      const savedRecipe = await createRecipe(recipeWithTags);
+      const savedRecipe = (await createRecipe(recipeWithTags)) as DatabaseRecipe;
 
       if ('error' in savedRecipe) {
-        throw new Error(savedRecipe.error);
+        throw new Error('Cannot save recipe');
       }
 
-      // Save the post with the single recipe
-      const result = await savePost(savedRecipe);
+      const newPost: Posts = {
+        username: post.username,
+        recipe: savedRecipe._id,
+        text: post.text,
+        datePosted: post.datePosted,
+        likes: post.likes,
+        saves: post.saves,
+      };
 
-      if ('error' in result) {
-        throw new Error(result.error);
+      const savedPost = await savePost(newPost);
+      if ('error' in savedPost) {
+        throw new Error(savedPost.error);
       }
-
-      // Populate the new post
-      const populatedPost = await populateDocument(result._id.toString(), 'post');
-
-      if ('error' in populatedPost) {
-        throw new Error(populatedPost.error);
-      }
-
-      socket.emit('postUpdate', populatedPost as PopulatedDatabasePost);
-      res.json(populatedPost);
-    } catch (err) {
-      res.status(500).send(`Error when saving post: ${err instanceof Error ? err.message : err}`);
+      socket.emit('postUpdate', savedPost);
+      res.json(savedPost);
+    } catch (error) {
+      res.status(500).send(`Error when saving post: ${error}`);
     }
   };
 
@@ -64,7 +82,26 @@ const postController = (socket: FakeSOSocket) => {
    */
   const getPosts = async (_: Request, res: Response): Promise<void> => {
     try {
-      const users = await getPostList();
+      const posts = await getPostList();
+      if ('error' in posts) {
+        throw Error('Error getting posts');
+      }
+
+      res.status(200).json(posts);
+    } catch (error) {
+      res.status(500).send(`Error when getting Posts: ${error}`);
+    }
+  };
+
+  /**
+   * Retrieves all users from the database.
+   * @param res The response, either returning the users or an error.
+   * @returns A promise resolving to void.
+   */
+  const getFollowingPosts = async (req: UserByUsernameRequest, res: Response): Promise<void> => {
+    try {
+      const { username } = req.params;
+      const users = await getFollowingPostList(username);
 
       if ('error' in users) {
         throw Error('error posting');
@@ -72,12 +109,13 @@ const postController = (socket: FakeSOSocket) => {
 
       res.status(200).json(users);
     } catch (error) {
-      res.status(500).send(`Error when getting Posts: ${error}`);
+      res.status(500).send(`Error when getting posts from users that you follow: ${error}`);
     }
   };
 
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
+  router.get('/getFollowingPosts', getFollowingPosts);
 
   return router;
 };

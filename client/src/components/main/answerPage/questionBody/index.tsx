@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import './index.css';
 import { handleHyperlink } from '../../../../tool';
 
@@ -15,6 +16,7 @@ interface QuestionBodyProps {
   text: string;
   askby: string;
   meta: string;
+  youtubeVideoUrl?: string;
 }
 
 /**
@@ -27,10 +29,22 @@ interface QuestionBodyProps {
  * @param askby The username of the question's author.
  * @param meta Additional metadata related to the question.
  */
-const QuestionBody = ({ views, text, askby, meta }: QuestionBodyProps) => (
+const QuestionBody = ({ views, text, askby, meta, youtubeVideoUrl }: QuestionBodyProps) => (
   <div id='questionBody' className='questionBody right_padding'>
     <div className='bold_title answer_question_view'>{views} views</div>
     <div className='answer_question_text'>{handleHyperlink(text)}</div>
+    {youtubeVideoUrl && (
+      <ReactPlayer
+        url={youtubeVideoUrl}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
+    )}
     <div className='answer_question_right'>
       <div className='question_author'>{askby}</div>
       <div className='answer_question_meta'>asked {meta}</div>

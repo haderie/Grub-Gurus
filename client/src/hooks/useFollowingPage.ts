@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PopulatedDatabasePost } from '../types/types';
-import { getPosts } from '../services/postService';
+import { getFollowingPosts } from '../services/postService';
 
 /**
  * Custom hook for managing the tag page's state and navigation.
@@ -8,16 +8,13 @@ import { getPosts } from '../services/postService';
  * @returns tlist - An array of tag data retrieved from the server
  * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
  */
-const useExplorePage = () => {
+const useFollowingPage = () => {
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
 
   useEffect(() => {
-    /**
-     * Function to fetch questions based on the filter and update the question list.
-     */
     const fetchData = async () => {
       try {
-        const res = await getPosts();
+        const res = await getFollowingPosts();
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -29,4 +26,4 @@ const useExplorePage = () => {
   }, []);
   return { qlist };
 };
-export default useExplorePage;
+export default useFollowingPage;

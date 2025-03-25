@@ -35,7 +35,7 @@ const MessagingPage = () => {
           onChange={e => setAiResponseChecked(e.target.checked)}
         />
         <label htmlFor='aiResponse'>
-          List ingredients you have, and the Munch Master will provide a recipe!
+          List ingredients you have and the Munch Master will provide a recipe!
         </label>
       </div>
       <div className='message-input'>

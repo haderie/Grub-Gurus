@@ -34,3 +34,19 @@
   color: blue;
   text-decoration: underline;
 }
+
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px; /* Space between tags */
+}
+
+.tag-box {
+  background-color: #f0f0f0; /* Light gray */
+  color: #333; /* Dark text */
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+}

@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { DatabaseQuestion, DatabaseTag, Question, Recipe, Tag } from '../types/types';
 import QuestionModel from '../models/questions.model';
 import TagModel from '../models/tags.model';
@@ -141,5 +142,18 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
     return tmap;
   } catch (error) {
     return { error: 'Error when constructing tag map' };
+  }
+};
+
+export const processRecipeTags = async (tagIds: ObjectId[]): Promise<Tag[]> => {
+  try {
+    // Populate the tags by their ObjectId references
+    const tags = await TagModel.find({ _id: { $in: tagIds } });
+
+    return tags; // Return the found tags (which should be Tag objects)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error processing tags:', error);
+    return [];
   }
 };

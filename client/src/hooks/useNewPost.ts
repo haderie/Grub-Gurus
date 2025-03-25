@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { validateHyperlink } from '../tool';
 import useUserContext from './useUserContext';
-import { Recipe, YouTubeVideo } from '../types/types';
-import { addRecipe } from '../services/recipeService';
+import { Posts, Recipe, YouTubeVideo } from '../types/types';
+import { addPost } from '../services/postService';
+import { getUserByUsername } from '../services/userService';
 
 /**
  * Custom hook to handle question submission and form validation
@@ -17,7 +18,7 @@ import { addRecipe } from '../services/recipeService';
  * @returns tagErr - Error message for the tag field, if any.
  * @returns postQuestion - Function to validate the form and submit a new question.
  */
-const useNewRecipe = () => {
+const useNewPost = () => {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const [title, setTitle] = useState<string>('');
@@ -27,6 +28,10 @@ const useNewRecipe = () => {
   const [tagNames, setTagNames] = useState<string>('');
   const [cookTime, setCookTime] = useState<number>(0);
   const [videoUrl, setVideoUrl] = useState<string>('');
+
+  const [likes, setLikes] = useState<string[]>([]);
+  const [saves, setSaves] = useState<string[]>([]);
+  const [postText, setPostText] = useState<string>('');
 
   const [searchTerm, setSearchTerm] = useState<string>(''); // State for search input
   const [videoResults, setVideoResults] = useState<YouTubeVideo[]>([]); // Store video search results
@@ -157,7 +162,7 @@ const useNewRecipe = () => {
    *
    * @returns title - The current value of the title input.
    */
-  const postRecipe = async () => {
+  const createPost = async () => {
     if (!validateForm()) return;
 
     const tagnames = tagNames.split(' ').filter(tagName => tagName.trim() !== '');
@@ -170,7 +175,9 @@ const useNewRecipe = () => {
       .split(' , ')
       .filter(ingredientName => ingredientName.trim() !== '');
 
-    const recipe: Recipe = {
+    const userPosting = await getUserByUsername(user.username);
+
+    const newRecipe: Recipe = {
       title,
       description,
       tags,
@@ -183,8 +190,16 @@ const useNewRecipe = () => {
       addedToCalendar: false,
     };
 
-    const res = await addRecipe(recipe);
+    const post: Posts = {
+      username: userPosting.username,
+      recipe: newRecipe,
+      datePosted: new Date(),
+      likes,
+      saves,
+      text: postText,
+    };
 
+    const res = await addPost(post);
     if (res && res._id) {
       navigate('/explore');
     }
@@ -206,7 +221,7 @@ const useNewRecipe = () => {
     titleErr,
     textErr,
     tagErr,
-    postRecipe,
+    createPost,
     videoUrl,
     setVideoUrl,
     videoUrlErr,
@@ -218,7 +233,13 @@ const useNewRecipe = () => {
     searchYouTube,
     selectVideo,
     loading,
+    likes,
+    setLikes,
+    saves,
+    setSaves,
+    postText,
+    setPostText,
   };
 };
 
-export default useNewRecipe;
+export default useNewPost;

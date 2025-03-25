@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
 import { handleHyperlink } from '../../../../tool';
 import CommentSection from '../../commentSection';
 import './index.css';
@@ -18,6 +19,7 @@ interface AnswerProps {
   ansBy: string;
   meta: string;
   comments: DatabaseComment[];
+  youtubeVideoUrl?: string;
   handleAddComment: (comment: Comment) => void;
 }
 
@@ -31,11 +33,30 @@ interface AnswerProps {
  * @param comments An array of comments associated with the answer.
  * @param handleAddComment Function to handle adding a new comment.
  */
-const AnswerView = ({ text, ansBy, meta, comments, handleAddComment }: AnswerProps) => (
+const AnswerView = ({
+  text,
+  ansBy,
+  meta,
+  comments,
+  youtubeVideoUrl,
+  handleAddComment,
+}: AnswerProps) => (
   <div className='answer right_padding'>
     <div id='answerText' className='answerText'>
       {handleHyperlink(text)}
     </div>
+    {youtubeVideoUrl && (
+      <ReactPlayer
+        url={youtubeVideoUrl}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
+    )}
     <div className='answerAuthor'>
       <div className='answer_author'>{ansBy}</div>
       <div className='answer_question_meta'>{meta}</div>

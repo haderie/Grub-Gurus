@@ -9,7 +9,7 @@ import { DatabasePost } from '../types/types';
  * `Recipe` collection in the MongoDB database, and provides an interface for interacting with
  * stored recipes.
  *
- * @type {Model<DatabaseRecipe>}
+ * @type {Model<DatabasePost>}
  */
 const PostModel: Model<DatabasePost> = mongoose.model<DatabasePost>('Posts', postSchema);
 

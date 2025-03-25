@@ -13,6 +13,7 @@ const mockUser: User = {
   following: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  postsCreated: [],
 };
 
 const recipePost: DatabaseRecipe = {
@@ -20,13 +21,11 @@ const recipePost: DatabaseRecipe = {
   user: mockUser,
   tags: [],
   title: 'Pesto Pasta',
-  views: [],
   privacyPublic: true,
   ingredients: ['pasta, pesto, parmesean, olive oil'],
   description: 'a delicious dish',
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
-  numOfLikes: 0,
   addedToCalendar: false,
 };
 
@@ -35,13 +34,11 @@ const calendarRecipeDataBase: DatabaseRecipe = {
   user: mockUser,
   tags: [],
   title: 'BBQ Chicken',
-  views: [],
   privacyPublic: true,
   ingredients: ['chicken, BBQ sauce, onion'],
   description: 'a quick and yummy dinner',
   instructions: 'bake chicken at 350, add BBQ sauce, enjoy',
   cookTime: 40,
-  numOfLikes: 0,
   addedToCalendar: true,
 };
 
@@ -49,13 +46,11 @@ const recipe: Recipe = {
   user: mockUser,
   tags: [],
   title: 'Pesto Pasta',
-  views: [],
   privacyPublic: true,
   ingredients: ['pasta, pesto, parmesean, olive oil'],
   description: 'a delicious dish',
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
-  numOfLikes: 0,
   addedToCalendar: false,
 };
 
@@ -63,13 +58,11 @@ const calendarRecipe: RecipeCalendarEvent = {
   user: mockUser,
   tags: [],
   title: 'Pesto Pasta',
-  views: [],
   privacyPublic: true,
   ingredients: ['pasta, pesto, parmesean, olive oil'],
   description: 'a delicious dish',
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
-  numOfLikes: 0,
   addedToCalendar: false,
   start: new Date(),
   end: new Date(),

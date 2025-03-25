@@ -36,7 +36,6 @@ describe('Recipe model', () => {
       expect(result.description).toEqual(recipe.description);
       expect(result.instructions).toEqual(recipe.instructions);
       expect(result.cookTime).toEqual(recipe.cookTime);
-      expect(result.numOfLikes).toEqual(recipe.numOfLikes);
       expect(result.addedToCalendar).toEqual(false);
     });
 
@@ -91,7 +90,6 @@ describe('Recipe model', () => {
       expect(result.description).toEqual(recipeCalendar.description);
       expect(result.instructions).toEqual(recipeCalendar.instructions);
       expect(result.cookTime).toEqual(recipeCalendar.cookTime);
-      expect(result.numOfLikes).toEqual(recipeCalendar.numOfLikes);
       expect(result.addedToCalendar).toEqual(true);
     });
 
