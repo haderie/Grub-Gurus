@@ -10,6 +10,7 @@ import {
 import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
+import UserModel from '../models/users.model';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();

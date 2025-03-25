@@ -45,19 +45,6 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
       <h3>Instructions:</h3>
       <ul className='recipe-ingredients'>{recipe.instructions}</ul>
 
-      {recipe.video && (
-        <ReactPlayer
-          url={recipe.video}
-          width='50%'
-          height='auto'
-          style={{
-            maxWidth: '100%',
-            maxHeight: '100%',
-            border: '2px solid red', // Temporary border to see if it's being rendered
-          }}
-        />
-      )}
-
       <h3>Tags:</h3>
       <div className='recipe-tags'>
         {recipe.tags.map(tag => (
@@ -68,9 +55,19 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
       </div>
       <div className='recipe-video'>
         <h3>Video Tutorial:</h3>
-        <a href={recipe.video} target='_blank' rel='noopener noreferrer'>
-          Watch Video
-        </a>
+
+        {recipe.video && (
+          <ReactPlayer
+            url={recipe.video}
+            width='50%'
+            height='auto'
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              border: '2px solid red', // Temporary border to see if it's being rendered
+            }}
+          />
+        )}
       </div>
 
       {/* Add to Calendar Button */}
