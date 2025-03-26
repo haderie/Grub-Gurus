@@ -47,7 +47,7 @@ const MessagingPage = () => {
         />
         <div className='message-actions'>
           <button type='button' className='send-button' onClick={handleSendMessage}>
-            Send
+            SEND
           </button>
           {error && <span className='error-message'>{error}</span>}
         </div>

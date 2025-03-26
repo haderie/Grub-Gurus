@@ -33,7 +33,7 @@ const Login = () => {
           type='text'
           value={username}
           onChange={event => handleInputChange(event, 'username')}
-          placeholder='username'
+          placeholder='Username'
           required
           className='input-text'
           id='username-input'
@@ -45,7 +45,7 @@ const Login = () => {
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={event => handleInputChange(event, 'password')}
-          placeholder='password'
+          placeholder='Password'
           required
           className='input-text'
           id='password-input'

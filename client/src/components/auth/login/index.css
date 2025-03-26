@@ -25,10 +25,10 @@
 .container h4 {
   font-size: 1rem;
   color: #666;
-  margin: 15px 0 5px; /* Adjusted for better spacing */
-  text-align: left; /* Align text to the left */
-  width: 100%; /* Ensure alignment respects the form's width */
-  max-width: 400px; /* Match the form's max width */
+  margin: 15px 0 5px;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
 }
 
 /* Form styles */

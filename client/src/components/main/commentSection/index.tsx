@@ -1,7 +1,16 @@
-import { useState } from 'react';
-import { getMetaData } from '../../../tool';
+import React, { useState } from 'react';
+import {
+  Button,
+  TextField,
+  Typography,
+  Box,
+  Collapse,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
 import { Comment, DatabaseComment } from '../../../types/types';
-import './index.css';
+import { getMetaData } from '../../../tool';
 import useUserContext from '../../../hooks/useUserContext';
 
 /**
@@ -48,45 +57,82 @@ const CommentSection = ({ comments, handleAddComment }: CommentSectionProps) => 
   };
 
   return (
-    <div className='comment-section'>
-      <button className='toggle-button' onClick={() => setShowComments(!showComments)}>
-        {showComments ? 'Hide Comments' : 'Show Comments'}
-      </button>
+    <Box sx={{ marginTop: 2 }}>
+      {/* Toggle Button */}
+      <Button
+        variant='outlined'
+        onClick={() => setShowComments(!showComments)}
+        sx={{
+          marginBottom: 2,
+          backgroundColor: '#6A9C89',
+          color: '#FFF5E4',
+          border: 'none',
+          borderRadius: 2,
+        }}>
+        {showComments ? 'Hide Replies' : 'View Replies'}
+      </Button>
 
-      {showComments && (
-        <div className='comments-container'>
-          <ul className='comments-list'>
+      {/* Comments Section */}
+      <Collapse in={showComments}>
+        <Box>
+          {/* Comment List */}
+          <List>
             {comments.length > 0 ? (
               comments.map(comment => (
-                <li key={String(comment._id)} className='comment-item'>
-                  <p className='comment-text'>{comment.text}</p>
-                  <small className='comment-meta'>
-                    {comment.commentBy}, {getMetaData(new Date(comment.commentDateTime))}
-                  </small>
-                </li>
+                <ListItem key={String(comment._id)}>
+                  <ListItemText
+                    primary={
+                      <Typography variant='body2' sx={{ color: '#3E3232' }}>
+                        {comment.text} {/* Custom color for the comment text */}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography variant='body2' sx={{ color: '#FFA725' }}>
+                        {comment.commentBy}, {getMetaData(new Date(comment.commentDateTime))}{' '}
+                        {/* Custom color for the commenter and timestamp */}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
               ))
             ) : (
-              <p className='no-comments'>No comments yet.</p>
+              <Typography variant='body2' color='textSecondary'>
+                No comments yet.
+              </Typography>
             )}
-          </ul>
+          </List>
 
-          <div className='add-comment'>
-            <div className='input-row'>
-              <textarea
-                placeholder='Comment'
-                value={text}
-                onChange={e => setText(e.target.value)}
-                className='comment-textarea'
-              />
-              <button className='add-comment-button' onClick={handleAddCommentClick}>
-                Add Comment
-              </button>
-            </div>
-            {textErr && <small className='error'>{textErr}</small>}
-          </div>
-        </div>
-      )}
-    </div>
+          {/* Add Comment Section */}
+          <Box sx={{ marginTop: 1 }}>
+            <TextField
+              id='comment'
+              label='Type your comment here.'
+              variant='outlined'
+              fullWidth
+              multiline
+              rows={1}
+              value={text}
+              onChange={e => setText(e.target.value)}
+              error={!!textErr}
+              helperText={textErr}
+            />
+            <Button
+              variant='contained'
+              color='primary'
+              sx={{
+                marginTop: 2,
+                marginBottom: 2,
+                borderRadius: 2,
+                color: '#FFF5E4',
+                backgroundColor: '#6A9C89',
+              }}
+              onClick={handleAddCommentClick}>
+              Add Comment
+            </Button>
+          </Box>
+        </Box>
+      </Collapse>
+    </Box>
   );
 };
 

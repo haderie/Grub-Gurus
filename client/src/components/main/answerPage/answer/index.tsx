@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import { handleHyperlink } from '../../../../tool';
+import { Box, Typography, Paper } from '@mui/material';
 import CommentSection from '../../commentSection';
 import './index.css';
 import { Comment, DatabaseComment } from '../../../../types/types';
@@ -41,28 +41,53 @@ const AnswerView = ({
   youtubeVideoUrl,
   handleAddComment,
 }: AnswerProps) => (
-  <div className='answer right_padding'>
-    <div id='answerText' className='answerText'>
-      {handleHyperlink(text)}
-    </div>
-    {youtubeVideoUrl && (
-      <ReactPlayer
-        url={youtubeVideoUrl}
-        width='50%'
-        height='auto'
-        style={{
-          maxWidth: '100%',
-          maxHeight: '100%',
-          border: '2px solid red', // Temporary border to see if it's being rendered
-        }}
-      />
-    )}
-    <div className='answerAuthor'>
-      <div className='answer_author'>{ansBy}</div>
-      <div className='answer_question_meta'>{meta}</div>
-    </div>
+  <Paper
+    elevation={2}
+    sx={{
+      display: 'flex',
+      flexDirection: 'row',
+      padding: 2,
+      gap: 2,
+      width: '100%', // Make sure the Paper container takes up full width
+    }}>
+    {/* Answer Text Section */}
+    <Box sx={{ flex: 1 }}>
+      <Typography variant='body1' sx={{ color: '#333', lineHeight: 1.6 }}>
+        {text}
+      </Typography>
+      {youtubeVideoUrl && (
+        <Box sx={{ marginTop: 2 }}>
+          <ReactPlayer
+            url={youtubeVideoUrl}
+            width='50%'
+            height='auto'
+            style={{ maxWidth: '50%' }}
+          />
+        </Box>
+      )}
+    </Box>
+
+    {/* Author & Meta Section */}
+    <Box
+      sx={{
+        minWidth: 150,
+        textAlign: 'right', // Align text to the right within this Box
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end', // Align content to the right side
+        marginLeft: 'auto', // Push this Box all the way to the right of the parent container
+      }}>
+      <Typography variant='subtitle1' sx={{ fontWeight: 'bold', color: '#6A9C89' }}>
+        {ansBy}
+      </Typography>
+      <Typography variant='body2' sx={{ color: '#3E3232' }}>
+        {meta}
+      </Typography>
+    </Box>
+
+    {/* Comments Section */}
     <CommentSection comments={comments} handleAddComment={handleAddComment} />
-  </div>
+  </Paper>
 );
 
 export default AnswerView;

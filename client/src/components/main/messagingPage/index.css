@@ -15,8 +15,8 @@
 }
 
 .chat-header {
-  background-color: #3090e2;
-  color: white;
+  background-color: #6A9C89;
+  color: #FFF5E4;
   padding: 10px 20px;
   text-align: center;
 }
@@ -66,15 +66,15 @@
 .send-button {
   padding: 10px 20px;
   border: none;
-  background-color: #007bff;
-  color: white;
+  background-color:  #6A9C89;
+  color: #FFF5E4;
   border-radius: 4px;
   cursor: pointer;
   width: 100px;
 }
 
 .send-button:hover {
-  background-color: #0056b3;
+  background-color:  #6A9C89;
 }
 
 .error-message {

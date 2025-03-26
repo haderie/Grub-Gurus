@@ -18,11 +18,12 @@
   border-radius: 5px;
   text-align: center;
   line-height: 40px;
-  color: cornflowerblue;
+  color: #6A9C89; /* Changed from cornflowerblue to #2f8632 */
+  text-decoration: none; /* Removes underline */
 }
 
 .menu_selected {
-  background: #cccccc;
+  background: #C1D8C3;
 }
 
 .additional-options {
@@ -37,7 +38,7 @@
 }
 
 .message-option-selected {
-  background: #3090e2;
-  color: white;
+  background: #C1D8C3;
+  color: #6A9C89;
   width: 110%;
 }

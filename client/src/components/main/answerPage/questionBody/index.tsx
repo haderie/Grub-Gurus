@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import './index.css';
+import { Box, Typography, Paper } from '@mui/material';
 import { handleHyperlink } from '../../../../tool';
 
 /**
@@ -30,26 +30,61 @@ interface QuestionBodyProps {
  * @param meta Additional metadata related to the question.
  */
 const QuestionBody = ({ views, text, askby, meta, youtubeVideoUrl }: QuestionBodyProps) => (
-  <div id='questionBody' className='questionBody right_padding'>
-    <div className='bold_title answer_question_view'>{views} views</div>
-    <div className='answer_question_text'>{handleHyperlink(text)}</div>
-    {youtubeVideoUrl && (
-      <ReactPlayer
-        url={youtubeVideoUrl}
-        width='50%'
-        height='auto'
-        style={{
-          maxWidth: '100%',
-          maxHeight: '100%',
-          border: '2px solid red', // Temporary border to see if it's being rendered
-        }}
-      />
-    )}
-    <div className='answer_question_right'>
-      <div className='question_author'>{askby}</div>
-      <div className='answer_question_meta'>asked {meta}</div>
-    </div>
-  </div>
+  <Paper
+    elevation={2}
+    sx={{
+      display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' },
+      padding: 2,
+      gap: 2,
+      marginBottom: 3,
+    }}>
+    {/* Left Section for Question Text */}
+    <Box sx={{ flex: 1 }}>
+      {/* Question Text Section with Hyperlinks */}
+      <Typography variant='body1' sx={{ color: '#3E3232', lineHeight: 1.6 }}>
+        {handleHyperlink(text)}
+      </Typography>
+
+      {/* Video Player Section (if youtubeVideoUrl is provided) */}
+      {youtubeVideoUrl && (
+        <Box sx={{ marginTop: 2 }}>
+          <ReactPlayer
+            url={youtubeVideoUrl}
+            width='100%'
+            height='auto'
+            style={{
+              maxWidth: '50%',
+              maxHeight: '100%',
+            }}
+          />
+        </Box>
+      )}
+    </Box>
+
+    {/* Right Section for Metadata */}
+    <Box
+      sx={{
+        minWidth: 150,
+        textAlign: 'right',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}>
+      {/* Author Name */}
+      <Typography variant='subtitle1' sx={{ fontWeight: 'bold', color: '#6A9C89' }}>
+        {askby}
+      </Typography>
+
+      {/* Meta Information */}
+      <Typography variant='body2' sx={{ color: '#FFA725' }}>
+        asked {meta}
+      </Typography>
+      <Typography variant='subtitle1' sx={{ color: '#3E3232' }}>
+        {views} views
+      </Typography>
+    </Box>
+  </Paper>
 );
 
 export default QuestionBody;
