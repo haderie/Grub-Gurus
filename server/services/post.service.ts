@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
 import TagModel from '../models/tags.model';
@@ -84,5 +85,38 @@ export const getFollowingPostList = async (username: string): Promise<PopulatedD
     return posts;
   } catch (error) {
     throw new Error(`Posts could not be retrieved: ${error}`);
+  }
+};
+
+/**
+ * Updates post information in the database.
+ *
+ * @param {ObjectId} postID - The ID of the post to update.
+ * @param {string} usernmae - Username of user who liked the post.
+ * @returns {Promise<PostResponse>} - Resolves with the updated post or an error message.
+ */
+export const likePost = async (postID: ObjectId, username: string): Promise<PostResponse> => {
+  try {
+    const post = await PostModel.findById(postID);
+
+    if (!post) {
+      throw Error('Post not found');
+    }
+
+    const isLiked = post.likes.includes(username);
+
+    const updatedPost = await PostModel.findOneAndUpdate(
+      { _id: postID },
+      isLiked ? { $pull: { likes: username } } : { $addToSet: { likes: username } },
+      { new: true },
+    );
+
+    if (!updatedPost) {
+      throw new Error('Failed to update likes');
+    }
+
+    return updatedPost;
+  } catch (error) {
+    return { error: `Error occurred when updating post: ${error}` };
   }
 };

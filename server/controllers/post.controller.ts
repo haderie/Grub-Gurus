@@ -5,9 +5,10 @@ import {
   FakeSOSocket,
   Posts,
   RecipeForPost,
+  UpdateLikesRequest,
   UserByUsernameRequest,
 } from '../types/types';
-import { getFollowingPostList, getPostList, savePost } from '../services/post.service';
+import { getFollowingPostList, getPostList, likePost, savePost } from '../services/post.service';
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 
@@ -113,9 +114,34 @@ const postController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Updates number of likes on a post.
+   * @param res The response, either returning the updated post or an error.
+   * @returns A promise resolving to void.
+   */
+  const updatePostLikes = async (req: UpdateLikesRequest, res: Response): Promise<void> => {
+    try {
+      if (!req.body.postID || !req.body.username) {
+        throw Error('PostID and Username required');
+      }
+
+      const result = await likePost(req.body.postID, req.body.username);
+
+      if ('error' in result) {
+        throw new Error(result.error);
+      }
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).send(`Error when updating post likes: ${error}`);
+    }
+  };
+
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
   router.get('/getFollowingPosts', getFollowingPosts);
+
+  router.patch('/updatePostLikes', updatePostLikes);
 
   return router;
 };
