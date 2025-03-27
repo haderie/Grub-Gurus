@@ -46,11 +46,11 @@ const useProfileSettings = () => {
   const canEditProfile =
     currentUser.username && userData?.username ? currentUser.username === userData.username : false;
 
-  const [selectedOption, setSelectedOption] = useState<'recipe' | 'posts'>('posts');
+  const [selectedOption, setSelectedOption] = useState<'recipes' | 'posts'>('posts');
   const [isFollowing, setIsFollowing] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value as 'recipe' | 'posts');
+    setSelectedOption(event.target.value as 'recipes' | 'posts');
   };
 
   useEffect(() => {

@@ -38,21 +38,23 @@ const PostView = ({ post }: PostCardProps) => {
   const formattedDate = new Date(post.datePosted).toLocaleString();
 
   return (
-    <div className='post-card'>
-      <h3 className='username'>@{post.username}</h3>
-      <RecipeCard recipe={post.recipe} />
+    <div className='question_list'>
+      <div className='post-card'>
+        <h3 className='username'>@{post.username}</h3>
+        <RecipeCard recipe={post.recipe} />
 
-      {post.text ? (
-        <p className='post-text'>{post.text}</p>
-      ) : (
-        <p className='post-text'>No description available</p>
-      )}
-      <p className='date-posted'>Posted on {formattedDate}</p>
+        {post.text ? (
+          <p className='post-text'>{post.text}</p>
+        ) : (
+          <p className='post-text'>No description available</p>
+        )}
+        <p className='date-posted'>Posted on {formattedDate}</p>
 
-      {/* Likes & Saves */}
-      <div className='post-actions'>
-        <button onClick={handleLike}>❤️ {likes.length} Likes</button>
-        <button onClick={handleSave}>🔖 {saves.length} Saves</button>
+        {/* Likes & Saves */}
+        <div className='post-actions'>
+          <button onClick={handleLike}>❤️ {likes.length} Likes</button>
+          <button onClick={handleSave}>🔖 {saves.length} Saves</button>
+        </div>
       </div>
     </div>
   );

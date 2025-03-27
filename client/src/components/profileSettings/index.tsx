@@ -6,6 +6,7 @@ import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
+import { PopulatedDatabaseRecipe } from '../../types/types';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -74,14 +75,14 @@ const ProfileSettings: React.FC = () => {
   };
 
   let selectedList: string[] = [];
+  let recipeSaved: PopulatedDatabaseRecipe[] = [];
 
   switch (selectedOption) {
-    case 'recipe':
-      selectedList = userData?.followers || [];
+    case 'recipes':
+      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
       break;
     case 'posts':
       selectedList = userData?.postsCreated?.map(post => post.recipe.title) || [];
-      console.log(selectedList);
       break;
     default:
       selectedList = [];
@@ -167,7 +168,17 @@ const ProfileSettings: React.FC = () => {
                   onChange={handleRadioChange}
                 />
                 <label htmlFor='posts'>Posts</label>
+                <input
+                  type='radio'
+                  name='recipes'
+                  id='recipes'
+                  value='recipes'
+                  checked={selectedOption === 'recipes'}
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor='recipes'>Recipes</label>
               </div>
+
               {showListPopup && listType && (
                 <div className='popup-overlay' onClick={() => setShowListPopup(false)}>
                   <div className='popup-content' onClick={e => e.stopPropagation()}>
@@ -194,7 +205,7 @@ const ProfileSettings: React.FC = () => {
                 </div>
               )}
 
-              {(canEditProfile || showLists) && (
+              {selectedOption === 'posts' && (
                 <div className='list-container'>
                   {selectedList && selectedList.length > 0 ? (
                     <div>
@@ -208,6 +219,19 @@ const ProfileSettings: React.FC = () => {
                     <p className='no-list-message'>No {selectedOption} yet.</p>
                   )}
                 </div>
+              )}
+
+              {selectedOption === 'recipes' && (
+                <>
+                  <div style={{ textAlign: 'center' }}>{/* Recipe Book Section */}</div>
+                  <div>
+                    {recipesLoading ? (
+                      <p>Loading recipes...</p>
+                    ) : (
+                      <RecipeBook recipes={recipeSaved} />
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -249,15 +273,14 @@ const ProfileSettings: React.FC = () => {
           />
         )}
       </div>
-      {(isRecipePublic || canEditProfile) && (
+      {/* {(isRecipePublic || canEditProfile) && (
         <>
           <div style={{ textAlign: 'center' }}>
-            {/* Recipe Book Section */}
             <h3>Recipe Book</h3>
           </div>
           <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
         </>
-      )}
+      )} */}
     </div>
   );
 };

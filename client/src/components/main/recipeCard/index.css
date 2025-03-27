@@ -1,9 +1,55 @@
+/*rd Styling (if any) */
 .recipe-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.post-text {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Video Styling */
+.react-player {
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%; /* Ensure it fits within container */
+  height: auto;
+}
+
+/* Likes & Saves Actions */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #666;
+}
+
+.post-actions span {
+  display: flex;
+  align-items: center;
+}
+
+.post-actions span:first-child {
+  color: #ff6347; /* Red color for likes */
+}
+
+.post-actions span:last-child {
+  color: #ffd700; /* Gold color for saves */
+}
+
+.post-actions svg {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+/* .recipe-card {
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   background-color: white;
-}
+  gap: 10px;
+} */
 
 .recipe-header {
   display: flex;
@@ -16,37 +62,36 @@
   margin: 0;
 }
 
-.recipe-likes {
-  color: gray;
-}
-
 .recipe-description {
   margin-top: 10px;
   color: #444;
+  margin-bottom: 10px; /* Adjusted bottom margin */
 }
 
-.recipe-ingredients {
+h3 {
+  margin-top: 10px; /* Reduced space before h3 elements */
+  margin-bottom: 5px; /* Reduced space after h3 elements */
+}
+
+ul.recipe-ingredients {
   list-style-type: disc;
   padding-left: 20px;
-}
-
-.recipe-video a {
-  color: blue;
-  text-decoration: underline;
+  margin-top: 0; /* Removed top margin */
+  margin-bottom: 10px; /* Reduced bottom margin */
 }
 
 .recipe-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px; /* Space between tags */
+  margin-top: 0; /* Removed top margin */
 }
 
-.tag-box {
-  background-color: #f0f0f0; /* Light gray */
-  color: #333; /* Dark text */
-  font-size: 16px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  white-space: nowrap;
+.recipe-video {
+  margin-top: 10px;
+}
+
+.recipe-video a {
+  color: blue;
+  text-decoration: underline;
 }

@@ -13,8 +13,8 @@
 /* A card-like container that holds the actual profile content */
 .profile-card {
   position: relative; /* Enables absolute positioning inside */
-  width: 100%;
-  max-width: 600px; /* limit the card width */
+  width: 800px;
+  max-width: 1000px; /* limit the card width */
   max-height: 700px;
   overflow-y: auto;
   background: #fff; /* white background */
