@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleHyperlink } from '../../../../tool';
+import Markdown from 'react-markdown';
 import CommentSection from '../../commentSection';
 import './index.css';
 import { Comment, DatabaseComment } from '../../../../types/types';
@@ -34,7 +34,7 @@ interface AnswerProps {
 const AnswerView = ({ text, ansBy, meta, comments, handleAddComment }: AnswerProps) => (
   <div className='answer right_padding'>
     <div id='answerText' className='answerText'>
-      {handleHyperlink(text)}
+      <Markdown>{text}</Markdown>
     </div>
     <div className='answerAuthor'>
       <div className='answer_author'>{ansBy}</div>

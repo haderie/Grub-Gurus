@@ -17,12 +17,11 @@ const NewQuestionPage = () => {
     setText,
     tagNames,
     setTagNames,
-    optInForAI,
-    setOptInForAI,
+    // optInForAI,
+    // setOptInForAI,
     titleErr,
     textErr,
     tagErr,
-    aiErr,
     postQuestion,
   } = useNewQuestion();
 
@@ -90,14 +89,6 @@ const NewQuestionPage = () => {
             ))}
           </ul>
         )}
-      </div>
-
-      {/* AI Response Toggle Checkbox */}
-      <div className='ai-response-toggle'>
-        <label>
-          <input type='checkbox' checked={optInForAI} onChange={() => setOptInForAI(!optInForAI)} />
-          Opt in to receive an AI-generated response from the Munch Master!
-        </label>
       </div>
 
       <div className='btn_indicator_container'>

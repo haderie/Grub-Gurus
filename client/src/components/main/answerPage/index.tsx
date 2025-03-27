@@ -14,7 +14,8 @@ import useAnswerPage from '../../../hooks/useAnswerPage';
  * It also includes the functionality to vote, ask a new question, and post a new answer.
  */
 const AnswerPage = () => {
-  const { questionID, question, handleNewComment, handleNewAnswer } = useAnswerPage();
+  const { questionID, question, handleNewComment, handleNewAnswer, handleAIAnswer } =
+    useAnswerPage();
 
   if (!question) {
     return null;
@@ -52,6 +53,13 @@ const AnswerPage = () => {
           handleNewAnswer();
         }}>
         Answer Question
+      </button>
+      <button
+        className='button'
+        onClick={() => {
+          handleAIAnswer();
+        }}>
+        Generate AI Answer
       </button>
     </>
   );

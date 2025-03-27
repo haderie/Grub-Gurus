@@ -4,7 +4,6 @@ import { validateHyperlink } from '../tool';
 import { addQuestion } from '../services/questionService';
 import useUserContext from './useUserContext';
 import { Question } from '../types/types';
-import getAIResponse from '../tool/aiInteraction';
 
 /**
  * Custom hook to handle question submission and form validation
@@ -24,12 +23,10 @@ const useNewQuestion = () => {
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [tagNames, setTagNames] = useState<string>('');
-  const [optInForAI, setOptInForAI] = useState<boolean>(false);
 
   const [titleErr, setTitleErr] = useState<string>('');
   const [textErr, setTextErr] = useState<string>('');
   const [tagErr, setTagErr] = useState<string>('');
-  const [aiErr, setAiErr] = useState<string>('');
 
   /**
    * Function to validate the form before submitting the question.
@@ -108,27 +105,6 @@ const useNewQuestion = () => {
       comments: [],
     };
 
-    const { REACT_APP_API_KEY: apiKey } = process.env;
-
-    if (apiKey === undefined) {
-      throw new Error('apiKey not defined.');
-    }
-
-    if (optInForAI) {
-      try {
-        const aiResponse = await getAIResponse(text, apiKey);
-        question.answers.push({
-          text: aiResponse,
-          ansBy: 'Munch Master',
-          ansDateTime: new Date(),
-          comments: [],
-          isUserCertified: true,
-        });
-      } catch (err) {
-        setAiErr('Could not generate AI response');
-      }
-    }
-
     const res = await addQuestion(question);
 
     if (res && res._id) {
@@ -143,12 +119,12 @@ const useNewQuestion = () => {
     setText,
     tagNames,
     setTagNames,
-    optInForAI,
-    setOptInForAI,
+    // optInForAI,
+    // setOptInForAI,
     titleErr,
     textErr,
     tagErr,
-    aiErr,
+    // aiErr,
     postQuestion,
   };
 };

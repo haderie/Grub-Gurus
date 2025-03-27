@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import useUserContext from './useUserContext';
 import { DatabaseMessage, Message, MessageUpdatePayload } from '../types/types';
 import { addMessage, getMessages } from '../services/messageService';
