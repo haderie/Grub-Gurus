@@ -25,16 +25,18 @@
 }
 
 .bluebtn {
-  background: #4caf50;
+  background: #408b51;
   color: #ffffff;
   border: #000000 1px solid;
+  border-radius: 5px; /* Rounded corners */
   font-size: 20px;
   padding: 10px 10px 10px 10px;
   margin-right: 5%;
+  cursor: pointer;
 }
 
 .bluebtn:hover {
-  background: #2f8632;
+  background: #29782c;
 }
 
 .btn_indicator_container {

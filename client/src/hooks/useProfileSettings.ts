@@ -10,7 +10,7 @@ import {
   updateRecipeBookPrivacy,
 } from '../services/userService';
 
-import { SafeDatabaseUser } from '../types/types';
+import { SafeDatabaseUser, SafePopulatedDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
 
 /**
@@ -22,7 +22,7 @@ const useProfileSettings = () => {
   const { user: currentUser } = useUserContext();
 
   // Local state
-  const [userData, setUserData] = useState<SafeDatabaseUser | null>(null);
+  const [userData, setUserData] = useState<SafePopulatedDatabaseUser | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,9 @@ const useProfileSettings = () => {
   const [isRecipePublic, setIsRecipePublic] = useState(currentUser.recipeBookPublic);
 
   const [newBio, setNewBio] = useState('');
-  const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>('Public');
+  const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>(
+    currentUser.privacySetting,
+  );
   const [showLists, setShowLists] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -44,11 +46,11 @@ const useProfileSettings = () => {
   const canEditProfile =
     currentUser.username && userData?.username ? currentUser.username === userData.username : false;
 
-  const [selectedOption, setSelectedOption] = useState<'followers' | 'following'>('followers');
+  const [selectedOption, setSelectedOption] = useState<'recipe' | 'posts'>('posts');
   const [isFollowing, setIsFollowing] = useState(false);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value as 'followers' | 'following');
+    setSelectedOption(event.target.value as 'recipe' | 'posts');
   };
 
   useEffect(() => {
@@ -215,6 +217,7 @@ const useProfileSettings = () => {
       setUserData(followedUser);
 
       if (updatedUser.following?.includes(followedUser.username)) {
+        // setUserData(updatedUser);
         setIsFollowing(true);
         setSuccessMessage(`${username} Followed!`);
       } else {
@@ -226,6 +229,11 @@ const useProfileSettings = () => {
     } catch (error) {
       setErrorMessage(`Failed to follow/unfollow ${username}.`);
     }
+  };
+
+  const checkIfFollowing = (uname: string) => {
+    if (!username) return false; // Prevent undefined errors
+    return userData?.following?.includes(uname);
   };
 
   /**
@@ -285,6 +293,7 @@ const useProfileSettings = () => {
     isRecipePublic,
     setIsRecipePublic,
     toggleRecipeBookVisibility,
+    checkIfFollowing,
   };
 };
 

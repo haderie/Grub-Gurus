@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import axios from 'axios';
 import { PopulatedDatabasePost, Posts } from '../types/types';
 import api from './config';
 
@@ -49,24 +50,39 @@ const getFollowingPosts = async (): Promise<PopulatedDatabasePost[]> => {
   return res.data;
 };
 
-const likePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
-  const res = await api.post(`${POST_API_URL}/likePost`);
-
-  if (res.status !== 200) {
-    throw new Error('Error while liking post');
+const likePost = async (postID: ObjectId, username: string): Promise<PopulatedDatabasePost> => {
+  try {
+    const res = await api.patch(`${POST_API_URL}/updatePostLikes`, {
+      postID,
+      username,
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(`Error while updating post: ${error.response.data}`);
+    } else {
+      throw new Error('Error while updating post');
+    }
   }
-
-  return res.data;
 };
 
-const savePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
-  const res = await api.post(`${POST_API_URL}/savePost`);
+// const savePost = async (
+//   post: PopulatedDatabasePost,
+//   postId: ObjectId,
+// ): Promise<PopulatedDatabasePost[]> => {
+//   const res = await api.post(`${POST_API_URL}/savePost`, post);
 
-  if (res.status !== 200) {
-    throw new Error('Error while saving post');
-  }
+//   if (res.status !== 200) {
+//     throw new Error('Error while saving post');
+//   }
 
-  return res.data;
+//   return res.data;
+// };
+
+export {
+  addPost,
+  getPosts,
+  getFollowingPosts,
+  likePost,
+  // savePost
 };
-
-export { addPost, getPosts, getFollowingPosts, likePost, savePost };

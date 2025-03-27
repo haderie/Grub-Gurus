@@ -32,6 +32,7 @@ const PostView = ({ post }: PostCardProps) => {
     post.saves,
     post.username,
     post._id,
+    post,
   );
 
   const formattedDate = new Date(post.datePosted).toLocaleString();

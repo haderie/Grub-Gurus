@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { UserCredentials, SafeDatabaseUser } from '../types/types';
+import { ObjectId } from 'mongodb';
+import {
+  UserCredentials,
+  SafeDatabaseUser,
+  SafePopulatedDatabaseUser,
+  PopulatedDatabasePost,
+} from '../types/types';
 import api from './config';
 
 const USER_API_URL = `${process.env.REACT_APP_SERVER_URL}/user`;
@@ -22,7 +28,7 @@ const getUsers = async (): Promise<SafeDatabaseUser[]> => {
  *
  * @throws Error if there is an issue fetching users.
  */
-const getUserByUsername = async (username: string): Promise<SafeDatabaseUser> => {
+const getUserByUsername = async (username: string): Promise<SafePopulatedDatabaseUser> => {
   const res = await api.get(`${USER_API_URL}/getUser/${username}`);
   if (res.status !== 200) {
     throw new Error('Error when fetching user');
@@ -112,7 +118,7 @@ const resetPassword = async (username: string, newPassword: string): Promise<Saf
 const updateBiography = async (
   username: string,
   newBiography: string,
-): Promise<SafeDatabaseUser> => {
+): Promise<SafePopulatedDatabaseUser> => {
   const res = await api.patch(`${USER_API_URL}/updateBiography`, {
     username,
     biography: newBiography,
@@ -133,7 +139,7 @@ const updateBiography = async (
 const updateRecipeBookPrivacy = async (
   username: string,
   newRecipeBookPublic: boolean,
-): Promise<SafeDatabaseUser> => {
+): Promise<SafePopulatedDatabaseUser> => {
   const res = await api.patch(`${USER_API_URL}/updateRecipeBookPrivacy`, {
     username,
     recipeBookPublic: newRecipeBookPublic,
@@ -186,7 +192,7 @@ const followUser = async (
 const updatePrivacy = async (
   username: string,
   privacySetting: 'Public' | 'Private',
-): Promise<SafeDatabaseUser> => {
+): Promise<SafePopulatedDatabaseUser> => {
   const res = await api.patch(`${USER_API_URL}/updatePrivacy`, {
     username,
     privacySetting,
@@ -194,6 +200,58 @@ const updatePrivacy = async (
 
   if (res.status !== 200) {
     throw new Error('Error when updating privacy setting');
+  }
+
+  return res.data;
+};
+
+/**
+ * Updates the user's privacy settings.
+ * @param username - The username of the user
+ * @param privacySetting - The new privacy setting
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const savePost = async (
+  username: string,
+  postID: ObjectId,
+  action: 'save' | 'remove',
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/savePost`, {
+    username,
+    postID,
+    action,
+  });
+
+  console.log(res); // Check the response here
+
+  if (res.status !== 200) {
+    throw new Error('Error when saving post');
+  }
+
+  return res.data;
+};
+
+/**
+ * Updates the user's privacy settings.
+ * @param username - The username of the user
+ * @param privacySetting - The new privacy setting
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const removeSavedPost = async (
+  username: string,
+  postID: ObjectId,
+  action: 'save' | 'remove',
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/removeSavedPost`, {
+    username,
+    postID,
+    action,
+  });
+
+  if (res.status !== 200) {
+    throw new Error('Error when saving post');
   }
 
   return res.data;
@@ -210,4 +268,5 @@ export {
   followUser,
   updatePrivacy,
   updateRecipeBookPrivacy,
+  savePost,
 };

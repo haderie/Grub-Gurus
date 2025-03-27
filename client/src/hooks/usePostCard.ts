@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { ObjectId } from 'mongodb';
-import { likePost, savePost } from '../services/postService';
+import { likePost } from '../services/postService';
+import { PopulatedDatabasePost } from '../types/types';
+import { savePost } from '../services/userService';
+import useUserContext from './useUserContext';
 
 const usePostCard = (
   initialLikes: string[],
   initialSaves: string[],
   username: string,
-  postId: ObjectId,
+  postID: ObjectId,
+  post: PopulatedDatabasePost,
 ) => {
   const [likes, setLikes] = useState(initialLikes);
-  const [saves, setSaves] = useState(initialSaves);
+  const [saves, setSaves] = useState(post.saves);
+  const { user: currentUser } = useUserContext();
 
   const handleLike = async () => {
     const isLiked = likes.includes(username);
@@ -18,19 +23,35 @@ const usePostCard = (
     } else {
       setLikes([...likes, username]); // Add like
     }
-    await likePost(username, postId);
+    try {
+      await likePost(postID, username);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(`Error liking post: ${error}`);
+    }
   };
 
   const handleSave = async () => {
-    const isSaved = saves.includes(username);
-    if (isSaved) {
-      setSaves(saves.filter(user => user !== username)); // Remove save
-    } else {
-      setSaves([...saves, username]); // Add save
+    try {
+      const isSaved = saves.includes(currentUser.username);
+      if (isSaved) {
+        setSaves(saves.filter(user => user !== currentUser.username)); // remove saves
+        const success = await savePost(currentUser.username, postID, 'remove');
+      } else {
+        setSaves([...saves, currentUser.username]); // add saves
+        // Wait for the backend to confirm the save/un-save action
+        const success = await savePost(currentUser.username, postID, 'save');
+        if (!success) {
+          // Revert the state if the request fails
+          setSaves(saves);
+          alert('Failed to update saves. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Error saving post:', error);
+      alert('Something went wrong. Please try again.');
     }
-    await savePost(username, postId);
   };
-
   return { likes, saves, handleLike, handleSave };
 };
 
