@@ -7,6 +7,12 @@
   background: #c3e9c6;
 }
 
+.header-logo {
+  height: 100px;
+  width: auto;
+  margin-right: 10px;
+}
+
 .title {
   font-size: 32px;
   font-weight: 800;

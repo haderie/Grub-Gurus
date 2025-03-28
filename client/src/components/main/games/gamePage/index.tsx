@@ -2,7 +2,8 @@ import React from 'react';
 import './index.css';
 import NimGamePage from '../nimGamePage';
 import useGamePage from '../../../../hooks/useGamePage';
-import { GameInstance, NimGameState } from '../../../../types/types';
+import { GameInstance, GuessTheIngredientState, NimGameState } from '../../../../types/types';
+import GuessTheIngredientPage from '../guessGamePage';
 
 /**
  * Component to display the game page for a specific game type, including controls and game state.
@@ -27,6 +28,12 @@ const GamePage = () => {
     switch (gameType) {
       case 'Nim':
         return <NimGamePage gameInstance={gameInstance as GameInstance<NimGameState>} />;
+      case 'Guess':
+        return (
+          <GuessTheIngredientPage
+            gameInstance={gameInstance as GameInstance<GuessTheIngredientState>}
+          />
+        );
       default:
         return <div>Unknown game type</div>;
     }

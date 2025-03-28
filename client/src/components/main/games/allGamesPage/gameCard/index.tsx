@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { GameInstance, GameState } from '../../../../../types/types';
+import { GameInstance, GameState, WinnableGameState } from '../../../../../types/types';
 
 /**
  * Component to display a game card with details about a specific game instance.
@@ -12,13 +12,23 @@ const GameCard = ({
   game,
   handleJoin,
 }: {
-  game: GameInstance<GameState>;
+  game: GameInstance<WinnableGameState>;
   handleJoin: (gameID: string) => void;
 }) => (
   <div className='game-item'>
     <p>
-      <strong>Game ID:</strong> {game.gameID} | <strong>Status:</strong> {game.state.status}
+      <strong>{game.gameType === 'Nim' ? 'Nim' : 'Guess The Ingredient'}</strong>
+      <br />
+      <br />
+      <strong>Game ID:</strong> {game.gameID}
+      <br />
     </p>
+    <strong>Status:</strong> {game.state.status}
+    {game.state.status === 'OVER' && (
+      <p>
+        <strong>Winner:</strong> {game.state.winners!.join(', ') || 'No winner'}
+      </p>
+    )}
     <ul className='game-players'>
       {game.players.map((player: string) => (
         <li key={`${game.gameID}-${player}`}>{player}</li>
