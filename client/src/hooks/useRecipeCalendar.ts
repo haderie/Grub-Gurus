@@ -170,13 +170,6 @@ const useRecipeCalendar = () => {
     setVideoResults([]); // Clear results after selection
   };
 
-  console.log('Events before rendering:', events);
-  events.forEach(event => {
-    console.log('Event Title:', event.title);
-    console.log('Start:', event.start, 'Type:', typeof event.start, 'Value:', event.start);
-    console.log('End:', event.end, 'Type:', typeof event.end, 'Value:', event.end);
-  });
-
   return {
     events,
     recipeState,
