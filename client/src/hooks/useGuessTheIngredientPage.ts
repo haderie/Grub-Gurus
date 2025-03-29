@@ -56,7 +56,15 @@ const useGuessTheIngredientPage = (gameInstance: GameInstance<GuessTheIngredient
     setGuess('');
   };
 
-  return { user, guess, handleMakeGuess, handleInputChange, hint, isCurrentPlayer, getPlayerKey };
+  return {
+    user,
+    guess,
+    handleMakeGuess,
+    handleInputChange,
+    hint,
+    isCurrentPlayer,
+    getPlayerKey,
+  };
 };
 
 export default useGuessTheIngredientPage;

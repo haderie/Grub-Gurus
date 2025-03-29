@@ -22,7 +22,7 @@ const useRecipeCalendar = () => {
 
   const [videoUrlErr, setVideoUrlErr] = useState<string>('');
   const [searchError, setSearchError] = useState<string>(''); // Error state for s
-  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
+  const [selectedColor, setSelectedColor] = useState<string>('#388E3C');
 
   const [recipeState, setRecipeState] = useState<Recipe>({
     user: user.username,
@@ -46,8 +46,8 @@ const useRecipeCalendar = () => {
             .filter((recipe: RecipeCalendarEvent) => recipe.addedToCalendar)
             .map((recipe: RecipeCalendarEvent) => ({
               ...recipe,
-              start: recipe.start, // Ensure correct date format
-              end: recipe.end,
+              start: new Date(recipe.start), // Ensure correct date format
+              end: new Date(recipe.end),
             }));
           setEvents(fetchedRecipes);
         } catch (error) {
@@ -169,6 +169,13 @@ const useRecipeCalendar = () => {
     setVideoUrl(url);
     setVideoResults([]); // Clear results after selection
   };
+
+  console.log('Events before rendering:', events);
+  events.forEach(event => {
+    console.log('Event Title:', event.title);
+    console.log('Start:', event.start, 'Type:', typeof event.start, 'Value:', event.start);
+    console.log('End:', event.end, 'Type:', typeof event.end, 'Value:', event.end);
+  });
 
   return {
     events,

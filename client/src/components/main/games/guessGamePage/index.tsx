@@ -23,6 +23,18 @@ const GuessTheIngredientPage = ({
   const player1 = gameInstance.players[0] || 'Waiting for player...';
   const player2 = gameInstance.players[1] || 'Waiting for player...';
 
+  const winner = gameInstance.state.winners?.[0]; // Assumes only one winner
+
+  const winnerScore =
+    winner === gameInstance.state.player1
+      ? gameInstance.state.score.player1
+      : gameInstance.state.score.player2;
+
+  const winnerAttempts =
+    winner === gameInstance.state.player1
+      ? gameInstance.state.attempts.player1
+      : gameInstance.state.attempts.player2;
+
   return (
     <>
       <div className='guess-rules'>
@@ -38,29 +50,36 @@ const GuessTheIngredientPage = ({
       {gameInstance.state.status === 'OVER' && (
         <p>
           <strong>Winner:</strong> {gameInstance.state.winners?.join(', ') || 'No winner'}
+          <br />
+          <strong>Score:</strong> {`${winnerScore}, ${winnerAttempts} attempt(s)`}
         </p>
       )}
       <div className='guess-game-details'>
-        <h2>Current Game</h2>
+        <h2>The Current Kitchen:</h2>
         <p>
-          <strong>Player 1:</strong> {player1} (Score: {gameInstance.state.score.player1})
+          <strong>Chef 1:</strong> {player1}
         </p>
         <p>
-          <strong>Player 2:</strong> {player2} (Score: {gameInstance.state.score.player2})
+          <strong>Chef 2:</strong> {player2}
         </p>
         <p>
-          <strong>Current Turn:</strong> {gameInstance.state.currentPlayer}
+          <strong>Whose Cooking:</strong> {gameInstance.state.currentPlayer}
         </p>
         <p>
           <strong>Your Attempts:</strong>{' '}
           {gameInstance.state.attempts[getPlayerKey(user.username)] || 0}
         </p>
         <div className='ingredient-image'>
-          <img
-            src={gameInstance.state.imageURL}
-            alt='Guess the ingredient'
-            style={{ filter: gameInstance.state.revealed ? 'none' : 'blur(10px)' }}
-          />
+          <div className='ingredient-image'>
+            <img
+              src={gameInstance.state.imageURL}
+              alt='Guess the ingredient'
+              style={{
+                filter: `blur(10px)`,
+                transition: 'filter 0.5s ease-in-out',
+              }}
+            />
+          </div>
         </div>
         {hint && (
           <p>
@@ -87,7 +106,7 @@ const GuessTheIngredientPage = ({
         )}
         {gameInstance.state.status === 'OVER' && (
           <p>
-            <strong>Correct Answer:</strong> {gameInstance.state.correctIngredient}
+            <strong>Correct Ingredient:</strong> {gameInstance.state.correctIngredient}
           </p>
         )}
       </div>

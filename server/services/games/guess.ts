@@ -48,12 +48,15 @@ class GuessTheIngredientGame extends Game<GuessTheIngredientState, GuessMove> {
     const playerSlot = this._players[0] === playerID ? 'player1' : 'player2';
 
     if (guess.toLowerCase() === this.state.correctIngredient.toLowerCase()) {
+      const newScore = Math.max(100 - this.state.attempts[playerSlot] * 10, 10);
+
       this.state = {
         ...this.state,
         status: 'OVER',
         revealed: true,
-        score: { ...this.state.score, [playerSlot]: this.state.score[playerSlot] + 10 },
+        score: { ...this.state.score, [playerSlot]: newScore },
         winners: [playerID],
+        attempts: { ...this.state.attempts, [playerSlot]: this.state.attempts[playerSlot] + 1 },
       };
     } else {
       this.state = {
@@ -72,25 +75,6 @@ class GuessTheIngredientGame extends Game<GuessTheIngredientState, GuessMove> {
     this._validateMove(move);
     this._gameEndCheck(move.move.guess, move.playerID);
   }
-
-  /**
-   * Starts a new round by setting a new correct ingredient and hints.
-   * @param correctIngredient The correct ingredient for this round.
-   * @param hints A list of hints for the ingredient.
-   * @param imageUrl The image URL for the ingredient.
-   */
-  //   public startNewRound(correctIngredient: string, hints: string[], imageURL: string): void {
-  //     this.state = {
-  //       status: 'IN_PROGRESS',
-  //       attempts: 0,
-  //       correctIngredient,
-  //       hints,
-  //       imageURL,
-  //       revealed: false,
-  //       score: this.state.score, // Keep the existing score
-  //       player: '',
-  //     };
-  //   }
 
   /**
    * Joins a player to the game. The game can only be joined if it is waiting to start.

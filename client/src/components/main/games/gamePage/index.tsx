@@ -15,6 +15,13 @@ import GuessTheIngredientPage from '../guessGamePage';
  */
 const GamePage = () => {
   const { gameInstance, error, handleLeaveGame } = useGamePage();
+  let gameTitle;
+
+  if (gameInstance!.gameType === 'Guess') {
+    gameTitle = 'Guess the Ingredient';
+  } else {
+    gameTitle = 'Nim Game';
+  }
 
   /**
    * Renders the appropriate game component based on the game type.
@@ -42,7 +49,7 @@ const GamePage = () => {
   return (
     <div className='game-page'>
       <header className='game-header'>
-        <h1>Nim Game</h1>
+        <h1>{gameTitle}</h1>
         <p className='game-status'>
           Status: {gameInstance ? gameInstance.state.status : 'Not started'}
         </p>
