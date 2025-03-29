@@ -3,6 +3,7 @@ import {
   AddPostRequest,
   DatabaseRecipe,
   FakeSOSocket,
+  PopulatedDatabasePost,
   Posts,
   RecipeForPost,
   UserByUsernameRequest,
@@ -11,6 +12,7 @@ import { getFollowingPostList, getPostList, savePost } from '../services/post.se
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 import UserModel from '../models/users.model';
+import PostModel from '../models/posts.model';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -69,8 +71,15 @@ const postController = (socket: FakeSOSocket) => {
       if ('error' in savedPost) {
         throw new Error(savedPost.error);
       }
-      socket.emit('postUpdate', savedPost);
-      res.json(savedPost);
+
+      const populatedPost = await PostModel.findById(savedPost._id).populate('recipe');
+
+      if (!populatedPost) {
+        throw new Error('Post not found after saving');
+      }
+
+      socket.emit('postUpdate', populatedPost);
+      res.json(populatedPost);
     } catch (error) {
       res.status(500).send(`Error when saving post: ${error}`);
     }

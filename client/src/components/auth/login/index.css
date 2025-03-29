@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f7f7f7;
+  background: #C1D8C3;
   padding: 20px;
 }
 
@@ -14,12 +14,14 @@
   font-size: 2rem;
   color: #333;
   margin-bottom: 10px;
+  background: #C1D8C3;
 }
 
 .container h3 {
   font-size: 1.5rem;
   color: #555;
   margin-bottom: 20px;
+  background: #C1D8C3;
 }
 
 .container h4 {
@@ -29,6 +31,7 @@
   text-align: left;
   width: 100%;
   max-width: 400px;
+  background: #C1D8C3;
 }
 
 /* Form styles */
@@ -38,6 +41,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  background: #C1D8C3;
 }
 
 /* Input styles */

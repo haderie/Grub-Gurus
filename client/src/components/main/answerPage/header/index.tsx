@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
-import AskQuestionButton from '../../askQuestionButton';
+import { Box, Typography } from '@mui/material';
 
 /**
  * Interface representing the props for the AnswerHeader component.
