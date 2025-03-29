@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { GameInstance, GameState, WinnableGameState } from '../../../../../types/types';
+import { GameInstance, WinnableGameState } from '../../../../../types/types';
 
 /**
  * Component to display a game card with details about a specific game instance.
