@@ -189,7 +189,7 @@ const useNewPost = () => {
       video: videoUrl,
       addedToCalendar: false,
       numOfLikes: 0,
-      views: []
+      views: [],
     };
 
     const post: Posts = {

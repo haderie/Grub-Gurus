@@ -182,7 +182,7 @@ const useNewRecipe = () => {
       video: videoUrl,
       addedToCalendar: false,
       numOfLikes: 0,
-      views: []
+      views: [],
     };
 
     const res = await addRecipe(recipe);
