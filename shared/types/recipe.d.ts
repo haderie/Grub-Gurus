@@ -27,7 +27,7 @@ export interface Recipe {
   cookTime: number;
   addedToCalendar: boolean;
   numOfLikes: number;
-  views: number;
+  views: string[];
 }
 
 /**
