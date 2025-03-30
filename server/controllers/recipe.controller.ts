@@ -55,8 +55,8 @@ const recipeController = (socket: FakeSOSocket) => {
   //   const { search } = req.query;
 
   //   try {
-  //     // let qlist = qlist.filter(q => q.user.username === askedBy);
-  //     // const rlist: Recipe[] = await getRecipeByUsername(username);
+  //     let qlist = qlist.filter(q => q.user.username === askedBy);
+  //     const rlist: Recipe[] = await getRecipeByUsername(username);
 
   //     // Filter by search keyword and tags
   //     const resqlist: PopulatedDatabaseRecipe[] = filterRecipeBySearch(rlist, search);

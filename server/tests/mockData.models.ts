@@ -2,7 +2,9 @@ import { ObjectId } from 'mongodb';
 import {
   DatabaseAnswer,
   DatabaseComment,
+  DatabasePost,
   DatabaseQuestion,
+  DatabaseRecipe,
   DatabaseTag,
   PopulatedDatabaseQuestion,
   SafeDatabaseUser,
@@ -234,4 +236,35 @@ export const safeUserFollowed: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+};
+
+export const sampleRecipe: DatabaseRecipe = {
+  _id: new ObjectId(),
+  user,
+  tags: [],
+  title: 'Pesto Pasta',
+  privacyPublic: true,
+  ingredients: ['pasta, pesto, parmesean, olive oil'],
+  description: 'a delicious dish',
+  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+  cookTime: 20,
+  addedToCalendar: false,
+};
+
+export const samplePost: DatabasePost = {
+  _id: new ObjectId(),
+  recipe: sampleRecipe._id,
+  username: user.username,
+  datePosted: new Date(),
+  likes: [],
+  saves: [],
+};
+
+export const sampleLikedPost: DatabasePost = {
+  _id: new ObjectId(),
+  recipe: sampleRecipe._id,
+  username: user.username,
+  datePosted: new Date(),
+  likes: [user.username],
+  saves: [],
 };

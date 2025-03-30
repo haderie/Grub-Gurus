@@ -1,7 +1,7 @@
 /**
  * A constant array representing the available types of games.
  */
-export const GAME_TYPES = ['Nim'];
+export const GAME_TYPES = ['Nim', 'Guess'] as const;
 
 /**
  * The maximum number of objects in a Nim game.
