@@ -26,12 +26,13 @@ export interface Recipe {
   tags: Tag[];
   cookTime: number;
   addedToCalendar: boolean;
+  numOfLikes: number;
+  views: number;
 }
 
 /**
  * Represents minimal recipe data used for summaries.
  * - `title`: The title of the recipe.
- * - `likes`: The number of likes received.
  */
 export interface RecipeData {
   title: string;
