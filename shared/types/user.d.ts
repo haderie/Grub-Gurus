@@ -31,6 +31,7 @@ export interface User extends UserCredentials {
   following: string[];
   privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
+  postsCreated: Posts[];
 }
 
 /**
