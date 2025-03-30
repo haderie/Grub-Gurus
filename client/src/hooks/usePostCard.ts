@@ -1,20 +1,15 @@
 import { useState } from 'react';
 import { ObjectId } from 'mongodb';
-import { likePost } from '../services/postService';
-import { PopulatedDatabasePost } from '../types/types';
-import { savePost } from '../services/userService';
-import useUserContext from './useUserContext';
+import { likePost, savePost } from '../services/postService';
 
 const usePostCard = (
   initialLikes: string[],
   initialSaves: string[],
   username: string,
   postID: ObjectId,
-  post: PopulatedDatabasePost,
 ) => {
   const [likes, setLikes] = useState(initialLikes);
-  const [saves, setSaves] = useState(post.saves);
-  const { user: currentUser } = useUserContext();
+  const [saves, setSaves] = useState(initialSaves);
 
   const handleLike = async () => {
     const isLiked = likes.includes(username);
@@ -32,27 +27,15 @@ const usePostCard = (
   };
 
   const handleSave = async () => {
-    try {
-      const isSaved = saves.includes(currentUser.username);
-      if (isSaved) {
-        setSaves(saves.filter(user => user !== currentUser.username)); // remove saves
-        await savePost(currentUser.username, postID, 'remove');
-      } else {
-        setSaves([...saves, currentUser.username]); // add saves
-        const success = await savePost(currentUser.username, postID, 'save');
-        if (!success) {
-          // Revert the state if the request fails
-          setSaves(saves);
-          // eslint-disable-next-line no-console
-          console.error('Failed to update saves. Please try again.');
-        }
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error saving post:', error);
+    const isSaved = saves.includes(username);
+    if (isSaved) {
+      setSaves(saves.filter(user => user !== username)); // Remove save
+    } else {
+      setSaves([...saves, username]); // Add save
     }
     await savePost(username, postID);
   };
+
   return { likes, saves, handleLike, handleSave };
 };
 

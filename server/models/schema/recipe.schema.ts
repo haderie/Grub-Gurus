@@ -1,5 +1,5 @@
+import { Recipe } from '@fake-stack-overflow/shared';
 import { Schema } from 'mongoose';
-import { Recipe } from '../../types/types';
 
 /**
  * Mongoose schema for the Recipe collection.

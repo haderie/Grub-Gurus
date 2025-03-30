@@ -66,23 +66,14 @@ const likePost = async (postID: ObjectId, username: string): Promise<PopulatedDa
   }
 };
 
-// const savePost = async (
-//   post: PopulatedDatabasePost,
-//   postId: ObjectId,
-// ): Promise<PopulatedDatabasePost[]> => {
-//   const res = await api.post(`${POST_API_URL}/savePost`, post);
+const savePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
+  const res = await api.post(`${POST_API_URL}/savePost`);
 
-//   if (res.status !== 200) {
-//     throw new Error('Error while saving post');
-//   }
+  if (res.status !== 200) {
+    throw new Error('Error while saving post');
+  }
 
-//   return res.data;
-// };
-
-export {
-  addPost,
-  getPosts,
-  getFollowingPosts,
-  likePost,
-  // savePost
+  return res.data;
 };
+
+export { addPost, getPosts, getFollowingPosts, likePost, savePost };
