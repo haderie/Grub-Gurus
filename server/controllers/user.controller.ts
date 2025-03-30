@@ -7,7 +7,6 @@ import {
   FakeSOSocket,
   UpdateBiographyRequest,
   UpdateFollowRequest,
-  SafeDatabaseUser,
   UpdatePrivacyRequest,
   UpdateRecipeBookPrivacy,
   SafePopulatedDatabaseUser,

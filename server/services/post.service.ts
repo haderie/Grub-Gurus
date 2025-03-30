@@ -9,8 +9,6 @@ import {
   PopulatedDatabasePost,
   DatabaseRecipe,
   Posts,
-  DatabaseUser,
-  SafeDatabaseUser,
 } from '../types/types';
 import { getUserByUsername } from './user.service';
 

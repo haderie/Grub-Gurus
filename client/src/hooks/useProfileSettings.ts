@@ -10,7 +10,7 @@ import {
   updateRecipeBookPrivacy,
 } from '../services/userService';
 
-import { SafeDatabaseUser, SafePopulatedDatabaseUser } from '../types/types';
+import { SafePopulatedDatabaseUser } from '../types/types';
 import useUserContext from './useUserContext';
 
 /**

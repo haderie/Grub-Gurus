@@ -34,7 +34,6 @@ const ProfileSettings: React.FC = () => {
     selectedOption,
     showPassword,
     privacySetting,
-    setSelectedOption,
     togglePasswordVisibility,
     setEditBioMode,
     setNewBio,
@@ -54,7 +53,7 @@ const ProfileSettings: React.FC = () => {
     isRecipePublic,
     toggleRecipeBookVisibility,
   } = useProfileSettings();
-  const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
+  const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
   const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
@@ -107,6 +106,7 @@ const ProfileSettings: React.FC = () => {
       });
       setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
     } else {
+      // eslint-disable-next-line no-alert
       alert('This ranking is already taken. Please choose another.');
     }
   };

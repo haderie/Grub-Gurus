@@ -36,20 +36,20 @@ const usePostCard = (
       const isSaved = saves.includes(currentUser.username);
       if (isSaved) {
         setSaves(saves.filter(user => user !== currentUser.username)); // remove saves
-        const success = await savePost(currentUser.username, postID, 'remove');
+        await savePost(currentUser.username, postID, 'remove');
       } else {
         setSaves([...saves, currentUser.username]); // add saves
-        // Wait for the backend to confirm the save/un-save action
         const success = await savePost(currentUser.username, postID, 'save');
         if (!success) {
           // Revert the state if the request fails
           setSaves(saves);
-          alert('Failed to update saves. Please try again.');
+          // eslint-disable-next-line no-console
+          console.error('Failed to update saves. Please try again.');
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error saving post:', error);
-      alert('Something went wrong. Please try again.');
     }
   };
   return { likes, saves, handleLike, handleSave };

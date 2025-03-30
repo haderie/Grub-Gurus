@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { ObjectId } from 'mongodb';
-import {
-  UserCredentials,
-  SafeDatabaseUser,
-  SafePopulatedDatabaseUser,
-  PopulatedDatabasePost,
-} from '../types/types';
+import { UserCredentials, SafeDatabaseUser, SafePopulatedDatabaseUser } from '../types/types';
 import api from './config';
 
 const USER_API_URL = `${process.env.REACT_APP_SERVER_URL}/user`;
@@ -223,8 +218,6 @@ const savePost = async (
     action,
   });
 
-  console.log(res); // Check the response here
-
   if (res.status !== 200) {
     throw new Error('Error when saving post');
   }
@@ -239,23 +232,23 @@ const savePost = async (
  * @returns A promise resolving to the updated user
  * @throws Error if the request fails
  */
-const removeSavedPost = async (
-  username: string,
-  postID: ObjectId,
-  action: 'save' | 'remove',
-): Promise<SafePopulatedDatabaseUser> => {
-  const res = await api.patch(`${USER_API_URL}/removeSavedPost`, {
-    username,
-    postID,
-    action,
-  });
+// const removeSavedPost = async (
+//   username: string,
+//   postID: ObjectId,
+//   action: 'save' | 'remove',
+// ): Promise<SafePopulatedDatabaseUser> => {
+//   const res = await api.patch(`${USER_API_URL}/removeSavedPost`, {
+//     username,
+//     postID,
+//     action,
+//   });
 
-  if (res.status !== 200) {
-    throw new Error('Error when saving post');
-  }
+//   if (res.status !== 200) {
+//     throw new Error('Error when saving post');
+//   }
 
-  return res.data;
-};
+//   return res.data;
+// };
 
 export {
   getUsers,
