@@ -1,6 +1,6 @@
-import { SafeDatabaseUser } from '@fake-stack-overflow/shared';
 import { Button } from '@mui/material';
 import React from 'react';
+import { SafePopulatedDatabaseUser } from '../../types/types';
 
 const ProfileEdit = ({
   userData,
@@ -16,9 +16,9 @@ const ProfileEdit = ({
   pendingAction,
   canEditProfile,
   showPassword,
+  isRecipePublic,
   togglePasswordVisibility,
-  showLists,
-
+  toggleRecipeBookVisibility,
   setEditBioMode,
   setNewBio,
   setNewPassword,
@@ -33,7 +33,7 @@ const ProfileEdit = ({
   handleUpdatePrivacy,
   handleCheckPrivacy,
 }: {
-  userData: SafeDatabaseUser | null;
+  userData: SafePopulatedDatabaseUser | null;
   loading: boolean;
   editBioMode: boolean;
   newBio: string;
@@ -47,7 +47,9 @@ const ProfileEdit = ({
   pendingAction: (() => void) | null;
   canEditProfile: boolean;
   showPassword: boolean;
+  isRecipePublic: boolean;
   togglePasswordVisibility: () => void;
+  toggleRecipeBookVisibility: () => void;
 
   setEditBioMode: React.Dispatch<React.SetStateAction<boolean>>;
   setNewBio: React.Dispatch<React.SetStateAction<string>>;
@@ -85,17 +87,22 @@ const ProfileEdit = ({
             <strong>Account Privacy:</strong> {privacySetting}
           </p>
           {/* ---- Account Privacy Section ---- */}
-          {editBioMode && canEditProfile && (
-            <button
-              onClick={async () => {
-                const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
-                setPrivacySetting(newSetting);
-                await handleUpdatePrivacy(newSetting);
-                await handleCheckPrivacy();
-              }}>
-              {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
-            </button>
-          )}
+          <button
+            onClick={async () => {
+              const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
+              setPrivacySetting(newSetting);
+              await handleUpdatePrivacy(newSetting);
+              await handleCheckPrivacy();
+            }}>
+            {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
+          </button>
+          <p>
+            <b>Recipe Book Privacy:</b> {userData.recipeBookPublic ? 'Public' : 'Private'}
+          </p>
+          <button onClick={toggleRecipeBookVisibility}>
+            {isRecipePublic ? 'Make Private' : 'Make Public'}
+          </button>
+
           <p>
             <strong>Followers:</strong> {userData.followers?.length}
           </p>
@@ -103,28 +110,26 @@ const ProfileEdit = ({
             <strong>Following:</strong> {userData.following?.length}
           </p>
           {/* ---- Biography Section ---- */}
-          {editBioMode && canEditProfile && (
-            <div style={{ margin: '1rem 0' }}>
-              <input
-                className='input-text'
-                type='text'
-                value={newBio}
-                onChange={e => setNewBio(e.target.value)}
-              />
-              <button
-                className='login-button'
-                style={{ marginLeft: '1rem' }}
-                onClick={handleUpdateBiography}>
-                Save
-              </button>
-              <button
-                className='delete-button'
-                style={{ marginLeft: '1rem' }}
-                onClick={handleCloseProfileEdit}>
-                Cancel
-              </button>
-            </div>
-          )}
+          <div style={{ margin: '1rem 0' }}>
+            <input
+              className='input-text'
+              type='text'
+              value={newBio}
+              onChange={e => setNewBio(e.target.value)}
+            />
+            <button
+              className='login-button'
+              style={{ marginLeft: '1rem' }}
+              onClick={handleUpdateBiography}>
+              Save
+            </button>
+            <button
+              className='delete-button'
+              style={{ marginLeft: '1rem' }}
+              onClick={handleCloseProfileEdit}>
+              Cancel
+            </button>
+          </div>
           <p>
             <strong>Date Joined:</strong>{' '}
             {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
