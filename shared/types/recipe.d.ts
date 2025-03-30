@@ -26,8 +26,6 @@ export interface Recipe {
   tags: Tag[];
   cookTime: number;
   addedToCalendar: boolean;
-  numOfLikes: number;
-  views: string[];
 }
 
 /**
@@ -66,6 +64,8 @@ export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
   _id: ObjectId;
   user: ObjectID; // Fully populated user object
   tags: ObjectId[]; // Fully populated tags
+  numOfLikes: number;
+  views: string[];
 }
 
 /**

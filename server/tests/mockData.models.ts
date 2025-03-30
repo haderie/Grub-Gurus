@@ -250,7 +250,7 @@ export const sampleRecipe: DatabaseRecipe = {
   cookTime: 20,
   addedToCalendar: false,
   numOfLikes: 0,
-  views: 0,
+  views: [],
 };
 
 export const samplePost: DatabasePost = {
