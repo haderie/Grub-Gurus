@@ -30,6 +30,7 @@ const AnswerPage = () => {
         text={question.text}
         askby={question.askedBy}
         meta={getMetaData(new Date(question.askDateTime))}
+        youtubeVideoUrl={question.youtubeVideoUrl}
       />
       <CommentSection
         comments={question.comments}
@@ -45,6 +46,7 @@ const AnswerPage = () => {
           handleAddComment={(comment: Comment) =>
             handleNewComment(comment, 'answer', String(a._id))
           }
+          youtubeVideoUrl={a.youtubeVideoUrl}
         />
       ))}
       <button

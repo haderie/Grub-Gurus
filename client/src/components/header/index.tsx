@@ -1,11 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@mui/material';
-import { FaUserLarge } from 'react-icons/fa6';
+import { TbChefHat } from 'react-icons/tb';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import useUserContext from '../../hooks/useUserContext';
-
 /**
  * Header component that renders the main title and a search bar.
  * The search bar allows the user to input a query and navigate to the search results page
@@ -17,7 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <div id='header' className='header'>
-      <div className='title'>Grub Gurus</div>
+      <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
       <TextField
         id='searchBar'
         size='small'
@@ -36,7 +35,7 @@ const Header = () => {
         onClick={() => navigate(`/user/${currentUser.username}`)}>
         {currentUser.username}
         <br />
-        <FaUserLarge />
+        <TbChefHat />
       </Button>
     </div>
   );

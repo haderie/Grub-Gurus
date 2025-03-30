@@ -129,7 +129,13 @@ async function answerCreate(
   comments: Comment[],
   isUserCertified: boolean,
 ): Promise<DatabaseAnswer> {
-  if (text === '' || ansBy === '' || ansDateTime == null || comments == null || isUserCertified == null)
+  if (
+    text === '' ||
+    ansBy === '' ||
+    ansDateTime == null ||
+    comments == null ||
+    isUserCertified == null
+  )
     throw new Error('Invalid Answer Format');
   const answerDetail: Answer = {
     text: text,
@@ -241,10 +247,7 @@ async function recipeCreate(
     cookTime,
   });
 
-
-
   return await RecipeModel.create(recipe);
-
 }
 
 /**

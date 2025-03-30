@@ -124,6 +124,7 @@ export interface ClientToServerEvents {
  * - `chatUpdate`: Server sends updated chat.
  */
 export interface ServerToClientEvents {
+  postUpdate: (post: PopulatedDatabasePost) => void;
   questionUpdate: (question: PopulatedDatabaseQuestion) => void;
   answerUpdate: (result: AnswerUpdatePayload) => void;
   viewsUpdate: (question: PopulatedDatabaseQuestion) => void;

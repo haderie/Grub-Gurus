@@ -4,7 +4,13 @@
   justify-content: space-around;
   height: 10%;
   width: 100%;
-  background: #dddddd;
+  background: #c3e9c6;
+}
+
+.header-logo {
+  height: 100px;
+  width: auto;
+  margin-right: 10px;
 }
 
 .title {
@@ -15,7 +21,7 @@
 .logout-button {
   padding: 12px;
   font-size: 16px;
-  background-color: #007bff;
+  background: #4caf50;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -24,7 +30,7 @@
 }
 
 .view-profile-button {
-  background-color: #007bff;
+  background: #4caf50;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -34,9 +40,9 @@
 }
 
 .view-profile-button:hover {
-  background-color: #0056b3;
+  background: #2f8632;
 }
 
 .view-profile-button:active {
-  background-color: #003f7f;
+  background: #2f8632;
 }

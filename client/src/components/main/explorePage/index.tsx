@@ -1,30 +1,29 @@
-/**
- * TAG CODE KEPT IN FOR NOW
- */
 import React from 'react';
 import './index.css';
-import TagView from './tag';
-import useTagPage from '../../../hooks/useTagPage';
-import AskQuestionButton from '../askQuestionButton';
+import useExplorePage from '../../../hooks/useExplorePage';
+import CreatePostButton from '../createPostButton';
+import PostCard from '../postCard';
 
 /**
  * Represents the TagPage component which displays a list of tags
  * and provides functionality to handle tag clicks and ask a new question.
  */
 const ExplorePage = () => {
-  const { tlist, clickTag } = useTagPage();
-
+  const { qlist } = useExplorePage();
   return (
     <>
       <div className='space_between right_padding'>
-        <div className='bold_title'>{tlist.length} Tags</div>
-        <div className='bold_title'>All Tags</div>
-        <AskQuestionButton />
+        <div className='bold_title'>All Posts</div>
+        <CreatePostButton />
       </div>
-      <div className='tag_list right_padding'>
-        {tlist.map(t => (
-          <TagView key={t.name} t={t} clickTag={clickTag} />
-        ))}
+      <div id='post_list' className='post_list'>
+        {qlist.map(post =>
+          post ? (
+            <div key={String(post._id)} className='post-item'>
+              <PostCard post={post} />
+            </div>
+          ) : null,
+        )}
       </div>
     </>
   );

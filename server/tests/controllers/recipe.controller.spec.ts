@@ -1,0 +1,178 @@
+import mongoose from 'mongoose';
+import supertest from 'supertest';
+import { app } from '../../app';
+import * as util from '../../services/recipe.service';
+import { DatabaseRecipe, Recipe, User, RecipeCalendarEvent } from '../../types/types';
+
+const mockUser: User = {
+  username: 'user1',
+  password: 'password',
+  dateJoined: new Date('2024-12-03'),
+  certified: false,
+  followers: [],
+  following: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  postsCreated: [],
+};
+
+const recipePost: DatabaseRecipe = {
+  _id: new mongoose.Types.ObjectId(),
+  user: mockUser,
+  tags: [],
+  title: 'Pesto Pasta',
+  privacyPublic: true,
+  ingredients: ['pasta, pesto, parmesean, olive oil'],
+  description: 'a delicious dish',
+  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+  cookTime: 20,
+  addedToCalendar: false,
+};
+
+const calendarRecipeDataBase: DatabaseRecipe = {
+  _id: new mongoose.Types.ObjectId(),
+  user: mockUser,
+  tags: [],
+  title: 'BBQ Chicken',
+  privacyPublic: true,
+  ingredients: ['chicken, BBQ sauce, onion'],
+  description: 'a quick and yummy dinner',
+  instructions: 'bake chicken at 350, add BBQ sauce, enjoy',
+  cookTime: 40,
+  addedToCalendar: true,
+};
+
+const recipe: Recipe = {
+  user: mockUser,
+  tags: [],
+  title: 'Pesto Pasta',
+  privacyPublic: true,
+  ingredients: ['pasta, pesto, parmesean, olive oil'],
+  description: 'a delicious dish',
+  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+  cookTime: 20,
+  addedToCalendar: false,
+};
+
+const calendarRecipe: RecipeCalendarEvent = {
+  user: mockUser,
+  tags: [],
+  title: 'Pesto Pasta',
+  privacyPublic: true,
+  ingredients: ['pasta, pesto, parmesean, olive oil'],
+  description: 'a delicious dish',
+  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+  cookTime: 20,
+  addedToCalendar: false,
+  start: new Date(),
+  end: new Date(),
+  color: '#fffff',
+};
+
+const createRecipeSpy = jest.spyOn(util, 'createRecipe');
+const createCalendarRecipeSpy = jest.spyOn(util, 'createCalendarRecipe');
+
+describe('Test recipeController', () => {
+  describe('POST /addRecipe', () => {
+    test('should add a recipe successfully', async () => {
+      createRecipeSpy.mockResolvedValue(recipePost);
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
+      expect(response.status).toBe(200);
+      expect(response.body.title).toEqual('Pesto Pasta');
+      expect(response.body.user.username).toEqual(mockUser.username);
+    });
+
+    test('should return 400 if recipe body is invalid', async () => {
+      const mockInvalidRecipe = {
+        user: undefined,
+        tags: [],
+        title: 'Pesto Pasta',
+        views: [],
+        privacyPublic: true,
+        ingredients: ['pasta, pesto, parmesean, olive oil'],
+        description: 'a delicious dish',
+        instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+        cookTime: 20,
+        numOfLikes: 0,
+        addedToCalendar: false,
+      };
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(mockInvalidRecipe);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toBe('Invalid recipe body');
+    });
+
+    test('should return 500 if recipe creation fails', async () => {
+      createRecipeSpy.mockResolvedValue({ error: 'Error creating recipe' });
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when saving recipe: Error: Error creating recipe');
+    });
+
+    test('should return 500 if database error occurs', async () => {
+      createRecipeSpy.mockRejectedValue(new Error());
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when saving recipe: Error');
+    });
+  });
+
+  describe('POST /addCalendarRecipe', () => {
+    test('should add a recipe to calendar successfully', async () => {
+      createCalendarRecipeSpy.mockResolvedValue(calendarRecipeDataBase);
+
+      const response = await supertest(app).post('/recipe/addCalendarRecipe').send(calendarRecipe);
+      expect(response.status).toBe(200);
+      expect(response.body.title).toEqual('BBQ Chicken');
+      expect(response.body.user.username).toEqual(mockUser.username);
+      expect(response.body.addedToCalendar).toEqual(true);
+    });
+
+    test('should return 400 if recipe body is invalid', async () => {
+      const mockInvalidCalendarRecipe = {
+        user: undefined,
+        tags: [],
+        title: 'Pesto Pasta',
+        views: [],
+        privacyPublic: true,
+        ingredients: ['pasta, pesto, parmesean, olive oil'],
+        description: 'a delicious dish',
+        instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+        cookTime: 20,
+        numOfLikes: 0,
+        addedToCalendar: true,
+      };
+
+      const response = await supertest(app)
+        .post('/recipe/addCalendarRecipe')
+        .send(mockInvalidCalendarRecipe);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toBe('Invalid recipe body');
+    });
+
+    test('should return 500 if recipe creation fails', async () => {
+      createCalendarRecipeSpy.mockResolvedValue({ error: 'Error creating recipe' });
+
+      const response = await supertest(app).post('/recipe/addCalendarRecipe').send(calendarRecipe);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when saving recipe: Error: Error creating recipe');
+    });
+
+    test('should return 500 if database error occurs', async () => {
+      createCalendarRecipeSpy.mockRejectedValue(new Error());
+
+      const response = await supertest(app).post('/recipe/addCalendarRecipe').send(calendarRecipe);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when saving recipe: Error');
+    });
+  });
+});

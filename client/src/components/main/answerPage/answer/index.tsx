@@ -45,6 +45,18 @@ const AnswerView = ({
     <div id='answerText' className='answerText'>
       <Markdown>{text}</Markdown>
     </div>
+    {youtubeVideoUrl && (
+      <ReactPlayer
+        url={youtubeVideoUrl}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
+    )}
     <div className='answerAuthor'>
       <div className='answer_author'>{ansBy}</div>
       <div className='answer_question_meta'>{meta}</div>

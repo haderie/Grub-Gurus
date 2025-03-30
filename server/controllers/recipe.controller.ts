@@ -1,6 +1,17 @@
 import express, { Request, Response } from 'express';
-import { getRecipesByUsername, createRecipe } from '../services/recipe.service';
-import { AddRecipeRequest, FakeSOSocket, Recipe } from '../types/types';
+import {
+  getRecipesByUsername,
+  createRecipe,
+  createCalendarRecipe,
+  updateRecipeToCalendarRecipe,
+} from '../services/recipe.service';
+import {
+  AddCalendarRecipeRequest,
+  AddRecipeRequest,
+  FakeSOSocket,
+  Recipe,
+  UpdateCalendarRecipeRequest,
+} from '../types/types';
 
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -12,9 +23,7 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.ingredients !== undefined &&
     recipe.description !== undefined &&
     recipe.instructions !== undefined &&
-    recipe.cookTime !== undefined &&
-    recipe.numOfLikes !== undefined &&
-    recipe.views !== undefined;
+    recipe.cookTime !== undefined;
 
   /**
    * Retrieves a recipe by the username of the user.
@@ -46,8 +55,8 @@ const recipeController = (socket: FakeSOSocket) => {
   //   const { search } = req.query;
 
   //   try {
-  //     // let qlist = qlist.filter(q => q.user.username === askedBy);
-  //     // const rlist: Recipe[] = await getRecipeByUsername(username);
+  //     let qlist = qlist.filter(q => q.user.username === askedBy);
+  //     const rlist: Recipe[] = await getRecipeByUsername(username);
 
   //     // Filter by search keyword and tags
   //     const resqlist: PopulatedDatabaseRecipe[] = filterRecipeBySearch(rlist, search);
@@ -87,9 +96,57 @@ const recipeController = (socket: FakeSOSocket) => {
     }
   };
 
-  router.get('/getrecipes/:username', getRecipes);
+  /**
+   * Handles the creation of a new calendar recipe.
+   * @param req The request containing username, email, and password in the body.
+   * @param res The response, either returning the created user or an error.
+   * @returns A promise resolving to void.
+   */
+  const addCalendarRecipe = async (req: AddCalendarRecipeRequest, res: Response): Promise<void> => {
+    if (!isRecipeRequestBodyValid(req.body)) {
+      res.status(400).send('Invalid recipe body');
+      return;
+    }
 
+    try {
+      const result = await createCalendarRecipe(req.body);
+
+      if ('error' in result) {
+        throw new Error(result.error);
+      }
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).send(`Error when saving recipe: ${error}`);
+    }
+  };
+
+  const updateRecipeForCalendar = async (
+    req: UpdateCalendarRecipeRequest,
+    res: Response,
+  ): Promise<void> => {
+    // if (!isRecipeRequestBodyValid(req.body)) {
+    //   res.status(400).send('Invalid recipe body');
+    //   return;
+    // }
+
+    try {
+      const result = await updateRecipeToCalendarRecipe(req.body.recipeID, req.body);
+
+      if ('error' in result) {
+        throw new Error(result.error);
+      }
+
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).send(`Error when updating recipe: ${error}`);
+    }
+  };
+
+  router.get('/getrecipes/:username', getRecipes);
   router.post('/addRecipe', addRecipe);
+  router.post('/addCalendarRecipe', addCalendarRecipe);
+  router.patch('/updateRecipeForCalendar', updateRecipeForCalendar);
 
   return router;
 };
