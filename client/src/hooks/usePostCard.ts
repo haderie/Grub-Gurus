@@ -51,7 +51,6 @@ const usePostCard = (
       // eslint-disable-next-line no-console
       console.error('Error saving post:', error);
     }
-    await savePost(username, postID);
   };
   return { likes, saves, handleLike, handleSave };
 };

@@ -88,7 +88,7 @@ const ProfileSettings: React.FC = () => {
     case 'posts':
       selectedList =
         userData?.postsCreated?.map(post => ({
-          title: post.recipe.title,
+          title: post.recipe?.title,
           username: post.username,
         })) || [];
       break;
@@ -162,7 +162,7 @@ const ProfileSettings: React.FC = () => {
   useEffect(() => {
     const totalItems = sortedList.length; // Get the number of items
     setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
-  }, [sortedList]); // Recalculate whenever sortedList changes
+  }, [sortedList.length]); // Recalculate whenever sortedList changes
 
   if (loading || recipesLoading) {
     return (
