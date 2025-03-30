@@ -1,3 +1,4 @@
+import GuessModel from '../../models/guess.model';
 import NimModel from '../../models/nim.model';
 import {
   BaseMove,
@@ -8,7 +9,9 @@ import {
   GameType,
 } from '../../types/types';
 import Game from './game';
+import GuessTheIngredientGame from './guess';
 import NimGame from './nim';
+import GUESS_GAME_DATA from './guessData';
 
 /**
  * Manages the lifecycle of games, including creation, joining, and leaving games.
@@ -39,6 +42,18 @@ class GameManager {
       case 'Nim': {
         const newGame = new NimGame();
         await NimModel.create(newGame.toModel());
+
+        return newGame;
+      }
+      case 'Guess': {
+        const randomGameData = GUESS_GAME_DATA[Math.floor(Math.random() * GUESS_GAME_DATA.length)];
+
+        const newGame = new GuessTheIngredientGame(
+          randomGameData.correctIngredient,
+          randomGameData!.hints,
+          randomGameData.imageURL,
+        );
+        await GuessModel.create(newGame.toModel());
 
         return newGame;
       }

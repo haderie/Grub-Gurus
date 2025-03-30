@@ -4,7 +4,7 @@ import { Request } from 'express';
  * Type representing the possible game types as a literal.
  * This is derived from the GAME_TYPES constant.
  */
-export type GameType = 'Nim';
+export type GameType = (typeof GAME_TYPES)[number];
 
 /**
  * Type representing the unique identifier for a game instance.
@@ -86,6 +86,32 @@ export interface NimGameState extends WinnableGameState {
   player1?: string;
   player2?: string;
   remainingObjects: number;
+}
+
+/**
+ * Interface representing the state of a Guess the Ingredient game, which includes:
+ * - `player`: The username playing the game.
+ * - `attempt`: The number of guesses the user has made.
+ */
+export interface GuessTheIngredientState extends WinnableGameState {
+  player1?: string;
+  player2?: string;
+  attempts: { player1: number; player2: number };
+  correctIngredient: string;
+  hints: string[];
+  imageURL: string;
+  revealed: boolean;
+  score: { player1: number; player2: number };
+  currentPlayer?: string;
+}
+
+/**
+ * Represents a move in the "Guess the Ingredient" game.
+ * A move consists of a player's guess for the ingredient.
+ * - `guess`: The player's guessed ingredient
+ */
+export interface GuessMove extends BaseMove {
+  guess: string;
 }
 
 /**
