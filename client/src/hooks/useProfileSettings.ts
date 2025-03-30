@@ -27,7 +27,9 @@ const useProfileSettings = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [editBioMode, setEditBioMode] = useState(false);
-  const [isRecipePublic, setIsRecipePublic] = useState(currentUser.recipeBookPublic);
+  const [isRecipePublic, setIsRecipePublic] = useState<boolean>(
+    userData?.recipeBookPublic ?? false,
+  );
 
   const [newBio, setNewBio] = useState('');
   const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>(
@@ -72,6 +74,12 @@ const useProfileSettings = () => {
 
     fetchUserData();
   }, [username, currentUser.username, currentUser.recipeBookPublic]);
+
+  useEffect(() => {
+    if (userData?.recipeBookPublic !== undefined) {
+      setIsRecipePublic(userData.recipeBookPublic);
+    }
+  }, [userData]);
 
   /**
    * Toggles the visibility of the password fields.

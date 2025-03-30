@@ -57,11 +57,13 @@ const ProfileSettings: React.FC = () => {
   const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
-  const [userRatings, setUserRatings] = useState<{ [key: string]: number }>({});
-  const [availableRatings, setAvailableRatings] = useState<number[]>([1, 2, 3, 4, 5]);
-
+  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
+
+  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
+  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
 
   useEffect(() => {
     const checkPrivacy = async () => {
@@ -96,31 +98,42 @@ const ProfileSettings: React.FC = () => {
       break;
   }
 
-  const handleRatingChange = (id: string, rating: number) => {
-    // Check if the rating is available and not already selected
-    if (availableRatings.includes(rating) && !userRatings[id]) {
-      // Update the selected rating for the item
-      setUserRatings(prevRatings => ({
-        ...prevRatings,
-        [id]: rating,
-      }));
-
-      // Remove the selected rating from the available ratings
-      setAvailableRatings(prevRatings => prevRatings.filter(r => r !== rating));
+  const handleRatingChange = (item: string, rating: number) => {
+    // Ensure the rank is unique
+    if (!usedRankings.has(rating)) {
+      setUserRankings(prevRatings => {
+        const newRatings = { ...prevRatings, [item]: rating };
+        return newRatings;
+      });
+      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
+    } else {
+      alert('This ranking is already taken. Please choose another.');
     }
   };
-
   const handleRemoveRating = (id: string) => {
-    const rating = userRatings[id];
+    const rating = userRankings[id];
     if (rating !== undefined) {
-      // Return the rating to the available ratings list
-      setAvailableRatings(prevRatings => [...prevRatings, rating]);
+      // Remove the rating from the used rankings set
+      setUsedRankings(prevUsed => {
+        const updatedUsed = new Set(prevUsed);
+        updatedUsed.delete(rating); // Remove the rating from the used set
+        return updatedUsed;
+      });
 
-      // Remove the rating from the selected ratings
-      setUserRatings(prevRatings => {
-        const updatedRatings = { ...prevRatings };
-        delete updatedRatings[id];
-        return updatedRatings;
+      // Return the rating to the available rankings list
+      setAvailableRankings(prevRankings => {
+        // Only add the rating if it is not already in the available list
+        if (!prevRankings.includes(rating)) {
+          return [...prevRankings, rating];
+        }
+        return prevRankings;
+      });
+
+      // Remove the rating from the selected rankings
+      setUserRankings(prevRankings => {
+        const updatedRankings = { ...prevRankings };
+        delete updatedRankings[id]; // Remove the ranking for the given ID
+        return updatedRankings;
       });
     }
   };
@@ -131,16 +144,25 @@ const ProfileSettings: React.FC = () => {
           .map(({ title, username }) => ({
             item: title,
             username, // Ensure user is included
-            rating: userRatings[title] || 0,
+            rating: userRankings[title] || 0,
           }))
-          .sort((a, b) => a.rating - b.rating)
+          .sort((a, b) => {
+            if (a.rating === 0 && b.rating !== 0) return 1; // Push unranked items down
+            if (a.rating !== 0 && b.rating === 0) return -1; // Keep ranked items up
+            return a.rating - b.rating; // Sort by rating
+          })
       : recipeSaved
           .map(recipe => ({
             item: recipe.title,
             username: recipe.user.username, // Ensure user is included
-            rating: userRatings[recipe.title] || 0,
+            rating: userRankings[recipe.title] || 0,
           }))
           .sort((a, b) => a.rating - b.rating);
+
+  useEffect(() => {
+    const totalItems = sortedList.length; // Get the number of items
+    setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
+  }, [sortedList]); // Recalculate whenever sortedList changes
 
   if (loading || recipesLoading) {
     return (
@@ -236,7 +258,9 @@ const ProfileSettings: React.FC = () => {
                   checked={selectedOption === 'recipes'}
                   onChange={handleRadioChange}
                 />
-                <label htmlFor='recipes'>Recipes</label>
+                <label htmlFor='recipes'>
+                  Recipes {isRecipePublic ? <FaUnlockAlt /> : <FaLock />}
+                </label>
               </div>
               {showListPopup && listType && (
                 <div className='popup-overlay' onClick={() => setShowListPopup(false)}>
@@ -283,21 +307,19 @@ const ProfileSettings: React.FC = () => {
                               <i> {`---made by @${sortedItem.username}`}</i>
                             </span>
                             {/* Rating Selector */}
-                            {sortedItem.rating === 0 ? (
+                            {sortedItem.rating === 0 && (
                               <select
-                                value={sortedItem.rating}
+                                value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
                                 onChange={e =>
                                   handleRatingChange(sortedItem.item, parseInt(e.target.value, 10))
                                 }>
-                                <option value={0}>Select Ranking</option>
+                                <option value=''>Select Rating</option>
                                 {availableRatings.map(rating => (
                                   <option key={rating} value={rating}>
                                     {rating}
                                   </option>
                                 ))}
                               </select>
-                            ) : (
-                              <span></span> // Display the current rating
                             )}
                             {sortedItem.rating !== 0 && (
                               <button onClick={() => handleRemoveRating(sortedItem.item)}>
@@ -317,14 +339,20 @@ const ProfileSettings: React.FC = () => {
 
               {selectedOption === 'recipes' && (
                 <>
-                  <div style={{ textAlign: 'center' }}>{/* Recipe Book Section */}</div>
-                  <div>
-                    {recipesLoading ? (
-                      <p>Loading recipes...</p>
-                    ) : (
-                      <RecipeBook recipes={recipeSaved} />
-                    )}
-                  </div>
+                  {isRecipePublic || canEditProfile ? (
+                    <>
+                      <div style={{ textAlign: 'center' }}>{/* Recipe Book Section */}</div>
+                      <div>
+                        {recipesLoading ? (
+                          <p>Loading recipes...</p>
+                        ) : (
+                          <RecipeBook recipes={recipeSaved} />
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <p>This user&apos;s recipe book is private</p>
+                  )}
                 </>
               )}
             </div>
