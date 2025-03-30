@@ -8,3 +8,5 @@ export * from './socket';
 export * from './tag';
 export * from './user';
 export * from './recipe';
+export * from './youtube';
+export * from './posts';
