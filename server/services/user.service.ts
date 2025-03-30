@@ -33,6 +33,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       following: result.following,
       privacySetting: result.privacySetting,
       recipeBookPublic: result.recipeBookPublic,
+      postsCreated: result.postsCreated,
     };
 
     return safeUser;
