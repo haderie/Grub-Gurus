@@ -33,7 +33,6 @@ const usePostCard = (
     } else {
       setSaves([...saves, username]); // Add save
     }
-    await savePost(username, postID);
   };
 
   return { likes, saves, handleLike, handleSave };
