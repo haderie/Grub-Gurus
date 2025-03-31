@@ -7,10 +7,9 @@ import {
   FakeSOSocket,
   UpdateBiographyRequest,
   UpdateFollowRequest,
+  SafeDatabaseUser,
   UpdatePrivacyRequest,
   UpdateRecipeBookPrivacy,
-  SafePopulatedDatabaseUser,
-  UpdatePosts,
 } from '../types/types';
 import {
   deleteUserByUsername,
@@ -22,7 +21,6 @@ import {
   unfollowUserService,
   updateUser,
 } from '../services/user.service';
-import PostModel from '../models/posts.model';
 
 const userController = (socket: FakeSOSocket) => {
   const router: Router = express.Router();
@@ -313,7 +311,7 @@ const userController = (socket: FakeSOSocket) => {
         throw Error('You cannot follow yourself');
       }
 
-      const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
+      const user = (await getUserByUsername(username)) as SafeDatabaseUser;
 
       let updatedUser;
 
@@ -370,69 +368,6 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
-  /**
-   * Saves or removes a post from the user's saves list.
-   * @param req The request containing the username and postID in the body.
-   * @param res The response, either confirming the update or returning an error.
-   * @returns A promise resolving to void.
-   */
-  const savePosts = async (req: UpdatePosts, res: Response): Promise<void> => {
-    try {
-      const { username, postID, action } = req.body; // Assuming `action` is either 'save' or 'remove'
-
-      // Fetch the user
-      const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
-
-      if (!user) {
-        res.status(404).send('User not found');
-        return;
-      }
-
-      const post = await PostModel.findById(postID);
-
-      if (!post) {
-        res.status(404).send('Post not found');
-        return;
-      }
-
-      // Check if the user is saving or removing the post
-      if (action === 'save') {
-        // Add post to the user's postsCreated if they are saving
-        const updatedPosts = [...user.postsCreated, postID];
-        await updateUser(username, {
-          postsCreated: updatedPosts,
-        });
-
-        // Add the user to the post's saves list
-        await PostModel.findOneAndUpdate(
-          { _id: postID },
-          { $addToSet: { saves: username } }, // Add user to saves list
-          { new: true },
-        );
-      } else if (action === 'remove') {
-        // Remove post from the user's postsCreated if they are removing
-        const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
-        await updateUser(username, {
-          postsCreated: updatedPosts,
-        });
-
-        // Remove the user from the post's saves list
-        await PostModel.findOneAndUpdate(
-          { _id: postID },
-          { $pull: { saves: username } }, // Remove user from saves list
-          { new: true },
-        );
-      } else {
-        res.status(400).send('Invalid action');
-        return;
-      }
-
-      res.status(200).json({ message: `Post ${action}d successfully.` });
-    } catch (error) {
-      res.status(500).send(`Error when saving or removing post: ${error}`);
-    }
-  };
-
   // Define routes for the user-related operations.
   router.post('/signup', createUser);
   router.post('/login', userLogin);
@@ -444,8 +379,6 @@ const userController = (socket: FakeSOSocket) => {
   router.patch('/updateRecipeBookPrivacy', updateRecipeBookPrivacy);
   router.patch('/followUser', updateFollowingList);
   router.patch('/updatePrivacy', updatePrivacy);
-  router.patch('/savePost', savePosts);
-
   return router;
 };
 

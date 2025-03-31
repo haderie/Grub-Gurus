@@ -1,17 +1,11 @@
-import PostModel from '../models/posts.model';
-import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
 import {
-  DatabasePost,
   DatabaseUser,
-  PopulatedDatabasePost,
   SafeDatabaseUser,
-  SafePopulatedDatabaseUser,
   User,
   UserCredentials,
-  UserPopulatedResponse,
   UserResponse,
-  UsersPopulatedResponse,
+  UsersResponse,
 } from '../types/types';
 
 /**
@@ -52,19 +46,11 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
  * Retrieves a user from the database by their username.
  *
  * @param {string} username - The username of the user to find.
- * @returns {Promise<UserPopulatedResponse>} - Resolves with the found user object (without the password) or an error message.
+ * @returns {Promise<UserResponse>} - Resolves with the found user object (without the password) or an error message.
  */
-export const getUserByUsername = async (username: string): Promise<UserPopulatedResponse> => {
+export const getUserByUsername = async (username: string): Promise<UserResponse> => {
   try {
-    const user: SafePopulatedDatabaseUser | null = await UserModel.findOne({ username })
-      .select('-password')
-      .populate<{ postsCreated: PopulatedDatabasePost[] }>([
-        {
-          path: 'postsCreated',
-          model: PostModel,
-          populate: { path: 'recipe', model: RecipeModel },
-        },
-      ]);
+    const user: SafeDatabaseUser | null = await UserModel.findOne({ username }).select('-password');
     if (!user) {
       throw Error('User not found');
     }
@@ -81,11 +67,10 @@ export const getUserByUsername = async (username: string): Promise<UserPopulated
  *
  * @returns {Promise<UsersResponse>} - Resolves with the found user objects (without the passwords) or an error message.
  */
-export const getUsersList = async (): Promise<UsersPopulatedResponse> => {
+export const getUsersList = async (): Promise<UsersResponse> => {
   try {
-    const users: SafePopulatedDatabaseUser[] = await UserModel.find()
-      .select('-password')
-      .populate<{ postsCreated: DatabasePost[] }>([{ path: 'postsCreated', model: PostModel }]);
+    const users: SafeDatabaseUser[] = await UserModel.find().select('-password');
+
     if (!users) {
       throw Error('Users could not be retrieved');
     }

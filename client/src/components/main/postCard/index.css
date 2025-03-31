@@ -5,7 +5,8 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   margin: 20px auto; /* Centering the card and adding margin */
   padding: 20px;
-  max-width: 800px;
+  max-width: 500px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -15,6 +16,51 @@
 .username {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #3e2723; /* Dark brown for username */
-  /* margin-bottom: 10px;  */
+  color: #3E2723; /* Dark brown for username */
+  margin-bottom: 10px; /* Spacing below username */
+}
+
+/* Recipe Card Styling (if any) */
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.post-text {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Video Styling */
+.react-player {
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%; /* Ensure it fits within container */
+  height: auto;
+}
+
+/* Likes & Saves Actions */
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  color: #666;
+}
+
+.post-actions span {
+  display: flex;
+  align-items: center;
+}
+
+.post-actions span:first-child {
+  color: #FF6347; /* Red color for likes */
+}
+
+.post-actions span:last-child {
+  color: #FFD700; /* Gold color for saves */
+}
+
+.post-actions svg {
+  margin-right: 5px; /* Space between icon and text */
 }

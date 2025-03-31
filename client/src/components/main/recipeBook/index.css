@@ -1,9 +1,8 @@
 .total-recipe-container {
   display: flex;
-  height: 50vh;
-  width: 100%;
+  height: 100vh;
   gap: 16px;
-  /* padding: 16px; */
+  padding: 16px;
   box-sizing: border-box;
 }
 .recipe-container {
