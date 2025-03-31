@@ -6,7 +6,7 @@ const usePostCard = (
   initialLikes: string[],
   initialSaves: string[],
   username: string,
-  postId: ObjectId,
+  postID: ObjectId,
 ) => {
   const [likes, setLikes] = useState(initialLikes);
   const [saves, setSaves] = useState(initialSaves);
@@ -18,7 +18,12 @@ const usePostCard = (
     } else {
       setLikes([...likes, username]); // Add like
     }
-    await likePost(username, postId);
+    try {
+      await likePost(postID, username);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(`Error liking post: ${error}`);
+    }
   };
 
   const handleSave = async () => {
@@ -28,7 +33,7 @@ const usePostCard = (
     } else {
       setSaves([...saves, username]); // Add save
     }
-    await savePost(username, postId);
+    await savePost(username, postID);
   };
 
   return { likes, saves, handleLike, handleSave };

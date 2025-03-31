@@ -83,8 +83,8 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
             <label>Date:</label>
             <input
               type='date'
-              value={selectedDate}
-              onChange={e => setSelectedDate(e.target.value)}
+              value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
+              onChange={e => setSelectedDate(new Date(e.target.value))}
             />
             <label>Time:</label>
             <input
@@ -93,21 +93,23 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
               onChange={e => setSelectedTime(e.target.value)}
             />
             {/* Color Picker */}
-            <label>Select a Color for Your Recipe:</label>
-            <br />
-            <input
-              type='color'
-              value={selectedColor}
-              onChange={e => setSelectedColor(e.target.value)}
-              style={{
-                width: '60px',
-                marginTop: '2%',
-                cursor: 'pointer',
-                border: 'none',
-                backgroundColor: selectedColor,
-              }}
-            />
-            <br />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <label>Select a Color for Your Recipe:</label>
+              <br />
+              <input
+                type='color'
+                value={selectedColor}
+                onChange={e => setSelectedColor(e.target.value)}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  cursor: 'pointer',
+                  border: 'none',
+                  marginTop: '3%',
+                  backgroundColor: selectedColor,
+                }}
+              />
+            </div>
             <button onClick={() => handleConfirm(recipe)}>Confirm</button>
             <button onClick={() => setShowModal(false)}>Cancel</button>
           </div>

@@ -83,6 +83,7 @@ const userController = (socket: FakeSOSocket) => {
       privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
+      postsCreated: [],
     };
 
     try {

@@ -54,3 +54,10 @@ export type PostsResponse = DatabasePost[] | { error: string };
 export interface PopulatedDatabasePost extends Omit<DatabasePost, 'recipe'> {
   recipe: PopulatedDatabaseRecipe;
 }
+
+export interface UpdateLikesRequest extends Request {
+  body: {
+    postID: ObjectId;
+    username: string;
+  };
+}

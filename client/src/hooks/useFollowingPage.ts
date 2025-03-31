@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PopulatedDatabasePost } from '../types/types';
+import { PopulatedDatabaseChat } from '../types/types';
 import { getFollowingPosts } from '../services/postService';
 import useUserContext from './useUserContext';
 
@@ -10,7 +10,7 @@ import useUserContext from './useUserContext';
  * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
  */
 const useFollowingPage = () => {
-  const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
+  const [qlist, setQlist] = useState<PopulatedDatabaseChat[]>([]);
   const { user, socket } = useUserContext();
 
   useEffect(() => {

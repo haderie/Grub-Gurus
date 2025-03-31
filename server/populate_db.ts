@@ -318,6 +318,12 @@ const populate = async () => {
       new Date('2023-05-10T14:28:01'),
       'I am an elephant lover.',
     );
+    await userCreate(
+      'Munch Master',
+      'munch123',
+      new Date(),
+      'I\'m a helpful recipe bot :)',
+    )
 
     const t1 = await tagCreate(T1_NAME, T1_DESC);
     const t2 = await tagCreate(T2_NAME, T2_DESC);

@@ -10,9 +10,9 @@ const useAddRecipeToCalendar = () => {
   const { setEvents } = useRecipeCalendar();
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]); // Default to today
-  const [selectedTime, setSelectedTime] = useState<string>('12:00');
-  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string>('12:00'); // Default to 12:00 PM
+  const [selectedColor, setSelectedColor] = useState<string>('#388E3C');
 
   const addRecipeToCalendar = async (recipe: PopulatedDatabaseRecipe) => {
     const [hours, minutes] = selectedTime.split(':').map(Number);
@@ -56,10 +56,14 @@ const useAddRecipeToCalendar = () => {
 
       if (!updatedRecipe._id) throw new Error('Failed to update recipe.');
 
-      setEvents((prevEvents: RecipeCalendarEvent[]) => [
-        ...prevEvents,
-        { ...updatedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
-      ]);
+      const newEvent: RecipeCalendarEvent = {
+        ...updatedRecipe,
+        addedToCalendar: true,
+        start: eventStart,
+        end: eventEnd,
+        color: selectedColor,
+      };
+      setEvents(prevEvents => [...prevEvents, newEvent]);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(`Error adding recipe: ${error}`);

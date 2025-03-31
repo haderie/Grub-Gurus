@@ -22,6 +22,9 @@ const answerSchema: Schema = new Schema(
     },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     youtubeVideoUrl: { type: String },
+    isUserCertified: {
+      type: Boolean,
+    },
   },
   { collection: 'Answer' },
 );

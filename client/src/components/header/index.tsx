@@ -6,7 +6,6 @@ import { MdLogout } from 'react-icons/md';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import useUserContext from '../../hooks/useUserContext';
-
 /**
  * Header component that renders the main title and a search bar.
  * The search bar allows the user to input a query and navigate to the search results page
@@ -30,7 +29,7 @@ const Header = () => {
         color: '#3E3232',
       }}>
       {/* Title aligned to the left */}
-      <Box sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Grub Gurus</Box>
+      <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
 
       {/* Search Bar in the center */}
       <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>

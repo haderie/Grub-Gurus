@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import { Card, CardContent, Typography, List, ListItem, Button } from '@mui/material';
-import { GameInstance, GameState } from '../../../../../types/types';
+import { GameInstance, WinnableGameState } from '../../../../../types/types';
 
 /**
  * Component to display a game card with details about a specific game instance.
@@ -13,15 +13,25 @@ const GameCard = ({
   game,
   handleJoin,
 }: {
-  game: GameInstance<GameState>;
+  game: GameInstance<WinnableGameState>;
   handleJoin: (gameID: string) => void;
 }) => (
   <Card sx={{ width: '100%', marginBottom: '20px', boxShadow: 3 }}>
     <CardContent>
       <Typography variant='h6' component='div'>
-        <strong> Game ID: </strong> {game.gameID} | <strong>Status:</strong> {game.state.status}
-      </Typography>
-      <List>
+        <strong>{game.gameType === 'Nim' ? 'Nim' : 'Guess The Ingredient'}</strong>
+      <br />
+      <br />
+      <strong> Game ID: </strong> {game.gameID}
+      <br />
+    </p>
+    <strong>Status:</strong> {game.state.status}
+    {game.state.status === 'OVER' && (
+      <p>
+        <strong>Winner:</strong> {game.state.winners!.join(', ') || 'No winner'}
+        </Typography>
+      )}
+    <List>
         {game.players.map((player: string) => (
           <ListItem
             key={`${game.gameID}-${player}`}

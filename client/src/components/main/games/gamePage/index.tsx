@@ -3,9 +3,17 @@ import { Box, Typography, Button, Paper } from '@mui/material';
 import NimGamePage from '../nimGamePage';
 import useGamePage from '../../../../hooks/useGamePage';
 import { GameInstance, NimGameState } from '../../../../types/types';
+import GuessTheIngredientPage from '../guessGamePage';
 
 const GamePage = () => {
   const { gameInstance, error, handleLeaveGame } = useGamePage();
+  let gameTitle;
+
+  if (gameInstance!.gameType === 'Guess') {
+    gameTitle = 'Guess the Ingredient';
+  } else {
+    gameTitle = 'Nim Game';
+  }
 
   const renderGameComponent = (gameType: string) => {
     if (!gameInstance) return null;
@@ -13,6 +21,12 @@ const GamePage = () => {
     switch (gameType) {
       case 'Nim':
         return <NimGamePage gameInstance={gameInstance as GameInstance<NimGameState>} />;
+      case 'Guess':
+        return (
+          <GuessTheIngredientPage
+            gameInstance={gameInstance as GameInstance<GuessTheIngredientState>}
+          />
+        );
       default:
         return (
           <Typography variant='body1' color='error'>

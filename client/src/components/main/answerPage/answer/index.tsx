@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
+import Markdown from 'react-markdown';
 import { Box, Typography, Paper } from '@mui/material';
 import CommentSection from '../../commentSection';
 import './index.css';
@@ -53,7 +54,7 @@ const AnswerView = ({
     {/* Answer Text Section */}
     <Box sx={{ flex: 1 }}>
       <Typography variant='body1' sx={{ color: '#333', lineHeight: 1.6 }}>
-        {text}
+      <Markdown>{text}</Markdown>
       </Typography>
       {youtubeVideoUrl && (
         <Box sx={{ marginTop: 2 }}>
