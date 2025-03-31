@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
-import { handleHyperlink } from '../../../../tool';
+import Markdown from 'react-markdown';
 import CommentSection from '../../commentSection';
 import './index.css';
 import { Comment, DatabaseComment } from '../../../../types/types';
@@ -43,7 +43,7 @@ const AnswerView = ({
 }: AnswerProps) => (
   <div className='answer right_padding'>
     <div id='answerText' className='answerText'>
-      {handleHyperlink(text)}
+      <Markdown>{text}</Markdown>
     </div>
     {youtubeVideoUrl && (
       <ReactPlayer
@@ -61,6 +61,18 @@ const AnswerView = ({
       <div className='answer_author'>{ansBy}</div>
       <div className='answer_question_meta'>{meta}</div>
     </div>
+    {youtubeVideoUrl && (
+      <ReactPlayer
+        url={youtubeVideoUrl}
+        width='50%'
+        height='auto'
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+          border: '2px solid red', // Temporary border to see if it's being rendered
+        }}
+      />
+    )}
     <CommentSection comments={comments} handleAddComment={handleAddComment} />
   </div>
 );

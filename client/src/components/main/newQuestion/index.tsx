@@ -17,6 +17,8 @@ const NewQuestionPage = () => {
     setText,
     tagNames,
     setTagNames,
+    // optInForAI,
+    // setOptInForAI,
     titleErr,
     textErr,
     tagErr,

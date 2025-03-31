@@ -6,10 +6,13 @@ import {
   VoteUpdatePayload,
   PopulatedDatabaseQuestion,
   PopulatedDatabaseAnswer,
+  Answer,
 } from '../types/types';
 import useUserContext from './useUserContext';
 import addComment from '../services/commentService';
 import { getQuestionById } from '../services/questionService';
+import getAIResponse from '../tool/aiInteraction';
+import addAnswer from '../services/answerService';
 
 /**
  * Gets the newest answer from a list, sorted by the answer date in descending order with certified having priority.
@@ -64,6 +67,34 @@ const useAnswerPage = () => {
    */
   const handleNewAnswer = () => {
     navigate(`/new/answer/${questionID}`);
+  };
+
+  /**
+   * Function to handle AI response to the given question.
+   */
+  const handleAIAnswer = async () => {
+    const { REACT_APP_API_KEY: apiKey } = process.env;
+
+    if (apiKey === undefined) {
+      throw new Error('apiKey not defined.');
+    }
+
+    try {
+      if (question) {
+        const emptyComments: Comment[] = [];
+        const generatedMessage = await getAIResponse(question.text, apiKey);
+        const aiAnswer: Answer = {
+          text: generatedMessage,
+          ansBy: 'Munch Master',
+          ansDateTime: new Date(),
+          comments: emptyComments,
+          isUserCertified: true,
+        };
+        await addAnswer(questionID, aiAnswer);
+      }
+    } catch (err) {
+      throw new Error('Could not add AI response');
+    }
   };
 
   useEffect(() => {
@@ -225,6 +256,7 @@ const useAnswerPage = () => {
     question,
     handleNewComment,
     handleNewAnswer,
+    handleAIAnswer,
   };
 };
 
