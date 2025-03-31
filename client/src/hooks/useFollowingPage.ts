@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PopulatedDatabasePost } from '../types/types';
+import { PopulatedDatabasePost } from '../types/types';
 import { getFollowingPosts } from '../services/postService';
 import useUserContext from './useUserContext';
 
