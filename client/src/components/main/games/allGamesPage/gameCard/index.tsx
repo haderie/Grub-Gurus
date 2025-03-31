@@ -20,18 +20,18 @@ const GameCard = ({
     <CardContent>
       <Typography variant='h6' component='div'>
         <strong>{game.gameType === 'Nim' ? 'Nim' : 'Guess The Ingredient'}</strong>
-      <br />
-      <br />
-      <strong> Game ID: </strong> {game.gameID}
-      <br />
-    </p>
-    <strong>Status:</strong> {game.state.status}
-    {game.state.status === 'OVER' && (
-      <p>
-        <strong>Winner:</strong> {game.state.winners!.join(', ') || 'No winner'}
+        <br />
+        <br />
+        <strong> Game ID: </strong> {game.gameID}
+        <br />
+      </Typography>
+      <strong>Status:</strong> {game.state.status}
+      {game.state.status === 'OVER' && (
+        <Typography variant='body1' component='p'>
+          <strong>Winner:</strong> {game.state.winners!.join(', ') || 'No winner'}
         </Typography>
       )}
-    <List>
+      <List>
         {game.players.map((player: string) => (
           <ListItem
             key={`${game.gameID}-${player}`}

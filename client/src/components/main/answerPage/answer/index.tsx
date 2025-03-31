@@ -54,7 +54,7 @@ const AnswerView = ({
     {/* Answer Text Section */}
     <Box sx={{ flex: 1 }}>
       <Typography variant='body1' sx={{ color: '#333', lineHeight: 1.6 }}>
-      <Markdown>{text}</Markdown>
+        <Markdown>{text}</Markdown>
       </Typography>
       {youtubeVideoUrl && (
         <Box sx={{ marginTop: 2 }}>

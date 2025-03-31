@@ -48,7 +48,7 @@ const AllGamesPage = () => {
             sx={{ mt: 2 }}>
             Nim
           </Button>
-            <button onClick={() => handleSelectGameType('Guess')}>Guess the Ingredient</button>
+          <button onClick={() => handleSelectGameType('Guess')}>Guess the Ingredient</button>
           <Button fullWidth variant='outlined' onClick={handleToggleModal} sx={{ mt: 1 }}>
             Cancel
           </Button>

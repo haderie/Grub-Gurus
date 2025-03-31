@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Button, Paper } from '@mui/material';
 import NimGamePage from '../nimGamePage';
 import useGamePage from '../../../../hooks/useGamePage';
-import { GameInstance, NimGameState } from '../../../../types/types';
+import { GameInstance, GuessTheIngredientState, NimGameState } from '../../../../types/types';
 import GuessTheIngredientPage from '../guessGamePage';
 
 const GamePage = () => {
