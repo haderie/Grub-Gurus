@@ -6,6 +6,7 @@
   padding: 10px 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-weight: bold;
 }
 
 .custom-button:hover {

@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { Box, Typography, TextField } from '@mui/material';
 import useUserSearch from '../../../../hooks/useUserSearch';
 
 /**
@@ -25,21 +26,28 @@ const UsersListHeader = ({ userCount, setUserFilter }: UserHeaderProps) => {
   const { val, handleInputChange } = useUserSearch(setUserFilter);
 
   return (
-    <div>
-      <div className='space_between right_padding'>
-        <div className='bold_title'>Users List</div>
-        <input
+    <Box sx={{ padding: '16px 24px', borderBottom: '2px solid #DDD' }}>
+      {/* Top Row: Title & Search */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant='h5' fontWeight='bold' sx={{ color: '#6A9C89' }}>
+          Users List
+        </Typography>
+        <TextField
           id='user_search_bar'
-          placeholder='Search Usernames ...'
-          type='text'
+          variant='outlined'
+          placeholder='Search by username.'
           value={val}
           onChange={handleInputChange}
+          size='small'
+          sx={{ width: '250px', backgroundColor: 'white' }}
         />
-      </div>
-      <div className='space_between right_padding'>
-        <div id='user_count'>{userCount} users</div>
-      </div>
-    </div>
+      </Box>
+
+      {/* Bottom Row: User Count */}
+      <Typography variant='body1' sx={{ color: '#FFA725', fontWeight: 'bold', fontSize: '20px' }}>
+        {userCount} users
+      </Typography>
+    </Box>
   );
 };
 

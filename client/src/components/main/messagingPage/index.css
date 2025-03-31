@@ -71,6 +71,7 @@
   border-radius: 4px;
   cursor: pointer;
   width: 100px;
+  font-weight: bold;
 }
 
 .send-button:hover {

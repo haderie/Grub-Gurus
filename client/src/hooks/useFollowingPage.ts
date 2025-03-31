@@ -49,7 +49,7 @@ const useFollowingPage = () => {
         socket.off('postUpdate', handlePostUpdate);
       }
     };
-  }, [socket]);
+  }, [user.username, socket]);
 
   return { qlist };
 };

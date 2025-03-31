@@ -21,6 +21,7 @@ const useExplorePage = () => {
         const res = await getPosts();
         setQlist(res);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error fetching posts:', error);
       }
     };
@@ -29,6 +30,7 @@ const useExplorePage = () => {
      * Handles real-time updates from the socket.
      */
     const handlePostUpdate = (updatedPost: PopulatedDatabasePost) => {
+      // eslint-disable-next-line no-console
       console.log('Received post update:', updatedPost);
       setQlist(prevQlist => [updatedPost, ...prevQlist]);
     };

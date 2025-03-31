@@ -41,7 +41,7 @@ const MessagingPage = () => {
       <div className='message-input'>
         <textarea
           className='message-textbox'
-          placeholder='Type your message here'
+          placeholder='Type your message here.'
           value={newMessage}
           onChange={e => setNewMessage(e.target.value)}
         />
