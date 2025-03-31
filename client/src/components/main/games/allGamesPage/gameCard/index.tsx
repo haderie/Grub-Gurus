@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { Card, CardContent, Typography, List, ListItem, Button } from '@mui/material';
 import { GameInstance, GameState } from '../../../../../types/types';
 
 /**
@@ -15,21 +16,38 @@ const GameCard = ({
   game: GameInstance<GameState>;
   handleJoin: (gameID: string) => void;
 }) => (
-  <div className='game-item'>
-    <p>
-      <strong>Game ID:</strong> {game.gameID} | <strong>Status:</strong> {game.state.status}
-    </p>
-    <ul className='game-players'>
-      {game.players.map((player: string) => (
-        <li key={`${game.gameID}-${player}`}>{player}</li>
-      ))}
-    </ul>
-    {game.state.status === 'WAITING_TO_START' && (
-      <button className='btn-join-game' onClick={() => handleJoin(game.gameID)}>
-        Join Game
-      </button>
-    )}
-  </div>
+  <Card sx={{ width: '100%', marginBottom: '20px', boxShadow: 3 }}>
+    <CardContent>
+      <Typography variant='h6' component='div'>
+        <strong> Game ID: </strong> {game.gameID} | <strong>Status:</strong> {game.state.status}
+      </Typography>
+      <List>
+        {game.players.map((player: string) => (
+          <ListItem
+            key={`${game.gameID}-${player}`}
+            sx={{
+              backgroundColor: '#FFF5E4',
+              marginBottom: '8px', // Spacing between list items
+              borderRadius: '8px', // Rounded corners
+              padding: '10px',
+            }}>
+            <Typography variant='body2' sx={{ fontSize: '18px' }}>
+              {player}
+            </Typography>
+          </ListItem>
+        ))}
+      </List>
+      {game.state.status === 'WAITING_TO_START' && (
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => handleJoin(game.gameID)}
+          sx={{ mt: 2, backgroundColor: '#6A9C89' }}>
+          Join Game
+        </Button>
+      )}
+    </CardContent>
+  </Card>
 );
 
 export default GameCard;
