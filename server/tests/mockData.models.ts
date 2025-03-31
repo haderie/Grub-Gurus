@@ -249,6 +249,8 @@ export const sampleRecipe: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
+  numOfLikes: 0,
+  views: [],
 };
 
 export const samplePost: DatabasePost = {

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Request } from 'express';
 import { DatabaseTag, Tag } from './tag';
-import { DatabaseUser, SafePopulatedDatabaseUser } from './user';
+import { DatabaseUser } from './user';
 
 /**
  * Represents a recipe.
@@ -25,13 +25,14 @@ export interface Recipe {
   video?: string;
   tags: Tag[];
   cookTime: number;
+  numOfLikes: number;
+  views: string[];
   addedToCalendar: boolean;
 }
 
 /**
  * Represents minimal recipe data used for summaries.
  * - `title`: The title of the recipe.
- * - `likes`: The number of likes received.
  */
 export interface RecipeData {
   title: string;
@@ -73,7 +74,7 @@ export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
  * - `tags`: An array of populated `DatabaseTag` objects.
  */
 export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | 'tags'> {
-  user: SafePopulatedDatabaseUser; // Fully populated user object
+  user: DatabaseUser; // Fully populated user object
   tags: DatabaseTag[]; // Fully populated tags
 }
 

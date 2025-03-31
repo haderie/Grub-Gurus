@@ -30,6 +30,7 @@ import { Question, YouTubeVideo } from '../types/types';
  * @returns titleErr - Error message for the title field, if any.
  * @returns textErr - Error message for the text field, if any.
  * @returns tagErr - Error message for the tag field, if any.
+ * @returns aiErr - Error message for the AI response, if any.
  * @returns postQuestion - Function to validate the form and submit a new question.
  */
 const useNewQuestion = () => {
@@ -195,9 +196,12 @@ const useNewQuestion = () => {
     setText,
     tagNames,
     setTagNames,
+    // optInForAI,
+    // setOptInForAI,
     titleErr,
     textErr,
     tagErr,
+    // aiErr,
     postQuestion,
     videoUrl,
     setVideoUrl,

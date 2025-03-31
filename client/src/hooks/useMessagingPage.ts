@@ -1,51 +1,8 @@
 import React, { useEffect } from 'react';
-// import axios from 'axios';
 import useUserContext from './useUserContext';
 import { DatabaseMessage, Message, MessageUpdatePayload } from '../types/types';
 import { addMessage, getMessages } from '../services/messageService';
-
-// Constants for utilizing the Hugging Face AI model
-// const API_KEY = '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';
-// const MODEL_NAME = 'flax-community/t5-recipe-generation';
-
-/**
- * A helper function to extract the list of ingredients from the user's message to a list of strings the AI model can use.
- *
- * @param message - The message the user provides to the AI model.
- * @returns The list of ingredients extracted as a list of strings.
- */
-// const extractIngredients = (message: string): string[] => {
-// const ingredientsRegex = /(\b\w+\b)(?=,|\.)/g;
-//  return message.match(ingredientsRegex) || [];
-// };
-
-/**
- * Calls the Hugging Face API to get a response for the given message.
- *
- * @param message - The user's message to send to Hugging Face
- * @returns - The AI-generated response.
- */
-/**
-const getAIResponse = async (message: string): Promise<string> => {
-  const url = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
-
-  const headers = {
-    Authorization: `Bearer ${API_KEY}`,
-  };
-
-  const payload = {
-    ingredients: extractIngredients(message),
-  };
-
-  try {
-    const response = await axios.post(url, payload, { headers });
-    const { data } = response;
-    return data;
-  } catch (err) {
-    return 'The Munch Master could not understand your message :(';
-  }
-};
-*/
+import getAIResponse from '../tool/aiInteraction';
 
 /**
  * Custom hook that handles the logic for the messaging page.
@@ -63,6 +20,12 @@ const useMessagingPage = () => {
   const [newMessage, setNewMessage] = React.useState<string>('');
   const [error, setError] = React.useState<string>('');
   const [aiResponseChecked, setAiResponseChecked] = React.useState<boolean>(false);
+
+  const { REACT_APP_API_KEY: apiKey } = process.env;
+
+  if (apiKey === undefined) {
+    throw new Error('apiKey not defined.');
+  }
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -108,9 +71,9 @@ const useMessagingPage = () => {
 
     if (aiResponseChecked) {
       try {
-        // For testing purposes, creating a dummy ai message for automatic reply
+        const generatedMessage = await getAIResponse(newMsg.msg, apiKey);
         const aiMessage: Omit<Message, 'type'> = {
-          msg: 'Test AI response',
+          msg: generatedMessage,
           msgFrom: 'Munch Master',
           msgDateTime: new Date(),
         };

@@ -8,6 +8,7 @@ import {
 } from '../types/types';
 import useUserContext from './useUserContext';
 import { createChat, getChatById, getChatsByUser, sendMessage } from '../services/chatService';
+import getAIResponse from '../tool/aiInteraction';
 
 /**
  * useDirectMessage is a custom hook that provides state and functions for direct messaging between users.
@@ -22,10 +23,17 @@ const useDirectMessage = () => {
   const [chats, setChats] = useState<PopulatedDatabaseChat[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [withMunchMaster, setWithMunchMaster] = useState<boolean>(false);
 
   const handleJoinChat = (chatID: ObjectId) => {
     socket.emit('joinChat', String(chatID));
   };
+
+  const { REACT_APP_API_KEY: apiKey } = process.env;
+
+  if (apiKey === undefined) {
+    throw new Error('apiKey not defined.');
+  }
 
   const handleSendMessage = async () => {
     if (newMessage.trim() && selectedChat?._id) {
@@ -39,6 +47,22 @@ const useDirectMessage = () => {
 
       setSelectedChat(chat);
       setError(null);
+
+      if (withMunchMaster) {
+        try {
+          const generatedMessage = await getAIResponse(newMessage, apiKey);
+          const aiMessage: Omit<Message, 'type'> = {
+            msg: generatedMessage,
+            msgFrom: 'Munch Master',
+            msgDateTime: new Date(),
+          };
+          const updatedChat = await sendMessage(aiMessage, selectedChat._id);
+          setSelectedChat(updatedChat);
+        } catch (err) {
+          setError('Failed to generate AI response');
+        }
+      }
+
       setNewMessage('');
     } else {
       setError('Message cannot be empty');
@@ -54,6 +78,12 @@ const useDirectMessage = () => {
     const chat = await getChatById(chatID);
     setSelectedChat(chat);
     handleJoinChat(chatID);
+
+    if (chat.participants.includes('Munch Master')) {
+      setWithMunchMaster(true);
+    } else {
+      setWithMunchMaster(false);
+    }
   };
 
   const handleUserSelect = (selectedUser: SafeDatabaseUser) => {
@@ -132,6 +162,7 @@ const useDirectMessage = () => {
     handleUserSelect,
     handleCreateChat,
     error,
+    withMunchMaster,
   };
 };
 

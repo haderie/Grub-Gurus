@@ -112,3 +112,4 @@ server/reports
 shared/package-lock.json
 
 .DS_Store
+shared/types/posts.d.ts

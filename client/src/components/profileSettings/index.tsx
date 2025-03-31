@@ -1,21 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
-import { FaRegUserCircle, FaUnlockAlt, FaLock } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import useProfileSettings from '../../hooks/useProfileSettings';
+import ProfileEdit from './profileEdit';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
-import ProfileEdit from './profileEdit';
-import { PopulatedDatabaseRecipe } from '../../types/types';
-
-type SortedItem = {
-  item: string; // Recipe title
-  rating: number;
-  username: string; // Recipe creator
-};
-
-const isItem = (obj: SortedItem): obj is { item: string; rating: number; username: string } =>
-  (obj as { item: string }).item !== undefined;
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -53,23 +42,15 @@ const ProfileSettings: React.FC = () => {
     isRecipePublic,
     toggleRecipeBookVisibility,
   } = useProfileSettings();
-  const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
-  const navigate = useNavigate();
 
-  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
-  const [showListPopup, setShowListPopup] = useState(false);
-  const [listType, setListType] = useState<'followers' | 'following' | null>(null);
-
-  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
-  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
-
+  const { recipes, loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   useEffect(() => {
     const checkPrivacy = async () => {
       if (userData) {
         await handleCheckPrivacy();
       }
     };
+
     checkPrivacy();
   }, [userData, handleCheckPrivacy]);
 
@@ -173,236 +154,157 @@ const ProfileSettings: React.FC = () => {
       </div>
     );
   }
+  const handleEditProfileClick = () => {
+    setEditBioMode(true); // Close the ProfileEdit modal
+    setNewBio(userData?.biography || '');
+  };
 
+  const selectedList = selectedOption === 'followers' ? userData?.followers : userData?.following;
   return (
     <div>
       {!editBioMode && (
         <div className='page-container'>
           <div className='profile-card'>
-            <div className='profile-icon'>
-              <FaRegUserCircle size={'40px'} style={{ color: '#54170a' }} /> {userData?.username}
-              {userData?.privacySetting === 'Private' ? <FaLock /> : <FaUnlockAlt />}
-            </div>
+            <h2>Profile</h2>
+            <h2>Recipe Book status {userData?.recipeBookPublic ? 'Public' : 'private'}</h2>
 
+            {/* ---- Follow / Unfollow Button ---- */}
             {!canEditProfile && (
-              <button className='unfollow-btn' onClick={handleUpdateFollowers}>
+              <Button variant='contained' onClick={handleUpdateFollowers}>
                 {isFollowing ? 'Unfollow' : 'Follow'}
-              </button>
+              </Button>
             )}
             {canEditProfile && (
               <>
-                <button className='edit-profile-btn' onClick={handleEditProfileClick}>
+                <Button variant='contained' onClick={handleEditProfileClick}>
                   Edit Profile
-                </button>
+                </Button>
+                <Button variant='contained' onClick={toggleRecipeBookVisibility}>
+                  {isRecipePublic ? 'Public' : 'Private'}
+                </Button>
               </>
             )}
             {successMessage && <p className='success-message'>{successMessage}</p>}
             {errorMessage && <p className='error-message'>{errorMessage}</p>}
             {userData ? (
-              <div className='user-profile'>
-                <div className='info-stats-container'>
-                  <span className='joined-date'>
-                    <i>Joined {new Date(userData.dateJoined).toLocaleDateString()}</i>
-                  </span>
+              <>
+                <h4>General Information</h4>
+                <p>
+                  <b>Username:</b> {userData.username}
+                </p>
+                <p>
+                  <strong>Account Privacy:</strong> {userData.privacySetting}
+                </p>
+                <p>
+                  <strong>Followers:</strong> {userData.followers?.length}
+                </p>
+                <p>
+                  <strong>Following:</strong> {userData.following?.length}
+                </p>
 
-                  <div className='stats-and-options'>
-                    <div className='stats'>
-                      <div role='button'>
-                        {userData.postsCreated?.length || 0} <small>Posts</small>
-                      </div>
-                      <span
-                        role='button'
-                        onClick={() => {
-                          setListType('followers');
-                          setShowListPopup(true);
-                        }}>
-                        {userData.followers?.length || 0} <small>Followers</small>
-                      </span>
-                      <span
-                        role='button'
-                        onClick={() => {
-                          setListType('following');
-                          setShowListPopup(true);
-                        }}>
-                        {userData.following?.length || 0} <small>Following</small>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <p className='biography'>{userData.biography || 'No biography yet.'}</p>
-                <hr className='separator' style={{ marginTop: '30px' }} />
-              </div>
+                {/* ---- Biography Section ---- */}
+                <p>
+                  <strong>Biography:</strong> {userData.biography || 'No biography yet.'}
+                </p>
+                <p>
+                  <strong>Date Joined:</strong>{' '}
+                  {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
+                </p>
+              </>
             ) : (
-              <p className='no-user-data'>
-                No user data found. Make sure the username parameter is correct.
-              </p>
+              <p>No user data found. Make sure the username parameter is correct.</p>
             )}
 
-            <div className='follow-status-container'>
-              <div className='radio-buttons'>
-                <input
-                  type='radio'
-                  name='posts'
-                  id='posts'
-                  value='posts'
-                  checked={selectedOption === 'posts'}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor='posts'>Posts</label>
-                <input
-                  type='radio'
-                  name='recipes'
-                  id='recipes'
-                  value='recipes'
-                  checked={selectedOption === 'recipes'}
-                  onChange={handleRadioChange}
-                />
-                <label htmlFor='recipes'>
-                  Recipes {isRecipePublic ? <FaUnlockAlt /> : <FaLock />}
-                </label>
-              </div>
-              {showListPopup && listType && (
-                <div className='popup-overlay' onClick={() => setShowListPopup(false)}>
-                  <div className='popup-content' onClick={e => e.stopPropagation()}>
-                    <h3>{listType === 'followers' ? 'Followers' : 'Following'}</h3>
-                    {userData && userData[listType] && userData[listType].length > 0 ? (
-                      <div>
-                        {userData[listType].map((user, index) => (
-                          <div
-                            key={index}
-                            className='list-item-container'
-                            onClick={() => {
-                              navigate(`/user/${user}`);
-                              setShowListPopup(false);
-                            }}>
-                            {user}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p>No {listType} yet.</p>
-                    )}
-                    <button onClick={() => setShowListPopup(false)}>Close</button>
-                  </div>
-                </div>
-              )}
-
-              {selectedOption === 'posts' && (
-                <div className='list-container'>
-                  {sortedList.length > 0 ? (
-                    sortedList.map((sortedItem, index) => {
-                      if (isItem(sortedItem)) {
-                        return (
-                          <div key={index} className='list-item-container'>
-                            <span>
-                              {' '}
-                              <b>
-                                {sortedItem.rating}
-                                {'.'}
-                              </b>{' '}
-                              {''}
-                              {sortedItem.item}
-                              {''} {''} {''} {''}
-                              <i> {`---made by @${sortedItem.username}`}</i>
-                            </span>
-                            {/* Rating Selector */}
-                            {sortedItem.rating === 0 && (
-                              <select
-                                value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
-                                onChange={e =>
-                                  handleRatingChange(sortedItem.item, parseInt(e.target.value, 10))
-                                }>
-                                <option value=''>Select Rating</option>
-                                {availableRatings.map(rating => (
-                                  <option key={rating} value={rating}>
-                                    {rating}
-                                  </option>
-                                ))}
-                              </select>
-                            )}
-                            {sortedItem.rating !== 0 && (
-                              <button onClick={() => handleRemoveRating(sortedItem.item)}>
-                                Remove Rating
-                              </button>
-                            )}
-                          </div>
-                        );
-                      }
-                      return null;
-                    })
+            <div>
+              <input
+                type='radio'
+                name='followStatus'
+                id='followers'
+                value='followers'
+                checked={selectedOption === 'followers'}
+                onChange={handleRadioChange}
+              />
+              <label htmlFor='followers'>Followers</label>
+              <input
+                type='radio'
+                name='followStatus'
+                id='following'
+                value='following'
+                checked={selectedOption === 'following'}
+                onChange={handleRadioChange}
+              />
+              <label htmlFor='following'>Following</label>
+              {(canEditProfile || showLists) && (
+                <div>
+                  {selectedList && selectedList.length > 0 ? (
+                    <ul>
+                      {selectedList.map((username: string, index: number) => (
+                        <li key={index}>{username}</li>
+                      ))}
+                    </ul>
                   ) : (
-                    <p>No posts yet.</p>
+                    <p>No {selectedOption} yet.</p>
                   )}
                 </div>
               )}
-
-              {selectedOption === 'recipes' && (
-                <>
-                  {isRecipePublic || canEditProfile ? (
-                    <>
-                      <div style={{ textAlign: 'center' }}>{/* Recipe Book Section */}</div>
-                      <div>
-                        {recipesLoading ? (
-                          <p>Loading recipes...</p>
-                        ) : (
-                          <RecipeBook recipes={recipeSaved} />
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <p>This user&apos;s recipe book is private</p>
-                  )}
-                </>
-              )}
+              {/* Display based on selected option */}
+              {/* <div>
+                {selectedList && selectedList.length > 0 ? (
+                  <ul>
+                    {selectedList.map((username: string, index: number) => (
+                      <li key={index}>{username}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No {selectedOption} yet.</p>
+                )}
+              </div> */}
             </div>
           </div>
         </div>
       )}
       {/* ---- Edit section ---- */}
-      <div className='page-container'>
-        {editBioMode && canEditProfile && (
-          <ProfileEdit
-            userData={userData}
-            loading={loading}
-            editBioMode={editBioMode}
-            newBio={newBio}
-            newPassword={newPassword}
-            confirmNewPassword={confirmNewPassword}
-            successMessage={successMessage}
-            errorMessage={errorMessage}
-            showConfirmation={showConfirmation}
-            pendingAction={pendingAction}
-            canEditProfile={canEditProfile}
-            showPassword={showPassword}
-            togglePasswordVisibility={togglePasswordVisibility}
-            setEditBioMode={setEditBioMode}
-            setNewBio={setNewBio}
-            setNewPassword={setNewPassword}
-            setConfirmNewPassword={setConfirmNewPassword}
-            setShowConfirmation={setShowConfirmation}
-            handleResetPassword={handleResetPassword}
-            handleUpdateBiography={handleUpdateBiography}
-            handleDeleteUser={handleDeleteUser}
-            privacySetting={privacySetting}
-            setPrivacySetting={setPrivacySetting}
-            showLists={showLists}
-            setShowLists={setShowLists}
-            handleUpdatePrivacy={handleUpdatePrivacy}
-            handleCheckPrivacy={handleCheckPrivacy}
-            isRecipePublic={isRecipePublic}
-            toggleRecipeBookVisibility={toggleRecipeBookVisibility}
-          />
-        )}
-      </div>
-      {/* {(isRecipePublic || canEditProfile) && (
+
+      {editBioMode && canEditProfile && (
+        <ProfileEdit
+          userData={userData}
+          loading={loading}
+          editBioMode={editBioMode}
+          newBio={newBio}
+          newPassword={newPassword}
+          confirmNewPassword={confirmNewPassword}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          showConfirmation={showConfirmation}
+          pendingAction={pendingAction}
+          canEditProfile={canEditProfile}
+          showPassword={showPassword}
+          togglePasswordVisibility={togglePasswordVisibility}
+          setEditBioMode={setEditBioMode}
+          setNewBio={setNewBio}
+          setNewPassword={setNewPassword}
+          setConfirmNewPassword={setConfirmNewPassword}
+          setShowConfirmation={setShowConfirmation}
+          handleResetPassword={handleResetPassword}
+          handleUpdateBiography={handleUpdateBiography}
+          handleDeleteUser={handleDeleteUser}
+          privacySetting={privacySetting}
+          setPrivacySetting={setPrivacySetting}
+          showLists={showLists}
+          setShowLists={setShowLists}
+          handleUpdatePrivacy={handleUpdatePrivacy}
+          handleCheckPrivacy={handleCheckPrivacy}
+        />
+      )}
+      {(isRecipePublic || canEditProfile) && (
         <>
           <div style={{ textAlign: 'center' }}>
+            {/* Recipe Book Section */}
             <h3>Recipe Book</h3>
           </div>
           <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
         </>
-      )} */}
+      )}
     </div>
   );
 };
