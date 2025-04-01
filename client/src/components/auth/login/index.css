@@ -1,37 +1,32 @@
 /* Container styles */
-.container {
+.login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #C1D8C3;
   padding: 20px;
+  background-color:  #C1D8C3;
 }
 
 /* Heading styles */
-.container h2 {
+.login-container h2 {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 10px;
-  background: #C1D8C3;
-}
+  margin-bottom: 10px;}
 
-.container h3 {
+.login-container h3 {
   font-size: 1.5rem;
   color: #555;
-  margin-bottom: 20px;
-  background: #C1D8C3;
-}
+  margin-bottom: 20px;}
 
-.container h4 {
+.login-container h4 {
   font-size: 1rem;
   color: #666;
   margin: 15px 0 5px;
   text-align: left;
   width: 100%;
   max-width: 400px;
-  background: #C1D8C3;
 }
 
 /* Form styles */
@@ -41,11 +36,9 @@ form {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background: #C1D8C3;
 }
 
-/* Input styles */
-.input-text {
+.input-text-login {
   padding: 12px;
   font-size: 16px;
   width: 100%;
@@ -55,20 +48,25 @@ form {
   color: #333;
   box-sizing: border-box;
   transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
+    border-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+  outline: none;
+  /* Prevents the default browser focus outline */
 }
 
-.input-text:focus {
-  border-color: #4caf50;
-  box-shadow: 0 0 5px rgba(0, 255, 26, 0.5);
+.input-text-login:focus {
+  border-color: #6A9C89 !important;
+  box-shadow: 0 0 5px rgba(106, 156, 137, 0.75);
+  /* Adds a subtle glow */
+  outline: none;
+  /* Adds a subtle glow */
 }
 
 /* Button styles */
 .login-button {
   padding: 12px;
   font-size: 16px;
-  background-color: #4caf50;
+  background-color: #6A9C89;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -77,18 +75,18 @@ form {
 }
 
 .login-button:hover {
-  background-color: #2f8632;
+  background-color: #FFA725;
 }
 
 .login-button:active {
-  background-color: #2f8632;
+  background-color: #FFA725;
 }
 
 /* Signup link styles */
 .signup-link {
   margin-top: 30px; /* Increased spacing */
-  font-size: 14px;
-  color: #2f8632;
+  font-size: 16px;
+  color: #6A9C89;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s;
@@ -96,13 +94,20 @@ form {
 }
 
 .signup-link:hover {
-  color: #2f8632;
+  color: #6A9C89;
   text-decoration: underline;
 }
 
-.error-message {
+.error-message-login {
   color: red;
   font-size: 14px;
   margin-top: 20px;
   text-align: center;
+}
+.show-password-login {
+  display: flex;
+  align-items: center; /* Aligns checkmark & text */
+  gap: 8px; /* Adjust space between checkmark and text */
+  color: #3E3232;
+  margin-bottom: 10px;
 }

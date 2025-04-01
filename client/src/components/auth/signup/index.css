@@ -1,28 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Container styles */
-.container {
+.signup-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #c3e9c6;
-  padding: 20px;
+  background-color: #C1D8C3;
 }
 
 /* Heading styles */
-.container h2 {
+.signup-container h2 {
   font-size: 2rem;
   color: #333;
   margin-bottom: 10px;
 }
 
-.container h3 {
+.signup-container h3 {
   font-size: 1.5rem;
   color: #555;
   margin-bottom: 20px;
 }
 
-.container h4 {
+.signup-container h4 {
   font-size: 1rem;
   color: #666;
   margin: 15px 0 5px; /* Adjusted for better spacing */
@@ -40,8 +45,7 @@ form {
   gap: 15px;
 }
 
-/* Input styles */
-.input-text {
+.input-text-signup {
   padding: 12px;
   font-size: 16px;
   width: 100%;
@@ -51,20 +55,24 @@ form {
   color: #333;
   box-sizing: border-box;
   transition:
-    border-color 0.3s,
-    box-shadow 0.3s;
+    border-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+  outline: none;
+  /* Prevents the default browser focus outline */
 }
 
-.input-text:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(0, 255, 26, 0.5);
+.input-text-signup:focus {
+  border-color: #6A9C89 !important;
+  box-shadow: 0 0 5px rgba(106, 156, 137, 0.75);
+  /* Adds a subtle glow */
+  outline: none;
+  /* Removes default blue focus outline */
 }
-
 /* Button styles */
 .signup-button {
   padding: 12px;
   font-size: 16px;
-  background-color: #4caf50;
+  background-color: #6A9C89;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -73,18 +81,18 @@ form {
 }
 
 .signup-button:hover {
-  background-color: #2f8632;
+  background-color: #FFA725;
 }
 
 .signup-button:active {
-  background-color: #2f8632;
+  background-color: #FFA725;
 }
 
 /* Signup link styles */
 .login-link {
   margin-top: 30px; /* Increased spacing */
-  font-size: 14px;
-  color: #2f8632;
+  font-size: 16px;
+  color: #6A9C89;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.3s;
@@ -92,13 +100,21 @@ form {
 }
 
 .login-link:hover {
-  color: #2f8632;
+  color: #6A9C89;
   text-decoration: underline;
 }
 
-.error-message {
+.error-message-signup {
   color: red;
   font-size: 14px;
   margin-top: 20px;
   text-align: center;
+}
+
+.show-password-signup {
+  display: flex;
+  align-items: center; /* Aligns checkmark & text */
+  gap: 8px; /* Adjust space between checkmark and text */
+  color: #3E3232;
+  margin-bottom: 10px;
 }

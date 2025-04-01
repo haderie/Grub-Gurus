@@ -67,7 +67,7 @@
 }
 
 .input-text:focus {
-  border-color: #4caf50;
+  border-color: #6A9C89;
   box-shadow: 0 0 5px rgba(0, 255, 26, 0.5);
 }
 
@@ -86,7 +86,7 @@
 
 /* Primary action button (Reset, Edit, etc.) */
 .login-button {
-  background-color: #4caf50;
+  background-color: #6A9C89;
   color: white;
 }
 

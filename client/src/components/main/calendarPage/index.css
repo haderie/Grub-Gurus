@@ -36,7 +36,7 @@
 .modal button {
   margin-top: 10px;
   padding: 8px 12px;
-  background-color: #4CAF50;
+  background-color: #6A9C89;
   color: white;
   border: none;
   border-radius: 4px;
@@ -57,7 +57,7 @@
 }
 
 .rbc-toolbar {
-  background-color: #4CAF50; /* Toolbar header in green */
+  background-color: #6A9C89; /* Toolbar header in green */
   color: white;
 }
 

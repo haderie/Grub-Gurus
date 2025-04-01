@@ -36,7 +36,7 @@ const Header = () => {
         <TextField
           id='searchBar'
           size='small'
-          placeholder='Search questions...'
+          placeholder='Search questions.'
           value={val}
           variant='outlined'
           onChange={handleInputChange}
