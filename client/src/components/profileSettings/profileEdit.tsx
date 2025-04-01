@@ -71,7 +71,7 @@ const ProfileEdit = ({
 
   return (
     <div className='profile-card'>
-      <h2>Profile</h2>
+      <h2>Edit your profile!</h2>
       <Button variant='contained' onClick={handleCloseProfileEdit}>
         Return to Profile
       </Button>

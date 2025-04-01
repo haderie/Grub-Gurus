@@ -6,16 +6,20 @@ import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
-import { PopulatedDatabaseRecipe } from '../../types/types';
+import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '../../types/types';
+import PostView from '../main/postCard';
 
 type SortedItem = {
-  item: string; // Recipe title
+  item: PopulatedDatabasePost;
+  title: string;
   rating: number;
-  username: string; // Recipe creator
+  username: string;
 };
 
-const isItem = (obj: SortedItem): obj is { item: string; rating: number; username: string } =>
-  (obj as { item: string }).item !== undefined;
+const isItem = (
+  obj: SortedItem,
+): obj is { item: PopulatedDatabasePost; title: string; rating: number; username: string } =>
+  (obj as { item: PopulatedDatabasePost }).item !== undefined;
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -56,6 +60,7 @@ const ProfileSettings: React.FC = () => {
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
+  const [selectedPost, setSelectedPost] = useState<PopulatedDatabasePost | null>(null);
   const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
@@ -78,7 +83,7 @@ const ProfileSettings: React.FC = () => {
     setNewBio(userData?.biography || '');
   };
 
-  let selectedList: { title: string; username: string }[] = [];
+  let selectedList: { title: string; post: PopulatedDatabasePost; username: string }[] = [];
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
 
   switch (selectedOption) {
@@ -87,9 +92,10 @@ const ProfileSettings: React.FC = () => {
       break;
     case 'posts':
       selectedList =
-        userData?.postsCreated?.map(post => ({
-          title: post.recipe.title,
-          username: post.username,
+        userData?.postsCreated?.map(p => ({
+          title: p?.recipe?.title,
+          post: p,
+          username: p.username,
         })) || [];
       break;
     default:
@@ -141,8 +147,9 @@ const ProfileSettings: React.FC = () => {
   const sortedList: SortedItem[] =
     selectedOption === 'posts'
       ? selectedList
-          .map(({ title, username }) => ({
-            item: title,
+          .map(({ post, title, username }) => ({
+            item: post,
+            title: post.recipe?.title,
             username, // Ensure user is included
             rating: userRankings[title] || 0,
           }))
@@ -151,14 +158,7 @@ const ProfileSettings: React.FC = () => {
             if (a.rating !== 0 && b.rating === 0) return -1; // Keep ranked items up
             return a.rating - b.rating; // Sort by rating
           })
-      : recipeSaved
-          .map(recipe => ({
-            item: recipe.title,
-            username: recipe.user.username, // Ensure user is included
-            rating: userRankings[recipe.title] || 0,
-          }))
-          .sort((a, b) => a.rating - b.rating);
-
+      : [];
   useEffect(() => {
     const totalItems = sortedList.length; // Get the number of items
     setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
@@ -295,14 +295,14 @@ const ProfileSettings: React.FC = () => {
                       if (isItem(sortedItem)) {
                         return (
                           <div key={index} className='list-item-container'>
-                            <span>
+                            <span onClick={() => setSelectedPost(sortedItem.item)}>
                               {' '}
                               <b>
                                 {sortedItem.rating}
                                 {'.'}
                               </b>{' '}
                               {''}
-                              {sortedItem.item}
+                              {sortedItem?.title}
                               {''} {''} {''} {''}
                               <i> {`---made by @${sortedItem.username}`}</i>
                             </span>
@@ -311,7 +311,7 @@ const ProfileSettings: React.FC = () => {
                               <select
                                 value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
                                 onChange={e =>
-                                  handleRatingChange(sortedItem.item, parseInt(e.target.value, 10))
+                                  handleRatingChange(sortedItem.title, parseInt(e.target.value, 10))
                                 }>
                                 <option value=''>Select Rating</option>
                                 {availableRatings.map(rating => (
@@ -322,7 +322,7 @@ const ProfileSettings: React.FC = () => {
                               </select>
                             )}
                             {sortedItem.rating !== 0 && (
-                              <button onClick={() => handleRemoveRating(sortedItem.item)}>
+                              <button onClick={() => handleRemoveRating(sortedItem.title)}>
                                 Remove Rating
                               </button>
                             )}
@@ -334,6 +334,15 @@ const ProfileSettings: React.FC = () => {
                   ) : (
                     <p>No posts yet.</p>
                   )}
+                </div>
+              )}
+
+              {selectedPost && (
+                <div className='popup-overlay-post' onClick={() => setSelectedPost(null)}>
+                  <div className='popup-content-post'>
+                    <PostView post={selectedPost} />
+                    <button onClick={() => setSelectedPost(null)}>Close</button>
+                  </div>
                 </div>
               )}
 
@@ -395,14 +404,6 @@ const ProfileSettings: React.FC = () => {
           />
         )}
       </div>
-      {/* {(isRecipePublic || canEditProfile) && (
-        <>
-          <div style={{ textAlign: 'center' }}>
-            <h3>Recipe Book</h3>
-          </div>
-          <div>{recipesLoading ? <p>Loading recipes...</p> : <RecipeBook recipes={recipes} />}</div>
-        </>
-      )} */}
     </div>
   );
 };

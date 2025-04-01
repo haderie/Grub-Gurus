@@ -152,14 +152,21 @@ export const deleteUserByUsername = async (username: string): Promise<UserRespon
 export const updateUser = async (
   username: string,
   updates: Partial<User>,
-): Promise<UserResponse> => {
+): Promise<UserPopulatedResponse> => {
   try {
-    const updatedUser: SafeDatabaseUser | null = await UserModel.findOneAndUpdate(
+    const updatedUser: SafePopulatedDatabaseUser | null = await UserModel.findOneAndUpdate(
       { username },
       { $set: updates },
       { new: true },
-    ).select('-password');
-
+    )
+      .select('-password')
+      .populate<{ postsCreated: PopulatedDatabasePost[] }>([
+        {
+          path: 'postsCreated',
+          model: PostModel,
+          populate: { path: 'recipe', model: RecipeModel },
+        },
+      ]);
     if (!updatedUser) {
       throw Error('Error updating user');
     }

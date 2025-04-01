@@ -250,12 +250,12 @@ describe('Test userController', () => {
         password: 'newPassword',
       };
 
-      updatedUserSpy.mockResolvedValueOnce(mockSafeUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
 
       const response = await supertest(app).patch('/user/resetPassword').send(mockReqBody);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ ...mockUserJSONResponse });
+      expect(response.body).toEqual({ ...mockPopulatedUserJSONResponse });
       expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, { password: 'newPassword' });
     });
 
@@ -401,12 +401,12 @@ describe('Test userController', () => {
       };
 
       // Mock a successful updateUser call
-      updatedUserSpy.mockResolvedValueOnce(mockSafeUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
 
       const response = await supertest(app).patch('/user/updateBiography').send(mockReqBody);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockUserJSONResponse);
+      expect(response.body).toEqual(mockPopulatedUserJSONResponse);
       // Ensure updateUser is called with the correct args
       expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
         biography: 'This is my new bio',

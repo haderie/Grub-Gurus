@@ -17,32 +17,95 @@
   font-size: 32px;
   font-weight: 800;
 }
+.left-section {
+  flex-grow: 1; /* Keeps the title on the left */
+  margin-left: 30px;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add spacing between search bar and buttons */
+  margin-right: 20px;
+}
+
+#searchBar {
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid black; /* Black outline */
+  border-radius: 10px; /* Rounded corners */
+  outline: none; /* Removes default browser outline */
+}
+
+#searchBar:focus {
+  border-color: black; /* Keeps border black when focused */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Slight glow effect */
+}
+
+.search-container {
+  position: relative;
+  width: 300px; /* You can adjust the width */
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 40px; /* Space for the icon */
+  padding-right: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  padding-top: 8px; /* Center text vertically */
+  display: block;
+  text-indent: 20px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px; /* Adjust the distance of the icon */
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #666;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+}
 
 .logout-button {
   padding: 12px;
-  font-size: 16px;
-  background: #4caf50;
-  color: #fff;
+  font-size: 18px;
+  background: #960200;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .view-profile-button {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border-radius: 5px;
+  font-size: 18px;
+  background: #f0ead2;
+  color: black;
+  border: none;
   cursor: pointer;
-  margin-left: 10px; /* Add spacing from Logout button */
 }
 
 .view-profile-button:hover {
-  background: #2f8632;
+  background: #fdfad9;
 }
 
 .view-profile-button:active {
-  background: #2f8632;
+  background: #fdfad9;
+}
+
+.logout-button:hover {
+  background: #d01e0e;
+}
+
+.logout-button:active {
+  background: #d01e0e;
 }

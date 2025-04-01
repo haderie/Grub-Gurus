@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import {
+  Button,
+  // TextField
+} from '@mui/material';
 import RecipeCard from '../recipeCard/index';
 import { PopulatedDatabaseRecipe } from '../../../types/types';
-import useHeader from '../../../hooks/useHeader';
+// import useHeader from '../../../hooks/useHeader';
 import './index.css';
 
 interface RecipeBookProps {
@@ -11,7 +14,7 @@ interface RecipeBookProps {
 
 const RecipeBook = ({ recipes }: RecipeBookProps) => {
   const [selectedRecipe, setSelectedRecipe] = useState<PopulatedDatabaseRecipe | null>(null);
-  const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
+  // const { val, handleInputChange, handleKeyDownRecipe } = useHeader();
 
   return (
     <>
@@ -19,7 +22,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
         {/* Left Sidebar: Recipe Names */}
         <div className='recipe-list'>
           <h2 className=''>Recipes</h2>
-          <TextField
+          {/* <TextField
             id='searchBarss'
             size='small'
             placeholder='Search recipes...'
@@ -27,7 +30,7 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
             variant='outlined'
             onChange={handleInputChange}
             onKeyDown={handleKeyDownRecipe}
-          />
+          /> */}
           <div className=''>
             {recipes.map(recipe => (
               <li

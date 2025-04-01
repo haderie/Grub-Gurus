@@ -1,10 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField } from '@mui/material';
 import { TbChefHat } from 'react-icons/tb';
+import { CiSearch } from 'react-icons/ci';
 import useHeader from '../../hooks/useHeader';
 import './index.css';
 import useUserContext from '../../hooks/useUserContext';
+
 /**
  * Header component that renders the main title and a search bar.
  * The search bar allows the user to input a query and navigate to the search results page
@@ -16,27 +17,32 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <div id='header' className='header'>
-      <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
-      <TextField
-        id='searchBar'
-        size='small'
-        placeholder='Search questions...'
-        value={val}
-        variant='outlined'
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-      />
-      <Button variant='contained' color='error' onClick={handleSignOut} className='logout-button'>
-        Log out
-      </Button>
-      <Button
-        variant='contained'
-        className='view-profile-button'
-        onClick={() => navigate(`/user/${currentUser.username}`)}>
-        {currentUser.username}
-        <br />
-        <TbChefHat />
-      </Button>
+      <div className='left-section'>
+        <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
+      </div>
+      <div className='right-section'>
+        <div className='search-container'>
+          <CiSearch className='search-icon' />
+          <input
+            type='text'
+            id='searchBar'
+            placeholder='Search questions...'
+            value={val}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            className='search-input'
+          />
+        </div>
+        <button onClick={handleSignOut} className='logout-button'>
+          Log out
+        </button>
+        <button
+          className='view-profile-button'
+          onClick={() => navigate(`/user/${currentUser.username}`)}>
+          {currentUser.username} {''}
+          <TbChefHat />
+        </button>
+      </div>
     </div>
   );
 };

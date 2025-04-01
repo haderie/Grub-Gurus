@@ -221,7 +221,7 @@ describe('updateUser', () => {
   it('should return the updated user when updated succesfully', async () => {
     mockingoose(UserModel).toReturn(safeUpdatedUser, 'findOneAndUpdate');
 
-    const result = (await updateUser(user.username, updates)) as SafeDatabaseUser;
+    const result = (await updateUser(user.username, updates)) as SafePopulatedDatabaseUser;
 
     expect(result.username).toEqual(user.username);
     expect(result.username).toEqual(updatedUser.username);

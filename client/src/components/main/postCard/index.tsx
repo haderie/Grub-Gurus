@@ -52,8 +52,8 @@ const PostView = ({ post }: PostCardProps) => {
 
         {/* Likes & Saves */}
         <div className='post-actions'>
-          <button onClick={handleLike}>❤️ {likes.length} Likes</button>
-          <button onClick={handleSave}>🔖 {saves.length} Saves</button>
+          <button onClick={handleLike}>❤️ {likes?.length} Likes</button>
+          <button onClick={handleSave}>🔖 {saves?.length} Saves</button>
         </div>
       </div>
     </div>
