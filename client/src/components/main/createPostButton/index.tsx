@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,13 +18,18 @@ const CreatePostButton = () => {
   };
 
   return (
-    <button
-      className='bluebtn'
-      onClick={() => {
-        handleNewPost();
+    <Button
+      variant='contained'
+      color='primary'
+      onClick={handleNewPost}
+      sx={{
+        borderRadius: 3,
+        textTransform: 'none',
+        fontSize: '16px',
+        backgroundColor: '#6A9C89',
       }}>
-      Create New Post
-    </button>
+      CREATE NEW POST
+    </Button>
   );
 };
 

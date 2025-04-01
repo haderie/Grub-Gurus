@@ -1,34 +1,20 @@
 import React from 'react';
-import './index.css';
+import { Box, Typography, Button, Paper } from '@mui/material';
 import NimGamePage from '../nimGamePage';
 import useGamePage from '../../../../hooks/useGamePage';
 import { GameInstance, GuessTheIngredientState, NimGameState } from '../../../../types/types';
 import GuessTheIngredientPage from '../guessGamePage';
 
-/**
- * Component to display the game page for a specific game type, including controls and game state.
- * @returns A React component rendering:
- * - A header with the game title and current game status.
- * - A "Leave Game" button to exit the current game.
- * - The game component specific to the game type (e.g., `NimGamePage` for "Nim").
- * - An error message if an error occurs during the game.
- */
 const GamePage = () => {
   const { gameInstance, error, handleLeaveGame } = useGamePage();
-  let gameTitle;
+  // let gameTitle;
 
-  if (gameInstance!.gameType === 'Guess') {
-    gameTitle = 'Guess the Ingredient';
-  } else {
-    gameTitle = 'Nim Game';
-  }
+  // if (gameInstance!.gameType === 'Guess') {
+  //   gameTitle = 'Guess the Ingredient';
+  // } else {
+  //   gameTitle = 'Nim Game';
+  // }
 
-  /**
-   * Renders the appropriate game component based on the game type.
-   * @param gameType The type of the game to render (e.g., "Nim").
-   * @returns A React component corresponding to the specified game type, or a
-   * fallback message for unknown types.
-   */
   const renderGameComponent = (gameType: string) => {
     if (!gameInstance) return null;
 
@@ -42,29 +28,47 @@ const GamePage = () => {
           />
         );
       default:
-        return <div>Unknown game type</div>;
+        return (
+          <Typography variant='body1' color='error'>
+            Unknown game type
+          </Typography>
+        );
     }
   };
 
   return (
-    <div className='game-page'>
-      <header className='game-header'>
-        <h1>{gameTitle}</h1>
-        <p className='game-status'>
+    <Box p={3} display='flex' flexDirection='column' alignItems='center'>
+      <Paper elevation={3} sx={{ width: '100%', maxWidth: 600, p: 3, textAlign: 'center' }}>
+        <Typography variant='h4' fontWeight='bold' color='#6A9C89'>
+          {gameInstance?.gameType === 'Nim' ? 'The Last Bite' : 'Guess the Ingredient'}
+        </Typography>
+        <Typography variant='subtitle1' sx={{ mt: 1 }}>
           Status: {gameInstance ? gameInstance.state.status : 'Not started'}
-        </p>
-      </header>
+        </Typography>
 
-      <div className='game-controls'>
-        <button className='btn-leave-game' onClick={handleLeaveGame}>
+        <Button
+          variant='contained'
+          onClick={handleLeaveGame}
+          sx={{
+            'mt': 2,
+            'backgroundColor': '#FFA725',
+            'color': '#FFF5E4',
+            '&:hover': { backgroundColor: '#E69520' },
+          }}>
           Leave Game
-        </button>
-      </div>
+        </Button>
+      </Paper>
 
-      {gameInstance && renderGameComponent(gameInstance.gameType)}
+      <Box mt={3} width='100%' display='flex' justifyContent='center'>
+        {gameInstance && renderGameComponent(gameInstance.gameType)}
+      </Box>
 
-      {error && <div className='game-error'>{error}</div>}
-    </div>
+      {error && (
+        <Typography variant='body1' color='error' sx={{ mt: 2 }}>
+          {error}
+        </Typography>
+      )}
+    </Box>
   );
 };
 

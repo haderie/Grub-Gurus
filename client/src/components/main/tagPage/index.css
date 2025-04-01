@@ -1,9 +1,10 @@
 /* Styling for the tag page container */
 .tag_list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Flexible columns that adjust to screen size */
+  grid-template-columns: repeat(auto-fit, minmax(200px, max-content)); /* Ensures tags only take up necessary space */
   gap: 20px; /* Spacing between tags */
   padding: 20px;
+  justify-content: center; /* Centers the whole grid */
 }
 
 /* Styling for individual tag items */

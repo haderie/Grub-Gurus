@@ -1,10 +1,10 @@
 import React from 'react';
+import { Box, Typography } from '@mui/material';
 import './index.css';
 import OrderButton from './orderButton';
 import { OrderType } from '../../../../types/types';
 import { orderTypeDisplayName } from '../../../../types/constants';
 import AskQuestionButton from '../../askQuestionButton';
-
 /**
  * Interface representing the props for the QuestionHeader component.
  *
@@ -28,14 +28,31 @@ interface QuestionHeaderProps {
  * @param setQuestionOrder - Function to set the order of questions based on input message.
  */
 const QuestionHeader = ({ titleText, qcnt, setQuestionOrder }: QuestionHeaderProps) => (
-  <div>
-    <div className='space_between right_padding'>
-      <div className='bold_title'>{titleText}</div>
+  <Box sx={{ marginBottom: 3 }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingRight: 3,
+        marginTop: 3,
+      }}>
+      <Typography variant='h5' component='h1' sx={{ fontWeight: 'bold' }}>
+        {titleText}
+      </Typography>
       <AskQuestionButton />
-    </div>
-    <div className='space_between right_padding'>
-      <div id='question_count'>{qcnt} questions</div>
-      <div className='btns'>
+    </Box>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingRight: 3,
+      }}>
+      <Typography variant='body1' sx={{ color: '#FFA725', fontWeight: 'bold', fontSize: '18px' }}>
+        {qcnt} questions
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 2, marginTop: 4 }}>
         {Object.keys(orderTypeDisplayName).map(order => (
           <OrderButton
             key={order}
@@ -43,9 +60,9 @@ const QuestionHeader = ({ titleText, qcnt, setQuestionOrder }: QuestionHeaderPro
             setQuestionOrder={setQuestionOrder}
           />
         ))}
-      </div>
-    </div>
-  </div>
+      </Box>
+    </Box>
+  </Box>
 );
 
 export default QuestionHeader;

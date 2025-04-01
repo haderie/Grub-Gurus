@@ -9,6 +9,7 @@
 
 .menu_button:first-child {
   margin-top: 0;
+  color: #6A9C89;
 }
 
 .menu_button {
@@ -18,11 +19,13 @@
   border-radius: 5px;
   text-align: center;
   line-height: 40px;
-  color: cornflowerblue;
+  color: #6A9C89;
+  text-decoration: none;
 }
 
 .menu_selected {
-  background: #cccccc;
+  background: #C1D8C3;
+  color: #6A9C89;
 }
 
 .additional-options {
@@ -34,10 +37,11 @@
 
 .message-options {
   width: max-content;
+  color: #6A9C89;
 }
 
 .message-option-selected {
-  background: #3090e2;
-  color: white;
+  background: #C1D8C3;
+  color: #6A9C89;
   width: 110%;
 }

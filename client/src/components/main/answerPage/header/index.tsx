@@ -1,6 +1,5 @@
 import React from 'react';
-import './index.css';
-import AskQuestionButton from '../../askQuestionButton';
+import { Box, Typography } from '@mui/material';
 
 /**
  * Interface representing the props for the AnswerHeader component.
@@ -21,11 +20,32 @@ interface AnswerHeaderProps {
  * @param title The title of the question or discussion thread.
  */
 const AnswerHeader = ({ ansCount, title }: AnswerHeaderProps) => (
-  <div id='answersHeader' className='space_between right_padding'>
-    <div className='bold_title'>{ansCount} answers</div>
-    <div className='bold_title answer_question_title'>{title}</div>
-    <AskQuestionButton />
-  </div>
+  <Box
+    id='answersHeader'
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '16px 24px',
+      backgroundColor: '#f5f5f5',
+      borderBottom: '1px solid #ddd',
+    }}>
+    <Box>
+      {/* Display number of answers */}
+      <Typography variant='subtitle1' sx={{ fontWeight: 'bold', color: '#3E3232' }}>
+        {ansCount} answers
+      </Typography>
+      {/* Display question title */}
+      <Typography variant='h5' sx={{ fontWeight: 'bold', marginTop: '8px', color: '#3E3232' }}>
+        {title}
+      </Typography>
+    </Box>
+
+    {/* Ask Question Button */}
+    {/* <Box>
+      <AskQuestionButton />
+    </Box> */}
+  </Box>
 );
 
 export default AnswerHeader;

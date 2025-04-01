@@ -1,9 +1,9 @@
 import React from 'react';
+import { Box, Button } from '@mui/material';
 import { getMetaData } from '../../../tool';
 import AnswerView from './answer';
 import AnswerHeader from './header';
 import { Comment } from '../../../types/types';
-import './index.css';
 import QuestionBody from './questionBody';
 import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
@@ -22,9 +22,14 @@ const AnswerPage = () => {
   }
 
   return (
-    <>
+    <Box sx={{ padding: 3 }}>
+      {/* Vote Component Section */}
       <VoteComponent question={question} />
+
+      {/* Question Header Section */}
       <AnswerHeader ansCount={question.answers.length} title={question.title} />
+
+      {/* Question Body Section */}
       <QuestionBody
         views={question.views.length}
         text={question.text}
@@ -32,10 +37,14 @@ const AnswerPage = () => {
         meta={getMetaData(new Date(question.askDateTime))}
         youtubeVideoUrl={question.youtubeVideoUrl}
       />
+
+      {/* Comment Section */}
       <CommentSection
         comments={question.comments}
         handleAddComment={(comment: Comment) => handleNewComment(comment, 'question', questionID)}
       />
+
+      {/* Answer Sections */}
       {question.answers.map(a => (
         <AnswerView
           key={String(a._id)}
@@ -49,13 +58,22 @@ const AnswerPage = () => {
           youtubeVideoUrl={a.youtubeVideoUrl}
         />
       ))}
-      <button
-        className='bluebtn ansButton'
-        onClick={() => {
-          handleNewAnswer();
-        }}>
-        Answer Question
-      </button>
+
+      {/* Button to Answer the Question */}
+      <Box sx={{ display: 'flex', justifyContent: 'left', marginTop: 3 }}>
+        <Button
+          variant='contained'
+          color='primary'
+          sx={{
+            borderRadius: 2,
+            textTransform: 'none',
+            backgroundColor: '#6A9C89',
+            color: '#FFF5E4',
+          }}
+          onClick={handleNewAnswer}>
+          ANSWER QUESTION
+        </Button>
+      </Box>
       <button
         className='button'
         onClick={() => {
@@ -63,7 +81,7 @@ const AnswerPage = () => {
         }}>
         Generate AI Answer
       </button>
-    </>
+    </Box>
   );
 };
 
