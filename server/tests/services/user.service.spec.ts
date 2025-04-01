@@ -10,7 +10,12 @@ import {
   unfollowUserService,
   updateUser,
 } from '../../services/user.service';
-import { SafeDatabaseUser, User, UserCredentials } from '../../types/types';
+import {
+  SafeDatabaseUser,
+  SafePopulatedDatabaseUser,
+  User,
+  UserCredentials,
+} from '../../types/types';
 import { user, safeUser, userFollowed } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -56,7 +61,7 @@ describe('getUserByUsername', () => {
   it('should return the matching user', async () => {
     mockingoose(UserModel).toReturn(safeUser, 'findOne');
 
-    const retrievedUser = (await getUserByUsername(user.username)) as SafeDatabaseUser;
+    const retrievedUser = (await getUserByUsername(user.username)) as SafePopulatedDatabaseUser;
 
     expect(retrievedUser.username).toEqual(user.username);
     expect(retrievedUser.dateJoined).toEqual(user.dateJoined);
@@ -87,7 +92,7 @@ describe('getUsersList', () => {
   it('should return the users', async () => {
     mockingoose(UserModel).toReturn([safeUser], 'find');
 
-    const retrievedUsers = (await getUsersList()) as SafeDatabaseUser[];
+    const retrievedUsers = (await getUsersList()) as SafePopulatedDatabaseUser[];
 
     expect(retrievedUsers[0].username).toEqual(safeUser.username);
     expect(retrievedUsers[0].dateJoined).toEqual(safeUser.dateJoined);

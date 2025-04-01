@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 import { app } from '../../app';
 import * as util from '../../services/user.service';
-import { SafeDatabaseUser, User } from '../../types/types';
+import { SafeDatabaseUser, SafePopulatedDatabaseUser, User } from '../../types/types';
 
 const mockUser: User = {
   username: 'user1',
@@ -28,6 +28,18 @@ const mockSafeUser: SafeDatabaseUser = {
   postsCreated: [],
 };
 
+const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
+  _id: new mongoose.Types.ObjectId(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03'),
+  certified: false,
+  followers: [],
+  following: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  postsCreated: [],
+};
+
 const mockUpdatedUser = {
   ...mockSafeUser,
   following: ['user2'],
@@ -35,6 +47,18 @@ const mockUpdatedUser = {
 
 const mockUserJSONResponse = {
   _id: mockSafeUser._id.toString(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03').toISOString(),
+  certified: false,
+  followers: [],
+  following: [],
+  postsCreated: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+};
+
+const mockPopulatedUserJSONResponse = {
+  _id: mockSafePopulatedUser._id.toString(),
   username: 'user1',
   dateJoined: new Date('2024-12-03').toISOString(),
   certified: false,
@@ -297,12 +321,12 @@ describe('Test userController', () => {
 
   describe('GET /getUser', () => {
     it('should return the user given correct arguments', async () => {
-      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
 
       const response = await supertest(app).get(`/user/getUser/${mockUser.username}`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockUserJSONResponse);
+      expect(response.body).toEqual(mockPopulatedUserJSONResponse);
       expect(getUserByUsernameSpy).toHaveBeenCalledWith(mockUser.username);
     });
 
@@ -324,12 +348,12 @@ describe('Test userController', () => {
 
   describe('GET /getUsers', () => {
     it('should return the users from the database', async () => {
-      getUsersListSpy.mockResolvedValueOnce([mockSafeUser]);
+      getUsersListSpy.mockResolvedValueOnce([mockSafePopulatedUser]);
 
       const response = await supertest(app).get(`/user/getUsers`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual([mockUserJSONResponse]);
+      expect(response.body).toEqual([mockPopulatedUserJSONResponse]);
       expect(getUsersListSpy).toHaveBeenCalled();
     });
 
@@ -443,7 +467,7 @@ describe('Test userController', () => {
 
   describe('PATCH /followUser', () => {
     test('should successfully follow a user', async () => {
-      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
       followUserServiceSpy.mockResolvedValueOnce(mockUpdatedUser);
 
       const response = await supertest(app).patch('/user/followUser').send({
@@ -457,7 +481,10 @@ describe('Test userController', () => {
     });
 
     test('should successfully unfollow a user', async () => {
-      getUserByUsernameSpy.mockResolvedValueOnce({ ...mockSafeUser, following: ['user2'] });
+      getUserByUsernameSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        following: ['user2'],
+      });
       unfollowUserServiceSpy.mockResolvedValueOnce(mockSafeUser);
 
       const response = await supertest(app).patch('/user/followUser').send({
@@ -483,7 +510,7 @@ describe('Test userController', () => {
     });
 
     test('should return 500 error if follow service fails', async () => {
-      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
       followUserServiceSpy.mockResolvedValueOnce({ error: 'Database error' });
 
       const response = await supertest(app).patch('/user/followUser').send({
@@ -496,7 +523,7 @@ describe('Test userController', () => {
     });
 
     test('should return 500 error if failure', async () => {
-      getUserByUsernameSpy.mockResolvedValueOnce(mockSafeUser);
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
       followUserServiceSpy.mockRejectedValueOnce(new Error());
 
       const response = await supertest(app).patch('/user/followUser').send({

@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { ObjectId } from 'mongodb';
-import { likePost, savePost } from '../services/postService';
+import { likePost } from '../services/postService';
+import { PopulatedDatabasePost } from '../types/types';
+import { savePost } from '../services/userService';
+import useUserContext from './useUserContext';
 
 const usePostCard = (
   initialLikes: string[],
   initialSaves: string[],
   username: string,
   postID: ObjectId,
+  post: PopulatedDatabasePost,
 ) => {
   const [likes, setLikes] = useState(initialLikes);
-  const [saves, setSaves] = useState(initialSaves);
+  const [saves, setSaves] = useState(post.saves);
+  const { user: currentUser } = useUserContext();
 
   const handleLike = async () => {
     const isLiked = likes.includes(username);
@@ -27,15 +32,27 @@ const usePostCard = (
   };
 
   const handleSave = async () => {
-    const isSaved = saves.includes(username);
-    if (isSaved) {
-      setSaves(saves.filter(user => user !== username)); // Remove save
-    } else {
-      setSaves([...saves, username]); // Add save
-    }
-    await savePost(username, postID);
-  };
+    try {
+      // Prevent the user from saving their own post
+      if (currentUser.username === post.username) {
+        // eslint-disable-next-line no-alert
+        alert('You cannot save your own post.');
+        return;
+      }
 
+      const isSaved = saves.includes(currentUser.username);
+      if (isSaved) {
+        setSaves(saves.filter(user => user !== currentUser.username)); // remove saves
+        await savePost(currentUser.username, postID, 'remove');
+      } else {
+        setSaves([...saves, currentUser.username]); // add saves
+        await savePost(currentUser.username, postID, 'save');
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error saving post:', error);
+    }
+  };
   return { likes, saves, handleLike, handleSave };
 };
 

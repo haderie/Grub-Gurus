@@ -5,8 +5,6 @@ import * as util from '../../services/post.service';
 import { DatabasePost, DatabaseRecipe, User } from '../../types/types';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const mockingoose = require('mockingoose');
-
 const mockUser: User = {
   username: 'user1',
   password: 'password',
@@ -30,6 +28,8 @@ const mockRecipe: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
+  numOfLikes: 0,
+  views: [],
 };
 
 const mockSampleLikedPost: DatabasePost = {
