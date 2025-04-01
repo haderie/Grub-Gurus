@@ -80,7 +80,7 @@ export interface MessageUpdatePayload {
  * - `type`: The type of modification (`'created'`, `'deleted'`, or `'updated'`).
  */
 export interface UserUpdatePayload {
-  user: SafeDatabaseUser;
+  user: SafePopulatedDatabaseUser;
   type: 'created' | 'deleted' | 'updated';
 }
 

@@ -1,6 +1,6 @@
-import { SafeDatabaseUser } from '@fake-stack-overflow/shared';
 import { Button } from '@mui/material';
 import React from 'react';
+import { SafePopulatedDatabaseUser } from '../../types/types';
 
 const ProfileEdit = ({
   userData,
@@ -16,9 +16,9 @@ const ProfileEdit = ({
   pendingAction,
   canEditProfile,
   showPassword,
+  isRecipePublic,
   togglePasswordVisibility,
-  showLists,
-
+  toggleRecipeBookVisibility,
   setEditBioMode,
   setNewBio,
   setNewPassword,
@@ -33,7 +33,7 @@ const ProfileEdit = ({
   handleUpdatePrivacy,
   handleCheckPrivacy,
 }: {
-  userData: SafeDatabaseUser | null;
+  userData: SafePopulatedDatabaseUser | null;
   loading: boolean;
   editBioMode: boolean;
   newBio: string;
@@ -47,7 +47,9 @@ const ProfileEdit = ({
   pendingAction: (() => void) | null;
   canEditProfile: boolean;
   showPassword: boolean;
+  isRecipePublic: boolean;
   togglePasswordVisibility: () => void;
+  toggleRecipeBookVisibility: () => void;
 
   setEditBioMode: React.Dispatch<React.SetStateAction<boolean>>;
   setNewBio: React.Dispatch<React.SetStateAction<string>>;
@@ -69,7 +71,7 @@ const ProfileEdit = ({
 
   return (
     <div className='profile-card'>
-      <h2>Profile</h2>
+      <h2>Edit your profile!</h2>
       <Button variant='contained' onClick={handleCloseProfileEdit}>
         Return to Profile
       </Button>
@@ -105,28 +107,26 @@ const ProfileEdit = ({
             <strong>Following:</strong> {userData.following?.length}
           </p>
           {/* ---- Biography Section ---- */}
-          {editBioMode && canEditProfile && (
-            <div style={{ margin: '1rem 0' }}>
-              <input
-                className='input-text'
-                type='text'
-                value={newBio}
-                onChange={e => setNewBio(e.target.value)}
-              />
-              <button
-                className='login-button'
-                style={{ marginLeft: '1rem' }}
-                onClick={handleUpdateBiography}>
-                Save
-              </button>
-              <button
-                className='delete-button'
-                style={{ marginLeft: '1rem' }}
-                onClick={handleCloseProfileEdit}>
-                Cancel
-              </button>
-            </div>
-          )}
+          <div style={{ margin: '1rem 0' }}>
+            <input
+              className='input-text'
+              type='text'
+              value={newBio}
+              onChange={e => setNewBio(e.target.value)}
+            />
+            <button
+              className='login-button'
+              style={{ marginLeft: '1rem' }}
+              onClick={handleUpdateBiography}>
+              Save
+            </button>
+            <button
+              className='delete-button'
+              style={{ marginLeft: '1rem' }}
+              onClick={handleCloseProfileEdit}>
+              Cancel
+            </button>
+          </div>
           <p>
             <strong>Date Joined:</strong>{' '}
             {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
