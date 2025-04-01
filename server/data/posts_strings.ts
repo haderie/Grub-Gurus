@@ -100,7 +100,6 @@ export const T12_NAME = 'umami';
 export const T12_DESC =
   'Umami is the fifth basic taste, often described as savory or meaty. It is found in ingredients such as mushrooms, tomatoes, soy sauce, and Parmesan cheese, enhancing the depth of flavor in dishes.';
 
-
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =
