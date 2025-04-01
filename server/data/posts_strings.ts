@@ -15,6 +15,22 @@ export const Q4_DESC = 'Quick question about storage on android';
 export const Q4_TXT =
   'I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains';
 
+export const Q5_DESC = 'How to substitute eggs in baking?';
+export const Q5_TXT =
+  'I am trying to bake a cake, but I ran out of eggs. What are the best alternatives I can use that will still maintain the texture and flavor of the cake?';
+
+export const Q6_DESC = 'How to thicken a sauce without flour?';
+export const Q6_TXT =
+  'I am making a pasta sauce but I want to avoid using flour as a thickener. What are some good alternatives that will not alter the taste too much?';
+
+export const Q7_DESC = 'Best way to store fresh herbs?';
+export const Q7_TXT =
+  'I often buy fresh herbs like cilantro and basil, but they wilt quickly in my fridge. What is the best way to store them so they last longer?';
+
+export const Q8_DESC = 'How to balance flavors in a dish?';
+export const Q8_TXT =
+  'Sometimes when I cook, my dish turns out too sweet, salty, or acidic. What are the best ways to adjust the balance of flavors when this happens?';
+
 export const A1_TXT =
   "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.";
 export const A2_TXT =
@@ -27,6 +43,19 @@ export const A5_TXT = 'I just found all the above examples just too confusing, s
 export const A6_TXT = 'Storing content as BLOBs in databases.';
 export const A7_TXT = 'Using GridFS to chunk and store content.';
 export const A8_TXT = 'Store data in a SQLLite database.';
+
+
+export const Q5A_TXT =
+  "When substituting eggs in baking, you need to consider the role eggs play in the recipe—whether it's binding, leavening, or moisture. Common substitutes include mashed bananas, applesauce, yogurt, or flaxseed mixed with water. For leavening, baking soda and vinegar can work as well.";
+
+export const Q6A_TXT =
+  "Cornstarch, arrowroot powder, and puréed vegetables like potatoes or cauliflower are great alternatives to flour for thickening sauces. You can also reduce the sauce by simmering it longer to naturally thicken it without adding extra ingredients.";
+
+export const Q7A_TXT =
+  "To keep fresh herbs from wilting quickly, store them in a damp paper towel inside an airtight container in the fridge. For herbs like basil, keeping them in a glass of water at room temperature works better.";
+
+export const Q8A_TXT =
+  "Balancing flavors is about understanding contrasts: too much sweetness can be cut with acidity (like lemon juice or vinegar), while excessive saltiness can be counteracted with a bit of sugar or dairy. When a dish is too bland, try adding umami-rich ingredients like soy sauce, mushrooms, or miso.";
 
 export const T1_NAME = 'react';
 export const T1_DESC =
@@ -52,6 +81,31 @@ export const T6_NAME = 'website';
 export const T6_DESC =
   'A website is a collection of interlinked web pages, typically identified with a common domain name, and published on at least one web server. Websites can serve various purposes, such as information sharing, entertainment, commerce, and social networking.';
 
+export const T7_NAME = 'baking';
+export const T7_DESC =
+  'Baking is a method of cooking that uses dry heat, typically in an oven, to cook food such as bread, cakes, and pastries. It requires precise measurements and temperature control to achieve the desired texture and flavor.';
+
+export const T8_NAME = 'spices';
+export const T8_DESC =
+  'Spices are aromatic substances derived from plants that enhance the flavor, color, and aroma of food. Common spices include cinnamon, cumin, turmeric, and paprika, each with unique culinary uses.';
+
+export const T9_NAME = 'fermentation';
+export const T9_DESC =
+  'Fermentation is a process in which microorganisms like yeast and bacteria convert carbohydrates into alcohol or acids. This technique is used in making bread, yogurt, kimchi, and many other fermented foods.';
+
+export const T10_NAME = 'knife-skills';
+export const T10_DESC =
+  'Knife skills are essential for efficient and safe food preparation. Techniques such as dicing, julienning, and chiffonade help improve consistency and presentation in cooking.';
+
+export const T11_NAME = 'meal-prep';
+export const T11_DESC =
+  'Meal prep is the practice of preparing meals or ingredients in advance to save time and effort throughout the week. It involves planning, portioning, and storing food to make cooking more efficient.';
+
+export const T12_NAME = 'umami';
+export const T12_DESC =
+  'Umami is the fifth basic taste, often described as savory or meaty. It is found in ingredients such as mushrooms, tomatoes, soy sauce, and Parmesan cheese, enhancing the depth of flavor in dishes.';
+
+
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =
@@ -76,3 +130,27 @@ export const C11_TEXT =
   'I found the discussion on SharedPreferences vs apply() very useful. Great explanation of the differences!';
 export const C12_TEXT =
   "I feel like there's so much more to Android Studio that I'm just scratching the surface of. Thanks for sharing your experience!";
+export const C13_TEXT =
+  'This tip on balancing flavors is so useful! I never knew acidity could counteract too much sweetness. Thanks!';
+export const C14_TEXT =
+  'I appreciate the suggestion to use cornstarch as a thickener. It worked perfectly for my homemade sauce!';
+export const C15_TEXT =
+  "The trick about storing fresh herbs in a damp paper towel is a game changer. My herbs last so much longer now!";
+export const C16_TEXT =
+  'Your explanation of umami was really insightful! Now I understand why mushrooms and soy sauce make dishes taste so rich.';
+export const C17_TEXT =
+  'I always struggled with meal prep, but your breakdown makes it seem so much easier. Definitely giving it a try!';
+export const C18_TEXT =
+  "I hadn't thought of using fermentation for food preservation. This is really helpful for making homemade kimchi!";
+export const C19_TEXT =
+  "The idea of substituting eggs with flaxseed in baking is brilliant! It kept my muffins moist without changing the taste.";
+export const C20_TEXT =
+  'I was skeptical about freezing fresh pasta, but your suggestion worked great. It cooked perfectly!';
+export const C21_TEXT =
+  'I love how simple your knife skills guide is. My chopping has gotten so much more precise thanks to this!';
+export const C22_TEXT =
+  "I've been over-salting my soups for years—your tip about adding a bit of sugar really helped fix the flavor.";
+export const C23_TEXT =
+  'I never realized letting dough rest could make such a difference in texture. Thanks for the baking advice!';
+export const C24_TEXT =
+  "This discussion on spices is fascinating. I didn't know cumin and coriander paired so well together!";
