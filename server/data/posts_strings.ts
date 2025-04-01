@@ -43,19 +43,14 @@ export const A5_TXT = 'I just found all the above examples just too confusing, s
 export const A6_TXT = 'Storing content as BLOBs in databases.';
 export const A7_TXT = 'Using GridFS to chunk and store content.';
 export const A8_TXT = 'Store data in a SQLLite database.';
-
-
 export const Q5A_TXT =
-  "When substituting eggs in baking, you need to consider the role eggs play in the recipe—whether it's binding, leavening, or moisture. Common substitutes include mashed bananas, applesauce, yogurt, or flaxseed mixed with water. For leavening, baking soda and vinegar can work as well.";
-
+  'When substituting eggs in baking, you need to consider the role eggs play in the recipe—whether it is binding, leavening, or moisture. Common substitutes include mashed bananas, applesauce, yogurt, or flaxseed mixed with water. For leavening, baking soda and vinegar can work as well.';
 export const Q6A_TXT =
-  "Cornstarch, arrowroot powder, and puréed vegetables like potatoes or cauliflower are great alternatives to flour for thickening sauces. You can also reduce the sauce by simmering it longer to naturally thicken it without adding extra ingredients.";
-
+  'Cornstarch, arrowroot powder, and puréed vegetables like potatoes or cauliflower are great alternatives to flour for thickening sauces. You can also reduce the sauce by simmering it longer to naturally thicken it without adding extra ingredients.';
 export const Q7A_TXT =
-  "To keep fresh herbs from wilting quickly, store them in a damp paper towel inside an airtight container in the fridge. For herbs like basil, keeping them in a glass of water at room temperature works better.";
-
+  'To keep fresh herbs from wilting quickly, store them in a damp paper towel inside an airtight container in the fridge. For herbs like basil, keeping them in a glass of water at room temperature works better.';
 export const Q8A_TXT =
-  "Balancing flavors is about understanding contrasts: too much sweetness can be cut with acidity (like lemon juice or vinegar), while excessive saltiness can be counteracted with a bit of sugar or dairy. When a dish is too bland, try adding umami-rich ingredients like soy sauce, mushrooms, or miso.";
+  'Balancing flavors is about understanding contrasts: too much sweetness can be cut with acidity (like lemon juice or vinegar), while excessive saltiness can be counteracted with a bit of sugar or dairy. When a dish is too bland, try adding umami-rich ingredients like soy sauce, mushrooms, or miso.';
 
 export const T1_NAME = 'react';
 export const T1_DESC =
@@ -117,9 +112,9 @@ export const C4_TEXT =
 export const C5_TEXT =
   'I get what you mean by those examples being confusing. Your custom approach makes way more sense for my use case.';
 export const C6_TEXT =
-  "I hadn't considered using BLOBs for storing content in a database. This will work perfectly for my needs.";
+  'I had not considered using BLOBs for storing content in a database. This will work perfectly for my needs.';
 export const C7_TEXT =
-  "GridFS seems like a good option for chunking large files. I'll give it a try for my media storage requirements.";
+  'GridFS seems like a good option for chunking large files. I will give it a try for my media storage requirements.';
 export const C8_TEXT =
   'SQLLite is such a versatile solution for local storage, especially for mobile applications. Thanks for the reminder!';
 export const C9_TEXT =
@@ -129,13 +124,13 @@ export const C10_TEXT =
 export const C11_TEXT =
   'I found the discussion on SharedPreferences vs apply() very useful. Great explanation of the differences!';
 export const C12_TEXT =
-  "I feel like there's so much more to Android Studio that I'm just scratching the surface of. Thanks for sharing your experience!";
+  'I feel like there is so much more to Android Studio that I am just scratching the surface of. Thanks for sharing your experience!';
 export const C13_TEXT =
   'This tip on balancing flavors is so useful! I never knew acidity could counteract too much sweetness. Thanks!';
 export const C14_TEXT =
   'I appreciate the suggestion to use cornstarch as a thickener. It worked perfectly for my homemade sauce!';
 export const C15_TEXT =
-  "The trick about storing fresh herbs in a damp paper towel is a game changer. My herbs last so much longer now!";
+  'The trick about storing fresh herbs in a damp paper towel is a game changer. My herbs last so much longer now!';
 export const C16_TEXT =
   'Your explanation of umami was really insightful! Now I understand why mushrooms and soy sauce make dishes taste so rich.';
 export const C17_TEXT =
@@ -143,14 +138,14 @@ export const C17_TEXT =
 export const C18_TEXT =
   "I hadn't thought of using fermentation for food preservation. This is really helpful for making homemade kimchi!";
 export const C19_TEXT =
-  "The idea of substituting eggs with flaxseed in baking is brilliant! It kept my muffins moist without changing the taste.";
+  'The idea of substituting eggs with flaxseed in baking is brilliant! It kept my muffins moist without changing the taste.';
 export const C20_TEXT =
   'I was skeptical about freezing fresh pasta, but your suggestion worked great. It cooked perfectly!';
 export const C21_TEXT =
   'I love how simple your knife skills guide is. My chopping has gotten so much more precise thanks to this!';
 export const C22_TEXT =
-  "I've been over-salting my soups for years—your tip about adding a bit of sugar really helped fix the flavor.";
+  'I have been over-salting my soups for years—your tip about adding a bit of sugar really helped fix the flavor.';
 export const C23_TEXT =
   'I never realized letting dough rest could make such a difference in texture. Thanks for the baking advice!';
 export const C24_TEXT =
-  "This discussion on spices is fascinating. I didn't know cumin and coriander paired so well together!";
+  'This discussion on spices is fascinating. I did not know cumin and coriander paired so well together!';
