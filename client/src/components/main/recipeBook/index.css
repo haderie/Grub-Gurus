@@ -1,6 +1,7 @@
 .total-recipe-container {
   display: flex;
   height: 100vh;
+  max-height: 500px;
   gap: 16px;
   padding: 16px;
   box-sizing: border-box;
