@@ -63,7 +63,7 @@ const GuessTheIngredientPage = ({
           <strong>Chef 2:</strong> {player2}
         </p>
         <p>
-          <strong>Whose Cooking:</strong> {gameInstance.state.currentPlayer}
+          <strong>Who&apos;s Cooking?:</strong> {gameInstance.state.currentPlayer}
         </p>
         <p>
           <strong>Your Attempts:</strong>{' '}

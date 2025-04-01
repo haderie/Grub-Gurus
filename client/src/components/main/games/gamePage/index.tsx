@@ -40,7 +40,7 @@ const GamePage = () => {
     <Box p={3} display='flex' flexDirection='column' alignItems='center'>
       <Paper elevation={3} sx={{ width: '100%', maxWidth: 600, p: 3, textAlign: 'center' }}>
         <Typography variant='h4' fontWeight='bold' color='#6A9C89'>
-          The Last Bite
+          {gameInstance?.gameType === 'Nim' ? 'The Last Bite' : 'Guess the Ingredient'}
         </Typography>
         <Typography variant='subtitle1' sx={{ mt: 1 }}>
           Status: {gameInstance ? gameInstance.state.status : 'Not started'}

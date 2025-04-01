@@ -39,7 +39,7 @@ const RecipeCalendar: React.FC = () => {
     <>
       <p className='calendar-intro'>
         This is your personal recipe calendar! Add recipes manually by selecting a date or add
-        directly from your feed
+        directly from your feed.
       </p>
       <div style={{ height: 500, padding: '20px' }}>
         <Calendar

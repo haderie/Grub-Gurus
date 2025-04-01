@@ -99,11 +99,12 @@
 
 .ai-response-checkbox label {
   margin-top: 5px;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
 }
 
 /* Styling for the checkbox */
 .ai-response-checkbox input[type="checkbox"] {
   margin-right: 10px;
+  margin-left: 10px;
 }
