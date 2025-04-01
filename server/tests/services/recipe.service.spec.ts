@@ -1,7 +1,11 @@
-import { DatabaseRecipe } from '@fake-stack-overflow/shared';
+import { DatabaseRecipe, RecipeCalendarEvent } from '@fake-stack-overflow/shared';
 import RecipeModel from '../../models/recipe.models';
-import { createCalendarRecipe, createRecipe } from '../../services/recipe.service';
-import { user } from '../mockData.models';
+import {
+  createCalendarRecipe,
+  createRecipe,
+  updateRecipeToCalendarRecipe,
+} from '../../services/recipe.service';
+import { sampleRecipe, user } from '../mockData.models';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mockingoose = require('mockingoose');
@@ -116,6 +120,64 @@ describe('Recipe model', () => {
       const saveError = await createCalendarRecipe(recipeCalendar);
 
       expect('error' in saveError).toBe(true);
+    });
+  });
+
+  describe('updateRecipeToCalendarRecipe', () => {
+    const updatedRecipe = {
+      ...sampleRecipe,
+      addedToCalendar: true,
+      start: new Date(),
+      end: new Date(),
+      color: '#fffff',
+    };
+
+    const updates: Partial<RecipeCalendarEvent> = {
+      addedToCalendar: true,
+      start: new Date(),
+      end: new Date(),
+      color: '#fffff',
+    };
+
+    beforeEach(() => {
+      mockingoose.resetAll();
+    });
+
+    test('should update a recipe successfully', async () => {
+      mockingoose(RecipeModel).toReturn(updatedRecipe, 'findOneAndUpdate');
+
+      expect(sampleRecipe.addedToCalendar).toEqual(false);
+
+      const result = (await updateRecipeToCalendarRecipe(
+        sampleRecipe._id,
+        updates,
+      )) as DatabaseRecipe;
+
+      expect(result._id).toBeDefined();
+      expect(result.tags).toEqual(sampleRecipe.tags);
+      expect(result.title).toEqual(sampleRecipe.title);
+      expect(result.privacyPublic).toEqual(true);
+      expect(result.ingredients).toEqual(sampleRecipe.ingredients);
+      expect(result.description).toEqual(sampleRecipe.description);
+      expect(result.instructions).toEqual(sampleRecipe.instructions);
+      expect(result.cookTime).toEqual(sampleRecipe.cookTime);
+      expect(result.addedToCalendar).toEqual(true);
+    });
+
+    test('should return an error if recipe is not found', async () => {
+      mockingoose(RecipeModel).toReturn(null, 'findOneAndUpdate');
+
+      const updateError = await updateRecipeToCalendarRecipe(sampleRecipe._id, updates);
+
+      expect('error' in updateError).toBe(true);
+    });
+
+    test('should return an error if database error occurs', async () => {
+      mockingoose(RecipeModel).toReturn(new Error(), 'findOneAndUpdate');
+
+      const updateError = await updateRecipeToCalendarRecipe(sampleRecipe._id, updates);
+
+      expect('error' in updateError).toBe(true);
     });
   });
 });
