@@ -2,8 +2,6 @@ import express, { Response } from 'express';
 import { ObjectId } from 'mongodb';
 import {
   Question,
-  Answer,
-  Comment,
   FindQuestionRequest,
   FindQuestionByIdRequest,
   AddQuestionRequest,
@@ -21,7 +19,6 @@ import {
 } from '../services/question.service';
 import { processTags } from '../services/tag.service';
 import { populateDocument } from '../utils/database.util';
-import { saveAnswer } from '../services/answer.service';
 
 const questionController = (socket: FakeSOSocket) => {
   const router = express.Router();

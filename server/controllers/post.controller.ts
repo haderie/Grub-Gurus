@@ -3,7 +3,6 @@ import {
   AddPostRequest,
   DatabaseRecipe,
   FakeSOSocket,
-  PopulatedDatabasePost,
   Posts,
   RecipeForPost,
   UpdateLikesRequest,
@@ -12,7 +11,6 @@ import {
 import { getFollowingPostList, getPostList, likePost, savePost } from '../services/post.service';
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
-import UserModel from '../models/users.model';
 import PostModel from '../models/posts.model';
 
 const postController = (socket: FakeSOSocket) => {

@@ -30,6 +30,8 @@ const mockRecipe: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
+  numOfLikes: 0,
+  views: []
 };
 
 const mockSampleLikedPost: DatabasePost = {

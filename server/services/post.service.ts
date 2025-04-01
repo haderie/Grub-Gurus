@@ -56,7 +56,7 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
       posts.map(async post => {
         const user = await UserModel.findOne({ username: post.username }).lean();
         return user && user.privacySetting !== 'Private' ? post : null;
-      })
+      }),
     );
 
     // Remove null values directly in filter()
@@ -80,7 +80,6 @@ export const getFollowingPostList = async (username: string): Promise<PopulatedD
     }
 
     const followingUserIds = [...user.following, username];
-   
 
     // Find posts only from users that the logged-in user follows
     const posts = await PostModel.find({ username: { $in: followingUserIds } })

@@ -7,13 +7,13 @@ import GuessTheIngredientPage from '../guessGamePage';
 
 const GamePage = () => {
   const { gameInstance, error, handleLeaveGame } = useGamePage();
-  let gameTitle;
+  // let gameTitle;
 
-  if (gameInstance!.gameType === 'Guess') {
-    gameTitle = 'Guess the Ingredient';
-  } else {
-    gameTitle = 'Nim Game';
-  }
+  // if (gameInstance!.gameType === 'Guess') {
+  //   gameTitle = 'Guess the Ingredient';
+  // } else {
+  //   gameTitle = 'Nim Game';
+  // }
 
   const renderGameComponent = (gameType: string) => {
     if (!gameInstance) return null;
