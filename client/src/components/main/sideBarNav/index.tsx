@@ -54,13 +54,6 @@ const SideBarNav = () => {
           </NavLink>
         </div>
       )}
-
-      <NavLink
-        to='/tags'
-        id='menu_tag'
-        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-        Tags
-      </NavLink>
       <NavLink
         to='/messaging'
         id='menu_messaging'
@@ -83,10 +76,10 @@ const SideBarNav = () => {
         </div>
       )}
       <NavLink
-        to='/users'
-        id='menu_users'
+        to='/calendar'
+        id='menu_calendar'
         className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-        Users
+        Meal Planner
       </NavLink>
       <NavLink
         to='/games'
@@ -94,11 +87,18 @@ const SideBarNav = () => {
         className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
         Games
       </NavLink>
+
       <NavLink
-        to='/calendar'
-        id='menu_calendar'
+        to='/tags'
+        id='menu_tag'
         className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
-        Your Recipe Calendar
+        Tags
+      </NavLink>
+      <NavLink
+        to='/users'
+        id='menu_users'
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
+        Users
       </NavLink>
     </div>
   );

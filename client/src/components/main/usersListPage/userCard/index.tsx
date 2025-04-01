@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import { Box, Typography } from '@mui/material';
 import { SafeDatabaseUser } from '../../../../types/types';
 
 /**
@@ -24,14 +25,25 @@ const UserCardView = (props: UserProps) => {
   const { user, handleUserCardViewClickHandler } = props;
 
   return (
-    <div className='user right_padding' onClick={() => handleUserCardViewClickHandler(user)}>
-      <div className='user_mid'>
-        <div className='userUsername'>{user.username}</div>
-      </div>
-      <div className='userStats'>
-        <div>joined {new Date(user.dateJoined).toUTCString()}</div>
-      </div>
-    </div>
+    <Box
+      onClick={() => handleUserCardViewClickHandler(user)}
+      sx={{
+        'cursor': 'pointer',
+        'padding': 3,
+        'borderBottom': '1px solid #DDD',
+        'display': 'flex',
+        'justifyContent': 'space-between',
+        'alignItems': 'center',
+        'width': '100%',
+        '&:hover': { backgroundColor: '#FFF5E4' },
+      }}>
+      <Typography variant='h6' fontWeight='bold' sx={{ color: '#6A9C89' }}>
+        {user.username}
+      </Typography>
+      <Typography variant='body2' color='text.secondary'>
+        Joined {new Date(user.dateJoined).toUTCString()}
+      </Typography>
+    </Box>
   );
 };
 

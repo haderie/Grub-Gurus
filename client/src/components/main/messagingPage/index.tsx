@@ -34,20 +34,18 @@ const MessagingPage = () => {
           checked={aiResponseChecked}
           onChange={e => setAiResponseChecked(e.target.checked)}
         />
-        <label htmlFor='aiResponse'>
-          List ingredients you have and the Munch Master will provide a recipe!
-        </label>
+        <label htmlFor='aiResponse'>Check this box for an answer from MunchMaster!</label>
       </div>
       <div className='message-input'>
         <textarea
           className='message-textbox'
-          placeholder='Type your message here'
+          placeholder='Type your message here.'
           value={newMessage}
           onChange={e => setNewMessage(e.target.value)}
         />
         <div className='message-actions'>
           <button type='button' className='send-button' onClick={handleSendMessage}>
-            Send
+            SEND
           </button>
           {error && <span className='error-message'>{error}</span>}
         </div>

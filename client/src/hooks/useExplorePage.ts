@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { PopulatedDatabasePost } from '../types/types';
 import { getPosts } from '../services/postService';
+import useUserContext from './useUserContext';
 
 /**
- * Custom hook for managing the tag page's state and navigation.
+ * Custom hook for managing the explore page's state and real-time updates.
  *
- * @returns tlist - An array of tag data retrieved from the server
- * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
+ * @returns qlist - An array of posts retrieved from the server
  */
 const useExplorePage = () => {
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);
+  const { socket } = useUserContext();
 
   useEffect(() => {
     /**
-     * Function to fetch questions based on the filter and update the question list.
+     * Function to fetch posts and update the state.
      */
     const fetchData = async () => {
       try {
@@ -21,12 +22,33 @@ const useExplorePage = () => {
         setQlist(res);
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error('Error fetching posts:', error);
       }
     };
 
+    /**
+     * Handles real-time updates from the socket.
+     */
+    const handlePostUpdate = (updatedPost: PopulatedDatabasePost) => {
+      // eslint-disable-next-line no-console
+      console.log('Received post update:', updatedPost);
+      setQlist(prevQlist => [updatedPost, ...prevQlist]);
+    };
+
     fetchData();
-  }, []);
+
+    if (socket) {
+      socket.on('postUpdate', handlePostUpdate);
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('postUpdate', handlePostUpdate);
+      }
+    };
+  }, [socket]);
+
   return { qlist };
 };
+
 export default useExplorePage;

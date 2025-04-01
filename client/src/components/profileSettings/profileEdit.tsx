@@ -84,25 +84,22 @@ const ProfileEdit = ({
             <strong>Username:</strong> {userData.username}
           </p>
           <p>
-            <strong>Account Privacy:</strong> {privacySetting}
+            <strong>Account Privacy:</strong> {userData.privacySetting}
           </p>
           {/* ---- Account Privacy Section ---- */}
-          <button
-            onClick={async () => {
-              const newSetting = privacySetting === 'Public' ? 'Private' : 'Public';
-              setPrivacySetting(newSetting);
-              await handleUpdatePrivacy(newSetting);
-              await handleCheckPrivacy();
-            }}>
-            {privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
-          </button>
-          <p>
-            <b>Recipe Book Privacy:</b> {userData.recipeBookPublic ? 'Public' : 'Private'}
-          </p>
-          <button onClick={toggleRecipeBookVisibility}>
-            {isRecipePublic ? 'Make Private' : 'Make Public'}
-          </button>
-
+          {editBioMode && canEditProfile && (
+            <button
+              onClick={async () => {
+                const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
+                setPrivacySetting(newSetting);
+                await handleUpdatePrivacy(newSetting);
+                await handleCheckPrivacy();
+              }}>
+              {userData.privacySetting === 'Public'
+                ? 'Make Account Private'
+                : 'Make Account Public'}
+            </button>
+          )}
           <p>
             <strong>Followers:</strong> {userData.followers?.length}
           </p>

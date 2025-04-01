@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import { Box, Button, Typography, TextField } from '@mui/material';
 import { GameInstance, NimGameState } from '../../../../types/types';
 import useNimGamePage from '../../../../hooks/useNimGamePage';
 
@@ -15,62 +15,74 @@ const NimGamePage = ({ gameInstance }: { gameInstance: GameInstance<NimGameState
   const { user, move, handleMakeMove, handleInputChange } = useNimGamePage(gameInstance);
 
   return (
-    <>
-      <div className='nim-rules'>
-        <h2>Rules of Nim</h2>
-        <p>The game of Nim is played as follows:</p>
-        <ol>
-          <li>The game starts with a pile of objects.</li>
-          <li>Players take turns removing objects from the pile.</li>
-          <li>On their turn, a player must remove 1, 2, or 3 objects from the pile.</li>
-          <li>The player who removes the last object loses the game.</li>
-        </ol>
-        <p>Think strategically and try to force your opponent into a losing position!</p>
-      </div>
-      <div className='nim-game-details'>
-        <h2>Current Game</h2>
-        <p>
+    <Box p={3}>
+      <Typography variant='h5' gutterBottom>
+        Rules:
+      </Typography>
+      <Typography variant='body1' paragraph>
+        The game of The Last Bite is played as follows:
+      </Typography>
+      <ul>
+        <li>The game starts with a plate of food.</li>
+        <li>Players take turns taking bites from the plate.</li>
+        <li>On their turn, a player must take 1, 2, or 3 bites from the plate.</li>
+        <li>The player who takes the last bite loses the game.</li>
+      </ul>
+      <Typography variant='body1' paragraph>
+        Think strategically and try to force your opponent into a losing position!
+      </Typography>
+
+      <Box mt={3}>
+        <Typography variant='h6' gutterBottom>
+          Current Game:
+        </Typography>
+        <Typography variant='body1'>
           <strong>Player 1:</strong> {gameInstance.state.player1 || 'Waiting...'}
-        </p>
-        <p>
+        </Typography>
+        <Typography variant='body1'>
           <strong>Player 2:</strong> {gameInstance.state.player2 || 'Waiting...'}
-        </p>
-        <p>
+        </Typography>
+        <Typography variant='body1'>
           <strong>Current Player to Move:</strong>{' '}
           {gameInstance.players[gameInstance.state.moves.length % 2]}
-        </p>
-        <p>
-          <strong>Remaining Objects:</strong> {gameInstance.state.remainingObjects}
-        </p>
+        </Typography>
+        <Typography variant='body1'>
+          <strong>Remaining Bites:</strong> {gameInstance.state.remainingObjects}
+        </Typography>
         {gameInstance.state.status === 'OVER' && (
-          <p>
+          <Typography variant='body1'>
             <strong>Winner:</strong> {gameInstance.state.winners?.join(', ') || 'No winner'}
-          </p>
+          </Typography>
         )}
+
         {gameInstance.state.status === 'IN_PROGRESS' && (
-          <div className='nim-game-move'>
-            <h3>Make Your Move</h3>
-            <input
+          <Box mt={3}>
+            <Typography variant='h6' gutterBottom>
+              Take Your Bite:
+            </Typography>
+            <TextField
+              label='Enter 1-3'
               type='number'
-              className='input-move'
               value={move}
               onChange={handleInputChange}
-              min='1'
-              max='3'
-              placeholder='Enter 1-3'
+              inputProps={{ min: 1, max: 3 }}
+              fullWidth
+              sx={{ maxWidth: 200, marginBottom: 2 }}
             />
-            <button
-              className='btn-submit'
+            <Button
+              variant='contained'
+              color='primary'
               onClick={handleMakeMove}
+              sx={{ backgroundColor: '#FFA725', marginLeft: 2 }}
               disabled={
                 gameInstance.players[gameInstance.state.moves.length % 2] !== user.username
               }>
               Submit Move
-            </button>
-          </div>
+            </Button>
+          </Box>
         )}
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };
 

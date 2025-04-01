@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.css';
 import { Link } from 'react-router-dom';
+import { TbChefHat } from 'react-icons/tb';
+import { PiCookingPotBold } from 'react-icons/pi';
 import useAuth from '../../../hooks/useAuth';
 
 /**
@@ -23,22 +25,26 @@ const Signup = () => {
     <div className='container'>
       <h2>Sign up for Grub Gurus!</h2>
       <form onSubmit={handleSubmit}>
-        <h4>Please enter your username.</h4>
+        <h4>
+          What should we call you, Chef? <TbChefHat />
+        </h4>
         <input
           type='text'
           value={username}
           onChange={event => handleInputChange(event, 'username')}
-          placeholder='Enter your username'
+          placeholder='Username'
           required
           className='input-text'
           id='username-input'
         />
-        <h4>Please enter your password.</h4>
+        <h4>
+          What is your secret ingredient? <PiCookingPotBold />
+        </h4>
         <input
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={event => handleInputChange(event, 'password')}
-          placeholder='Enter your password'
+          placeholder='Password'
           required
           className='input-text'
           id='password-input'
@@ -47,7 +53,7 @@ const Signup = () => {
           type={showPassword ? 'text' : 'password'}
           value={passwordConfirmation}
           onChange={e => handleInputChange(e, 'confirmPassword')}
-          placeholder='Confirm your password'
+          placeholder='Confirm Password'
           required
           className='input-text'
         />

@@ -1,15 +1,16 @@
 .custom-button {
-  background-color: #007bff;
-  color: #fff;
+  background-color:  #6A9C89;
+  color: #FFF5E4;
   border: none;
   border-radius: 6px;
   padding: 10px 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-weight: bold;
 }
 
 .custom-button:hover {
-  background-color: #0056b3;
+  background-color:  #6A9C89;
 }
 
 .custom-input {
@@ -19,6 +20,7 @@
   font-size: 16px;
   width: 100%;
   box-sizing: border-box;
+  color: #3E3232;
 }
 
 /* Container styles */
@@ -64,7 +66,7 @@
 }
 
 .chat-message strong {
-  color: #007bff;
+  color: #3E3232;
 }
 
 .message-input {
@@ -76,7 +78,7 @@
 /* Chat list styles */
 .chats-list {
   width: 30%;
-  background-color: #fff;
+  background-color: #fefefe;;
   border: 2px solid #ddd;
   border-radius: 8px;
   padding: 16px;

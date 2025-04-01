@@ -11,6 +11,7 @@ import {
 import { getFollowingPostList, getPostList, likePost, savePost } from '../services/post.service';
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
+import PostModel from '../models/posts.model';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -69,8 +70,15 @@ const postController = (socket: FakeSOSocket) => {
       if ('error' in savedPost) {
         throw new Error(savedPost.error);
       }
-      socket.emit('postUpdate', savedPost);
-      res.json(savedPost);
+
+      const populatedPost = await PostModel.findById(savedPost._id).populate('recipe');
+
+      if (!populatedPost) {
+        throw new Error('Post not found after saving');
+      }
+
+      socket.emit('postUpdate', populatedPost);
+      res.json(populatedPost);
     } catch (error) {
       res.status(500).send(`Error when saving post: ${error}`);
     }
@@ -139,7 +147,7 @@ const postController = (socket: FakeSOSocket) => {
 
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
-  router.get('/getFollowingPosts', getFollowingPosts);
+  router.get('/getFollowingPosts/:username', getFollowingPosts);
 
   router.patch('/updatePostLikes', updatePostLikes);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import { Box, Typography, Card, CardContent } from '@mui/material';
 import { TagData } from '../../../../types/types';
 import useTagSelected from '../../../../hooks/useTagSelected';
 
@@ -26,17 +26,34 @@ const TagView = ({ t, clickTag }: TagProps) => {
   const { tag } = useTagSelected(t);
 
   return (
-    <div
-      className='tagNode'
+    <Box
+      sx={{
+        'maxWidth': 300,
+        'marginBottom': 2,
+        'cursor': 'pointer',
+        '&:hover': {
+          transform: 'scale(1.05)',
+          transition: 'transform 0.3s ease',
+        },
+        'textAlign': 'center',
+      }}
       onClick={() => {
         clickTag(t.name);
       }}>
-      <div className='tagName'>{tag.name}</div>
-      <br />
-      <div className='tagDescription'>{tag.description}</div>
-      <br />
-      <div style={{ color: 'red' }}>{t.qcnt} questions</div>
-    </div>
+      <Card sx={{ boxShadow: 3 }}>
+        <CardContent>
+          <Typography variant='h6' fontWeight='bold' sx={{ color: '#FFA725' }} gutterBottom>
+            {tag.name}
+          </Typography>
+          <Typography variant='body2' sx={{ color: '#6A9C89', marginBottom: 2 }}>
+            {tag.description}
+          </Typography>
+          <Typography variant='body2' sx={{ color: '#FF6F61' }}>
+            {t.qcnt} questions
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

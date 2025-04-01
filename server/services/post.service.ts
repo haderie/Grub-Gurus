@@ -52,7 +52,15 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
       throw Error('Posts could not be retrieved');
     }
 
-    return posts;
+    const publicPosts = await Promise.all(
+      posts.map(async post => {
+        const user = await UserModel.findOne({ username: post.username }).lean();
+        return user && user.privacySetting !== 'Private' ? post : null;
+      }),
+    );
+
+    // Remove null values directly in filter()
+    return publicPosts.filter(post => post !== null);
   } catch (error) {
     throw new Error(`Posts could not be retrieved: ${error}`);
   }
@@ -71,11 +79,17 @@ export const getFollowingPostList = async (username: string): Promise<PopulatedD
       throw new Error('User not found');
     }
 
-    const followingUserIds = user.following;
+    const followingUserIds = [...user.following, username];
 
     // Find posts only from users that the logged-in user follows
     const posts = await PostModel.find({ username: { $in: followingUserIds } })
-      .populate<{ recipe: DatabaseRecipe }>([{ path: 'recipe', model: RecipeModel }])
+      .populate<{ recipe: DatabaseRecipe }>([
+        {
+          path: 'recipe',
+          model: RecipeModel,
+          populate: { path: 'tags', model: TagModel },
+        },
+      ])
       .sort({ createdAt: -1 });
 
     if (!posts) {
