@@ -31,7 +31,7 @@ const mockRecipe: DatabaseRecipe = {
   cookTime: 20,
   addedToCalendar: false,
   numOfLikes: 0,
-  views: []
+  views: [],
 };
 
 const mockSampleLikedPost: DatabasePost = {
