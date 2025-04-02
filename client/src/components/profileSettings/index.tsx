@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import { FaRegUserCircle, FaUnlockAlt, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { ObjectId } from 'mongodb';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
@@ -60,7 +61,6 @@ const ProfileSettings: React.FC = () => {
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
-  const [selectedPost, setSelectedPost] = useState<PopulatedDatabasePost | null>(null);
   const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
@@ -68,6 +68,10 @@ const ProfileSettings: React.FC = () => {
   const [availableRankings, setAvailableRankings] = useState<number[]>([]);
   const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
+
+  const handlePostClick = (postId: string) => {
+    navigate(`/explore?post=${postId}`);
+  };
 
   useEffect(() => {
     const checkPrivacy = async () => {
@@ -295,7 +299,7 @@ const ProfileSettings: React.FC = () => {
                       if (isItem(sortedItem)) {
                         return (
                           <div key={index} className='list-item-container'>
-                            <span onClick={() => setSelectedPost(sortedItem.item)}>
+                            <span onClick={() => handlePostClick(sortedItem.item._id.toString())}>
                               {' '}
                               <b>
                                 {sortedItem.rating}
@@ -336,16 +340,6 @@ const ProfileSettings: React.FC = () => {
                   )}
                 </div>
               )}
-
-              {selectedPost && (
-                <div className='popup-overlay-post' onClick={() => setSelectedPost(null)}>
-                  <div className='popup-content-post'>
-                    <PostView post={selectedPost} />
-                    <button onClick={() => setSelectedPost(null)}>Close</button>
-                  </div>
-                </div>
-              )}
-
               {selectedOption === 'recipes' && (
                 <>
                   {isRecipePublic || canEditProfile ? (
