@@ -129,10 +129,10 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                 type='date'
                 value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
                 onChange={e => {
-                const [year, month, day] = e.target.value.split('-').map(Number);
-                const localDate = new Date(year, month - 1, day); // Month is 0-based in JS Date
-                setSelectedDate(localDate);
-              }}
+                  const [year, month, day] = e.target.value.split('-').map(Number);
+                  const localDate = new Date(year, month - 1, day); // Month is 0-based in JS Date
+                  setSelectedDate(localDate);
+                }}
                 style={{
                   width: '100%',
                   padding: '10px',
