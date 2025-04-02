@@ -2,7 +2,7 @@ import React from 'react';
 import './index.css';
 import { PopulatedDatabasePost } from '@fake-stack-overflow/shared';
 import { ThumbUp, Bookmark } from '@mui/icons-material';
-import { Box, Card, CardContent, Typography, Stack, Chip, IconButton } from '@mui/material';
+import { Box, Card, CardContent, Typography, Stack, Chip } from '@mui/material';
 import RecipeCard from '../recipeCard';
 import usePostCard from '../../../hooks/usePostCard';
 

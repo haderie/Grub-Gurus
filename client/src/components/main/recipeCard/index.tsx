@@ -1,18 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 import './index.css';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  Chip,
-  Box,
-  CardMedia,
-  Button,
-  Modal,
-  TextField,
-} from '@mui/material';
+import { Card, CardContent, Typography, Stack, Chip, Box, CardMedia, Button } from '@mui/material';
 import { CalendarToday } from '@mui/icons-material';
 import { PopulatedDatabaseRecipe } from '../../../types/types';
 import useRecipeCard from '../../../hooks/useRecipeCard';

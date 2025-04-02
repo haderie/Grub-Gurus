@@ -6,7 +6,6 @@ import {
   CircularProgress,
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardMedia,

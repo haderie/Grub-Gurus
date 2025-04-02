@@ -12,9 +12,6 @@ import {
   Chip,
 } from '@mui/material';
 import useNewQuestion from '../../../hooks/useNewQuestion';
-import Form from '../baseComponents/form';
-import Input from '../baseComponents/input';
-import TextArea from '../baseComponents/textarea';
 import './index.css';
 
 /**
@@ -31,7 +28,6 @@ const NewQuestionPage = () => {
     setTagNames,
     // optInForAI,
     // setOptInForAI,
-    titleErr,
     textErr,
     tagErr,
     postQuestion,

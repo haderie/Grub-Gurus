@@ -1,18 +1,6 @@
 import './index.css';
 import React from 'react';
-import {
-  Box,
-  Button,
-  TextField,
-  CircularProgress,
-  Typography,
-  Grid,
-  Stack,
-  Chip,
-  FormControl,
-  FormControlLabel,
-  Checkbox,
-} from '@mui/material';
+import { Box, Button, TextField, CircularProgress, Typography, Stack, Chip } from '@mui/material';
 import useNewPost from '../../../hooks/useNewPost';
 
 /**
@@ -32,7 +20,6 @@ const NewPost = () => {
     setTagNames,
     cookTime,
     setCookTime,
-    titleErr,
     textErr,
     tagErr,
     createPost,
@@ -43,8 +30,6 @@ const NewPost = () => {
     setVideoResults,
     searchYouTube,
     loading,
-    postText,
-    setPostText,
   } = useNewPost();
 
   const predefinedTags = [
