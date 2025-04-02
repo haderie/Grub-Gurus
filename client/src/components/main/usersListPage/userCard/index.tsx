@@ -37,7 +37,7 @@ const UserCardView = (props: UserProps) => {
         'width': '100%',
         '&:hover': { backgroundColor: '#FFF5E4' },
       }}>
-      <Typography variant='h6' fontWeight='bold' sx={{ color: '#6A9C89' }}>
+      <Typography variant='h6' fontWeight='bold' sx={{ color: '#6A9C89', fontSize: '18px' }}>
         {user.username}
       </Typography>
       <Typography variant='body2' color='text.secondary'>

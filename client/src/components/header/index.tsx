@@ -42,7 +42,7 @@ const Header = () => {
           variant='outlined'
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          sx={{ width: '50%' }}
+          sx={{ width: '50%', borderColor: '#6A9C89' }}
         />
       </Box>
 
@@ -52,7 +52,13 @@ const Header = () => {
           variant='contained'
           onClick={() => navigate(`/user/${currentUser.username}`)}
           startIcon={<TbChefHat />}
-          sx={{ marginRight: 2, backgroundColor: '#6A9C89' }}>
+          sx={{
+            marginRight: 2,
+            backgroundColor: '#6A9C89',
+            color: '#FFF5E4',
+            fontsize: '16px',
+            borderRadius: '5px',
+          }}>
           {currentUser.username}
         </Button>
         <IconButton

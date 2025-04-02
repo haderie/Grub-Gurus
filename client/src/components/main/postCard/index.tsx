@@ -1,6 +1,8 @@
 import React from 'react';
 import './index.css';
 import { PopulatedDatabasePost } from '@fake-stack-overflow/shared';
+import { ThumbUp, Bookmark } from '@mui/icons-material';
+import { Box, Card, CardContent, Typography, Stack, Chip, IconButton } from '@mui/material';
 import RecipeCard from '../recipeCard';
 import usePostCard from '../../../hooks/usePostCard';
 
@@ -38,25 +40,45 @@ const PostView = ({ post }: PostCardProps) => {
   const formattedDate = new Date(post.datePosted).toLocaleString();
 
   return (
-    <div className='question_list'>
-      <div className='post-card'>
-        <h3 className='username'>@{post.username}</h3>
-        <RecipeCard recipe={post.recipe} />
+    <Box sx={{ width: '100%', maxWidth: 800, mx: 'auto', mt: 4 }}>
+      <Card sx={{ boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
+        <CardContent>
+          {/* Username */}
+          <Typography variant='h6' color='#6A9C89' fontWeight='bold'>
+            @{post.username}
+          </Typography>
 
-        {post.text ? (
-          <p className='post-text'>{post.text}</p>
-        ) : (
-          <p className='post-text'>No description available</p>
-        )}
-        <p className='date-posted'>Posted on {formattedDate}</p>
+          {/* Recipe Card */}
+          <RecipeCard recipe={post.recipe} />
 
-        {/* Likes & Saves */}
-        <div className='post-actions'>
-          <button onClick={handleLike}>❤️ {likes?.length} Likes</button>
-          <button onClick={handleSave}>🔖 {saves?.length} Saves</button>
-        </div>
-      </div>
-    </div>
+          {/* Post Text */}
+          <Typography variant='body1' color='#3E3232' sx={{ mt: 2 }}>
+            {post.text || 'No description available'}
+          </Typography>
+
+          {/* Post Date */}
+          <Typography variant='caption' color='#FFA725' sx={{ mt: 1, fontSize: '14px' }}>
+            Posted on {formattedDate}
+          </Typography>
+
+          {/* Actions - Likes & Saves */}
+          <Stack direction='row' spacing={2} sx={{ mt: 2 }}>
+            <Chip
+              icon={<ThumbUp />}
+              label={`${likes?.length || 0} Likes`}
+              onClick={handleLike}
+              sx={{ backgroundColor: likes?.length ? '#FFF5E4' : 'transparent', color: '#FFA725' }}
+            />
+            <Chip
+              icon={<Bookmark />}
+              label={`${saves?.length || 0} Saves`}
+              onClick={handleSave}
+              sx={{ backgroundColor: saves?.length ? '#FFF5E4' : 'transparent', color: '#FFA725' }}
+            />
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

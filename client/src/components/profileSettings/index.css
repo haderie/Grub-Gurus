@@ -30,7 +30,7 @@
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: bold;
-  color: black;
+  color: #3E3232;
   text-align: left; /* left-align the headings */
 }
 
@@ -40,7 +40,7 @@
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
-  color: black;
+  color: #3E3232;
   text-align: left;
 }
 
@@ -49,37 +49,44 @@
   margin-bottom: 10px;
   font-size: 15px;
   line-height: 1.4;
-  color: black;
+  color: #3E3232;
   text-align: left;
 }
 
 .profile-icon {
   font-size: 30px;
   font-weight: bold;
-  color: #54170a;
+  color: #6A9C89;
   display: flex;
   align-items: center;
   text-align: center;
   gap: 8px; /* Adjust the value to control spacing */
 }
 
+.close-button {
+  top: 5px;
+  right: 5px;
+  background-color: #6A9C89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 8px;
+  font-size: 14px;
+  transition: background-color 0.3s;  
+}
+
 .edit-profile-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #960200;
-  color: white;
+  background-color: #6A9C89;
+  color: #FFF5E4;
   border: none;
-  padding: 13px 12px;
-  font-size: 18px;
   border-radius: 5px;
-  cursor: pointer;
+  padding: 12px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s;  
 }
-
-.edit-profile-btn:hover {
-  background-color: #d01e0e;
-}
-
 .unfollow-btn {
   position: absolute;
   top: 10px;
@@ -122,17 +129,18 @@
   /* font-size: 14px; */
   margin-top: 20px;
   margin-right: 20px;
+  color: #3E3232;
 }
 
 .stats span {
   cursor: pointer;
   /* font-weight: 500; */
-  color: #f39406;
+  color: #FFA725;
   transition: color 0.2s ease-in-out;
 }
 
 .stats span:hover {
-  color: #54180a;
+  color: #3E3232;
 }
 
 .stats small {
@@ -143,7 +151,7 @@
 .biography {
   margin-top: 10px;
   font-size: 16px;
-  color: #333;
+  color: #3E3232;
 }
 
 .follow-status-container {
@@ -196,7 +204,6 @@
 
 .popup-content-post {
   align-items: center;
-
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -235,16 +242,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: #54180a26;
+  background-color: #C1D8C3;
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 14px;
-  color: #333;
+  color: #3E3232;
   cursor: pointer;
 }
 
 .list-item-container:hover {
-  background-color: #54170a;
+  background-color: #FFF5E4;
   color: #f39406;
 }
 
@@ -256,7 +263,7 @@
   position: absolute;
   right: 40px;
   background-color: #ffa725;
-  color: #54170a;
+  color: #6A9C89;
   border: none;
   padding: 7px 10px;
   font-size: 13px;
@@ -341,7 +348,7 @@
 
 .toggle-password-button {
   background-color: #ddd;
-  color: #333;
+  color: #3E3232;
   border: none;
   padding: 5px 10px;
   margin-top: 10px;

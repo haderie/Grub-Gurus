@@ -1,13 +1,15 @@
 .message {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  margin: auto;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin: 10px auto;
+  margin-bottom: 15px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #f9f9f9;
   width: 98%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .message.sender {
@@ -24,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-size: 0.9rem;
   color: #666;
 }
@@ -32,6 +34,7 @@
 .message-sender {
   font-weight: bold;
   color: #333;
+  font-size: 18px;
 }
 
 .message-time {
@@ -42,6 +45,43 @@
 .message-body {
   font-size: 1rem;
   color: #333;
-  line-height: 1.5;
+  line-height: 1.6;
   word-wrap: break-word;
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+
+ul {
+  padding-left: 20px;
+  /* Add space to the left of bullet points */
+  margin-top: 10px;
+}
+
+ul li {
+  margin-bottom: 5px;
+  /* Add some space between list items */
+}
+
+ol {
+  padding-left: 30px; /* Add space to the left of numbered list items */
+  margin-top: 10px;
+  counter-reset: item; /* Reset numbering */
+}
+
+ol li {
+  margin-bottom: 8px; /* Add space between each numbered item */
+  list-style-type: decimal; /* Ensure it's a numbered list */
+  counter-increment: item; /* Increment counter for each list item */
+}
+
+.message:hover {
+  background-color: #e0e0e0;
+  /* Subtle hover effect */
+  cursor: pointer;
+}
+
+.message-header .message-time {
+  font-style: italic;
+  color: #777;
 }

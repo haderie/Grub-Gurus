@@ -1,3 +1,4 @@
+import { IoArrowUpCircleOutline, IoArrowDownCircleOutline } from 'react-icons/io5';
 import { downvoteQuestion, upvoteQuestion } from '../../../services/questionService';
 import './index.css';
 import useUserContext from '../../../hooks/useUserContext';
@@ -43,16 +44,18 @@ const VoteComponent = ({ question }: VoteComponentProps) => {
 
   return (
     <div className='vote-container'>
-      <button
-        className={`vote-button ${voted === 1 ? 'vote-button-upvoted' : ''}`}
-        onClick={() => handleVote('upvote')}>
-        Upvote
-      </button>
-      <button
-        className={`vote-button ${voted === -1 ? 'vote-button-downvoted' : ''}`}
-        onClick={() => handleVote('downvote')}>
-        Downvote
-      </button>
+      <div className='vote-buttons'>
+        <button
+          className={`vote-button upvote ${voted === 1 ? 'upvoted' : ''}`}
+          onClick={() => handleVote('upvote')}>
+          <IoArrowUpCircleOutline size={40} color={voted === 1 ? '#6A9C89' : '#3E3232'} />
+        </button>
+        <button
+          className={`vote-button downvote ${voted === -1 ? 'downvoted' : ''}`}
+          onClick={() => handleVote('downvote')}>
+          <IoArrowDownCircleOutline size={40} color={voted === -1 ? 'red' : '#3E3232'} />
+        </button>
+      </div>
       <span className='vote-count'>{count}</span>
     </div>
   );

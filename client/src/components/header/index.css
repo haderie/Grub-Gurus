@@ -33,14 +33,16 @@
 #searchBar {
   padding: 10px 12px;
   font-size: 16px;
-  border: 1px solid black; /* Black outline */
   border-radius: 10px; /* Rounded corners */
   outline: none; /* Removes default browser outline */
 }
 
 #searchBar:focus {
-  border-color: black; /* Keeps border black when focused */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Slight glow effect */
+  border-color: #6A9C89 !important;
+  box-shadow: 0 0 5px rgba(106, 156, 137, 0.75);
+  /* Adds a subtle glow */
+  outline: none;
+  /* Adds a subtle glow */
 }
 
 .search-container {
@@ -86,18 +88,14 @@
 }
 
 .view-profile-button {
-  padding: 12px 20px;
   background: #6A9C89;
   color: #FFF5E4;
   font-size: 16px;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 12px;
   border-radius: 5px;
   font-size: 18px;
   background: #f0ead2;
-  color: black;
-  border: none;
-  cursor: pointer;
 }
 
 .view-profile-button:hover {
