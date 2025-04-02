@@ -38,7 +38,12 @@ describe('GuessTheIngredientGame', () => {
     expect(() => guessGame.join('player3')).toThrow('Cannot join game: already started');
   });
 
-  test('validates moves correctly', () => {
+  test('prevents joining an game a user is a part of already', () => {
+    guessGame.join(player1);
+    expect(() => guessGame.join('player1')).toThrow('Cannot join game: player already in game');
+  });
+
+  test('does not allow move when its not your turn', () => {
     guessGame.join(player1);
     guessGame.join(player2);
 
@@ -48,6 +53,17 @@ describe('GuessTheIngredientGame', () => {
       move: { guess: 'Onion' },
     };
     expect(() => guessGame.applyMove(invalidMove)).toThrow('It is not your turn!');
+  });
+
+  test('does not allow move when game is not in progress', () => {
+    guessGame.join(player1);
+
+    const invalidMove: GameMove<GuessMove> = {
+      gameID: 'testGameID',
+      playerID: 'randomPlayer',
+      move: { guess: 'Onion' },
+    };
+    expect(() => guessGame.applyMove(invalidMove)).toThrow('Invalid move: game is not in progress');
   });
 
   test('players take turns and game progresses', () => {
@@ -106,5 +122,13 @@ describe('GuessTheIngredientGame', () => {
     guessGame.join(player2);
     guessGame.leave(player1);
     expect(guessGame.state.status).toBe('OVER');
+  });
+
+  test('cannot leave if player is not in the game', () => {
+    guessGame.join(player1);
+    guessGame.join(player2);
+    expect(() => guessGame.leave('player3')).toThrow(
+      'Cannot leave game: player player3 is not in the game.',
+    );
   });
 });
