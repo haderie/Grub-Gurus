@@ -52,7 +52,7 @@
     "build": "tsc",
     "start:prod": "node ./dist/server.js",
     "stryker": "stryker run",
-    "populate-db": "ts-node populate_db.ts mongodb://127.0.0.1:27017/fake_so",
-    "delete-db": "ts-node remove_db.ts mongodb://127.0.0.1:27017/fake_so"
+    "populate-db": "ts-node populate_db.ts mongodb+srv://haderie49:AKiVMghmmx6nq2eY@db-cs4530-spring25-206.sn2xi.mongodb.net/fake_so",
+    "delete-db": "ts-node remove_db.ts mongodb+srv://haderie49:AKiVMghmmx6nq2eY@db-cs4530-spring25-206.sn2xi.mongodb.net/fake_so"
   }
 }

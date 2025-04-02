@@ -411,7 +411,7 @@ const userController = (socket: FakeSOSocket) => {
         );
       } else if (action === 'remove') {
         // Remove post from the user's postsCreated if they are removing
-        const updatedPosts = user.postsCreated.filter(p => p.toString() !== postID.toString());
+        const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
         await updateUser(username, {
           postsCreated: updatedPosts,
         });
