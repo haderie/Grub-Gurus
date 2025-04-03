@@ -33,16 +33,29 @@ const Header = () => {
       <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
 
       {/* Search Bar in the center */}
-      <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box
+        sx={{
+          'flex': 1,
+          'display': 'flex',
+          'justifyContent': 'center',
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89', // Set custom border color on focus
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89', // Set custom label color on focus
+          },
+        }}>
         <TextField
           id='searchBar'
           size='small'
-          placeholder='Search questions...'
+          placeholder='Search questions.'
           value={val}
           variant='outlined'
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          sx={{ width: '50%' }}
+          sx={{ width: '50%', borderColor: '#6A9C89' }}
         />
       </Box>
 
@@ -52,7 +65,13 @@ const Header = () => {
           variant='contained'
           onClick={() => navigate(`/user/${currentUser.username}`)}
           startIcon={<TbChefHat />}
-          sx={{ marginRight: 2, backgroundColor: '#6A9C89' }}>
+          sx={{
+            marginRight: 2,
+            backgroundColor: '#6A9C89',
+            color: '#FFF5E4',
+            fontsize: '16px',
+            borderRadius: '5px',
+          }}>
           {currentUser.username}
         </Button>
         <IconButton

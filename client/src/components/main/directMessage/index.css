@@ -4,7 +4,6 @@
   border: none;
   border-radius: 6px;
   padding: 10px 16px;
-  cursor: pointer;
   transition: background-color 0.3s;
   font-weight: bold;
 }

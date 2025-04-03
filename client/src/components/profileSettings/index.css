@@ -2,27 +2,35 @@
    using padding instead of forced vertical centering */
 .page-container {
   width: 100%;
-  /* min-height: 100vh; */
+  height: 100vh;
+  /* Ensures it takes up the full viewport height */
   background: #f7f7f7;
   display: flex;
-  justify-content: center; /* horizontally center the card */
-  padding: 40px 0; /* top & bottom spacing */
+  justify-content: center;
+  /* Horizontally centers the content */
+  align-items: center;
+  /* Vertically centers the content */
+  padding: 0;
+  /* Removes unnecessary top & bottom spacing */
   box-sizing: border-box;
 }
 
 /* A card-like container that holds the actual profile content */
 .profile-card {
-  position: relative; /* Enables absolute positioning inside */
-  width: 800px;
-  max-width: 1000px; /* limit the card width */
-  max-height: 700px;
+  position: relative;
+  width: 100vw; /* Make it take the full width of the viewport */
+  height: 100vh; /* Make it take the full height of the viewport */
+  max-height: none; /* Remove height limitation */
   overflow-y: auto;
-  background: #fff; /* white background */
-  border-radius: 5px; /* slight rounding on edges */
-  padding: 30px; /* internal padding */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  background: #fff; /* White background */
+  border-radius: 5px; /* Slight rounding on edges */
+  padding: 30px; /* Internal padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  padding: 4;
+  flex-direction: column;
 }
 
 /* A clear section for the main heading */
@@ -30,7 +38,7 @@
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: bold;
-  color: black;
+  color: #3E3232;
   text-align: left; /* left-align the headings */
 }
 
@@ -40,7 +48,7 @@
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
-  color: black;
+  color: #3E3232;
   text-align: left;
 }
 
@@ -49,52 +57,127 @@
   margin-bottom: 10px;
   font-size: 15px;
   line-height: 1.4;
-  color: black;
+  color: #3E3232;
   text-align: left;
 }
 
 .profile-icon {
   font-size: 30px;
   font-weight: bold;
-  color: #54170a;
+  color: #6A9C89;
   display: flex;
   align-items: center;
   text-align: center;
   gap: 8px; /* Adjust the value to control spacing */
 }
 
+.close-button {
+  top: 5px;
+  right: 5px;
+  background-color: #6A9C89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 8px;
+  font-size: 14px;
+  transition: background-color 0.3s;  
+}
+
 .edit-profile-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #960200;
-  color: white;
+  top: 25px;
+  right: 45px;
+  background-color: #6A9C89;
+  color: #FFF5E4;
   border: none;
-  padding: 13px 12px;
-  font-size: 18px;
   border-radius: 5px;
-  cursor: pointer;
+  padding: 12px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s;  
 }
 
 .edit-profile-btn:hover {
-  background-color: #d01e0e;
+  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
+}
+/* Style the select dropdown */
+.list-item-container select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #3E3232;
+  width: 150px; /* Adjust width as needed */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Style the select dropdown when it's focused (active) */
+.list-item-container select:focus {
+  border-color: #6a9c89;
+  box-shadow: 0 0 5px rgba(106, 156, 137, 0.5);
+  outline: none;
+}
+
+/* Style the options in the select dropdown */
+.list-item-container select option {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Style the select dropdown when hovering */
+.list-item-container select:hover {
+  border-color: #6a9c89;  /* Color changes on hover */
+}
+
+/* Add some spacing between the dropdown and other elements */
+.list-item-container .rating-container {
+  margin-top: 10px;
+}
+
+/* Style the remove rating button */
+.list-item-container button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #6a9c89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.list-item-container button:hover {
+  box-shadow: 0 0 5px rgba(230, 57, 70, 0.5); /* Soft glow effect */
+}
+
+/* Focus effect for accessibility */
+.list-item-container button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(230, 57, 70, 0.7); /* Slightly stronger focus effect */
+}
+
+/* Spacing */
+.list-item-container .rating-button-container {
+  margin-top: 10px;
 }
 
 .unfollow-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #ffa725;
-  color: #54170a;
+  background-color: #6A9C89;
+  color: #FFF5E4;
   border: none;
-  padding: 13px 12px;
-  font-size: 18px;
   border-radius: 5px;
-  cursor: pointer;
+  padding: 12px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s;  
 }
 
 .unfollow-btn:hover {
-  background-color: #f39406;
+  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
 }
 
 .info-stats-container {
@@ -122,17 +205,17 @@
   /* font-size: 14px; */
   margin-top: 20px;
   margin-right: 20px;
+  color: #3E3232;
 }
 
 .stats span {
-  cursor: pointer;
   /* font-weight: 500; */
-  color: #f39406;
+  color: #FFA725;
   transition: color 0.2s ease-in-out;
 }
 
 .stats span:hover {
-  color: #54180a;
+  color: #3E3232;
 }
 
 .stats small {
@@ -143,7 +226,7 @@
 .biography {
   margin-top: 10px;
   font-size: 16px;
-  color: #333;
+  color: #3E3232;
 }
 
 .follow-status-container {
@@ -196,7 +279,6 @@
 
 .popup-content-post {
   align-items: center;
-
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -218,11 +300,10 @@
 
 .radio-buttons label {
   font-size: 16px;
-  cursor: pointer;
 }
 
 .list-container {
-  max-height: 200px;
+  height: 100vh;
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
@@ -235,16 +316,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: #54180a26;
+  background-color: #C1D8C3;
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 14px;
-  color: #333;
-  cursor: pointer;
+  color: #3E3232;
 }
 
 .list-item-container:hover {
-  background-color: #54170a;
+  background-color: #FFF5E4;
   color: #f39406;
 }
 
@@ -256,12 +336,11 @@
   position: absolute;
   right: 40px;
   background-color: #ffa725;
-  color: #54170a;
+  color: #6A9C89;
   border: none;
   padding: 7px 10px;
   font-size: 13px;
   border-radius: 5px;
-  cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
 
@@ -284,7 +363,7 @@
 }
 
 .input-text:focus {
-  border-color: #4caf50;
+  border-color: #6A9C89;
   box-shadow: 0 0 5px rgba(0, 255, 26, 0.5);
 }
 
@@ -298,12 +377,11 @@
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 /* Primary action button (Reset, Edit, etc.) */
 .login-button {
-  background-color: #4caf50;
+  background-color: #6A9C89;
   color: white;
 }
 
@@ -341,12 +419,11 @@
 
 .toggle-password-button {
   background-color: #ddd;
-  color: #333;
+  color: #3E3232;
   border: none;
   padding: 5px 10px;
   margin-top: 10px;
   border-radius: 5px;
-  cursor: pointer;
   font-size: 14px;
 }
 

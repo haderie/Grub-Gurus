@@ -41,7 +41,7 @@ const CommentSection = ({ comments, handleAddComment }: CommentSectionProps) => 
    */
   const handleAddCommentClick = () => {
     if (text.trim() === '' || user.username.trim() === '') {
-      setTextErr(text.trim() === '' ? 'Comment text cannot be empty' : '');
+      setTextErr(text.trim() === '' ? 'Comment text cannot be empty.' : '');
       return;
     }
 
@@ -60,16 +60,17 @@ const CommentSection = ({ comments, handleAddComment }: CommentSectionProps) => 
     <Box sx={{ marginTop: 2 }}>
       {/* Toggle Button */}
       <Button
-        variant='outlined'
+        variant='contained'
         onClick={() => setShowComments(!showComments)}
         sx={{
           marginBottom: 2,
+          borderRadius: '5px',
+          fontSize: '14px',
+          textTransform: 'none',
           backgroundColor: '#6A9C89',
           color: '#FFF5E4',
-          border: 'none',
-          borderRadius: 2,
         }}>
-        {showComments ? 'Hide Replies' : 'View Replies'}
+        {showComments ? 'HIDE COMMENTS' : 'VIEW COMMENTS'}
       </Button>
 
       {/* Comments Section */}
@@ -88,7 +89,8 @@ const CommentSection = ({ comments, handleAddComment }: CommentSectionProps) => 
                     }
                     secondary={
                       <Typography variant='body2' sx={{ color: '#FFA725' }}>
-                        {comment.commentBy}, {getMetaData(new Date(comment.commentDateTime))}{' '}
+                        {comment.commentBy}, commented{' '}
+                        {getMetaData(new Date(comment.commentDateTime))}{' '}
                         {/* Custom color for the commenter and timestamp */}
                       </Typography>
                     }
@@ -115,6 +117,16 @@ const CommentSection = ({ comments, handleAddComment }: CommentSectionProps) => 
               onChange={e => setText(e.target.value)}
               error={!!textErr}
               helperText={textErr}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#6A9C89',
+                  },
+                },
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: '#6A9C89',
+                },
+              }}
             />
             <Button
               variant='contained'

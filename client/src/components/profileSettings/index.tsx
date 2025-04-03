@@ -180,19 +180,19 @@ const ProfileSettings: React.FC = () => {
         <div className='page-container'>
           <div className='profile-card'>
             <div className='profile-icon'>
-              <FaRegUserCircle size={'40px'} style={{ color: '#54170a' }} /> {userData?.username}
+              <FaRegUserCircle size={'40px'} style={{ color: '#FFA725' }} /> {userData?.username}
               {userData?.privacySetting === 'Private' ? <FaLock /> : <FaUnlockAlt />}
             </div>
 
             {!canEditProfile && (
               <button className='unfollow-btn' onClick={handleUpdateFollowers}>
-                {isFollowing ? 'Unfollow' : 'Follow'}
+                {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
               </button>
             )}
             {canEditProfile && (
               <>
                 <button className='edit-profile-btn' onClick={handleEditProfileClick}>
-                  Edit Profile
+                  EDIT PROFILE
                 </button>
               </>
             )}
@@ -234,9 +234,7 @@ const ProfileSettings: React.FC = () => {
                 <hr className='separator' style={{ marginTop: '30px' }} />
               </div>
             ) : (
-              <p className='no-user-data'>
-                No user data found. Make sure the username parameter is correct.
-              </p>
+              <p className='no-user-data'>No user data found. Make sure the username is correct.</p>
             )}
 
             <div className='follow-status-container'>
@@ -249,7 +247,7 @@ const ProfileSettings: React.FC = () => {
                   checked={selectedOption === 'posts'}
                   onChange={handleRadioChange}
                 />
-                <label htmlFor='posts'>Posts</label>
+                <label htmlFor='posts'>Saved Posts</label>
                 <input
                   type='radio'
                   name='recipes'
@@ -283,7 +281,9 @@ const ProfileSettings: React.FC = () => {
                     ) : (
                       <p>No {listType} yet.</p>
                     )}
-                    <button onClick={() => setShowListPopup(false)}>Close</button>
+                    <button className='close-button' onClick={() => setShowListPopup(false)}>
+                      CLOSE
+                    </button>
                   </div>
                 </div>
               )}
@@ -308,18 +308,23 @@ const ProfileSettings: React.FC = () => {
                             </span>
                             {/* Rating Selector */}
                             {sortedItem.rating === 0 && (
-                              <select
-                                value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
-                                onChange={e =>
-                                  handleRatingChange(sortedItem.title, parseInt(e.target.value, 10))
-                                }>
-                                <option value=''>Select Rating</option>
-                                {availableRatings.map(rating => (
-                                  <option key={rating} value={rating}>
-                                    {rating}
-                                  </option>
-                                ))}
-                              </select>
+                              <div className='rating-container'>
+                                <select
+                                  value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
+                                  onChange={e =>
+                                    handleRatingChange(
+                                      sortedItem.title,
+                                      parseInt(e.target.value, 10),
+                                    )
+                                  }>
+                                  <option value=''>Select Rating</option>
+                                  {availableRatings.map(rating => (
+                                    <option key={rating} value={rating}>
+                                      {rating}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
                             )}
                             {sortedItem.rating !== 0 && (
                               <button onClick={() => handleRemoveRating(sortedItem.title)}>

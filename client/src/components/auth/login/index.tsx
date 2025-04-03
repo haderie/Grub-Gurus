@@ -22,7 +22,7 @@ const Login = () => {
   } = useAuth('login');
 
   return (
-    <div className='container'>
+    <div className='login-container'>
       <h2>Welcome to Grub Gurus!</h2>
       <h3>Login to Start Munchin&#39;</h3>
       <form onSubmit={handleSubmit}>
@@ -35,7 +35,7 @@ const Login = () => {
           onChange={event => handleInputChange(event, 'username')}
           placeholder='Username'
           required
-          className='input-text'
+          className='input-text-login'
           id='username-input'
         />
         <h4>
@@ -47,10 +47,10 @@ const Login = () => {
           onChange={event => handleInputChange(event, 'password')}
           placeholder='Password'
           required
-          className='input-text'
+          className='input-text-login'
           id='password-input'
         />
-        <div className='show-password'>
+        <div className='show-password-login'>
           <input
             type='checkbox'
             id='showPasswordToggle'
@@ -59,11 +59,11 @@ const Login = () => {
           />
           <label htmlFor='showPasswordToggle'>Show Password</label>
         </div>
-        <button type='submit' className='login-button'>
+        <button type='submit' className='user-login-button'>
           TO THE KITCHEN <IoMdArrowRoundForward />
         </button>
       </form>
-      {err && <p className='error-message'>{err}</p>}
+      {err && <p className='error-message-login'>{err}</p>}
       <Link to='/signup' className='signup-link'>
         Not a guru yet? Sign up here.
       </Link>

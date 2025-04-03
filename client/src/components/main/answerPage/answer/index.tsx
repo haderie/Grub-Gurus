@@ -67,12 +67,11 @@ const AnswerView = ({
         </Box>
       )}
     </Box>
-
     {/* Author & Meta Section */}
     <Box
       sx={{
-        minWidth: 150,
-        textAlign: 'right', // Align text to the right within this Box
+        textAlign: 'right',
+        justifyContent: 'right', // Align text to the right within this Box
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end', // Align content to the right side
@@ -81,13 +80,12 @@ const AnswerView = ({
       <Typography variant='subtitle1' sx={{ fontWeight: 'bold', color: '#6A9C89' }}>
         {ansBy}
       </Typography>
-      <Typography variant='body2' sx={{ color: '#3E3232' }}>
-        {meta}
+      <Typography variant='body2' sx={{ color: '#FFA725' }}>
+        answered {meta}
       </Typography>
+      {/* Comments Section */}
+      <CommentSection comments={comments} handleAddComment={handleAddComment} />
     </Box>
-
-    {/* Comments Section */}
-    <CommentSection comments={comments} handleAddComment={handleAddComment} />
   </Paper>
 );
 

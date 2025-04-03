@@ -12,7 +12,7 @@ import { getMetaData } from '../../../tool';
 const MessageCard = ({ message }: { message: DatabaseMessage }) => (
   <div className='message'>
     <div className='message-header'>
-      <div className='message-sender'>{message.msgFrom}</div>
+      <div className='message-sender'>@{message.msgFrom}</div>
       <div className='message-time'>{getMetaData(new Date(message.msgDateTime))}</div>
     </div>
     <div className='message-body'>

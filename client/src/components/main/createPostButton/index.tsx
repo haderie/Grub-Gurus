@@ -23,7 +23,7 @@ const CreatePostButton = () => {
       color='primary'
       onClick={handleNewPost}
       sx={{
-        borderRadius: 3,
+        borderRadius: '5px',
         textTransform: 'none',
         fontSize: '16px',
         backgroundColor: '#6A9C89',

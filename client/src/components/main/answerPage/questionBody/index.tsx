@@ -51,11 +51,11 @@ const QuestionBody = ({ views, text, askby, meta, youtubeVideoUrl }: QuestionBod
         <Box sx={{ marginTop: 2 }}>
           <ReactPlayer
             url={youtubeVideoUrl}
-            width='100%'
+            width='50%'
             height='auto'
             style={{
               maxWidth: '50%',
-              maxHeight: '100%',
+              maxHeight: '50%',
             }}
           />
         </Box>
