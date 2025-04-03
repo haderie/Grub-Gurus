@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import { Box, Button, List, ListItem, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { GameInstance, GuessTheIngredientState } from '../../../../types/types';
 import useGuessTheIngredientPage from '../../../../hooks/useGuessTheIngredientPage';
 

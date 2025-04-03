@@ -44,7 +44,7 @@ jobs:
         if: ${{ always() }}
         env:
           REACT_APP_SERVER_URL: http://localhost:8000
-        run: cd client; npm run build
+        run: cd client; NODE_OPTIONS="--max-old-space-size=4096" npm run build -- --no-cache
 
       - name: Build backend server
         if: ${{ always() }}

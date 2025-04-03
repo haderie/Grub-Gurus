@@ -79,6 +79,7 @@ const ProfileEdit = ({
   handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
   handleCheckPrivacy: () => void;
 }) => {
+  // eslint-disable-next-line
   const handleCloseProfileEdit = () => {
     setEditBioMode(false);
   };
