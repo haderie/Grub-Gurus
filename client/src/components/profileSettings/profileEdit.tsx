@@ -93,6 +93,7 @@ const ProfileEdit = ({
         padding: 4,
         boxSizing: 'border-box',
         backgroundColor: '#f5f5f5',
+        marginTop: '-30px',
       }}>
       {/* Header Section: Title + Return Button */}
       <Box
@@ -108,7 +109,7 @@ const ProfileEdit = ({
         <Button
           variant='contained'
           color='primary'
-          sx={{ backgroundColor: '#6A9C89', color: '#FFF5E4' }}
+          sx={{ backgroundColor: '#6A9C89', color: '#FFF5E4', fontSize: '16px' }}
           onClick={() => setEditBioMode(false)}>
           Return to Profile
         </Button>

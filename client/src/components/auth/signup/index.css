@@ -73,10 +73,9 @@ form {
   padding: 12px;
   font-size: 16px;
   background-color: #6A9C89;
-  color: #fff;
+  color: #FFF5E4;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
   transition: background-color 0.3s;
 }
 
@@ -94,7 +93,6 @@ form {
   font-size: 16px;
   color: #6A9C89;
   text-decoration: none;
-  cursor: pointer;
   transition: color 0.3s;
   text-align: center; /* Center the link */
 }

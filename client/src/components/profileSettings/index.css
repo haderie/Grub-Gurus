@@ -2,27 +2,35 @@
    using padding instead of forced vertical centering */
 .page-container {
   width: 100%;
-  /* min-height: 100vh; */
+  height: 100vh;
+  /* Ensures it takes up the full viewport height */
   background: #f7f7f7;
   display: flex;
-  justify-content: center; /* horizontally center the card */
-  padding: 40px 0; /* top & bottom spacing */
+  justify-content: center;
+  /* Horizontally centers the content */
+  align-items: center;
+  /* Vertically centers the content */
+  padding: 0;
+  /* Removes unnecessary top & bottom spacing */
   box-sizing: border-box;
 }
 
 /* A card-like container that holds the actual profile content */
 .profile-card {
-  position: relative; /* Enables absolute positioning inside */
-  width: 800px;
-  max-width: 1000px; /* limit the card width */
-  max-height: 700px;
+  position: relative;
+  width: 100vw; /* Make it take the full width of the viewport */
+  height: 100vh; /* Make it take the full height of the viewport */
+  max-height: none; /* Remove height limitation */
   overflow-y: auto;
-  background: #fff; /* white background */
-  border-radius: 5px; /* slight rounding on edges */
-  padding: 30px; /* internal padding */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  background: #fff; /* White background */
+  border-radius: 5px; /* Slight rounding on edges */
+  padding: 30px; /* Internal padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  padding: 4;
+  flex-direction: column;
 }
 
 /* A clear section for the main heading */
@@ -77,6 +85,86 @@
 
 .edit-profile-btn {
   position: absolute;
+  top: 25px;
+  right: 45px;
+  background-color: #6A9C89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s;  
+}
+
+.edit-profile-btn:hover {
+  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
+}
+/* Style the select dropdown */
+.list-item-container select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #3E3232;
+  width: 150px; /* Adjust width as needed */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Style the select dropdown when it's focused (active) */
+.list-item-container select:focus {
+  border-color: #6a9c89;
+  box-shadow: 0 0 5px rgba(106, 156, 137, 0.5);
+  outline: none;
+}
+
+/* Style the options in the select dropdown */
+.list-item-container select option {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Style the select dropdown when hovering */
+.list-item-container select:hover {
+  border-color: #6a9c89;  /* Color changes on hover */
+}
+
+/* Add some spacing between the dropdown and other elements */
+.list-item-container .rating-container {
+  margin-top: 10px;
+}
+
+/* Style the remove rating button */
+.list-item-container button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: #6a9c89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.list-item-container button:hover {
+  box-shadow: 0 0 5px rgba(230, 57, 70, 0.5); /* Soft glow effect */
+}
+
+/* Focus effect for accessibility */
+.list-item-container button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(230, 57, 70, 0.7); /* Slightly stronger focus effect */
+}
+
+/* Spacing */
+.list-item-container .rating-button-container {
+  margin-top: 10px;
+}
+
+.unfollow-btn {
+  position: absolute;
   top: 10px;
   right: 10px;
   background-color: #6A9C89;
@@ -87,21 +175,9 @@
   font-size: 16px;
   transition: background-color 0.3s;  
 }
-.unfollow-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #ffa725;
-  color: #54170a;
-  border: none;
-  padding: 13px 12px;
-  font-size: 18px;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 .unfollow-btn:hover {
-  background-color: #f39406;
+  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
 }
 
 .info-stats-container {
@@ -133,7 +209,6 @@
 }
 
 .stats span {
-  cursor: pointer;
   /* font-weight: 500; */
   color: #FFA725;
   transition: color 0.2s ease-in-out;
@@ -225,11 +300,10 @@
 
 .radio-buttons label {
   font-size: 16px;
-  cursor: pointer;
 }
 
 .list-container {
-  max-height: 200px;
+  height: 100vh;
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
@@ -247,7 +321,6 @@
   margin-bottom: 10px;
   font-size: 14px;
   color: #3E3232;
-  cursor: pointer;
 }
 
 .list-item-container:hover {
@@ -268,7 +341,6 @@
   padding: 7px 10px;
   font-size: 13px;
   border-radius: 5px;
-  cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
 
@@ -305,7 +377,6 @@
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 /* Primary action button (Reset, Edit, etc.) */
@@ -353,7 +424,6 @@
   padding: 5px 10px;
   margin-top: 10px;
   border-radius: 5px;
-  cursor: pointer;
   font-size: 14px;
 }
 

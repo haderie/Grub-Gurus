@@ -106,7 +106,7 @@ const RecipeCalendar: React.FC = () => {
                 placeholder='Enter name of recipe.'
                 value={recipeState.title}
                 onChange={e => setRecipeState({ ...recipeState, title: e.target.value })}
-                className='input-field'
+                className='input-field-calendar'
               />
             </div>
 
@@ -123,7 +123,7 @@ const RecipeCalendar: React.FC = () => {
                     ingredients: e.target.value.split(',').map(ing => ing.trim()),
                   })
                 }
-                className='input-field'
+                className='input-field-calendar'
               />
             </div>
 
@@ -135,7 +135,7 @@ const RecipeCalendar: React.FC = () => {
                 placeholder='Enter recipe instructions.'
                 value={recipeState.instructions}
                 onChange={e => setRecipeState({ ...recipeState, instructions: e.target.value })}
-                className='input-field'
+                className='input-field-calendar'
               />
             </div>
 
@@ -147,7 +147,7 @@ const RecipeCalendar: React.FC = () => {
                 placeholder='Enter your cook time in minutes.'
                 value={recipeState.cookTime}
                 onChange={e => setRecipeState({ ...recipeState, cookTime: Number(e.target.value) })}
-                className='input-field'
+                className='input-field-calendar'
               />
             </div>
 
@@ -160,7 +160,7 @@ const RecipeCalendar: React.FC = () => {
                   placeholder='Search for a YouTube video.'
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className='input-field'
+                  className='input-field-calendar'
                 />
                 <button
                   type='button'
@@ -200,7 +200,7 @@ const RecipeCalendar: React.FC = () => {
                 type='time'
                 value={selectedTime}
                 onChange={e => setSelectedTime(e.target.value)}
-                className='input-field'
+                className='input-field-calendar'
               />
             </div>
 
@@ -213,7 +213,6 @@ const RecipeCalendar: React.FC = () => {
                 style={{
                   width: '40px',
                   height: '40px',
-                  cursor: 'pointer',
                   border: 'none',
                   marginTop: '3%',
                   backgroundColor: selectedColor,

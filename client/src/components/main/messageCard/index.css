@@ -78,7 +78,6 @@ ol li {
 .message:hover {
   background-color: #e0e0e0;
   /* Subtle hover effect */
-  cursor: pointer;
 }
 
 .message-header .message-time {

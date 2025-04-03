@@ -129,10 +129,10 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                 type='date'
                 value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
                 onChange={e => {
-                const [year, month, day] = e.target.value.split('-').map(Number);
-                const localDate = new Date(year, month - 1, day); // Month is 0-based in JS Date
-                setSelectedDate(localDate);
-              }}
+                  const [year, month, day] = e.target.value.split('-').map(Number);
+                  const localDate = new Date(year, month - 1, day); // Month is 0-based in JS Date
+                  setSelectedDate(localDate);
+                }}
                 style={{
                   width: '100%',
                   padding: '10px',
@@ -174,7 +174,6 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                   width: '40px',
                   height: '40px',
                   border: 'none',
-                  cursor: 'pointer',
                   marginBottom: '10px',
                 }}
               />
@@ -189,7 +188,6 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                   color: '#FFF',
                   border: 'none',
                   borderRadius: '4px',
-                  cursor: 'pointer',
                   fontSize: '16px',
                 }}>
                 CONFIRM
@@ -202,7 +200,6 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                   color: '#FFF',
                   border: 'none',
                   borderRadius: '4px',
-                  cursor: 'pointer',
                   fontSize: '16px',
                 }}>
                 CANCEL

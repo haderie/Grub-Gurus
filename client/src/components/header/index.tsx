@@ -33,7 +33,20 @@ const Header = () => {
       <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
 
       {/* Search Bar in the center */}
-      <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box
+        sx={{
+          'flex': 1,
+          'display': 'flex',
+          'justifyContent': 'center',
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89', // Set custom border color on focus
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89', // Set custom label color on focus
+          },
+        }}>
         <TextField
           id='searchBar'
           size='small'

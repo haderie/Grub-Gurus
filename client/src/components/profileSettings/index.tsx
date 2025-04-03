@@ -186,7 +186,7 @@ const ProfileSettings: React.FC = () => {
 
             {!canEditProfile && (
               <button className='unfollow-btn' onClick={handleUpdateFollowers}>
-                {isFollowing ? 'Unfollow' : 'Follow'}
+                {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
               </button>
             )}
             {canEditProfile && (
@@ -247,7 +247,7 @@ const ProfileSettings: React.FC = () => {
                   checked={selectedOption === 'posts'}
                   onChange={handleRadioChange}
                 />
-                <label htmlFor='posts'>Posts</label>
+                <label htmlFor='posts'>Saved Posts</label>
                 <input
                   type='radio'
                   name='recipes'
@@ -308,18 +308,23 @@ const ProfileSettings: React.FC = () => {
                             </span>
                             {/* Rating Selector */}
                             {sortedItem.rating === 0 && (
-                              <select
-                                value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
-                                onChange={e =>
-                                  handleRatingChange(sortedItem.title, parseInt(e.target.value, 10))
-                                }>
-                                <option value=''>Select Rating</option>
-                                {availableRatings.map(rating => (
-                                  <option key={rating} value={rating}>
-                                    {rating}
-                                  </option>
-                                ))}
-                              </select>
+                              <div className='rating-container'>
+                                <select
+                                  value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
+                                  onChange={e =>
+                                    handleRatingChange(
+                                      sortedItem.title,
+                                      parseInt(e.target.value, 10),
+                                    )
+                                  }>
+                                  <option value=''>Select Rating</option>
+                                  {availableRatings.map(rating => (
+                                    <option key={rating} value={rating}>
+                                      {rating}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
                             )}
                             {sortedItem.rating !== 0 && (
                               <button onClick={() => handleRemoveRating(sortedItem.title)}>
