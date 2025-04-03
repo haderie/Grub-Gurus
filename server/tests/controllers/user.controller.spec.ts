@@ -14,6 +14,7 @@ const mockUser: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -26,6 +27,7 @@ const mockSafeUser: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
@@ -38,6 +40,7 @@ const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 const mockUpdatedUser = {
@@ -55,6 +58,7 @@ const mockUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  rankings: [],
 };
 
 const mockPopulatedUserJSONResponse = {
@@ -67,6 +71,7 @@ const mockPopulatedUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  rankings: [],
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');

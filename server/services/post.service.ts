@@ -60,7 +60,7 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
     );
 
     // Remove null values directly in filter()
-    return publicPosts.filter(post => post !== null);
+    return publicPosts.filter(Boolean) as PopulatedDatabasePost[];
   } catch (error) {
     throw new Error(`Posts could not be retrieved: ${error}`);
   }
