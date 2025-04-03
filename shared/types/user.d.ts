@@ -137,6 +137,18 @@ export interface UpdateRecipeBookPrivacy extends Request {
 }
 
 /**
+ * Express request for updating a user's recipeBook privacy status.
+ * - `username`: The username whose recipeBook privacy status is being updated (body).
+ * - `certified`: The new certification status.
+ */
+export interface UpdateCertification extends Request {
+  body: {
+    username: string;
+    certified: boolean;
+  };
+}
+
+/**
  * Express request for following a new user.
  * - `username`: The username whose following list is being updated.
  * - `followingUsername`: The new user to be followed.

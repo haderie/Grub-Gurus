@@ -4,7 +4,10 @@ import axios from 'axios';
 import { validateHyperlink } from '../tool';
 import useUserContext from './useUserContext';
 import { Recipe, YouTubeVideo } from '../types/types';
-import { addRecipe } from '../services/recipeService';
+import { addRecipe, getRecipesByUsername } from '../services/recipeService';
+import { updateCertifiedStatus } from '../services/userService';
+
+const NUM_RECIPES_FOR_CERTIFICATION = 1;
 
 /**
  * Custom hook to handle question submission and form validation
@@ -186,6 +189,10 @@ const useNewRecipe = () => {
     };
 
     const res = await addRecipe(recipe);
+    const recipes = await getRecipesByUsername(user.username);
+    if (recipes.length > NUM_RECIPES_FOR_CERTIFICATION) {
+      updateCertifiedStatus(user.username);
+    }
 
     if (res && res._id) {
       navigate('/explore');

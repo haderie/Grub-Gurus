@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import { FaRegUserCircle, FaUnlockAlt, FaLock } from 'react-icons/fa';
+import { FaRegUserCircle, FaUnlockAlt, FaLock, FaCrown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
@@ -229,7 +229,11 @@ const ProfileSettings: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
+                {userData?.certified && (
+                  <p className='certified-user-message'>
+                    <FaCrown style={{ color: 'gold', marginRight: '8px' }} /> Certified User
+                  </p>
+                )}
                 <p className='biography'>{userData.biography || 'No biography yet.'}</p>
                 <hr className='separator' style={{ marginTop: '30px' }} />
               </div>

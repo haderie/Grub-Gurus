@@ -146,6 +146,23 @@ const updateRecipeBookPrivacy = async (
 };
 
 /**
+ * Updates the user's certified status.
+ * @param username The unique username of the user
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updateCertifiedStatus = async (username: string): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updateCertifiedStatus`, {
+    username,
+    certified: true,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error when updating certification');
+  }
+  return res.data;
+};
+
+/**
  * Follow a user by username
  * @param username - The unique username of the user
  * @param userToFollow - The username of the user to follow
@@ -261,5 +278,6 @@ export {
   followUser,
   updatePrivacy,
   updateRecipeBookPrivacy,
+  updateCertifiedStatus,
   savePost,
 };
