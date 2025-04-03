@@ -20,6 +20,7 @@ import {
   loginUser,
   saveUser,
   unfollowUserService,
+  updateRecipeRanking,
   updateUser,
 } from '../services/user.service';
 import PostModel from '../models/posts.model';
@@ -85,6 +86,7 @@ const userController = (socket: FakeSOSocket) => {
       privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
+      rankings: requestUser.rankings,
     };
 
     try {
@@ -433,6 +435,35 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Handles the ranking of a recipe by a user.
+   * @param req The request containing username, recipeId, and ranking.
+   * @param res The response confirming the update or returning an error.
+   */
+  const rankRecipe = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { username, postID, ranking } = req.body;
+
+      if (!username || !postID || ranking === undefined) {
+        res.status(400).send('Missing required fields.');
+        return;
+      }
+
+      const updatedUser = await updateRecipeRanking(username, postID, ranking);
+
+      if ('error' in updatedUser) {
+        res.status(400).send(updatedUser.error);
+        return;
+      }
+
+      res
+        .status(200)
+        .json({ message: 'Ranking updated successfully.', rankings: updatedUser.rankings });
+    } catch (error) {
+      res.status(500).send(`Error ranking recipe: ${error}`);
+    }
+  };
+
   // Define routes for the user-related operations.
   router.post('/signup', createUser);
   router.post('/login', userLogin);
@@ -445,6 +476,7 @@ const userController = (socket: FakeSOSocket) => {
   router.patch('/followUser', updateFollowingList);
   router.patch('/updatePrivacy', updatePrivacy);
   router.patch('/savePost', savePosts);
+  router.post('/rank-recipe', rankRecipe);
 
   return router;
 };

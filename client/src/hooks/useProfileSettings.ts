@@ -8,10 +8,27 @@ import {
   followUser,
   updatePrivacy,
   updateRecipeBookPrivacy,
+  updateRanking,
 } from '../services/userService';
 
-import { SafePopulatedDatabaseUser } from '../types/types';
+import {
+  PopulatedDatabasePost,
+  PopulatedDatabaseRecipe,
+  SafePopulatedDatabaseUser,
+} from '../types/types';
 import useUserContext from './useUserContext';
+
+type SortedItem = {
+  item: PopulatedDatabasePost;
+  title: string;
+  rating: number;
+  user: string;
+};
+
+const isItem = (
+  obj: SortedItem,
+): obj is { item: PopulatedDatabasePost; title: string; rating: number; user: string } =>
+  (obj as { item: PopulatedDatabasePost }).item !== undefined;
 
 /**
  * A custom hook to encapsulate all logic/state for the ProfileSettings component.
@@ -55,6 +72,10 @@ const useProfileSettings = () => {
     setSelectedOption(event.target.value as 'recipes' | 'posts');
   };
 
+  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>(currentUser.rankings);
+  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
+
   useEffect(() => {
     if (!username) return;
 
@@ -80,6 +101,47 @@ const useProfileSettings = () => {
       setIsRecipePublic(userData.recipeBookPublic);
     }
   }, [userData]);
+
+  let selectedList: { title: string; post: PopulatedDatabasePost; user: string }[] = [];
+  let recipeSaved: PopulatedDatabaseRecipe[] = [];
+
+  switch (selectedOption) {
+    case 'recipes':
+      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
+      break;
+    case 'posts':
+      selectedList =
+        userData?.postsCreated?.map(p => ({
+          title: p?.recipe?.title,
+          post: p,
+          user: p.username,
+        })) || [];
+      break;
+    default:
+      selectedList = [];
+      break;
+  }
+
+  const sortedList: SortedItem[] =
+    selectedOption === 'posts'
+      ? selectedList
+          .map(({ post, title, user }) => ({
+            item: post,
+            title,
+            user, // Ensure user is included
+            rating: userRankings[post._id.toString()] || 0,
+          }))
+          .sort((a, b) => {
+            if (a.rating === 0 && b.rating !== 0) return 1; // Push unranked items down
+            if (a.rating !== 0 && b.rating === 0) return -1; // Keep ranked items up
+            return a.rating - b.rating; // Sort by rating
+          })
+      : [];
+
+  useEffect(() => {
+    const totalItems = sortedList.length; // Get the number of items
+    setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
+  }, [sortedList.length]); // Recalculate whenever sortedList changes
 
   /**
    * Toggles the visibility of the password fields.
@@ -264,6 +326,48 @@ const useProfileSettings = () => {
     }
   };
 
+  const handleRatingChange = async (item: PopulatedDatabasePost, rating: number) => {
+    // Ensure the rank is unique
+    if (!usedRankings.has(rating) && userData?.username) {
+      await updateRanking(userData.username, item._id, rating);
+      setUserRankings(prevRatings => {
+        const newRatings = { ...prevRatings, [item._id.toString()]: rating };
+        return newRatings;
+      });
+      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
+    } else {
+      // eslint-disable-next-line no-alert
+      alert('This ranking is already taken. Please choose another.');
+    }
+  };
+  const handleRemoveRating = (id: string) => {
+    const rating = userRankings[id];
+    if (rating !== undefined) {
+      // Remove the rating from the used rankings set
+      setUsedRankings(prevUsed => {
+        const updatedUsed = new Set(prevUsed);
+        updatedUsed.delete(rating); // Remove the rating from the used set
+        return updatedUsed;
+      });
+
+      // Return the rating to the available rankings list
+      setAvailableRankings(prevRankings => {
+        // Only add the rating if it is not already in the available list
+        if (!prevRankings.includes(rating)) {
+          return [...prevRankings, rating];
+        }
+        return prevRankings;
+      });
+
+      // Remove the rating from the selected rankings
+      setUserRankings(prevRankings => {
+        const updatedRankings = { ...prevRankings };
+        delete updatedRankings[id]; // Remove the ranking for the given ID
+        return updatedRankings;
+      });
+    }
+  };
+
   return {
     userData,
     newPassword,
@@ -302,6 +406,14 @@ const useProfileSettings = () => {
     setIsRecipePublic,
     toggleRecipeBookVisibility,
     checkIfFollowing,
+    handleRatingChange,
+    handleRemoveRating,
+    availableRankings,
+    usedRankings,
+    userRankings,
+    sortedList,
+    isItem,
+    recipeSaved,
   };
 };
 

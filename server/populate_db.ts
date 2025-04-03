@@ -258,6 +258,7 @@ async function userCreate(
     privacySetting: 'Public',
     recipeBookPublic: false,
     postsCreated: [],
+    rankings: [],
   };
 
   return await UserModel.create(userDetail);
