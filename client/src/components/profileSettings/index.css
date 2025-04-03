@@ -11,8 +11,6 @@
   align-items: center;
   /* Vertically centers the content */
   padding: 0;
-  /* Removes unnecessary top & bottom spacing */
-  box-sizing: border-box;
 }
 
 /* A card-like container that holds the actual profile content */
