@@ -49,14 +49,13 @@ const ProfileSettings: React.FC = () => {
     sortedList,
     isItem,
     recipeSaved,
+    availableRatings,
   } = useProfileSettings();
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
-
-  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
 
   const handlePostClick = (postId: string) => {
     navigate(`/explore?post=${postId}`);
@@ -234,8 +233,7 @@ const ProfileSettings: React.FC = () => {
                               </select>
                             )}
                             {sortedItem.rating !== 0 && canEditProfile && (
-                              <button
-                                onClick={() => handleRemoveRating(sortedItem.item._id.toString())}>
+                              <button onClick={() => handleRemoveRating(sortedItem.item._id)}>
                                 Remove Rating
                               </button>
                             )}

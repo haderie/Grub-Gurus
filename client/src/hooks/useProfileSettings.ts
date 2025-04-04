@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ObjectId } from 'mongodb';
 import {
   getUserByUsername,
   deleteUser,
@@ -72,9 +73,12 @@ const useProfileSettings = () => {
     setSelectedOption(event.target.value as 'recipes' | 'posts');
   };
 
-  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>(currentUser.rankings);
+  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(
+    new Set(Object.values(currentUser.rankings || {})),
+  );
+  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
 
   useEffect(() => {
     if (!username) return;
@@ -85,6 +89,7 @@ const useProfileSettings = () => {
         const data = await getUserByUsername(username);
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
+        setUserRankings(data.rankings);
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -99,6 +104,7 @@ const useProfileSettings = () => {
   useEffect(() => {
     if (userData?.recipeBookPublic !== undefined) {
       setIsRecipePublic(userData.recipeBookPublic);
+      // setUserRankings(userData.rankings);
     }
   }, [userData]);
 
@@ -143,6 +149,65 @@ const useProfileSettings = () => {
     setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
   }, [sortedList.length]); // Recalculate whenever sortedList changes
 
+  const handleRatingChange = async (item: PopulatedDatabasePost, rating: number) => {
+    // Ensure the rank is unique
+    if (!usedRankings.has(rating) && username) {
+      await updateRanking(username, item._id, rating);
+
+      // Re-fetch updated user
+      const updatedUser = await getUserByUsername(username);
+      setUserRankings(userData?.rankings);
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+
+      setUserRankings(prevRatings => {
+        const newRatings = { ...prevRatings, [item._id.toString()]: rating };
+        return newRatings;
+      });
+      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
+    } else {
+      // eslint-disable-next-line no-alert
+      alert('This ranking is already taken. Please choose another.');
+    }
+  };
+  const handleRemoveRating = async (id: ObjectId) => {
+    const rating = userRankings[id.toString()];
+    if (rating !== undefined) {
+      // Remove the rating from the used rankings set
+      setUsedRankings(prevUsed => {
+        const updatedUsed = new Set(prevUsed);
+        updatedUsed.delete(rating); // Remove the rating from the used set
+        return updatedUsed;
+      });
+      if (!username) return;
+
+      await updateRanking(username, id, 0);
+      const updatedUser = await getUserByUsername(username);
+
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+
+      // Return the rating to the available rankings list
+      setAvailableRankings(prevRankings => {
+        // Only add the rating if it is not already in the available list
+        if (!prevRankings.includes(rating)) {
+          return [...prevRankings, rating];
+        }
+        return prevRankings;
+      });
+
+      // Remove the rating from the selected rankings
+      setUserRankings(prevRankings => {
+        const updatedRankings = { ...prevRankings };
+        delete updatedRankings[id.toString()]; // Remove the ranking for the given ID
+        return updatedRankings;
+      });
+    }
+  };
   /**
    * Toggles the visibility of the password fields.
    */
@@ -326,48 +391,6 @@ const useProfileSettings = () => {
     }
   };
 
-  const handleRatingChange = async (item: PopulatedDatabasePost, rating: number) => {
-    // Ensure the rank is unique
-    if (!usedRankings.has(rating) && userData?.username) {
-      await updateRanking(userData.username, item._id, rating);
-      setUserRankings(prevRatings => {
-        const newRatings = { ...prevRatings, [item._id.toString()]: rating };
-        return newRatings;
-      });
-      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
-    } else {
-      // eslint-disable-next-line no-alert
-      alert('This ranking is already taken. Please choose another.');
-    }
-  };
-  const handleRemoveRating = (id: string) => {
-    const rating = userRankings[id];
-    if (rating !== undefined) {
-      // Remove the rating from the used rankings set
-      setUsedRankings(prevUsed => {
-        const updatedUsed = new Set(prevUsed);
-        updatedUsed.delete(rating); // Remove the rating from the used set
-        return updatedUsed;
-      });
-
-      // Return the rating to the available rankings list
-      setAvailableRankings(prevRankings => {
-        // Only add the rating if it is not already in the available list
-        if (!prevRankings.includes(rating)) {
-          return [...prevRankings, rating];
-        }
-        return prevRankings;
-      });
-
-      // Remove the rating from the selected rankings
-      setUserRankings(prevRankings => {
-        const updatedRankings = { ...prevRankings };
-        delete updatedRankings[id]; // Remove the ranking for the given ID
-        return updatedRankings;
-      });
-    }
-  };
-
   return {
     userData,
     newPassword,
@@ -414,6 +437,7 @@ const useProfileSettings = () => {
     sortedList,
     isItem,
     recipeSaved,
+    availableRatings,
   };
 };
 

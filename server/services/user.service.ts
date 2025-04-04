@@ -291,16 +291,12 @@ export const updateRecipeRanking = async (username: string, postID: ObjectId, ra
     const updatedUser = await UserModel.findOneAndUpdate(
       { username }, // Find the user by username
       { $set: { [`rankings.${postID}`]: ranking } },
-      { new: true }, // Return the updated document
-    );
+      { new: true },
+    ).select('-password');
 
     if (!updatedUser) {
       return { error: 'User not found' };
     }
-
-    // Update the ranking for this recipe
-    // user.set(recipeId, ranking);
-    await updatedUser.save();
 
     return updatedUser;
   } catch (error) {
