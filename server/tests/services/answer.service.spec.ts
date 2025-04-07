@@ -86,4 +86,132 @@ describe('Answer model', () => {
       });
     });
   });
+
+  describe('saveAnswer with YouTube Video', () => {
+    test('should save an answer with a valid YouTube URL', async () => {
+      const mockAnswer = {
+        text: 'Test answer text',
+        ansBy: 'testuser',
+        ansDateTime: new Date(),
+        comments: [],
+        youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        isUserCertified: false
+      };
+
+      const mockDBAnswer = {
+        ...mockAnswer,
+        _id: new mongoose.Types.ObjectId(),
+      };
+
+      mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
+
+      const result = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
+
+      expect(result._id).toBeDefined();
+      expect(result.youtubeVideoUrl).toBe(mockAnswer.youtubeVideoUrl);
+    });
+
+    test('should save an answer with different YouTube URL formats', async () => {
+      const validUrls = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://www.youtube.com/v/dQw4w9WgXcQ',
+        'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      ];
+
+      for (const url of validUrls) {
+        const mockAnswer = {
+          text: 'Test answer text',
+          ansBy: 'testuser',
+          ansDateTime: new Date(),
+          comments: [],
+          youtubeVideoUrl: url,
+          isUserCertified: false
+        };
+
+        const mockDBAnswer = {
+          ...mockAnswer,
+          _id: new mongoose.Types.ObjectId(),
+        };
+
+        mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
+
+        const result = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
+
+        expect(result._id).toBeDefined();
+        expect(result.youtubeVideoUrl).toBe(url);
+      }
+    });
+
+    test('should save an answer without a YouTube URL', async () => {
+      const mockAnswer = {
+        text: 'Test answer text',
+        ansBy: 'testuser',
+        ansDateTime: new Date(),
+        comments: [],
+        isUserCertified: false
+      };
+
+      const mockDBAnswer = {
+        ...mockAnswer,
+        _id: new mongoose.Types.ObjectId(),
+      };
+
+      mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
+
+      const result = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
+
+      expect(result._id).toBeDefined();
+      expect(result.youtubeVideoUrl).toBeUndefined();
+    });
+
+    test('should add an answer with YouTube URL to a question', async () => {
+      // Create a fixed ObjectId for testing
+      const answerId = new mongoose.Types.ObjectId('67f2db6002fd37d9ced01605');
+      
+      const mockQuestion: DatabaseQuestion = QUESTIONS.filter(
+        q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
+      )[0];
+
+      const mockAnswer = {
+        text: 'Test answer text',
+        ansBy: 'testuser',
+        ansDateTime: new Date(),
+        comments: [],
+        youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        isUserCertified: false
+      };
+
+      const mockDBAnswer = {
+        ...mockAnswer,
+        _id: answerId,
+      };
+
+      // Mock the saveAnswer function to return our mockDBAnswer
+      mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
+      
+      // Mock the findOneAndUpdate to return the question with the new answer added
+      const updatedQuestion = {
+        ...mockQuestion,
+        answers: [...mockQuestion.answers, answerId]
+      };
+      
+      jest
+        .spyOn(QuestionModel, 'findOneAndUpdate')
+        .mockResolvedValueOnce(updatedQuestion);
+
+      const savedAnswer = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
+      expect(savedAnswer._id).toBeDefined();
+      expect(savedAnswer.youtubeVideoUrl).toBe(mockAnswer.youtubeVideoUrl);
+
+      const result = await addAnswerToQuestion(mockQuestion._id.toString(), savedAnswer);
+      expect('error' in result).toBe(false);
+      if (!('error' in result)) {
+        // Check if the answer ID is in the question's answers array
+        const answerIds = result.answers.map(id => id.toString());
+        expect(answerIds).toContain(answerId.toString());
+      }
+    });
+  });
 });

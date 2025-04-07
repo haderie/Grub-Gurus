@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import QuestionModel from '../../models/questions.model';
 import {
   filterQuestionsBySearch,
@@ -471,6 +472,101 @@ describe('Question model', () => {
       const result = await addVoteToQuestion('someQuestionId', 'testUser', 'downvote');
 
       expect(result).toEqual({ error: 'Error when adding downvote to question' });
+    });
+  });
+
+  describe('saveQuestion with YouTube Video', () => {
+    test('should save a question with a valid YouTube URL', async () => {
+      const mockQuestion = {
+        title: 'Test Question',
+        text: 'Test question text',
+        tags: [],
+        askedBy: 'testuser',
+        askDateTime: new Date(),
+        answers: [],
+        upVotes: [],
+        downVotes: [],
+        views: [],
+        comments: [],
+        youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      };
+
+      const mockDBQuestion = {
+        ...mockQuestion,
+        _id: new mongoose.Types.ObjectId(),
+      };
+
+      mockingoose(QuestionModel, 'create').toReturn(mockDBQuestion);
+
+      const result = (await saveQuestion(mockQuestion)) as DatabaseQuestion;
+
+      expect(result._id).toBeDefined();
+      expect(result.youtubeVideoUrl).toBe(mockQuestion.youtubeVideoUrl);
+    });
+
+    test('should save a question with different YouTube URL formats', async () => {
+      const validUrls = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://www.youtube.com/v/dQw4w9WgXcQ',
+        'https://www.youtube.com/embed/dQw4w9WgXcQ'
+      ];
+
+      for (const url of validUrls) {
+        const mockQuestion = {
+          title: 'Test Question',
+          text: 'Test question text',
+          tags: [],
+          askedBy: 'testuser',
+          askDateTime: new Date(),
+          answers: [],
+          upVotes: [],
+          downVotes: [],
+          views: [],
+          comments: [],
+          youtubeVideoUrl: url
+        };
+
+        const mockDBQuestion = {
+          ...mockQuestion,
+          _id: new mongoose.Types.ObjectId(),
+        };
+
+        mockingoose(QuestionModel, 'create').toReturn(mockDBQuestion);
+
+        const result = (await saveQuestion(mockQuestion)) as DatabaseQuestion;
+
+        expect(result._id).toBeDefined();
+        expect(result.youtubeVideoUrl).toBe(url);
+      }
+    });
+
+    test('should save a question without a YouTube URL', async () => {
+      const mockQuestion = {
+        title: 'Test Question',
+        text: 'Test question text',
+        tags: [],
+        askedBy: 'testuser',
+        askDateTime: new Date(),
+        answers: [],
+        upVotes: [],
+        downVotes: [],
+        views: [],
+        comments: []
+      };
+
+      const mockDBQuestion = {
+        ...mockQuestion,
+        _id: new mongoose.Types.ObjectId(),
+      };
+
+      mockingoose(QuestionModel, 'create').toReturn(mockDBQuestion);
+
+      const result = (await saveQuestion(mockQuestion)) as DatabaseQuestion;
+
+      expect(result._id).toBeDefined();
+      expect(result.youtubeVideoUrl).toBeUndefined();
     });
   });
 });

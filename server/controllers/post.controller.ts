@@ -27,30 +27,11 @@ const postController = (socket: FakeSOSocket) => {
   const addPost = async (req: AddPostRequest, res: Response): Promise<void> => {
     const post: Posts = req.body; // Destructure the post fields from the request body
     try {
-      // const tagIds = await Promise.all(
-      //   post.recipe.tags.map(async (tagObject: { name: string; description: string }) => {
-      //     let tag = await TagModel.findOne({ name: tagObject.name });
-      //     if (!tag) {
-      //       tag = new TagModel({
-      //         name: tagObject.name,
-      //         description: tagObject.description || '',
-      //       });
-      //       await tag.save();
-      //     }
-      //     return tag._id;
-      //   })
-      // );
-
       const recipeWithTags: RecipeForPost = {
         ...post.recipe,
         tags: await processTags(post.recipe.tags),
       };
-
-      // const recipeWithTags: DatabaseRecipe = {
-      //   ...post.recipe,
-      //   tags: tagIds,
-      // };
-
+      
       const savedRecipe = (await createRecipe(recipeWithTags)) as DatabaseRecipe;
 
       if ('error' in savedRecipe) {
@@ -92,10 +73,6 @@ const postController = (socket: FakeSOSocket) => {
   const getPosts = async (_: Request, res: Response): Promise<void> => {
     try {
       const posts = await getPostList();
-      if ('error' in posts) {
-        throw Error('Error getting posts');
-      }
-
       res.status(200).json(posts);
     } catch (error) {
       res.status(500).send(`Error when getting Posts: ${error}`);
@@ -111,11 +88,6 @@ const postController = (socket: FakeSOSocket) => {
     try {
       const { username } = req.params;
       const users = await getFollowingPostList(username);
-
-      if ('error' in users) {
-        throw Error('error posting');
-      }
-
       res.status(200).json(users);
     } catch (error) {
       res.status(500).send(`Error when getting posts from users that you follow: ${error}`);
@@ -148,7 +120,6 @@ const postController = (socket: FakeSOSocket) => {
   router.post('/addPost', addPost);
   router.get('/getPosts', getPosts);
   router.get('/getFollowingPosts/:username', getFollowingPosts);
-
   router.patch('/updatePostLikes', updatePostLikes);
 
   return router;
