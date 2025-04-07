@@ -73,7 +73,7 @@ const NewRecipe = () => {
         mandatory={false}
       />
       <button type='button' onClick={searchYouTube} disabled={loading}>
-        {loading ? 'Searching...' : 'Search'}
+        {loading ? 'SEARCHING...' : 'Search'}
       </button>
 
       {videoResults.length > 0 && (

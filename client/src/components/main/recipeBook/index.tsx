@@ -33,14 +33,17 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
           /> */}
           <div className=''>
             {recipes.map(recipe => (
-              <li
+              <div
                 key={recipe._id.toString()}
                 className={`recipe-list-card ${selectedRecipe?._id === recipe._id}`}
                 onClick={() => setSelectedRecipe(recipe)}>
-                <Button className='w-full text-left' onClick={() => setSelectedRecipe(recipe)}>
+                <Button
+                  className='w-full text-left'
+                  sx={{ color: '#FFF5E4', textAlign: 'left', fontSize: '14px' }}
+                  onClick={() => setSelectedRecipe(recipe)}>
                   {recipe.title}
                 </Button>
-              </li>
+              </div>
             ))}
           </div>
         </div>

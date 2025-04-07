@@ -236,10 +236,12 @@ const useProfileSettings = () => {
   const validatePasswords = () => {
     if (newPassword.trim() === '' || confirmNewPassword.trim() === '') {
       setErrorMessage('Please enter and confirm your new password.');
+      setSuccessMessage(null);
       return false;
     }
     if (newPassword !== confirmNewPassword) {
       setErrorMessage('Passwords do not match.');
+      setSuccessMessage(null);
       return false;
     }
     return true;

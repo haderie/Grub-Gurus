@@ -1,4 +1,18 @@
-import { Button } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen'; // This should work once the package is installed
+import IconButton from '@mui/material/IconButton';
 import React from 'react';
 import { SafePopulatedDatabaseUser } from '../../types/types';
 
@@ -54,132 +68,235 @@ const ProfileEdit = ({
   handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
   handleCheckPrivacy: () => void;
 }) => {
+  // eslint-disable-next-line
   const handleCloseProfileEdit = () => {
     setEditBioMode(false);
   };
-
   return (
-    <div className='profile-card'>
-      <h2>Edit your profile!</h2>
-      <Button variant='contained' onClick={handleCloseProfileEdit}>
-        Return to Profile
-      </Button>
-      {successMessage && <p className='success-message'>{successMessage}</p>}
-      {errorMessage && <p className='error-message'>{errorMessage}</p>}
+    <Box
+      sx={{
+        width: '100vw',
+        minHeight: '100vh', // Prevents unwanted overflow
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch', // Makes everything naturally flow left to right
+        padding: 4,
+        boxSizing: 'border-box',
+        backgroundColor: '#f5f5f5',
+        marginTop: '-30px',
+      }}>
+      {/* Header Section: Title + Return Button */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+        <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+          Edit Profile
+        </Typography>
+        <Button
+          variant='contained'
+          color='primary'
+          sx={{ backgroundColor: '#6A9C89', color: '#FFF5E4', fontSize: '16px' }}
+          onClick={() => setEditBioMode(false)}>
+          Return to Profile
+        </Button>
+      </Box>
+
+      {/* Messages */}
+      {successMessage && <Typography color='success.main'>{successMessage}</Typography>}
+      {errorMessage && <Typography color='error.main'>{errorMessage}</Typography>}
+
       {userData ? (
         <>
-          <h4>General Information</h4>
-          <p>
-            <strong>Username:</strong> {userData.username}
-          </p>
-          <p>
-            <strong>Account Privacy:</strong> {userData.privacySetting}
-          </p>
-          {/* ---- Account Privacy Section ---- */}
-          <button
-            onClick={async () => {
-              const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
-              setPrivacySetting(newSetting);
-              await handleUpdatePrivacy(newSetting);
-              await handleCheckPrivacy();
-            }}>
-            {userData.privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
-          </button>
-          <p>
-            <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}
-          </p>
-          <button onClick={toggleRecipeBookVisibility}>
-            {userData.recipeBookPublic ? 'Make Account Private' : 'Make Account Public'}{' '}
-          </button>
-          <p>
-            <strong>Followers:</strong> {userData.followers?.length}
-          </p>
-          <p>
-            <strong>Following:</strong> {userData.following?.length}
-          </p>
-          {/* ---- Biography Section ---- */}
-          <div style={{ margin: '1rem 0' }}>
-            <input
-              className='input-text'
-              type='text'
+          {/* General Information */}
+          <Box sx={{ mt: 3 }}>
+            <Typography variant='h6'>General Information</Typography>
+            <Typography>
+              <strong>Username: @</strong>
+              {userData.username}
+            </Typography>
+            {/* Date Joined */}
+            <Typography>
+              <strong>Date Joined:</strong>{' '}
+              {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
+            </Typography>
+            <Typography>
+              <strong>Account Privacy:</strong> {userData.privacySetting}{' '}
+                <IconButton
+                  size='small'
+                  onClick={async () => {
+                    const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
+                    setPrivacySetting(newSetting);
+                    await handleUpdatePrivacy(newSetting);
+                    await handleCheckPrivacy();
+                  }}>
+                  {userData.privacySetting === 'Public' ? (
+                    <LockOpenIcon fontSize='small' />
+                  ) : (
+                    <LockIcon fontSize='small' />
+                  )}
+                </IconButton>
+            </Typography>
+            <Typography>
+              <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic} {' '}
+                <IconButton onClick={toggleRecipeBookVisibility}>
+                  {userData.recipeBookPublic ? 'Make Recipe Book Private' : 'Make Recipe Book Public'}{' '}
+                </IconButton>
+            </Typography>
+
+            <Typography>
+              <strong>Followers:</strong> {userData.followers?.length}
+            </Typography>
+            <Typography>
+              <strong>Following:</strong> {userData.following?.length}
+            </Typography>
+          </Box>
+
+          {/* Biography Section */}
+          <Box sx={{ mt: 3 }}>
+            <Typography variant='h6'>Biography</Typography>
+            <TextField
               value={newBio}
+              sx={{
+                'width': '700px',
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#6A9C89', // Change 'blue' to your desired color
+                  },
+                },
+              }}
               onChange={e => setNewBio(e.target.value)}
+              variant='outlined'
+              size='small'
             />
-            <button
-              className='login-button'
-              style={{ marginLeft: '1rem' }}
-              onClick={handleUpdateBiography}>
+            <Button
+              variant='contained'
+              onClick={handleUpdateBiography}
+              sx={{
+                marginLeft: '10px',
+                backgroundColor: '#6A9C89',
+                color: '#FFF5E4',
+                fontsize: '16px',
+              }}>
               Save
-            </button>
-            <button
-              className='delete-button'
-              style={{ marginLeft: '1rem' }}
-              onClick={handleCloseProfileEdit}>
+            </Button>
+            {/* <Button
+              variant='contained'
+              sx={{ backgroundColor: '#FFA725', color: '#FFF5E4', fontsize: '16px' }}
+              onClick={() => setEditBioMode(false)}>
               Cancel
-            </button>
-          </div>
-          <p>
-            <strong>Date Joined:</strong>{' '}
-            {userData.dateJoined ? new Date(userData.dateJoined).toLocaleDateString() : 'N/A'}
-          </p>
-          {/* ---- Reset Password Section ---- */}
+            </Button> */}
+          </Box>
+
+          {/* Reset Password Section */}
           {canEditProfile && (
-            <>
-              <h4>Reset Password</h4>
-              <input
-                className='input-text'
+            <Box sx={{ mt: 3 }}>
+              <Typography variant='h6'>Reset Password</Typography>
+              <TextField
                 type={showPassword ? 'text' : 'password'}
                 placeholder='New Password'
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
+                variant='outlined'
+                size='small'
+                sx={{
+                  'mb': 1,
+                  'width': '700px',
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#6A9C89', // Change 'blue' to your desired color
+                    },
+                  },
+                }}
               />
-              <input
-                className='input-text'
+              <TextField
+                fullWidth
                 type={showPassword ? 'text' : 'password'}
                 placeholder='Confirm New Password'
                 value={confirmNewPassword}
                 onChange={e => setConfirmNewPassword(e.target.value)}
+                variant='outlined'
+                size='small'
+                sx={{
+                  'width': '700px',
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#6A9C89', // Change 'blue' to your desired color
+                    },
+                  },
+                }}
               />
-              <button className='toggle-password-button' onClick={togglePasswordVisibility}>
-                {showPassword ? 'Hide Passwords' : 'Show Passwords'}
-              </button>
-              <button className='login-button' onClick={handleResetPassword}>
+              <Button
+                variant='contained'
+                sx={{
+                  marginLeft: '10px',
+                  backgroundColor: '#6A9C89',
+                  color: '#FFF5E4',
+                  fontsize: '16px',
+                }}
+                onClick={handleResetPassword}>
                 Reset
-              </button>
-            </>
+              </Button>
+            </Box>
           )}
-          {/* ---- Danger Zone (Delete User) ---- */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showPassword}
+                onChange={togglePasswordVisibility}
+                sx={{
+                  color: ' #3E3232',
+                  marginRight: 0,
+                }}
+              />
+            }
+            label={showPassword ? 'Hide Password' : 'Show Password'}
+            sx={{
+              mt: 1,
+              color: ' #3E3232',
+              fontSize: '14px',
+            }}
+          />
+          {/* Danger Zone */}
           {canEditProfile && (
-            <>
-              <h4>Danger Zone</h4>
-              <button className='delete-button' onClick={handleDeleteUser}>
-                Delete This User
-              </button>
-            </>
+            <Box sx={{ mt: 4, borderTop: '1px solid #ddd', paddingTop: 2 }}>
+              <Typography variant='h6' color='error'>
+                Danger Zone
+              </Typography>
+              <Button
+                variant='contained'
+                color='error'
+                sx={{ marginTop: 1 }}
+                onClick={handleDeleteUser}>
+                Delete Profile
+              </Button>
+            </Box>
           )}
         </>
       ) : (
-        <p>No user data found. Make sure the username parameter is correct.</p>
+        <Typography>No user data found. Make sure the username parameter is correct.</Typography>
       )}
 
-      {/* ---- Confirmation Modal for Delete ---- */}
-      {showConfirmation && (
-        <div className='modal'>
-          <div className='modal-content'>
-            <p>
-              Are you sure you want to delete user <strong>{userData?.username}</strong>? This
-              action cannot be undone.
-            </p>
-            <button className='delete-button' onClick={() => pendingAction && pendingAction()}>
-              Confirm
-            </button>
-            <button className='cancel-button' onClick={() => setShowConfirmation(false)}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+      {/* Confirmation Modal */}
+      <Dialog open={showConfirmation} onClose={() => setShowConfirmation(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete user <strong>{userData?.username}</strong>? This action
+            cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => pendingAction && pendingAction()} color='error'>
+            Confirm
+          </Button>
+          <Button onClick={() => setShowConfirmation(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

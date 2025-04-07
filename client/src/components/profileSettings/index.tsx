@@ -93,19 +93,19 @@ const ProfileSettings: React.FC = () => {
         <div className='page-container'>
           <div className='profile-card'>
             <div className='profile-icon'>
-              <FaRegUserCircle size={'40px'} style={{ color: '#54170a' }} /> {userData?.username}
+              <FaRegUserCircle size={'40px'} style={{ color: '#FFA725' }} /> {userData?.username}
               {userData?.privacySetting === 'Private' ? <FaLock /> : <FaUnlockAlt />}
             </div>
 
             {!canEditProfile && (
               <button className='unfollow-btn' onClick={handleUpdateFollowers}>
-                {isFollowing ? 'Unfollow' : 'Follow'}
+                {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
               </button>
             )}
             {canEditProfile && (
               <>
                 <button className='edit-profile-btn' onClick={handleEditProfileClick}>
-                  Edit Profile
+                  EDIT PROFILE
                 </button>
               </>
             )}
@@ -121,7 +121,7 @@ const ProfileSettings: React.FC = () => {
                   <div className='stats-and-options'>
                     <div className='stats'>
                       <div role='button'>
-                        {userData.postsCreated?.length || 0} <small>Posts</small>
+                        {userData.postsCreated?.length || 0} <small>Saved Posts</small>
                       </div>
                       <span
                         role='button'
@@ -147,9 +147,7 @@ const ProfileSettings: React.FC = () => {
                 <hr className='separator' style={{ marginTop: '30px' }} />
               </div>
             ) : (
-              <p className='no-user-data'>
-                No user data found. Make sure the username parameter is correct.
-              </p>
+              <p className='no-user-data'>No user data found. Make sure the username is correct.</p>
             )}
 
             <div className='follow-status-container'>
@@ -162,7 +160,7 @@ const ProfileSettings: React.FC = () => {
                   checked={selectedOption === 'posts'}
                   onChange={handleRadioChange}
                 />
-                <label htmlFor='posts'>Posts</label>
+                <label htmlFor='posts'>Saved Posts</label>
                 <input
                   type='radio'
                   name='recipes'
@@ -196,7 +194,9 @@ const ProfileSettings: React.FC = () => {
                     ) : (
                       <p>No {listType} yet.</p>
                     )}
-                    <button onClick={() => setShowListPopup(false)}>Close</button>
+                    <button className='close-button' onClick={() => setShowListPopup(false)}>
+                      CLOSE
+                    </button>
                   </div>
                 </div>
               )}

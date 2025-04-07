@@ -80,6 +80,7 @@ const calendarRecipe: RecipeCalendarEvent = {
 
 const createRecipeSpy = jest.spyOn(util, 'createRecipe');
 const createCalendarRecipeSpy = jest.spyOn(util, 'createCalendarRecipe');
+const updateRecipeSpy = jest.spyOn(util, 'updateRecipeToCalendarRecipe');
 
 describe('Test recipeController', () => {
   describe('POST /addRecipe', () => {
@@ -182,6 +183,51 @@ describe('Test recipeController', () => {
 
       expect(response.status).toBe(500);
       expect(response.text).toBe('Error when saving recipe: Error');
+    });
+  });
+
+  describe('PATCH /updateRecipeForCalendar', () => {
+    test('should update a recipe successfully', async () => {
+      updateRecipeSpy.mockResolvedValue(calendarRecipeDataBase);
+
+      const response = await supertest(app)
+        .patch('/recipe/updateRecipeForCalendar')
+        .send({ recipeID: calendarRecipeDataBase._id, ...calendarRecipe });
+
+      expect(response.status).toBe(200);
+      expect(response.body.title).toEqual('BBQ Chicken');
+      expect(response.body.user.username).toEqual(calendarRecipe.user.username);
+    });
+
+    test('should return 400 if recipe body is invalid', async () => {
+      const response = await supertest(app)
+        .patch('/recipe/updateRecipeForCalendar')
+        .send({ recipeID: undefined, ...calendarRecipe });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toBe('Invalid recipe body');
+    });
+
+    test('should return 500 if recipe update fails', async () => {
+      updateRecipeSpy.mockResolvedValue({ error: 'Error updating recipe' });
+
+      const response = await supertest(app)
+        .patch('/recipe/updateRecipeForCalendar')
+        .send({ recipeID: calendarRecipeDataBase._id, ...calendarRecipe });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when updating recipe: Error: Error updating recipe');
+    });
+
+    test('should return 500 if database error occurs', async () => {
+      updateRecipeSpy.mockRejectedValue(new Error());
+
+      const response = await supertest(app)
+        .patch('/recipe/updateRecipeForCalendar')
+        .send({ recipeID: calendarRecipeDataBase._id, ...calendarRecipe });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toBe('Error when updating recipe: Error');
     });
   });
 });

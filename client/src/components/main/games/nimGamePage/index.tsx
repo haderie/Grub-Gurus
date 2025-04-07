@@ -16,7 +16,7 @@ const NimGamePage = ({ gameInstance }: { gameInstance: GameInstance<NimGameState
 
   return (
     <Box p={3}>
-      <Typography variant='h5' gutterBottom>
+      <Typography variant='h5' sx={{ fontWeight: 'bold', color: '#FFA725' }} gutterBottom>
         Rules:
       </Typography>
       <Typography variant='body1' paragraph>
@@ -33,8 +33,8 @@ const NimGamePage = ({ gameInstance }: { gameInstance: GameInstance<NimGameState
       </Typography>
 
       <Box mt={3}>
-        <Typography variant='h6' gutterBottom>
-          Current Game:
+        <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#FFA725' }} gutterBottom>
+          Current Plate:
         </Typography>
         <Typography variant='body1'>
           <strong>Player 1:</strong> {gameInstance.state.player1 || 'Waiting...'}
@@ -57,17 +57,28 @@ const NimGamePage = ({ gameInstance }: { gameInstance: GameInstance<NimGameState
 
         {gameInstance.state.status === 'IN_PROGRESS' && (
           <Box mt={3}>
-            <Typography variant='h6' gutterBottom>
+            <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#FFA725' }} gutterBottom>
               Take Your Bite:
             </Typography>
             <TextField
-              label='Enter 1-3'
+              label='Enter number from 1-3'
               type='number'
               value={move}
               onChange={handleInputChange}
               inputProps={{ min: 1, max: 3 }}
               fullWidth
-              sx={{ maxWidth: 200, marginBottom: 2 }}
+              sx={{
+                'maxWidth': 200,
+                'marginBottom': 2,
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#6A9C89', // Set custom border color on focus
+                  },
+                },
+                '& .MuiInputLabel-root.Mui-focused': {
+                  color: '#6A9C89', // Set custom label color on focus
+                },
+              }}
             />
             <Button
               variant='contained'

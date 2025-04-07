@@ -25,6 +25,13 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.instructions !== undefined &&
     recipe.cookTime !== undefined;
 
+  const isRecipeUpdateRequestBodyValid = (request: UpdateCalendarRecipeRequest): boolean =>
+    request.body.recipeID !== undefined &&
+    request.body.addedToCalendar !== undefined &&
+    request.body.start !== undefined &&
+    request.body.end !== undefined &&
+    request.body.color !== undefined;
+
   /**
    * Retrieves a recipe by the username of the user.
    * @param req The request containing the username as a route parameter.
@@ -40,36 +47,6 @@ const recipeController = (socket: FakeSOSocket) => {
       res.status(500).json({ message: error || 'Error fetching recipes' });
     }
   };
-
-  /**
-   * Retrieves a list of questions filtered by a search term and ordered by a specified criterion.
-   * If there is an error, the HTTP response's status is updated.
-   *
-   * @param req The FindQuestionRequest object containing the query parameters `order` and `search`.
-   * @param res The HTTP response object used to send back the filtered list of questions.
-   *
-   * @returns A Promise that resolves to void.
-   */
-  // const getRecipesByFilter = async (req: FindRecipeRequest, res: Response): Promise<void> => {
-  //   const { username } = req.params;
-  //   const { search } = req.query;
-
-  //   try {
-  //     let qlist = qlist.filter(q => q.user.username === askedBy);
-  //     const rlist: Recipe[] = await getRecipeByUsername(username);
-
-  //     // Filter by search keyword and tags
-  //     const resqlist: PopulatedDatabaseRecipe[] = filterRecipeBySearch(rlist, search);
-
-  //     res.json(resqlist);
-  //   } catch (err: unknown) {
-  //     if (err instanceof Error) {
-  //       res.status(500).send(`Error when fetching questions by filter: ${err.message}`);
-  //     } else {
-  //       res.status(500).send(`Error when fetching questions by filter`);
-  //     }
-  //   }
-  // };
 
   /**
    * Handles the creation of a new recipe.
@@ -121,14 +98,17 @@ const recipeController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   *
+   */
   const updateRecipeForCalendar = async (
     req: UpdateCalendarRecipeRequest,
     res: Response,
   ): Promise<void> => {
-    // if (!isRecipeRequestBodyValid(req.body)) {
-    //   res.status(400).send('Invalid recipe body');
-    //   return;
-    // }
+    if (!isRecipeUpdateRequestBodyValid(req)) {
+      res.status(400).send('Invalid recipe body');
+      return;
+    }
 
     try {
       const result = await updateRecipeToCalendarRecipe(req.body.recipeID, req.body);

@@ -3,6 +3,7 @@ import './index.css';
 import { Link } from 'react-router-dom';
 import { TbChefHat } from 'react-icons/tb';
 import { PiCookingPotBold } from 'react-icons/pi';
+import { IoMdArrowRoundForward } from 'react-icons/io';
 import useAuth from '../../../hooks/useAuth';
 
 /**
@@ -22,7 +23,7 @@ const Signup = () => {
   } = useAuth('signup');
 
   return (
-    <div className='container'>
+    <div className='signup-container'>
       <h2>Sign up for Grub Gurus!</h2>
       <form onSubmit={handleSubmit}>
         <h4>
@@ -34,7 +35,7 @@ const Signup = () => {
           onChange={event => handleInputChange(event, 'username')}
           placeholder='Username'
           required
-          className='input-text'
+          className='input-text-signup'
           id='username-input'
         />
         <h4>
@@ -46,7 +47,7 @@ const Signup = () => {
           onChange={event => handleInputChange(event, 'password')}
           placeholder='Password'
           required
-          className='input-text'
+          className='input-text-signup'
           id='password-input'
         />
         <input
@@ -55,9 +56,9 @@ const Signup = () => {
           onChange={e => handleInputChange(e, 'confirmPassword')}
           placeholder='Confirm Password'
           required
-          className='input-text'
+          className='input-text-signup'
         />
-        <div className='show-password'>
+        <div className='show-password-signup'>
           <input
             type='checkbox'
             id='showPasswordToggle'
@@ -66,13 +67,13 @@ const Signup = () => {
           />
           <label htmlFor='showPasswordToggle'>Show Password</label>
         </div>
-        <button type='submit' className='login-button'>
-          Submit
+        <button type='submit' className='signup-button'>
+          JOIN THE KITCHEN <IoMdArrowRoundForward />
         </button>
       </form>
-      {err && <p className='error-message'>{err}</p>}
+      {err && <p className='error-message-signup'>{err}</p>}
       <Link to='/' className='login-link'>
-        Have an account? Login here.
+        Already a guru? Login here.
       </Link>
     </div>
   );

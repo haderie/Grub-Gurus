@@ -23,7 +23,7 @@ const AskQuestionButton = () => {
       color='primary'
       onClick={handleNewQuestion}
       sx={{
-        borderRadius: 3,
+        borderRadius: '5px',
         textTransform: 'none',
         fontSize: '16px',
         backgroundColor: '#6A9C89',
