@@ -23,12 +23,10 @@ const ProfileSettings: React.FC = () => {
     canEditProfile,
     selectedOption,
     showPassword,
-    privacySetting,
     togglePasswordVisibility,
     setEditBioMode,
     setNewBio,
     setNewPassword,
-    setShowLists,
     setConfirmNewPassword,
     setShowConfirmation,
     setPrivacySetting,
@@ -272,8 +270,6 @@ const ProfileSettings: React.FC = () => {
         {editBioMode && canEditProfile && (
           <ProfileEdit
             userData={userData}
-            loading={loading}
-            editBioMode={editBioMode}
             newBio={newBio}
             newPassword={newPassword}
             confirmNewPassword={confirmNewPassword}
@@ -292,13 +288,10 @@ const ProfileSettings: React.FC = () => {
             handleResetPassword={handleResetPassword}
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
-            privacySetting={privacySetting}
             setPrivacySetting={setPrivacySetting}
             showLists={showLists}
-            setShowLists={setShowLists}
             handleUpdatePrivacy={handleUpdatePrivacy}
             handleCheckPrivacy={handleCheckPrivacy}
-            isRecipePublic={isRecipePublic}
             toggleRecipeBookVisibility={toggleRecipeBookVisibility}
           />
         )}

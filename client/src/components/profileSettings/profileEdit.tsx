@@ -4,19 +4,15 @@ import { SafePopulatedDatabaseUser } from '../../types/types';
 
 const ProfileEdit = ({
   userData,
-  loading,
-  editBioMode,
   newBio,
   newPassword,
   confirmNewPassword,
-  privacySetting,
   successMessage,
   errorMessage,
   showConfirmation,
   pendingAction,
   canEditProfile,
   showPassword,
-  isRecipePublic,
   togglePasswordVisibility,
   toggleRecipeBookVisibility,
   setEditBioMode,
@@ -25,8 +21,6 @@ const ProfileEdit = ({
   setConfirmNewPassword,
   setShowConfirmation,
   setPrivacySetting,
-  setShowLists,
-
   handleResetPassword,
   handleUpdateBiography,
   handleDeleteUser,
@@ -34,12 +28,9 @@ const ProfileEdit = ({
   handleCheckPrivacy,
 }: {
   userData: SafePopulatedDatabaseUser | null;
-  loading: boolean;
-  editBioMode: boolean;
   newBio: string;
   newPassword: string;
   confirmNewPassword: string;
-  privacySetting: 'Public' | 'Private';
   showLists: boolean;
   successMessage: string | null;
   errorMessage: string | null;
@@ -47,7 +38,6 @@ const ProfileEdit = ({
   pendingAction: (() => void) | null;
   canEditProfile: boolean;
   showPassword: boolean;
-  isRecipePublic: boolean;
   togglePasswordVisibility: () => void;
   toggleRecipeBookVisibility: () => void;
 
@@ -57,7 +47,6 @@ const ProfileEdit = ({
   setConfirmNewPassword: React.Dispatch<React.SetStateAction<string>>;
   setShowConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   setPrivacySetting: React.Dispatch<React.SetStateAction<'Public' | 'Private'>>;
-  setShowLists: React.Dispatch<React.SetStateAction<boolean>>;
 
   handleResetPassword: () => void;
   handleUpdateBiography: () => void;
@@ -87,19 +76,21 @@ const ProfileEdit = ({
             <strong>Account Privacy:</strong> {userData.privacySetting}
           </p>
           {/* ---- Account Privacy Section ---- */}
-          {editBioMode && canEditProfile && (
-            <button
-              onClick={async () => {
-                const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
-                setPrivacySetting(newSetting);
-                await handleUpdatePrivacy(newSetting);
-                await handleCheckPrivacy();
-              }}>
-              {userData.privacySetting === 'Public'
-                ? 'Make Account Private'
-                : 'Make Account Public'}
-            </button>
-          )}
+          <button
+            onClick={async () => {
+              const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
+              setPrivacySetting(newSetting);
+              await handleUpdatePrivacy(newSetting);
+              await handleCheckPrivacy();
+            }}>
+            {userData.privacySetting === 'Public' ? 'Make Account Private' : 'Make Account Public'}
+          </button>
+          <p>
+            <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}
+          </p>
+          <button onClick={toggleRecipeBookVisibility}>
+            {userData.recipeBookPublic ? 'Make Account Private' : 'Make Account Public'}{' '}
+          </button>
           <p>
             <strong>Followers:</strong> {userData.followers?.length}
           </p>

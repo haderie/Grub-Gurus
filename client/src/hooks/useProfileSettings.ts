@@ -396,7 +396,6 @@ const useProfileSettings = () => {
     confirmNewPassword,
     privacySetting,
     showLists,
-    setShowLists,
     setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,
