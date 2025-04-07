@@ -48,7 +48,6 @@ const recipeController = (socket: FakeSOSocket) => {
     }
   };
 
-
   /**
    * Handles the creation of a new recipe.
    * @param req The request containing username, email, and password in the body.
@@ -100,7 +99,7 @@ const recipeController = (socket: FakeSOSocket) => {
   };
 
   /**
-   *  
+   *
    */
   const updateRecipeForCalendar = async (
     req: UpdateCalendarRecipeRequest,
