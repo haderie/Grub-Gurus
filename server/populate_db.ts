@@ -7,7 +7,9 @@ import {
   Comment,
   DatabaseAnswer,
   DatabaseComment,
+  DatabasePost,
   DatabaseQuestion,
+  DatabaseRecipe,
   DatabaseTag,
   DatabaseUser,
   Question,
@@ -23,6 +25,12 @@ import {
   Q3_TXT,
   Q4_DESC,
   Q4_TXT,
+  Q5_DESC,
+  Q5_TXT,
+  Q6_DESC,
+  Q6_TXT,
+  Q7_DESC,
+  Q7_TXT,
   A1_TXT,
   A2_TXT,
   A3_TXT,
@@ -43,6 +51,40 @@ import {
   T5_DESC,
   T6_NAME,
   T6_DESC,
+  T7_NAME,
+  T7_DESC,
+  T8_NAME,
+  T8_DESC,
+  T9_NAME,
+  T9_DESC,
+  T10_NAME,
+  T10_DESC,
+  T11_NAME,
+  T11_DESC,
+  T12_NAME,
+  T12_DESC,
+  T13_NAME,
+  T13_DESC,
+  T14_NAME,
+  T14_DESC,
+  T15_NAME,
+  T15_DESC,
+  T16_NAME,
+  T16_DESC,
+  T17_NAME,
+  T17_DESC,
+  T18_NAME,
+  T18_DESC,
+  T19_NAME,
+  T19_DESC,
+  T20_NAME,
+  T20_DESC,
+  T21_NAME,
+  T21_DESC,
+  T22_NAME,
+  T22_DESC,
+  T23_NAME,
+  T23_DESC,
   C1_TEXT,
   C2_TEXT,
   C3_TEXT,
@@ -59,6 +101,7 @@ import {
 import CommentModel from './models/comments.model';
 import UserModel from './models/users.model';
 import RecipeModel from './models/recipe.models';
+import PostModel from './models/posts.model';
 
 // Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
 const userArgs = process.argv.slice(2);
@@ -215,6 +258,7 @@ async function userCreate(
     privacySetting: 'Public',
     recipeBookPublic: false,
     postsCreated: [],
+    rankings: [],
   };
 
   return await UserModel.create(userDetail);
@@ -230,7 +274,10 @@ async function recipeCreate(
   video: string | null,
   tags: DatabaseTag[],
   cookTime: number,
-) {
+  numOfLikes: number,
+  views: string[],
+  addedToCalendar: boolean,
+): Promise<DatabaseRecipe> {
   if (!user || !title || !ingredients.length || cookTime < 0) {
     throw new Error('Invalid Recipe Data');
   }
@@ -245,9 +292,33 @@ async function recipeCreate(
     video,
     tags,
     cookTime,
+    numOfLikes,
+    views,
+    addedToCalendar,
   });
 
   return await RecipeModel.create(recipe);
+}
+
+export async function postCreate(
+  username: string,
+  recipe: DatabaseRecipe,
+  text: string | null,
+): Promise<DatabasePost> {
+  if (!username || !recipe) {
+    throw new Error('Invalid Post Data');
+  }
+
+  const post = new PostModel({
+    username,
+    recipe,
+    text,
+    datePosted: new Date('2023-12-02T03:30:00'),
+    likes: [],
+    saves: [],
+  });
+
+  return await PostModel.create(post);
 }
 
 /**
@@ -256,27 +327,37 @@ async function recipeCreate(
  */
 const populate = async () => {
   try {
-    await userCreate(
+    const u1 = await userCreate(
       'sana',
       'sanaPassword',
       new Date('2023-12-11T03:30:00'),
       'I am a software engineer.',
     );
-    await userCreate(
+    const u2 = await userCreate(
       'ihba001',
       'SomePassword#123',
       new Date('2022-12-11T03:30:00'),
       'I am a student.',
     );
-    await userCreate(
+    const u3 = await userCreate(
       'saltyPeter',
       'VeryStrongPassword#!@',
       new Date('2023-12-11T03:30:00'),
       'I am a chef.',
     );
-    await userCreate('monkeyABC', 'password', new Date('2023-11-11T03:30:00'), 'I am a monkey.');
-    await userCreate('hamkalo', 'redapplecar', new Date('2023-12-02T03:30:00'), 'I am a hamster.');
-    await userCreate(
+    const u4 = await userCreate(
+      'monkeyABC',
+      'password',
+      new Date('2023-11-11T03:30:00'),
+      'I am a monkey.',
+    );
+    const u5 = await userCreate(
+      'hamkalo',
+      'redapplecar',
+      new Date('2023-12-02T03:30:00'),
+      'I am a hamster.',
+    );
+    const u6 = await userCreate(
       'azad',
       'treeorangeBike',
       new Date('2023-06-11T03:30:00'),
@@ -318,12 +399,7 @@ const populate = async () => {
       new Date('2023-05-10T14:28:01'),
       'I am an elephant lover.',
     );
-    await userCreate(
-      'Munch Master',
-      'munch123',
-      new Date(),
-      'I\'m a helpful recipe bot :)',
-    )
+    await userCreate('Munch Master', 'munch123', new Date(), "I'm a helpful recipe bot :)");
 
     const t1 = await tagCreate(T1_NAME, T1_DESC);
     const t2 = await tagCreate(T2_NAME, T2_DESC);
@@ -331,6 +407,84 @@ const populate = async () => {
     const t4 = await tagCreate(T4_NAME, T4_DESC);
     const t5 = await tagCreate(T5_NAME, T5_DESC);
     const t6 = await tagCreate(T6_NAME, T6_DESC);
+    const t7 = await tagCreate(T7_NAME, T7_DESC);
+    const t8 = await tagCreate(T8_NAME, T8_DESC);
+    const t9 = await tagCreate(T9_NAME, T9_DESC);
+    const t10 = await tagCreate(T10_NAME, T10_DESC);
+    const t11 = await tagCreate(T11_NAME, T11_DESC);
+    const DR_GLUTEN_FREE = await tagCreate(T13_NAME, T13_DESC);
+    const DR_VEGETARIAN = await tagCreate(T14_NAME, T14_DESC);
+    const DR_VEGAN = await tagCreate(T15_NAME, T15_DESC);
+    const DR_HALAL = await tagCreate(T16_NAME, T16_DESC);
+    const MT_BREAKFAST = await tagCreate(T17_NAME, T17_DESC);
+    const MT_LUNCH = await tagCreate(T18_NAME, T18_DESC);
+    const MT_DINNER = await tagCreate(T19_NAME, T19_DESC);
+    const MT_SNACKS = await tagCreate(T20_NAME, T20_DESC);
+    const SL_BEGINNER = await tagCreate(T21_NAME, T21_DESC);
+    const SL_INTERMEDIATE = await tagCreate(T22_NAME, T22_DESC);
+    const SL_ADVANCED = await tagCreate(T23_NAME, T23_DESC);
+
+    // const r1 = await recipeCreate(
+    //   u1, // Replace with actual user object
+    //   'Spaghetti Carbonara',
+    //   true,
+    //   ['Spaghetti', 'Eggs', 'Parmesan Cheese', 'Pancetta', 'Black Pepper', 'Salt'],
+    //   'A classic Italian pasta dish.',
+    //   '1. Cook pasta. 2. Mix eggs and cheese. 3. Fry pancetta. 4. Combine everything.',
+    //   null,
+    //   [MT_DINNER, SL_INTERMEDIATE],
+    //   20,
+    //   100,
+    //   [],
+    //   false,
+    // );
+
+    // const r2 = await recipeCreate(
+    //   u1,
+    //   'Avocado Toast',
+    //   true,
+    //   ['Bread', 'Avocado', 'Salt', 'Pepper', 'Lemon Juice', 'Chili Flakes'],
+    //   'A quick and healthy breakfast option.',
+    //   '1. Toast bread. 2. Mash avocado. 3. Spread on toast and season.',
+    //   null,
+    //   [MT_BREAKFAST, DR_VEGAN, SL_BEGINNER],
+    //   5,
+    //   200,
+    //   [],
+    //   false,
+    // );
+
+    // await recipeCreate(
+    //   u2,
+    //   'Chocolate Chip Cookies',
+    //   false,
+    //   ['Flour', 'Butter', 'Sugar', 'Eggs', 'Chocolate Chips', 'Vanilla Extract'],
+    //   'Classic chewy chocolate chip cookies.',
+    //   '1. Mix ingredients. 2. Shape dough. 3. Bake.',
+    //   null,
+    //   [MT_SNACKS, SL_BEGINNER],
+    //   30,
+    //   150,
+    //   [],
+    //   true,
+    // );
+
+    // await recipeCreate(
+    //   u3,
+    //   'Grilled Chicken Salad',
+    //   true,
+    //   ['Chicken Breast', 'Lettuce', 'Tomatoes', 'Cucumber', 'Olive Oil', 'Lemon Juice'],
+    //   'A fresh and protein-packed meal.',
+    //   '1. Grill chicken. 2. Chop veggies. 3. Toss with dressing.',
+    //   null,
+    //   [MT_LUNCH, DR_HALAL, SL_INTERMEDIATE],
+    //   15,
+    //   180,
+    //   [],
+    //   false,
+    // );
+
+    // await postCreate(u1.username, r1, 'check this out');
 
     const c1 = await commentCreate(C1_TEXT, 'sana', new Date('2023-12-12T03:30:00'));
     const c2 = await commentCreate(C2_TEXT, 'ihba001', new Date('2023-12-01T15:24:19'));
@@ -395,6 +549,38 @@ const populate = async () => {
       Q4_TXT,
       [t3, t4, t5],
       [a8],
+      'elephantCDE',
+      new Date('2023-03-10T14:28:01'),
+      [],
+      [c12],
+    );
+
+    await questionCreate(
+      Q5_DESC,
+      Q5_TXT,
+      [SL_BEGINNER],
+      [],
+      'elephantCDE',
+      new Date('2023-03-10T14:28:01'),
+      [],
+      [c12],
+    );
+
+    await questionCreate(
+      Q6_DESC,
+      Q6_TXT,
+      [SL_BEGINNER],
+      [],
+      'elephantCDE',
+      new Date('2023-03-10T14:28:01'),
+      [],
+      [c12],
+    );
+    await questionCreate(
+      Q7_DESC,
+      Q7_TXT,
+      [SL_BEGINNER],
+      [],
       'elephantCDE',
       new Date('2023-03-10T14:28:01'),
       [],

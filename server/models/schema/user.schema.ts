@@ -56,6 +56,11 @@ const userSchema: Schema = new Schema(
       ref: 'Post',
       default: [],
     },
+    rankings: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
   },
   { collection: 'User' },
 );

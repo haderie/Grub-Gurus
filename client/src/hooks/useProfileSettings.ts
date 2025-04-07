@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ObjectId } from 'mongodb';
 import {
   getUserByUsername,
   deleteUser,
@@ -8,10 +9,27 @@ import {
   followUser,
   updatePrivacy,
   updateRecipeBookPrivacy,
+  updateRanking,
 } from '../services/userService';
 
-import { SafePopulatedDatabaseUser } from '../types/types';
+import {
+  PopulatedDatabasePost,
+  PopulatedDatabaseRecipe,
+  SafePopulatedDatabaseUser,
+} from '../types/types';
 import useUserContext from './useUserContext';
+
+type SortedItem = {
+  item: PopulatedDatabasePost;
+  title: string;
+  rating: number;
+  user: string;
+};
+
+const isItem = (
+  obj: SortedItem,
+): obj is { item: PopulatedDatabasePost; title: string; rating: number; user: string } =>
+  (obj as { item: PopulatedDatabasePost }).item !== undefined;
 
 /**
  * A custom hook to encapsulate all logic/state for the ProfileSettings component.
@@ -55,6 +73,13 @@ const useProfileSettings = () => {
     setSelectedOption(event.target.value as 'recipes' | 'posts');
   };
 
+  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
+  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(
+    new Set(Object.values(currentUser.rankings || {})),
+  );
+  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
+
   useEffect(() => {
     if (!username) return;
 
@@ -64,6 +89,7 @@ const useProfileSettings = () => {
         const data = await getUserByUsername(username);
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
+        setUserRankings(data.rankings);
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -81,6 +107,106 @@ const useProfileSettings = () => {
     }
   }, [userData]);
 
+  let selectedList: { title: string; post: PopulatedDatabasePost; user: string }[] = [];
+  let recipeSaved: PopulatedDatabaseRecipe[] = [];
+
+  switch (selectedOption) {
+    case 'recipes':
+      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
+      break;
+    case 'posts':
+      selectedList =
+        userData?.postsCreated?.map(p => ({
+          title: p?.recipe?.title,
+          post: p,
+          user: p.username,
+        })) || [];
+      break;
+    default:
+      selectedList = [];
+      break;
+  }
+
+  const sortedList: SortedItem[] =
+    selectedOption === 'posts'
+      ? selectedList
+          .map(({ post, title, user }) => ({
+            item: post,
+            title,
+            user, // Ensure user is included
+            rating: userRankings[post._id.toString()] || 0,
+          }))
+          .sort((a, b) => {
+            if (a.rating === 0 && b.rating !== 0) return 1; // Push unranked items down
+            if (a.rating !== 0 && b.rating === 0) return -1; // Keep ranked items up
+            return a.rating - b.rating; // Sort by rating
+          })
+      : [];
+
+  useEffect(() => {
+    const totalItems = sortedList.length; // Get the number of items
+    setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
+  }, [sortedList.length]); // Recalculate whenever sortedList changes
+
+  const handleRatingChange = async (item: PopulatedDatabasePost, rating: number) => {
+    // Ensure the rank is unique
+    if (!usedRankings.has(rating) && username) {
+      await updateRanking(username, item._id, rating);
+
+      // Re-fetch updated user
+      const updatedUser = await getUserByUsername(username);
+      setUserRankings(userData?.rankings);
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+
+      setUserRankings(prevRatings => {
+        const newRatings = { ...prevRatings, [item._id.toString()]: rating };
+        return newRatings;
+      });
+      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
+    } else {
+      // eslint-disable-next-line no-alert
+      alert('This ranking is already taken. Please choose another.');
+    }
+  };
+  const handleRemoveRating = async (id: ObjectId) => {
+    const rating = userRankings[id.toString()];
+    if (rating !== undefined) {
+      // Remove the rating from the used rankings set
+      setUsedRankings(prevUsed => {
+        const updatedUsed = new Set(prevUsed);
+        updatedUsed.delete(rating); // Remove the rating from the used set
+        return updatedUsed;
+      });
+      if (!username) return;
+
+      await updateRanking(username, id, 0);
+      const updatedUser = await getUserByUsername(username);
+
+      await new Promise(resolve => {
+        setUserData(updatedUser);
+        resolve(null);
+      });
+
+      // Return the rating to the available rankings list
+      setAvailableRankings(prevRankings => {
+        // Only add the rating if it is not already in the available list
+        if (!prevRankings.includes(rating)) {
+          return [...prevRankings, rating];
+        }
+        return prevRankings;
+      });
+
+      // Remove the rating from the selected rankings
+      setUserRankings(prevRankings => {
+        const updatedRankings = { ...prevRankings };
+        delete updatedRankings[id.toString()]; // Remove the ranking for the given ID
+        return updatedRankings;
+      });
+    }
+  };
   /**
    * Toggles the visibility of the password fields.
    */
@@ -272,7 +398,6 @@ const useProfileSettings = () => {
     confirmNewPassword,
     privacySetting,
     showLists,
-    setShowLists,
     setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,
@@ -304,6 +429,15 @@ const useProfileSettings = () => {
     setIsRecipePublic,
     toggleRecipeBookVisibility,
     checkIfFollowing,
+    handleRatingChange,
+    handleRemoveRating,
+    availableRankings,
+    usedRankings,
+    userRankings,
+    sortedList,
+    isItem,
+    recipeSaved,
+    availableRatings,
   };
 };
 

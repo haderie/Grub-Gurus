@@ -20,6 +20,7 @@ import {
   loginUser,
   saveUser,
   unfollowUserService,
+  updateRecipeRanking,
   updateUser,
 } from '../services/user.service';
 import PostModel from '../models/posts.model';
@@ -85,6 +86,7 @@ const userController = (socket: FakeSOSocket) => {
       privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
+      rankings: requestUser.rankings,
     };
 
     try {
@@ -411,9 +413,29 @@ const userController = (socket: FakeSOSocket) => {
         );
       } else if (action === 'remove') {
         // Remove post from the user's postsCreated if they are removing
-        const updatedPosts = user.postsCreated.filter(p => p.toString() !== postID.toString());
+        // Remove post from the user's postsCreated if they are removing
+        const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
+
+        // Remove the ranking associated with the deleted post
+        const removedRank = user.rankings.get(postID.toString());
+        const updatedRankings = user.rankings;
+        updatedRankings.delete(postID.toString());
+        // delete user.rankings[postID.toString()];
+
+        for (const [id, rank] of updatedRankings.entries()) {
+          if (rank > removedRank) {
+            updatedRankings.set(id, rank - 1);
+          }
+        }
+
+        // Update user document with new posts and adjusted rankings
         await updateUser(username, {
           postsCreated: updatedPosts,
+        });
+
+        // Update user document with new posts and adjusted rankings
+        await updateUser(username, {
+          rankings: Object.fromEntries(updatedRankings),
         });
 
         // Remove the user from the post's saves list
@@ -433,6 +455,32 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   * Handles the ranking of a recipe by a user.
+   * @param req The request containing username, recipeId, and ranking.
+   * @param res The response confirming the update or returning an error.
+   */
+  const rankRecipe = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { username, postID, ranking } = req.body;
+
+      if (!username || !postID || ranking === undefined) {
+        res.status(400).send('Missing required fields.');
+        return;
+      }
+
+      const updatedUser = await updateRecipeRanking(username, postID, ranking);
+
+      if ('error' in updatedUser) {
+        res.status(400).send(updatedUser.error);
+        return;
+      }
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error ranking recipe: ${error}`);
+    }
+  };
+
   // Define routes for the user-related operations.
   router.post('/signup', createUser);
   router.post('/login', userLogin);
@@ -445,6 +493,7 @@ const userController = (socket: FakeSOSocket) => {
   router.patch('/followUser', updateFollowingList);
   router.patch('/updatePrivacy', updatePrivacy);
   router.patch('/savePost', savePosts);
+  router.post('/rank-recipe', rankRecipe);
 
   return router;
 };
