@@ -6,6 +6,7 @@ import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
+import { getUserByUsername } from '../../services/userService';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -53,8 +54,13 @@ const ProfileSettings: React.FC = () => {
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
 
-  const handlePostClick = (postId: string) => {
-    navigate(`/explore?post=${postId}`);
+  const handlePostClick = async (postId: string, username: string) => {
+    const user = await getUserByUsername(username);
+    if (user.privacySetting === 'Public') {
+      navigate(`/explore?post=${postId}`);
+    } else {
+      navigate(`/explore/following?post=${postId}`);
+    }
   };
 
   useEffect(() => {
@@ -202,7 +208,10 @@ const ProfileSettings: React.FC = () => {
                       if (isItem(sortedItem)) {
                         return (
                           <div key={index} className='list-item-container'>
-                            <span onClick={() => handlePostClick(sortedItem.item._id.toString())}>
+                            <span
+                              onClick={() =>
+                                handlePostClick(sortedItem.item._id.toString(), sortedItem.user)
+                              }>
                               {' '}
                               <b>
                                 {sortedItem.rating}
