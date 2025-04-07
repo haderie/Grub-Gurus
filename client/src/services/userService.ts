@@ -243,8 +243,6 @@ const updateRanking = async (
     ranking,
   });
 
-  console.log(ranking);
-
   if (res.status !== 200) {
     throw new Error('Error when saving post');
   }

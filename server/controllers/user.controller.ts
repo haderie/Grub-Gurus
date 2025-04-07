@@ -417,19 +417,16 @@ const userController = (socket: FakeSOSocket) => {
         const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
 
         // Remove the ranking associated with the deleted post
-        const removedRating = user.rankings[postID.toString()];
+        const removedRank = user.rankings.get(postID.toString());
         const updatedRankings = user.rankings;
         updatedRankings.delete(postID.toString());
         // delete user.rankings[postID.toString()];
 
-        // // Shift rankings down to fill the gap
-        // Object.keys(updatedRankings).forEach(id => {
-        //   if (updatedRankings[id] > removedRating) {
-        //     updatedRankings[id] -= 1;
-        //   }
-        // });
-
-        console.log(updatedRankings);
+        for (const [id, rank] of updatedRankings.entries()) {
+          if (rank > removedRank) {
+            updatedRankings.set(id, rank - 1);
+          }
+        }
 
         // Update user document with new posts and adjusted rankings
         await updateUser(username, {
@@ -438,10 +435,8 @@ const userController = (socket: FakeSOSocket) => {
 
         // Update user document with new posts and adjusted rankings
         await updateUser(username, {
-          rankings: updatedRankings,
+          rankings: Object.fromEntries(updatedRankings),
         });
-
-        console.log('3rrrr', updatedRankings);
 
         // Remove the user from the post's saves list
         await PostModel.findOneAndUpdate(
@@ -475,8 +470,6 @@ const userController = (socket: FakeSOSocket) => {
       }
 
       const updatedUser = await updateRecipeRanking(username, postID, ranking);
-
-      console.log(updatedUser);
 
       if ('error' in updatedUser) {
         res.status(400).send(updatedUser.error);

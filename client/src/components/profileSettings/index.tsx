@@ -44,8 +44,6 @@ const ProfileSettings: React.FC = () => {
     toggleRecipeBookVisibility,
     handleRatingChange,
     handleRemoveRating,
-    availableRankings,
-    usedRankings,
     sortedList,
     isItem,
     recipeSaved,
