@@ -104,7 +104,6 @@ const useProfileSettings = () => {
   useEffect(() => {
     if (userData?.recipeBookPublic !== undefined) {
       setIsRecipePublic(userData.recipeBookPublic);
-      // setUserRankings(userData.rankings);
     }
   }, [userData]);
 
