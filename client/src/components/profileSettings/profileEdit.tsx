@@ -18,19 +18,15 @@ import { SafePopulatedDatabaseUser } from '../../types/types';
 
 const ProfileEdit = ({
   userData,
-  loading,
-  editBioMode,
   newBio,
   newPassword,
   confirmNewPassword,
-  privacySetting,
   successMessage,
   errorMessage,
   showConfirmation,
   pendingAction,
   canEditProfile,
   showPassword,
-  isRecipePublic,
   togglePasswordVisibility,
   toggleRecipeBookVisibility,
   setEditBioMode,
@@ -39,8 +35,6 @@ const ProfileEdit = ({
   setConfirmNewPassword,
   setShowConfirmation,
   setPrivacySetting,
-  setShowLists,
-
   handleResetPassword,
   handleUpdateBiography,
   handleDeleteUser,
@@ -48,12 +42,9 @@ const ProfileEdit = ({
   handleCheckPrivacy,
 }: {
   userData: SafePopulatedDatabaseUser | null;
-  loading: boolean;
-  editBioMode: boolean;
   newBio: string;
   newPassword: string;
   confirmNewPassword: string;
-  privacySetting: 'Public' | 'Private';
   showLists: boolean;
   successMessage: string | null;
   errorMessage: string | null;
@@ -61,7 +52,6 @@ const ProfileEdit = ({
   pendingAction: (() => void) | null;
   canEditProfile: boolean;
   showPassword: boolean;
-  isRecipePublic: boolean;
   togglePasswordVisibility: () => void;
   toggleRecipeBookVisibility: () => void;
 
@@ -71,7 +61,6 @@ const ProfileEdit = ({
   setConfirmNewPassword: React.Dispatch<React.SetStateAction<string>>;
   setShowConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
   setPrivacySetting: React.Dispatch<React.SetStateAction<'Public' | 'Private'>>;
-  setShowLists: React.Dispatch<React.SetStateAction<boolean>>;
 
   handleResetPassword: () => void;
   handleUpdateBiography: () => void;
@@ -136,23 +125,30 @@ const ProfileEdit = ({
             </Typography>
             <Typography>
               <strong>Account Privacy:</strong> {userData.privacySetting}{' '}
-              {canEditProfile && (
-                <IconButton
-                  size='small'
-                  onClick={async () => {
-                    const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
-                    setPrivacySetting(newSetting);
-                    await handleUpdatePrivacy(newSetting);
-                    await handleCheckPrivacy();
-                  }}>
-                  {userData.privacySetting === 'Public' ? (
-                    <LockOpenIcon fontSize='small' />
-                  ) : (
-                    <LockIcon fontSize='small' />
-                  )}
-                </IconButton>
-              )}
+              <IconButton
+                size='small'
+                onClick={async () => {
+                  const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
+                  setPrivacySetting(newSetting);
+                  await handleUpdatePrivacy(newSetting);
+                  await handleCheckPrivacy();
+                }}>
+                {userData.privacySetting === 'Public' ? (
+                  <LockOpenIcon fontSize='small' />
+                ) : (
+                  <LockIcon fontSize='small' />
+                )}
+              </IconButton>
             </Typography>
+            <Typography>
+              <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}{' '}
+              <IconButton onClick={toggleRecipeBookVisibility}>
+                {userData.recipeBookPublic
+                  ? 'Make Recipe Book Private'
+                  : 'Make Recipe Book Public'}{' '}
+              </IconButton>
+            </Typography>
+
             <Typography>
               <strong>Followers:</strong> {userData.followers?.length}
             </Typography>

@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
@@ -40,6 +41,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       privacySetting: result.privacySetting,
       recipeBookPublic: result.recipeBookPublic,
       postsCreated: result.postsCreated,
+      rankings: result.rankings,
     };
 
     return safeUser;
@@ -274,5 +276,30 @@ export const unfollowUserService = async (
     return updatedUser;
   } catch (error) {
     return { error: `Error while unfollowing user: ${usernameUnfollowed}: ${error}` };
+  }
+};
+
+/**
+ * Updates the ranking of a recipe for a specific user.
+ * @param username The username of the user.
+ * @param recipeId The ID of the recipe being ranked.
+ * @param ranking The ranking assigned by the user.
+ * @returns The updated user document or an error object.
+ */
+export const updateRecipeRanking = async (username: string, postID: ObjectId, ranking: number) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username }, // Find the user by username
+      { $set: { [`rankings.${postID}`]: ranking } },
+      { new: true },
+    ).select('-password');
+
+    if (!updatedUser) {
+      return { error: 'User not found' };
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error updating ranking: ${error}` };
   }
 };

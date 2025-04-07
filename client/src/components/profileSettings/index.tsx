@@ -6,20 +6,7 @@ import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
-import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '../../types/types';
-import PostView from '../main/postCard';
-
-type SortedItem = {
-  item: PopulatedDatabasePost;
-  title: string;
-  rating: number;
-  username: string;
-};
-
-const isItem = (
-  obj: SortedItem,
-): obj is { item: PopulatedDatabasePost; title: string; rating: number; username: string } =>
-  (obj as { item: PopulatedDatabasePost }).item !== undefined;
+import { getUserByUsername } from '../../services/userService';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -37,12 +24,10 @@ const ProfileSettings: React.FC = () => {
     canEditProfile,
     selectedOption,
     showPassword,
-    privacySetting,
     togglePasswordVisibility,
     setEditBioMode,
     setNewBio,
     setNewPassword,
-    setShowLists,
     setConfirmNewPassword,
     setShowConfirmation,
     setPrivacySetting,
@@ -56,18 +41,27 @@ const ProfileSettings: React.FC = () => {
     handleCheckPrivacy,
     isRecipePublic,
     toggleRecipeBookVisibility,
+    handleRatingChange,
+    handleRemoveRating,
+    sortedList,
+    isItem,
+    recipeSaved,
+    availableRatings,
   } = useProfileSettings();
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
 
-  const [selectedPost, setSelectedPost] = useState<PopulatedDatabasePost | null>(null);
-  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
 
-  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
-  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
+  const handlePostClick = async (postId: string, username: string) => {
+    const user = await getUserByUsername(username);
+    if (user.privacySetting === 'Public') {
+      navigate(`/explore?post=${postId}`);
+    } else {
+      navigate(`/explore/following?post=${postId}`);
+    }
+  };
 
   useEffect(() => {
     const checkPrivacy = async () => {
@@ -82,87 +76,6 @@ const ProfileSettings: React.FC = () => {
     setEditBioMode(true);
     setNewBio(userData?.biography || '');
   };
-
-  let selectedList: { title: string; post: PopulatedDatabasePost; username: string }[] = [];
-  let recipeSaved: PopulatedDatabaseRecipe[] = [];
-
-  switch (selectedOption) {
-    case 'recipes':
-      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
-      break;
-    case 'posts':
-      selectedList =
-        userData?.postsCreated?.map(p => ({
-          title: p?.recipe?.title,
-          post: p,
-          username: p.username,
-        })) || [];
-      break;
-    default:
-      selectedList = [];
-      break;
-  }
-
-  const handleRatingChange = (item: string, rating: number) => {
-    // Ensure the rank is unique
-    if (!usedRankings.has(rating)) {
-      setUserRankings(prevRatings => {
-        const newRatings = { ...prevRatings, [item]: rating };
-        return newRatings;
-      });
-      setUsedRankings(prevUsed => new Set(prevUsed.add(rating))); // Add the new rating to used ranks
-    } else {
-      // eslint-disable-next-line no-alert
-      alert('This ranking is already taken. Please choose another.');
-    }
-  };
-  const handleRemoveRating = (id: string) => {
-    const rating = userRankings[id];
-    if (rating !== undefined) {
-      // Remove the rating from the used rankings set
-      setUsedRankings(prevUsed => {
-        const updatedUsed = new Set(prevUsed);
-        updatedUsed.delete(rating); // Remove the rating from the used set
-        return updatedUsed;
-      });
-
-      // Return the rating to the available rankings list
-      setAvailableRankings(prevRankings => {
-        // Only add the rating if it is not already in the available list
-        if (!prevRankings.includes(rating)) {
-          return [...prevRankings, rating];
-        }
-        return prevRankings;
-      });
-
-      // Remove the rating from the selected rankings
-      setUserRankings(prevRankings => {
-        const updatedRankings = { ...prevRankings };
-        delete updatedRankings[id]; // Remove the ranking for the given ID
-        return updatedRankings;
-      });
-    }
-  };
-
-  const sortedList: SortedItem[] =
-    selectedOption === 'posts'
-      ? selectedList
-          .map(({ post, title, username }) => ({
-            item: post,
-            title: post.recipe?.title,
-            username, // Ensure user is included
-            rating: userRankings[title] || 0,
-          }))
-          .sort((a, b) => {
-            if (a.rating === 0 && b.rating !== 0) return 1; // Push unranked items down
-            if (a.rating !== 0 && b.rating === 0) return -1; // Keep ranked items up
-            return a.rating - b.rating; // Sort by rating
-          })
-      : [];
-  useEffect(() => {
-    const totalItems = sortedList.length; // Get the number of items
-    setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
-  }, [sortedList.length]); // Recalculate whenever sortedList changes
 
   if (loading || recipesLoading) {
     return (
@@ -295,7 +208,10 @@ const ProfileSettings: React.FC = () => {
                       if (isItem(sortedItem)) {
                         return (
                           <div key={index} className='list-item-container'>
-                            <span onClick={() => setSelectedPost(sortedItem.item)}>
+                            <span
+                              onClick={() =>
+                                handlePostClick(sortedItem.item._id.toString(), sortedItem.user)
+                              }>
                               {' '}
                               <b>
                                 {sortedItem.rating}
@@ -304,30 +220,25 @@ const ProfileSettings: React.FC = () => {
                               {''}
                               {sortedItem?.title}
                               {''} {''} {''} {''}
-                              <i> {`---made by @${sortedItem.username}`}</i>
+                              <i> {`---made by @${sortedItem.user}`}</i>
                             </span>
                             {/* Rating Selector */}
-                            {sortedItem.rating === 0 && (
-                              <div className='rating-container'>
-                                <select
-                                  value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
-                                  onChange={e =>
-                                    handleRatingChange(
-                                      sortedItem.title,
-                                      parseInt(e.target.value, 10),
-                                    )
-                                  }>
-                                  <option value=''>Select Rating</option>
-                                  {availableRatings.map(rating => (
-                                    <option key={rating} value={rating}>
-                                      {rating}
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
+                            {sortedItem.rating === 0 && canEditProfile && (
+                              <select
+                                value={sortedItem.rating !== 0 ? sortedItem.rating : ''}
+                                onChange={e =>
+                                  handleRatingChange(sortedItem.item, parseInt(e.target.value, 10))
+                                }>
+                                <option value=''>Select Rating</option>
+                                {availableRatings.map(rating => (
+                                  <option key={rating} value={rating}>
+                                    {rating}
+                                  </option>
+                                ))}
+                              </select>
                             )}
-                            {sortedItem.rating !== 0 && (
-                              <button onClick={() => handleRemoveRating(sortedItem.title)}>
+                            {sortedItem.rating !== 0 && canEditProfile && (
+                              <button onClick={() => handleRemoveRating(sortedItem.item._id)}>
                                 Remove Rating
                               </button>
                             )}
@@ -341,16 +252,6 @@ const ProfileSettings: React.FC = () => {
                   )}
                 </div>
               )}
-
-              {selectedPost && (
-                <div className='popup-overlay-post' onClick={() => setSelectedPost(null)}>
-                  <div className='popup-content-post'>
-                    <PostView post={selectedPost} />
-                    <button onClick={() => setSelectedPost(null)}>Close</button>
-                  </div>
-                </div>
-              )}
-
               {selectedOption === 'recipes' && (
                 <>
                   {isRecipePublic || canEditProfile ? (
@@ -378,8 +279,6 @@ const ProfileSettings: React.FC = () => {
         {editBioMode && canEditProfile && (
           <ProfileEdit
             userData={userData}
-            loading={loading}
-            editBioMode={editBioMode}
             newBio={newBio}
             newPassword={newPassword}
             confirmNewPassword={confirmNewPassword}
@@ -398,13 +297,10 @@ const ProfileSettings: React.FC = () => {
             handleResetPassword={handleResetPassword}
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
-            privacySetting={privacySetting}
             setPrivacySetting={setPrivacySetting}
             showLists={showLists}
-            setShowLists={setShowLists}
             handleUpdatePrivacy={handleUpdatePrivacy}
             handleCheckPrivacy={handleCheckPrivacy}
-            isRecipePublic={isRecipePublic}
             toggleRecipeBookVisibility={toggleRecipeBookVisibility}
           />
         )}

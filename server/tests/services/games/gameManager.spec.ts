@@ -1,5 +1,7 @@
+import GuessModel from '../../../models/guess.model';
 import NimModel from '../../../models/nim.model';
 import GameManager from '../../../services/games/gameManager';
+import GuessTheIngredientGame from '../../../services/games/guess';
 import NimGame from '../../../services/games/nim';
 import { MAX_NIM_OBJECTS } from '../../../types/constants';
 import { GameInstance, GameInstanceID, NimGameState, GameType } from '../../../types/types';
@@ -40,7 +42,7 @@ describe('GameManager', () => {
   describe('addGame', () => {
     const mapSetSpy = jest.spyOn(Map.prototype, 'set');
 
-    it('should return the gameID for a successfully created game', async () => {
+    it('should return the gameID for a successfully created nim game', async () => {
       mockingoose(NimModel).toReturn(new NimGame().toModel(), 'create');
 
       const gameManager = GameManager.getInstance();
@@ -48,6 +50,23 @@ describe('GameManager', () => {
 
       expect(gameID).toEqual('testGameID');
       expect(mapSetSpy).toHaveBeenCalledWith(gameID, expect.any(NimGame));
+    });
+
+    test('should return the gameID for a successfully created guess game', async () => {
+      const correctIngredient = 'Tomato';
+      const hints = ['Red', 'Used in pasta sauce', 'A fruit'];
+      const imageURL = 'http://example.com/image.jpg';
+
+      mockingoose(NimModel).toReturn(
+        new GuessTheIngredientGame(correctIngredient, hints, imageURL).toModel(),
+        'create',
+      );
+
+      const gameManager = GameManager.getInstance();
+      const gameID = await gameManager.addGame('Guess');
+
+      expect(gameID).toEqual('testGameID');
+      expect(mapSetSpy).toHaveBeenCalledWith(gameID, expect.any(GuessTheIngredientGame));
     });
 
     it('should return an error for an invalid game type', async () => {
@@ -75,12 +94,38 @@ describe('GameManager', () => {
   describe('removeGame', () => {
     const mapDeleteSpy = jest.spyOn(Map.prototype, 'delete');
 
-    it('should remove the game with the provided gameID', async () => {
+    it('should remove the nim game with the provided gameID', async () => {
       mockingoose(NimModel).toReturn(new NimGame().toModel(), 'create');
 
       // assemble
       const gameManager = GameManager.getInstance();
       const gameID = await gameManager.addGame('Nim');
+      expect(gameManager.getActiveGameInstances().length).toEqual(1);
+
+      if (typeof gameID === 'string') {
+        // act
+        const removed = gameManager.removeGame(gameID);
+
+        // assess
+        expect(removed).toBeTruthy();
+        expect(gameManager.getActiveGameInstances().length).toEqual(0);
+        expect(mapDeleteSpy).toHaveBeenCalledWith(gameID);
+      }
+    });
+
+    it('should remove the guess game with the provided gameID', async () => {
+      const correctIngredient = 'Tomato';
+      const hints = ['Red', 'Used in pasta sauce', 'A fruit'];
+      const imageURL = 'http://example.com/image.jpg';
+
+      mockingoose(GuessModel).toReturn(
+        new GuessTheIngredientGame(correctIngredient, hints, imageURL).toModel(),
+        'create',
+      );
+
+      // assemble
+      const gameManager = GameManager.getInstance();
+      const gameID = await gameManager.addGame('Guess');
       expect(gameManager.getActiveGameInstances().length).toEqual(1);
 
       if (typeof gameID === 'string') {

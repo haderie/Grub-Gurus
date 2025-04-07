@@ -200,6 +200,7 @@ export const user: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 export const userFollowed: User = {
@@ -212,6 +213,7 @@ export const userFollowed: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 export const safeUser: SafeDatabaseUser = {
@@ -224,6 +226,7 @@ export const safeUser: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 export const safeUserFollowed: SafeDatabaseUser = {
@@ -236,6 +239,7 @@ export const safeUserFollowed: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  rankings: [],
 };
 
 export const sampleRecipe: DatabaseRecipe = {

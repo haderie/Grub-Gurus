@@ -214,6 +214,31 @@ const savePost = async (
   return res.data;
 };
 
+/**
+ * Updates the user's privacy settings.
+ * @param username - The username of the user
+ * @param privacySetting - The new privacy setting
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updateRanking = async (
+  username: string,
+  postID: ObjectId,
+  ranking: number,
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.post(`${USER_API_URL}/rank-recipe`, {
+    username,
+    postID,
+    ranking,
+  });
+
+  if (res.status !== 200) {
+    throw new Error('Error when saving post');
+  }
+
+  return res.data;
+};
+
 export {
   getUsers,
   getUserByUsername,
@@ -226,4 +251,5 @@ export {
   updatePrivacy,
   updateRecipeBookPrivacy,
   savePost,
+  updateRanking,
 };

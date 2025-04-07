@@ -29,18 +29,18 @@ const usePostCard = (
   post: PopulatedDatabasePost,
 ) => {
   const [likes, setLikes] = useState(initialLikes);
-  const [saves, setSaves] = useState(post.saves);
+  const [saves, setSaves] = useState(initialSaves);
   const { user: currentUser } = useUserContext();
 
   const handleLike = async () => {
-    const isLiked = likes.includes(username);
+    const isLiked = likes.includes(currentUser.username);
     if (isLiked) {
-      setLikes(likes.filter(user => user !== username)); // Remove like
+      setLikes(likes.filter(user => user !== currentUser.username)); // Remove like
     } else {
-      setLikes([...likes, username]); // Add like
+      setLikes([...likes, currentUser.username]); // Add like
     }
     try {
-      await likePost(postID, username);
+      await likePost(postID, currentUser.username);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(`Error liking post: ${error}`);
