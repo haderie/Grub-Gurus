@@ -60,15 +60,19 @@ A class diagram for the schema definition is shown below:
 
 ### `/user`
 
-| Endpoint         | Method | Description                    |
-| ---------------- | ------ | ------------------------------ |
-| /signup          | POST   | Create a new user account      |
-| /login           | POST   | Log in as a user               |
-| /resetPassword   | PATCH  | Reset user password            |
-| /getUser/        | GET    | Fetch user details by username |
-| /getUsers        | GET    | Fetch all users                |
-| /deleteUser/     | DELETE | Delete a user by username      |
-| /updateBiography | PATCH  | Update user biography          |
+| Endpoint                 | Method | Description                                         |
+| ------------------------ | ------ | ------------------------------                      
+| /signup                  | POST   | Create a new user account                           |
+| /login                   | POST   | Log in as a user                                    |
+| /resetPassword           | PATCH  | Reset user password                                 |
+| /getUser/                | GET    | Fetch user details by username                      |
+| /getUsers                | GET    | Fetch all users                                     |
+| /deleteUser/             | DELETE | Delete a user by username                           |
+| /updateBiography         | PATCH  | Update user biography                               |
+| /updateRecipeBookPrivacy | PATCH  | Update user's recipe book privacy setting biography |
+| /followUser              | PATCH  | Update user following list                          |
+| /updatePrivacy           | PATCH  | Update user profile privacy setting                 |
+| /savePost                | PATCH  | Saves/removes post from user's saved posts list     |
 
 ### `/chat`
 
@@ -88,6 +92,24 @@ A class diagram for the schema definition is shown below:
 | /join    | POST   | Join an existing game |
 | /leave   | POST   | Leave a game          |
 | /games   | GET    | Retrieve all games    |
+
+### `/posts`
+
+| Endpoint                     | Method | Description                                           |
+| ---------------------------- | ------ | ----------------------------------------------------- |
+| /addPost                     | POST   | Saves a new post                                      |
+| /getPost                     | GET    | Retrieves an existing post                            |
+| /getFollowingPosts/:username | GET    | Gets posts from users that the logged in user follows |
+| /updatePostLikes             | PATCH  | Updates number of likes on a post                     |
+
+### `/recipe`
+
+| Endpoint                 | Method | Description                           |
+| -------------------------| ------ | --------------------------------------|
+| /getRecipes/:username    | GET    | Gets recipes given a user's username  |
+| /addRecipe               | POST   | Creates a new recipe                  |
+| /addCalendarRecipe       | POST   | Creates a new calendar recipe         |
+| /updateRecipeForCalendar | PATCH  | Updates a calendar recipe             |
 
 ## Running Stryker Mutation Testing
 

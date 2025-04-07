@@ -49,36 +49,6 @@ const recipeController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Retrieves a list of questions filtered by a search term and ordered by a specified criterion.
-   * If there is an error, the HTTP response's status is updated.
-   *
-   * @param req The FindQuestionRequest object containing the query parameters `order` and `search`.
-   * @param res The HTTP response object used to send back the filtered list of questions.
-   *
-   * @returns A Promise that resolves to void.
-   */
-  // const getRecipesByFilter = async (req: FindRecipeRequest, res: Response): Promise<void> => {
-  //   const { username } = req.params;
-  //   const { search } = req.query;
-
-  //   try {
-  //     let qlist = qlist.filter(q => q.user.username === askedBy);
-  //     const rlist: Recipe[] = await getRecipeByUsername(username);
-
-  //     // Filter by search keyword and tags
-  //     const resqlist: PopulatedDatabaseRecipe[] = filterRecipeBySearch(rlist, search);
-
-  //     res.json(resqlist);
-  //   } catch (err: unknown) {
-  //     if (err instanceof Error) {
-  //       res.status(500).send(`Error when fetching questions by filter: ${err.message}`);
-  //     } else {
-  //       res.status(500).send(`Error when fetching questions by filter`);
-  //     }
-  //   }
-  // };
-
-  /**
    * Handles the creation of a new recipe.
    * @param req The request containing username, email, and password in the body.
    * @param res The response, either returning the created user or an error.
@@ -128,6 +98,9 @@ const recipeController = (socket: FakeSOSocket) => {
     }
   };
 
+  /**
+   *
+   */
   const updateRecipeForCalendar = async (
     req: UpdateCalendarRecipeRequest,
     res: Response,

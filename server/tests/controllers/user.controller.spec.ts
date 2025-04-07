@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { app } from '../../app';
 import * as util from '../../services/user.service';
 import { SafeDatabaseUser, SafePopulatedDatabaseUser, User } from '../../types/types';
+import PostModel from '../../models/posts.model';
 
 const mockUser: User = {
   username: 'user1',
@@ -94,17 +95,6 @@ describe('Test userController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography });
-      // expect(saveUserSpy).toHaveBeenCalledWith({
-      //   ...mockReqBody,
-      //   biography: mockReqBody.biography,
-      //   dateJoined: expect.any(Date),
-      //   certified: false,
-      //   followers: [],
-      //   following: [],
-      //   postsCreated: [],
-      //   privacySetting: 'Public',
-      //   recipeBookPublic: false,
-      // });
     });
 
     it('should return 400 for request missing username', async () => {
@@ -533,6 +523,157 @@ describe('Test userController', () => {
 
       expect(response.status).toBe(500);
       expect(response.text).toContain('Error when following user2: Error');
+    });
+  });
+  describe('PATCH /updatePrivacy', () => {
+    it('should successfully update privacy setting given valid input', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        privacySetting: 'Private',
+      };
+
+      updatedUserSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        privacySetting: 'Private',
+      });
+
+      const response = await supertest(app).patch('/user/updatePrivacy').send(mockReqBody);
+
+      expect(response.status).toBe(200);
+      expect(response.body.privacySetting).toBe('Private');
+      expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
+        privacySetting: 'Private',
+      });
+    });
+
+    it('should return 400 for request missing username', async () => {
+      const response = await supertest(app).patch('/user/updatePrivacy').send({
+        privacySetting: 'Private',
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid user body');
+    });
+
+    it('should return 400 for request missing privacySetting', async () => {
+      const response = await supertest(app).patch('/user/updatePrivacy').send({
+        username: mockUser.username,
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid user body');
+    });
+
+    it('should return 500 if updateUser returns error', async () => {
+      updatedUserSpy.mockResolvedValueOnce({ error: 'Database error' });
+
+      const response = await supertest(app).patch('/user/updatePrivacy').send({
+        username: mockUser.username,
+        privacySetting: 'Private',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toMatch(/Error when updating user privacy setting/);
+    });
+  });
+
+  describe('PATCH /savePost', () => {
+    const mockPostID = new mongoose.Types.ObjectId();
+    const mockPost = {
+      _id: mockPostID,
+      username: 'user1',
+      recipe: new mongoose.Types.ObjectId(),
+      text: 'Test post',
+      datePosted: new Date(),
+      likes: [],
+      saves: [],
+    };
+
+    let findByIdSpy: jest.SpyInstance;
+    let findOneAndUpdateSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      findByIdSpy = jest.spyOn(PostModel, 'findById');
+      findOneAndUpdateSpy = jest.spyOn(PostModel, 'findOneAndUpdate');
+    });
+
+    it('should successfully save a post', async () => {
+      jest.spyOn(PostModel, 'findById').mockResolvedValue(mockPost);
+      jest.spyOn(PostModel, 'findOneAndUpdate').mockResolvedValue(mockPost);
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'save',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: 'Post saved successfully.' });
+    });
+
+    it('should successfully remove a post', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      jest.spyOn(PostModel, 'findById').mockResolvedValue(mockPost);
+      jest.spyOn(PostModel, 'findOneAndUpdate').mockResolvedValue(mockPost);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'remove',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: 'Post removed successfully.' });
+    });
+
+    it('should return 400 for invalid action', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      findByIdSpy.mockResolvedValueOnce(mockPost);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'invalid',
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toBe('Invalid action');
+    });
+
+    it('should return 500 for database error during save', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      findByIdSpy.mockResolvedValueOnce(mockPost);
+      findOneAndUpdateSpy.mockRejectedValueOnce(new Error('Database error'));
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'save',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when saving or removing post');
+    });
+
+    it('should return 500 for database error during remove', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      findByIdSpy.mockResolvedValueOnce(mockPost);
+      findOneAndUpdateSpy.mockRejectedValueOnce(new Error('Database error'));
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'remove',
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when saving or removing post');
     });
   });
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, IconButton, Box } from '@mui/material';
+import { TextField, Button, IconButton, Box, Typography } from '@mui/material';
 import { TbChefHat } from 'react-icons/tb';
 import { MdLogout } from 'react-icons/md';
 import useHeader from '../../hooks/useHeader';
@@ -29,8 +29,11 @@ const Header = () => {
         width: '100%',
         color: '#3E3232',
       }}>
+      <Typography variant='h5' sx={{ marginLeft: '25px', fontWeight: 'bold' }}>
+        Grub Gurus
+      </Typography>
       {/* Title aligned to the left */}
-      <img src='/grubGurus_logo-02.png' alt='Grub Gurus Logo' className='header-logo'></img>
+      <img src='/grubGurus_logo.png' alt='Grub Gurus Logo' className='header-logo'></img>
 
       {/* Search Bar in the center */}
       <Box
