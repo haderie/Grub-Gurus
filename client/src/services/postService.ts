@@ -6,10 +6,10 @@ import api from './config';
 const POST_API_URL = `${process.env.REACT_APP_SERVER_URL}/posts`;
 
 /**
- * Function to add a new question.
+ * Function to add a new post.
  *
- * @param q - The question object to add.
- * @throws Error if there is an issue creating the new question.
+ * @param q - The post object to add.
+ * @throws Error if there is an issue creating the new post.
  */
 const addPost = async (q: Posts): Promise<PopulatedDatabasePost> => {
   const res = await api.post(`${POST_API_URL}/addPost`, q);
@@ -50,6 +50,12 @@ const getFollowingPosts = async (username: string): Promise<PopulatedDatabasePos
   return res.data;
 };
 
+/**
+ * Function to like a post.
+ *
+ * @throws Error if there is an issue liking the post.
+ */
+
 const likePost = async (postID: ObjectId, username: string): Promise<PopulatedDatabasePost> => {
   try {
     const res = await api.patch(`${POST_API_URL}/updatePostLikes`, {
@@ -65,15 +71,5 @@ const likePost = async (postID: ObjectId, username: string): Promise<PopulatedDa
     }
   }
 };
-
-// const savePost = async (username: string, postId: ObjectId): Promise<PopulatedDatabasePost[]> => {
-//   const res = await api.post(`${POST_API_URL}/savePost`);
-
-//   if (res.status !== 200) {
-//     throw new Error('Error while saving post');
-//   }
-
-//   return res.data;
-// };
 
 export { addPost, getPosts, getFollowingPosts, likePost };

@@ -5,8 +5,8 @@ import CreatePostButton from '../createPostButton';
 import PostCard from '../postCard';
 
 /**
- * Represents the TagPage component which displays a list of tags
- * and provides functionality to handle tag clicks and ask a new question.
+ * Represents the ExplorePage component which displays public posts
+ * and provides functionality to interact with the posts and create new posts.
  */
 const ExplorePage = () => {
   const { qlist } = useExplorePage();

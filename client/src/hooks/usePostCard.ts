@@ -5,6 +5,22 @@ import { PopulatedDatabasePost } from '../types/types';
 import { savePost } from '../services/userService';
 import useUserContext from './useUserContext';
 
+/**
+ * Custom hook to manage the likes and saves for a post card.
+ * This hook handles the state of likes and saves, and provides handlers for liking and saving a post.
+ * 
+ * @param initialLikes - An array of users who have liked the post initially.
+ * @param initialSaves - An array of users who have saved the post initially.
+ * @param username - The username of the current user, who will be adding/removing likes and saves.
+ * @param postID - The ID of the post to be liked or saved.
+ * @param post - The full post data object containing post details like the username of the poster and saves.
+ * 
+ * @returns {likes, saves, handleLike, handleSave} 
+ * - likes: Current state of users who have liked the post.
+ * - saves: Current state of users who have saved the post.
+ * - handleLike: Function to toggle like status for the current user on the post.
+ * - handleSave: Function to toggle save status for the current user on the post.
+ */
 const usePostCard = (
   initialLikes: string[],
   initialSaves: string[],

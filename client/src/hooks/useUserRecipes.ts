@@ -4,33 +4,19 @@ import { getRecipesByUsername } from '../services/recipeService';
 import useUserContext from './useUserContext';
 import { getUserByUsername } from '../services/userService';
 
+/**
+ * Custom hook to fetch and manage the user's recipes based on their username.
+ * It handles loading state, error handling, and updates the recipes state
+ * when the recipes are successfully fetched from the server.
+ *
+ * @param username The username of the user whose recipes need to be fetched.
+ * @returns An object containing the recipes, loading state, and error message (if any).
+ */
 const useUserRecipes = (username: string) => {
   const { socket } = useUserContext();
-
-  // const [searchParams] = useSearchParams();
-  // const [search, setSearch] = useState<string>('');
   const [recipes, setRecipes] = useState<PopulatedDatabaseRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // IF SEARCH IS TO BE IMPLEMENTED
-  // useEffect(() => {
-  //   // let pageTitle = 'All Rec';
-  //   let searchString = '';
-
-  //   const searchQuery = searchParams.get('search');
-  //   const tagQuery = searchParams.get('tag');
-
-  //   if (searchQuery) {
-  //     // pageTitle = 'Search Results';
-  //     searchString = searchQuery;
-  //   } else if (tagQuery) {
-  //     // pageTitle = tagQuery;
-  //     searchString = `[${tagQuery}]`;
-  //   }
-
-  //   setSearch(searchString);
-  // }, [searchParams]);
 
   useEffect(() => {
     if (!username) {
@@ -54,26 +40,9 @@ const useUserRecipes = (username: string) => {
       }
     };
 
-    // /**
-    //  * Updates the recipe views when an update is received from the socket.
-    //  *
-    //  * @param updatedRecipe - The updated recipe object with new view count.
-    //  */
-    // const handleViewsUpdate = (updatedRecipe: DatabaseRecipe) => {
-    //   setRecipes(prevRecipes =>
-    //     prevRecipes.map(recipe => (recipe._id === updatedRecipe._id ? updatedRecipe : recipe)),
-    //   );
-    // };
-
     fetchRecipes();
 
-    // socket.on('recipeViewsUpdate', handleViewsUpdate);
-
-    // return () => {
-    //   socket.off('recipeViewsUpdate', handleViewsUpdate);
-    // };
   }, [username, socket]);
-  // search ^ in dependency
 
   return { recipes, loading, error };
 };

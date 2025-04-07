@@ -125,7 +125,7 @@ const updateBiography = async (
 };
 
 /**
- * Updates the user's biography.
+ * Updates the user's recipe book privacy setting.
  * @param username The unique username of the user
  * @param newRecipeBookPublic The new boolean indicating recipeBookPrivacy status
  * @returns A promise resolving to the updated user
@@ -166,19 +166,8 @@ const followUser = async (
   return res.data;
 };
 
-// /**
-//  * Unfollow a user by username
-//  * @param username - The username of the user to unfollow
-//  */
-// const unfollowUser = async (username: string): Promise<void> => {
-//   const res = await api.patch(`${USER_API_URL}/unfollowUser`, { username });
-//   if (res.status !== 200) {
-//     throw new Error('Error unfollowing user');
-//   }
-// };
-
 /**
- * Updates the user's privacy settings.
+ * Updates the user's profile privacy settings.
  * @param username - The username of the user
  * @param privacySetting - The new privacy setting
  * @returns A promise resolving to the updated user
@@ -201,9 +190,9 @@ const updatePrivacy = async (
 };
 
 /**
- * Updates the user's privacy settings.
+ * Updates the user's saved posts.
  * @param username - The username of the user
- * @param privacySetting - The new privacy setting
+ * @param privacySetting - The new post.
  * @returns A promise resolving to the updated user
  * @throws Error if the request fails
  */
@@ -224,31 +213,6 @@ const savePost = async (
 
   return res.data;
 };
-
-/**
- * Updates the user's privacy settings.
- * @param username - The username of the user
- * @param privacySetting - The new privacy setting
- * @returns A promise resolving to the updated user
- * @throws Error if the request fails
- */
-// const removeSavedPost = async (
-//   username: string,
-//   postID: ObjectId,
-//   action: 'save' | 'remove',
-// ): Promise<SafePopulatedDatabaseUser> => {
-//   const res = await api.patch(`${USER_API_URL}/removeSavedPost`, {
-//     username,
-//     postID,
-//     action,
-//   });
-
-//   if (res.status !== 200) {
-//     throw new Error('Error when saving post');
-//   }
-
-//   return res.data;
-// };
 
 export {
   getUsers,

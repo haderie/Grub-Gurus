@@ -5,8 +5,8 @@ import PostCard from '../postCard';
 import useFollowingPage from '../../../hooks/useFollowingPage';
 
 /**
- * Represents the TagPage component which displays a list of tags
- * and provides functionality to handle tag clicks and ask a new question.
+ * Represents the FollowingPage component which displays posts from users that
+ * you follow and provides functionality to interact with the posts and create new posts.
  */
 const FollowingPage = () => {
   const { qlist } = useFollowingPage();

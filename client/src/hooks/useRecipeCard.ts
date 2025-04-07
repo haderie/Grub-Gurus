@@ -5,6 +5,17 @@ import { updateRecipeForCalendar } from '../services/recipeService';
 import useRecipeCalendar from './useRecipeCalendar';
 import useUserContext from './useUserContext';
 
+/**
+ * Custom hook to manage adding a recipe to the user's calendar.
+ * 
+ * This hook provides functionality to:
+ * - Set and manage the modal state for adding a recipe to the calendar.
+ * - Handle the selection of a date, time, and color for the calendar event.
+ * - Add the recipe to the calendar by updating the recipe's data and creating a corresponding event.
+ * 
+ * The hook communicates with the `useUserContext` to access the user and `useRecipeCalendar` for managing calendar events.
+ * It interacts with the `updateRecipeForCalendar` function to update recipe data with calendar event details.
+ */
 const useAddRecipeToCalendar = () => {
   const { user } = useUserContext();
   const { setEvents } = useRecipeCalendar();
@@ -39,13 +50,6 @@ const useAddRecipeToCalendar = () => {
     };
 
     try {
-      // const savedRecipe = await addCalendarRecipe(newRecipe);
-      // if (!savedRecipe._id) throw new Error('Recipe did not receive an _id');
-
-      // setEvents((prevEvents: RecipeCalendarEvent[]) => [
-      //   ...prevEvents,
-      //   { ...savedRecipe, start: eventStart, end: eventEnd, color: selectedColor },
-      // ]);
       const updatedRecipe = await updateRecipeForCalendar(
         recipe._id,
         updatedRecipeData.addedToCalendar,

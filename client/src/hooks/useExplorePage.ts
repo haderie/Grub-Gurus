@@ -6,7 +6,7 @@ import useUserContext from './useUserContext';
 /**
  * Custom hook for managing the explore page's state and real-time updates.
  *
- * @returns qlist - An array of posts retrieved from the server
+ * @returns qlist - An array of posts retrieved from the server.
  */
 const useExplorePage = () => {
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);

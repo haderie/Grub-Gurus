@@ -3,15 +3,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /**
- * AskQuestionButton component that renders a button for navigating to the
- * "New Question" page. When clicked, it redirects the user to the page
- * where they can ask a new question.
+ * CreatePostButton component that renders a button for navigating to the
+ * "New Post" page. When clicked, it redirects the user to the page
+ * where they can create a new post.
  */
 const CreatePostButton = () => {
   const navigate = useNavigate();
 
   /**
-   * Function to handle navigation to the "New Question" page.
+   * Function to handle navigation to the "New Post" page.
    */
   const handleNewPost = () => {
     navigate('/new/post');

@@ -7,26 +7,23 @@ import RecipeCard from '../recipeCard';
 import usePostCard from '../../../hooks/usePostCard';
 
 /**
- * Interface representing the props for the QuestionBody component.
+ * Interface representing the props for the PostCard component.
  *
- * - views - The number of views the question has received.
- * - text - The content of the question, which may contain hyperlinks.
- * - askby - The username of the user who asked the question.
- * - meta - Additional metadata related to the question, such as the date and time it was asked.
+ * - post - the populated post that is being displayed.
  */
 interface PostCardProps {
   post: PopulatedDatabasePost;
 }
 
 /**
- * QuestionBody component that displays the body of a question.
+ * PostView component that displays the post.
  * It includes the number of views, the question content (with hyperlink handling),
  * the username of the author, and additional metadata.
  *
- * @param views The number of views the question has received.
- * @param text The content of the question.
- * @param askby The username of the question's author.
- * @param meta Additional metadata related to the question.
+ * @param likes An array of usernames who liked the post.
+ * @param saves An array of usernames who saved the post.
+ * @param handleLike A function to handle liking the post.
+ * @param handleSave A function to handle saving the post.
  */
 const PostView = ({ post }: PostCardProps) => {
   const { likes, saves, handleLike, handleSave } = usePostCard(
