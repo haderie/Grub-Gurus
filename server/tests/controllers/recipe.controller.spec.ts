@@ -16,9 +16,11 @@ const mockUser: User = {
   postsCreated: [],
 };
 
+const mockUserId = new mongoose.Types.ObjectId();
+
 const recipePost: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),
-  user: mockUser,
+  user: mockUserId,
   tags: [],
   title: 'Pesto Pasta',
   privacyPublic: true,
@@ -33,7 +35,7 @@ const recipePost: DatabaseRecipe = {
 
 const calendarRecipeDataBase: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),
-  user: mockUser,
+  user: mockUserId,
   tags: [],
   title: 'BBQ Chicken',
   privacyPublic: true,

@@ -222,7 +222,7 @@ const useProfileSettings = () => {
   };
 
   /**
-   * Function to update the follow status of a user. It toggles the follow/unfollow state 
+   * Function to update the follow status of a user. It toggles the follow/unfollow state
    * and updates the UI accordingly.
    * - If the user successfully follows or unfollows the target user, the follow status is updated.
    * - A success message is shown with the appropriate status (Followed/Unfollowed).
@@ -251,9 +251,9 @@ const useProfileSettings = () => {
   };
 
   /**
-   * Function to check if the current user is following a specific user. 
+   * Function to check if the current user is following a specific user.
    * It returns a boolean indicating the follow status.
-   * 
+   *
    * @param uname - The username of the user to check if the current user is following.
    * @returns `true` if the current user is following the provided username, otherwise `false`.
    */
@@ -267,7 +267,7 @@ const useProfileSettings = () => {
    * This function updates the privacy setting (either 'Public' or 'Private') of the current user.
    * - If the privacy setting is successfully updated, a success message is shown.
    * - If the update fails, an error message is displayed.
-   * 
+   *
    * @param newSetting - The new privacy setting to be applied ('Public' or 'Private').
    */
   const handleUpdatePrivacy = async (newSetting: 'Public' | 'Private') => {
