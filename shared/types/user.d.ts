@@ -33,6 +33,7 @@ export interface User extends UserCredentials {
   privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
   postsCreated: Posts[];
+  highScore: number;
 }
 
 /**
@@ -72,6 +73,7 @@ export interface UserRequest extends Request {
     privacySetting: 'Public' | 'Private';
     recipeBookPublic: boolean;
     postsCreated: Posts[];
+    highScore: number;
   };
 }
 

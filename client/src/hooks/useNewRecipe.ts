@@ -7,7 +7,7 @@ import { Recipe, YouTubeVideo } from '../types/types';
 import { addRecipe, getRecipesByUsername } from '../services/recipeService';
 import { updateCertifiedStatus } from '../services/userService';
 
-const NUM_RECIPES_FOR_CERTIFICATION = 1;
+const NUM_RECIPES_FOR_CERTIFICATION = 5;
 
 /**
  * Custom hook to handle question submission and form validation

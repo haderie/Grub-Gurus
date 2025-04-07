@@ -43,6 +43,15 @@ const useGuessTheIngredientPage = (gameInstance: GameInstance<GuessTheIngredient
       gameInstance.state.revealed = true;
       gameInstance.state.score[playerKey] = (gameInstance.state.score[playerKey] || 0) + 10;
       gameInstance.state.winners = [user.username];
+
+      // Check if the player's score exceeds their current high score
+      const currentScore = gameInstance.state.score[playerKey] || 0;
+      const currentHighScore = user.highScore || 0;
+
+      if (currentScore > currentHighScore) {
+        // Update the high score if the current score is greater
+        user.highScore = currentScore;
+      }
     } else {
       // Incorrect guess, increment attempts and show hint if available
       gameInstance.state.attempts[playerKey] = (gameInstance.state.attempts[playerKey] || 0) + 1;

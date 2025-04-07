@@ -86,6 +86,7 @@ const userController = (socket: FakeSOSocket) => {
       privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
+      highScore: requestUser.highScore,
     };
 
     try {
@@ -273,11 +274,6 @@ const userController = (socket: FakeSOSocket) => {
     res: Response,
   ): Promise<void> => {
     try {
-      // if (!isUpdateBiographyBodyValid(req)) {
-      //   res.status(400).send('Invalid user body');
-      //   return;
-      // }
-
       // Validate that request has username and biography
       const { username, recipeBookPublic } = req.body;
 
@@ -357,11 +353,6 @@ const userController = (socket: FakeSOSocket) => {
       if ('error' in updatedUser) {
         throw new Error(updatedUser.error);
       }
-
-      // socket.emit('userUpdate', {
-      //   user: updatedUser,
-      //   type: 'updated',
-      // });
 
       res.status(200).json(updatedUser);
     } catch (error) {

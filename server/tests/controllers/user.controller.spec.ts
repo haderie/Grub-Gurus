@@ -14,6 +14,7 @@ const mockUser: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -26,6 +27,7 @@ const mockSafeUser: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
 };
 
 const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
@@ -38,6 +40,7 @@ const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
 };
 
 const mockUpdatedUser = {
@@ -55,6 +58,7 @@ const mockUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  highScore: 0,
 };
 
 const mockPopulatedUserJSONResponse = {
@@ -67,6 +71,7 @@ const mockPopulatedUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  highScore: 0,
 };
 
 const mockCertifiedPopulatedUserJSONResponse = {
@@ -79,6 +84,7 @@ const mockCertifiedPopulatedUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  highScore: 0,
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
@@ -106,17 +112,6 @@ describe('Test userController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ ...mockUserJSONResponse, biography: mockReqBody.biography });
-      // expect(saveUserSpy).toHaveBeenCalledWith({
-      //   ...mockReqBody,
-      //   biography: mockReqBody.biography,
-      //   dateJoined: expect.any(Date),
-      //   certified: false,
-      //   followers: [],
-      //   following: [],
-      //   postsCreated: [],
-      //   privacySetting: 'Public',
-      //   recipeBookPublic: false,
-      // });
     });
 
     it('should return 400 for request missing username', async () => {
