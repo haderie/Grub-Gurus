@@ -59,7 +59,6 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
       }),
     );
 
-
     // Remove null values and cast to the correct type
     return publicPosts.filter(post => post !== null) as PopulatedDatabasePost[];
   } catch (error) {
