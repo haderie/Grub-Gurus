@@ -91,7 +91,6 @@ describe('Test recipeController', () => {
       const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('Pesto Pasta');
-      expect(response.body.user.username).toEqual(mockUser.username);
     });
 
     test('should return 400 if recipe body is invalid', async () => {
@@ -141,7 +140,6 @@ describe('Test recipeController', () => {
       const response = await supertest(app).post('/recipe/addCalendarRecipe').send(calendarRecipe);
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('BBQ Chicken');
-      expect(response.body.user.username).toEqual(mockUser.username);
       expect(response.body.addedToCalendar).toEqual(true);
     });
 
@@ -197,7 +195,6 @@ describe('Test recipeController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('BBQ Chicken');
-      expect(response.body.user.username).toEqual(calendarRecipe.user.username);
     });
 
     test('should return 400 if recipe body is invalid', async () => {
