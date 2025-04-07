@@ -125,26 +125,28 @@ const ProfileEdit = ({
             </Typography>
             <Typography>
               <strong>Account Privacy:</strong> {userData.privacySetting}{' '}
-                <IconButton
-                  size='small'
-                  onClick={async () => {
-                    const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
-                    setPrivacySetting(newSetting);
-                    await handleUpdatePrivacy(newSetting);
-                    await handleCheckPrivacy();
-                  }}>
-                  {userData.privacySetting === 'Public' ? (
-                    <LockOpenIcon fontSize='small' />
-                  ) : (
-                    <LockIcon fontSize='small' />
-                  )}
-                </IconButton>
+              <IconButton
+                size='small'
+                onClick={async () => {
+                  const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
+                  setPrivacySetting(newSetting);
+                  await handleUpdatePrivacy(newSetting);
+                  await handleCheckPrivacy();
+                }}>
+                {userData.privacySetting === 'Public' ? (
+                  <LockOpenIcon fontSize='small' />
+                ) : (
+                  <LockIcon fontSize='small' />
+                )}
+              </IconButton>
             </Typography>
             <Typography>
-              <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic} {' '}
-                <IconButton onClick={toggleRecipeBookVisibility}>
-                  {userData.recipeBookPublic ? 'Make Recipe Book Private' : 'Make Recipe Book Public'}{' '}
-                </IconButton>
+              <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}{' '}
+              <IconButton onClick={toggleRecipeBookVisibility}>
+                {userData.recipeBookPublic
+                  ? 'Make Recipe Book Private'
+                  : 'Make Recipe Book Public'}{' '}
+              </IconButton>
             </Typography>
 
             <Typography>
