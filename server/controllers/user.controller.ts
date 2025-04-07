@@ -272,11 +272,6 @@ const userController = (socket: FakeSOSocket) => {
     res: Response,
   ): Promise<void> => {
     try {
-      // if (!isUpdateBiographyBodyValid(req)) {
-      //   res.status(400).send('Invalid user body');
-      //   return;
-      // }
-
       // Validate that request has username and biography
       const { username, recipeBookPublic } = req.body;
 
@@ -327,11 +322,6 @@ const userController = (socket: FakeSOSocket) => {
         throw new Error(updatedUser.error);
       }
 
-      // socket.emit('userUpdate', {
-      //   user: updatedUser,
-      //   type: 'updated',
-      // });
-
       res.status(200).json(updatedUser);
     } catch (error) {
       res.status(500).send(`Error when following ${req.body.usernameFollowed}: ${error}`);
@@ -339,8 +329,8 @@ const userController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Updates a user's privacy setting.
-   * @param req The request containing the username and privacy setting in the body.
+   * Updates a user's profile privacy setting.
+   * @param req The request containing the username and profile privacy setting in the body.
    * @param res The response, either confirming the update or returning an error.
    * @returns A promise resolving to void.
    */

@@ -16,6 +16,11 @@ import {
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
 
+  /**
+   * Validates that the request body for creating or updating a recipe contains all required fields.
+   * @param recipe The recipe object to validate.
+   * @returns `true` if the recipe contains all required fields; otherwise, `false`.
+   */
   const isRecipeRequestBodyValid = (recipe: Recipe): boolean =>
     recipe.user !== undefined &&
     recipe.title !== undefined &&
@@ -25,6 +30,11 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.instructions !== undefined &&
     recipe.cookTime !== undefined;
 
+  /** 
+   * Validates that the request body for updating a calendar recipe contains all required fields.
+   * @param request The request object containing the recipe update data.
+   * @returns `true` if the update request contains all required fields; otherwise, `false`.
+   */
   const isRecipeUpdateRequestBodyValid = (request: UpdateCalendarRecipeRequest): boolean =>
     request.body.recipeID !== undefined &&
     request.body.addedToCalendar !== undefined &&
@@ -50,8 +60,8 @@ const recipeController = (socket: FakeSOSocket) => {
 
   /**
    * Handles the creation of a new recipe.
-   * @param req The request containing username, email, and password in the body.
-   * @param res The response, either returning the created user or an error.
+   * @param req The request containing recipe in the body.
+   * @param res The response, either returning the created recipe or an error.
    * @returns A promise resolving to void.
    */
   const addRecipe = async (req: AddRecipeRequest, res: Response): Promise<void> => {
@@ -75,8 +85,8 @@ const recipeController = (socket: FakeSOSocket) => {
 
   /**
    * Handles the creation of a new calendar recipe.
-   * @param req The request containing username, email, and password in the body.
-   * @param res The response, either returning the created user or an error.
+   * @param req The request containing calendar recipe in the body.
+   * @param res The response, either returning the created calendar or an error.
    * @returns A promise resolving to void.
    */
   const addCalendarRecipe = async (req: AddCalendarRecipeRequest, res: Response): Promise<void> => {
@@ -99,7 +109,14 @@ const recipeController = (socket: FakeSOSocket) => {
   };
 
   /**
-   *
+   * Updates a recipe's details in the calendar.
+   * This function validates the request body, checks if all required fields are present,
+   * and then attempts to update the recipe on the calendar. If successful, it returns the updated recipe details.
+   * If there is an error, it sends an appropriate error response.
+   * 
+   * @param req The incoming request containing the recipe update data.
+   * @param res The response object, used to send back the result or error.
+   * @returns A promise resolving to void.
    */
   const updateRecipeForCalendar = async (
     req: UpdateCalendarRecipeRequest,
