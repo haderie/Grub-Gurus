@@ -31,7 +31,6 @@ const postController = (socket: FakeSOSocket) => {
         ...post.recipe,
         tags: await processTags(post.recipe.tags),
       };
-      
       const savedRecipe = (await createRecipe(recipeWithTags)) as DatabaseRecipe;
 
       if ('error' in savedRecipe) {

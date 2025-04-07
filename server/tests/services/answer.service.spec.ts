@@ -95,7 +95,7 @@ describe('Answer model', () => {
         ansDateTime: new Date(),
         comments: [],
         youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        isUserCertified: false
+        isUserCertified: false,
       };
 
       const mockDBAnswer = {
@@ -117,7 +117,7 @@ describe('Answer model', () => {
         'https://youtu.be/dQw4w9WgXcQ',
         'https://youtube.com/watch?v=dQw4w9WgXcQ',
         'https://www.youtube.com/v/dQw4w9WgXcQ',
-        'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        'https://www.youtube.com/embed/dQw4w9WgXcQ',
       ];
 
       for (const url of validUrls) {
@@ -127,7 +127,7 @@ describe('Answer model', () => {
           ansDateTime: new Date(),
           comments: [],
           youtubeVideoUrl: url,
-          isUserCertified: false
+          isUserCertified: false,
         };
 
         const mockDBAnswer = {
@@ -137,6 +137,7 @@ describe('Answer model', () => {
 
         mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
 
+        // eslint-disable-next-line no-await-in-loop
         const result = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
 
         expect(result._id).toBeDefined();
@@ -150,7 +151,7 @@ describe('Answer model', () => {
         ansBy: 'testuser',
         ansDateTime: new Date(),
         comments: [],
-        isUserCertified: false
+        isUserCertified: false,
       };
 
       const mockDBAnswer = {
@@ -169,7 +170,6 @@ describe('Answer model', () => {
     test('should add an answer with YouTube URL to a question', async () => {
       // Create a fixed ObjectId for testing
       const answerId = new mongoose.Types.ObjectId('67f2db6002fd37d9ced01605');
-      
       const mockQuestion: DatabaseQuestion = QUESTIONS.filter(
         q => q._id && q._id.toString() === '65e9b5a995b6c7045a30d823',
       )[0];
@@ -180,7 +180,7 @@ describe('Answer model', () => {
         ansDateTime: new Date(),
         comments: [],
         youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        isUserCertified: false
+        isUserCertified: false,
       };
 
       const mockDBAnswer = {
@@ -188,19 +188,13 @@ describe('Answer model', () => {
         _id: answerId,
       };
 
-      // Mock the saveAnswer function to return our mockDBAnswer
       mockingoose(AnswerModel, 'create').toReturn(mockDBAnswer);
-      
-      // Mock the findOneAndUpdate to return the question with the new answer added
       const updatedQuestion = {
         ...mockQuestion,
-        answers: [...mockQuestion.answers, answerId]
+        answers: [...mockQuestion.answers, answerId],
       };
-      
-      jest
-        .spyOn(QuestionModel, 'findOneAndUpdate')
-        .mockResolvedValueOnce(updatedQuestion);
 
+      jest.spyOn(QuestionModel, 'findOneAndUpdate').mockResolvedValueOnce(updatedQuestion);
       const savedAnswer = (await saveAnswer(mockAnswer)) as DatabaseAnswer;
       expect(savedAnswer._id).toBeDefined();
       expect(savedAnswer.youtubeVideoUrl).toBe(mockAnswer.youtubeVideoUrl);

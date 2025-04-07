@@ -4,7 +4,6 @@ import { app } from '../../app';
 import * as util from '../../services/post.service';
 import * as recipeService from '../../services/recipe.service';
 import * as tagService from '../../services/tag.service';
-import PostModel from '../../models/posts.model';
 import { DatabaseTag } from '../../types/types';
 
 // Mock data
@@ -17,36 +16,36 @@ const mockPost = {
   saves: [],
 };
 
-const mockTagResponse: DatabaseTag = {
-  name: 'test-tag',
-  description: 'Test description',
-  _id: new mongoose.Types.ObjectId()
-};
+// const mockTagResponse: DatabaseTag = {
+//   name: 'test-tag',
+//   description: 'Test description',
+//   _id: new mongoose.Types.ObjectId(),
+// };
 
 const mockPostResponse = {
   ...mockPost,
   _id: new mongoose.Types.ObjectId(),
 };
 
-const mockRecipeResponse = {
-  _id: new mongoose.Types.ObjectId(),
-  title: 'Test Recipe',
-  ingredients: ['ing1', 'ing2'],
-  instructions: 'step1,step2',
-  user: 'testUser',
-  tags: [],
-  privacyPublic: true,
-  description: 'Test description',
-  cookTime: 30,
-  numOfLikes: 0,
-  views: [],
-  addedToCalendar: false
-};
+// const mockRecipeResponse = {
+//   _id: new mongoose.Types.ObjectId(),
+//   title: 'Test Recipe',
+//   ingredients: ['ing1', 'ing2'],
+//   instructions: 'step1,step2',
+//   user: 'testUser',
+//   tags: [],
+//   privacyPublic: true,
+//   description: 'Test description',
+//   cookTime: 30,
+//   numOfLikes: 0,
+//   views: [],
+//   addedToCalendar: false,
+// };
 
 // Mock services
-const processTagsSpy = jest.spyOn(tagService, 'processTags');
-const createRecipeSpy = jest.spyOn(recipeService, 'createRecipe');
-const savePostSpy = jest.spyOn(util, 'savePost');
+// const processTagsSpy = jest.spyOn(tagService, 'processTags');
+// const createRecipeSpy = jest.spyOn(recipeService, 'createRecipe');
+// const savePostSpy = jest.spyOn(util, 'savePost');
 const getPostListSpy = jest.spyOn(util, 'getPostList');
 const getFollowingPostListSpy = jest.spyOn(util, 'getFollowingPostList');
 const likePostSpy = jest.spyOn(util, 'likePost');
@@ -166,7 +165,6 @@ describe('Post Controller', () => {
 
       const response = await supertest(app)
         .get(`/posts/getFollowingPosts/${mockPost.username}`);
-
       expect(response.status).toBe(200);
     });
 
@@ -175,7 +173,6 @@ describe('Post Controller', () => {
 
       const response = await supertest(app)
         .get(`/posts/getFollowingPosts/${mockPost.username}`);
-
       expect(response.status).toBe(500);
       expect(response.text).toContain('Error when getting posts from users that you follow');
     });
@@ -189,7 +186,6 @@ describe('Post Controller', () => {
       const response = await supertest(app)
         .patch('/posts/updatePostLikes')
         .send(likeData);
-
       expect(response.status).toBe(200);
       expect(response.body.likes).toContain(likeData.username);
     });
@@ -201,7 +197,6 @@ describe('Post Controller', () => {
       const response = await supertest(app)
         .patch('/posts/updatePostLikes')
         .send(likeData);
-
       expect(response.status).toBe(500);
       expect(response.text).toContain('Error when updating post likes');
     });
@@ -210,7 +205,6 @@ describe('Post Controller', () => {
       const response = await supertest(app)
         .patch('/posts/updatePostLikes')
         .send({});
-
       expect(response.status).toBe(500);
       expect(response.text).toContain('PostID and Username required');
     });

@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 import { app } from '../../app';
 import * as util from '../../services/user.service';
-import { SafeDatabaseUser, SafePopulatedDatabaseUser, User, PopulatedDatabasePost } from '../../types/types';
+import { SafeDatabaseUser, SafePopulatedDatabaseUser, User } from '../../types/types';
 import PostModel from '../../models/posts.model';
 
 const mockUser: User = {

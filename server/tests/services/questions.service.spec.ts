@@ -488,7 +488,7 @@ describe('Question model', () => {
         downVotes: [],
         views: [],
         comments: [],
-        youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        youtubeVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       };
 
       const mockDBQuestion = {
@@ -510,7 +510,7 @@ describe('Question model', () => {
         'https://youtu.be/dQw4w9WgXcQ',
         'https://youtube.com/watch?v=dQw4w9WgXcQ',
         'https://www.youtube.com/v/dQw4w9WgXcQ',
-        'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        'https://www.youtube.com/embed/dQw4w9WgXcQ',
       ];
 
       for (const url of validUrls) {
@@ -525,7 +525,7 @@ describe('Question model', () => {
           downVotes: [],
           views: [],
           comments: [],
-          youtubeVideoUrl: url
+          youtubeVideoUrl: url,
         };
 
         const mockDBQuestion = {
@@ -535,6 +535,7 @@ describe('Question model', () => {
 
         mockingoose(QuestionModel, 'create').toReturn(mockDBQuestion);
 
+        // eslint-disable-next-line no-await-in-loop
         const result = (await saveQuestion(mockQuestion)) as DatabaseQuestion;
 
         expect(result._id).toBeDefined();
@@ -553,7 +554,7 @@ describe('Question model', () => {
         upVotes: [],
         downVotes: [],
         views: [],
-        comments: []
+        comments: [],
       };
 
       const mockDBQuestion = {

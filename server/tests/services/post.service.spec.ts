@@ -1,10 +1,10 @@
 import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 import { likePost, savePost, getPostList, getFollowingPostList } from '../../services/post.service';
 import PostModel from '../../models/posts.model';
 import UserModel from '../../models/users.model';
 import { DatabasePost } from '../../types/types';
 import { sampleLikedPost, samplePost, sampleRecipe, user } from '../mockData.models';
-import mongoose from 'mongoose';
 
 jest.mock('../../models/posts.model');
 jest.mock('../../models/users.model');
@@ -103,10 +103,10 @@ describe('Post Service', () => {
     tags: [mockTagID],
   };
 
-  const mockTag = {
-    _id: mockTagID,
-    name: 'test-tag',
-  };
+  // const mockTag = {
+  //   _id: mockTagID,
+  //   name: 'test-tag',
+  // };
 
   const mockUser = {
     _id: new mongoose.Types.ObjectId(),
@@ -132,6 +132,7 @@ describe('Post Service', () => {
     findOneAndUpdateSpy = jest.spyOn(UserModel, 'findOneAndUpdate');
     findSpy = jest.spyOn(PostModel, 'find');
     findOneSpy = jest.spyOn(UserModel, 'findOne');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     getUserByUsernameSpy = jest.spyOn(require('../../services/user.service'), 'getUserByUsername');
   });
 
@@ -147,14 +148,16 @@ describe('Post Service', () => {
       expect(findOneAndUpdateSpy).toHaveBeenCalledWith(
         { username: mockPost.username },
         { $push: { postsCreated: mockPost } },
-        { new: true }
+        { new: true },
       );
     });
 
     it('should throw error when post creation fails', async () => {
       createSpy.mockRejectedValueOnce(new Error('Database error'));
 
-      await expect(savePost(mockPost)).rejects.toThrow('Post could not be saved: Error: Database error');
+      await expect(savePost(mockPost)).rejects.toThrow(
+        'Post could not be saved: Error: Database error'
+      );
     });
   });
 
@@ -223,14 +226,13 @@ describe('Post Service', () => {
 
   describe('getFollowingPostList', () => {
     it('should return posts from followed users', async () => {
-      const mockUser2 = {
-        ...mockUser,
-        username: 'user2',
-      };
+      // const mockUser2 = {
+      //   ...mockUser,
+      //   username: 'user2',
+      // };
 
       getUserByUsernameSpy.mockResolvedValueOnce(mockUser);
 
-      // Mock the PostModel.find() chain
       const mockFind = {
         populate: jest.fn().mockReturnThis(),
         sort: jest.fn().mockResolvedValue([mockPost]),
