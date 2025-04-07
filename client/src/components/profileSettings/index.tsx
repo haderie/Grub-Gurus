@@ -208,7 +208,7 @@ const ProfileSettings: React.FC = () => {
                   <div className='stats-and-options'>
                     <div className='stats'>
                       <div role='button'>
-                        {userData.postsCreated?.length || 0} <small>Posts</small>
+                        {userData.postsCreated?.length || 0} <small>Saved Posts</small>
                       </div>
                       <span
                         role='button'

@@ -16,18 +16,17 @@
 /* A card-like container that holds the actual profile content */
 .profile-card {
   position: relative;
-  width: 100vw; /* Make it take the full width of the viewport */
-  height: 100vh; /* Make it take the full height of the viewport */
-  max-height: none; /* Remove height limitation */
+  width: 100vw; /* Full width of the viewport */
+  max-width: 100%; /* Prevent it from going beyond viewport */
+  height: auto; /* Allow height to adjust based on content */
+  min-height: 100%; /* Ensure the card takes at least full height of viewport */
   overflow-y: auto;
   background: #fff; /* White background */
   border-radius: 5px; /* Slight rounding on edges */
   padding: 30px; /* Internal padding */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  padding: 4;
   flex-direction: column;
 }
 
@@ -83,8 +82,8 @@
 
 .edit-profile-btn {
   position: absolute;
-  top: 25px;
-  right: 45px;
+  top: 10px;
+  right: 10px;
   background-color: #6A9C89;
   color: #FFF5E4;
   border: none;
@@ -95,6 +94,23 @@
 }
 
 .edit-profile-btn:hover {
+  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
+}
+
+.unfollow-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #6A9C89;
+  color: #FFF5E4;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s;  
+}
+
+.unfollow-btn:hover {
   box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
 }
 /* Style the select dropdown */
@@ -161,23 +177,6 @@
   margin-top: 10px;
 }
 
-.unfollow-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #6A9C89;
-  color: #FFF5E4;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 12px;
-  font-size: 16px;
-  transition: background-color 0.3s;  
-}
-
-.unfollow-btn:hover {
-  box-shadow: 0px 2px 4px rgba(106, 156, 137, 0.5); /* Light shadow effect on hover */
-}
-
 .info-stats-container {
   display: flex;
   justify-content: space-between;
@@ -203,7 +202,7 @@
   /* font-size: 14px; */
   margin-top: 20px;
   margin-right: 20px;
-  color: #3E3232;
+  color: #FFA725;
 }
 
 .stats span {
