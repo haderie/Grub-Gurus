@@ -143,4 +143,3 @@ export interface FindRecipeRequest extends Request {
 export interface RecipeForPost extends Recipe {
   _id: ObjectId;
 }
-

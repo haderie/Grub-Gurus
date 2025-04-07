@@ -8,7 +8,7 @@ import useUserContext from './useUserContext';
 
 /**
  * Custom hook to manage the recipe calendar for the user.
- * 
+ *
  * This hook provides functionality to:
  * - Manage and display calendar events for recipes added to the user's calendar.
  * - Handle the selection of a date, time, and color for calendar events.

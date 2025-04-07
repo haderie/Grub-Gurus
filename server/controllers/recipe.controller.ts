@@ -30,7 +30,7 @@ const recipeController = (socket: FakeSOSocket) => {
     recipe.instructions !== undefined &&
     recipe.cookTime !== undefined;
 
-  /** 
+  /**
    * Validates that the request body for updating a calendar recipe contains all required fields.
    * @param request The request object containing the recipe update data.
    * @returns `true` if the update request contains all required fields; otherwise, `false`.
@@ -113,7 +113,7 @@ const recipeController = (socket: FakeSOSocket) => {
    * This function validates the request body, checks if all required fields are present,
    * and then attempts to update the recipe on the calendar. If successful, it returns the updated recipe details.
    * If there is an error, it sends an appropriate error response.
-   * 
+   *
    * @param req The incoming request containing the recipe update data.
    * @param res The response object, used to send back the result or error.
    * @returns A promise resolving to void.

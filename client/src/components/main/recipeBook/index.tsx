@@ -11,7 +11,7 @@ import './index.css';
 /**
  * Interface for the props expected by the RecipeBook component.
  * It expects a list of populated recipes to be passed in as an array.
- * 
+ *
  * @param recipes An array of PopulatedDatabaseRecipe objects representing the recipes to display in the recipe book.
  */
 interface RecipeBookProps {
@@ -21,7 +21,7 @@ interface RecipeBookProps {
 /**
  * RecipeBook component that displays a collection of recipes.
  * The component allows for selecting a recipe and viewing its details.
- * 
+ *
  * @param recipes An array of PopulatedDatabaseRecipe objects passed as a prop to render the recipe list.
  * @returns a component that displays a list of recipes in a sidebar, and potentially details of the selected recipe.
  */

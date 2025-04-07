@@ -18,7 +18,6 @@ const getRecipesByUsername = async (username: string) => {
   return res.data;
 };
 
-
 // eslint-disable-next-line import/prefer-default-export
 
 /**

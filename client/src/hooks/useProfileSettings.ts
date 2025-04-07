@@ -183,13 +183,13 @@ const useProfileSettings = () => {
     });
   };
 
- /**
-  * Function to check the privacy settings of a user and whether the current user is allowed
-  * to view their lists based on those settings. It checks the following conditions:
-  * - If the target user has a public profile, the lists are shown.
-  * - If the target user has a private profile, the current user must be following the target user to view the lists.
-  * - If the target user is the same as the current user, the lists are shown.
-  */
+  /**
+   * Function to check the privacy settings of a user and whether the current user is allowed
+   * to view their lists based on those settings. It checks the following conditions:
+   * - If the target user has a public profile, the lists are shown.
+   * - If the target user has a private profile, the current user must be following the target user to view the lists.
+   * - If the target user is the same as the current user, the lists are shown.
+   */
   const handleCheckPrivacy = async () => {
     if (!username) return;
     try {
@@ -220,7 +220,6 @@ const useProfileSettings = () => {
       setSuccessMessage(null);
     }
   };
-
 
   /**
    * Function to update the follow status of a user. It toggles the follow/unfollow state 

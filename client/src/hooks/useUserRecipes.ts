@@ -41,7 +41,6 @@ const useUserRecipes = (username: string) => {
     };
 
     fetchRecipes();
-
   }, [username, socket]);
 
   return { recipes, loading, error };

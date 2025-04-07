@@ -7,12 +7,12 @@ import useUserContext from './useUserContext';
 
 /**
  * Custom hook to manage adding a recipe to the user's calendar.
- * 
+ *
  * This hook provides functionality to:
  * - Set and manage the modal state for adding a recipe to the calendar.
  * - Handle the selection of a date, time, and color for the calendar event.
  * - Add the recipe to the calendar by updating the recipe's data and creating a corresponding event.
- * 
+ *
  * The hook communicates with the `useUserContext` to access the user and `useRecipeCalendar` for managing calendar events.
  * It interacts with the `updateRecipeForCalendar` function to update recipe data with calendar event details.
  */
