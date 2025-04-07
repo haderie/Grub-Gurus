@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { likePost, savePost, getPostList, getFollowingPostList } from '../../services/post.service';
 import PostModel from '../../models/posts.model';
 import UserModel from '../../models/users.model';
+import * as userService from '../../services/user.service';
 import { DatabasePost } from '../../types/types';
 import { sampleLikedPost, samplePost, sampleRecipe, user } from '../mockData.models';
 
@@ -132,8 +133,7 @@ describe('Post Service', () => {
     findOneAndUpdateSpy = jest.spyOn(UserModel, 'findOneAndUpdate');
     findSpy = jest.spyOn(PostModel, 'find');
     findOneSpy = jest.spyOn(UserModel, 'findOne');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    getUserByUsernameSpy = jest.spyOn(require('../../services/user.service'), 'getUserByUsername');
+    getUserByUsernameSpy = jest.spyOn(userService, 'getUserByUsername');
   });
 
   describe('savePost', () => {
@@ -156,7 +156,7 @@ describe('Post Service', () => {
       createSpy.mockRejectedValueOnce(new Error('Database error'));
 
       await expect(savePost(mockPost)).rejects.toThrow(
-        'Post could not be saved: Error: Database error'
+        'Post could not be saved: Error: Database error',
       );
     });
   });

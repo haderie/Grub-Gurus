@@ -2,9 +2,9 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 import { app } from '../../app';
 import * as util from '../../services/post.service';
-import * as recipeService from '../../services/recipe.service';
-import * as tagService from '../../services/tag.service';
-import { DatabaseTag } from '../../types/types';
+// import * as recipeService from '../../services/recipe.service';
+// import * as tagService from '../../services/tag.service';
+// import { DatabaseTag } from '../../types/types';
 
 // Mock data
 const mockPost = {
@@ -162,7 +162,6 @@ describe('Post Controller', () => {
   describe('GET /posts/getFollowingPosts/:username', () => {
     it('should return posts from followed users successfully', async () => {
       getFollowingPostListSpy.mockResolvedValueOnce([mockPostResponse]);
-
       const response = await supertest(app)
         .get(`/posts/getFollowingPosts/${mockPost.username}`);
       expect(response.status).toBe(200);
@@ -170,7 +169,6 @@ describe('Post Controller', () => {
 
     it('should return 500 when getFollowingPostList returns an error', async () => {
       getFollowingPostListSpy.mockRejectedValueOnce(new Error('error posting'));
-
       const response = await supertest(app)
         .get(`/posts/getFollowingPosts/${mockPost.username}`);
       expect(response.status).toBe(500);
@@ -182,9 +180,7 @@ describe('Post Controller', () => {
     it('should successfully update post likes', async () => {
       const likeData = { postID: mockPostResponse._id, username: 'user2' };
       likePostSpy.mockResolvedValueOnce({ ...mockPostResponse, likes: [likeData.username] });
-
-      const response = await supertest(app)
-        .patch('/posts/updatePostLikes')
+      const response = await supertest(app).patch('/posts/updatePostLikes')
         .send(likeData);
       expect(response.status).toBe(200);
       expect(response.body.likes).toContain(likeData.username);
@@ -194,16 +190,14 @@ describe('Post Controller', () => {
       const likeData = { postID: mockPostResponse._id, username: 'user2' };
       likePostSpy.mockResolvedValueOnce({ error: 'Cannot update likes' });
 
-      const response = await supertest(app)
-        .patch('/posts/updatePostLikes')
+      const response = await supertest(app).patch('/posts/updatePostLikes')
         .send(likeData);
       expect(response.status).toBe(500);
       expect(response.text).toContain('Error when updating post likes');
     });
 
     it('should return 500 when postID or username is missing', async () => {
-      const response = await supertest(app)
-        .patch('/posts/updatePostLikes')
+      const response = await supertest(app).patch('/posts/updatePostLikes')
         .send({});
       expect(response.status).toBe(500);
       expect(response.text).toContain('PostID and Username required');
