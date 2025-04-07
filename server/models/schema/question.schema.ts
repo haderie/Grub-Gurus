@@ -14,6 +14,7 @@ import { Schema } from 'mongoose';
  * - `upVotes`: An array of usernames that have upvoted the question.
  * - `downVotes`: An array of usernames that have downvoted the question.
  * - `comments`: Comments that have been added to the question by users.
+ * - `youtubeVideoUrl`: An optional URL to a YouTube video.
  */
 const questionSchema: Schema = new Schema(
   {

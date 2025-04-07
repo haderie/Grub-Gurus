@@ -17,9 +17,11 @@ const mockUser: User = {
   rankings: [],
 };
 
+const mockUserId = new mongoose.Types.ObjectId();
+
 const recipePost: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),
-  user: mockUser,
+  user: mockUserId,
   tags: [],
   title: 'Pesto Pasta',
   privacyPublic: true,
@@ -34,7 +36,7 @@ const recipePost: DatabaseRecipe = {
 
 const calendarRecipeDataBase: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),
-  user: mockUser,
+  user: mockUserId,
   tags: [],
   title: 'BBQ Chicken',
   privacyPublic: true,
@@ -90,7 +92,6 @@ describe('Test recipeController', () => {
       const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('Pesto Pasta');
-      expect(response.body.user.username).toEqual(mockUser.username);
     });
 
     test('should return 400 if recipe body is invalid', async () => {
@@ -140,7 +141,6 @@ describe('Test recipeController', () => {
       const response = await supertest(app).post('/recipe/addCalendarRecipe').send(calendarRecipe);
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('BBQ Chicken');
-      expect(response.body.user.username).toEqual(mockUser.username);
       expect(response.body.addedToCalendar).toEqual(true);
     });
 
@@ -196,7 +196,6 @@ describe('Test recipeController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('BBQ Chicken');
-      expect(response.body.user.username).toEqual(calendarRecipe.user.username);
     });
 
     test('should return 400 if recipe body is invalid', async () => {

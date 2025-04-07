@@ -5,15 +5,18 @@ import { DatabaseUser } from './user';
 
 /**
  * Represents a recipe.
- * - `user`: The ID of the user who created the recipe.
+ * - `user`: The user who created the recipe, referenced by their `User` object.
  * - `title`: The title of the recipe.
- * - `privacyPublic`: Indicates whether the recipe is public or private.
- * - `ingredients`: An array of ingredient names.
+ * - `privacyPublic`: A boolean indicating whether the recipe is public or private.
+ * - `ingredients`: An array of ingredient names required for the recipe.
  * - `description`: A detailed description of the recipe.
- * - `video`: An optional URL string for a video tutorial.
- * - `tags`: An array of associated tags (either strings or references to `Tag` documents).
+ * - `instructions`: The instructions on how to prepare the recipe.
+ * - `video`: An optional URL to a video tutorial for the recipe.
+ * - `tags`: An array of associated tags, either as strings or references to `Tag` documents.
  * - `cookTime`: The estimated cooking time in minutes.
- * - `numOfLikes`: The number of likes received.
+ * - `numOfLikes`: The number of likes the recipe has received.
+ * - `views`: An array of users who have viewed the recipe.
+ * - `addedToCalendar`: A boolean indicating whether the recipe has been added to a calendar.
  */
 export interface Recipe {
   user: User;
@@ -39,9 +42,10 @@ export interface RecipeData {
 }
 
 /**
- * Represents recipe data used for calendar.
- * - `start`: Start of recipe cooking.
- * - `end`: End of recipe cooking.
+ * Represents recipe data used for calendar events.
+ * - `start`: The start time for cooking the recipe.
+ * - `end`: The end time for cooking the recipe.
+ * - Inherits all properties of the `Recipe` interface.
  */
 export interface RecipeCalendarEvent extends Recipe {
   start: Date;
@@ -49,49 +53,64 @@ export interface RecipeCalendarEvent extends Recipe {
   color: string;
 }
 
+/**
+ * Represents a possible response when fetching recipe data.
+ * - Either a `DatabaseRecipe` object or an error message.
+ */
 export type RecipeResponse = DatabaseRecipe | { error: string };
 
+/**
+ * Represents the HTTP request to fetch a recipe by username.
+ * - `params`: Contains the `username` for which to fetch recipes.
+ */
 export interface RecipeByUsernameRequest extends Request {
   params: {
     username: string;
   };
 }
+
 /**
  * Represents a recipe stored in the database with a unique identifier.
  * - `_id`: The unique identifier for the recipe.
- * - Includes all properties of `Recipe`.
+ * - `user`: The user who created the recipe, referenced by their `ObjectId`.
+ * - `tags`: An array of `ObjectId` references to the tags associated with the recipe.
  */
-
 export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
   _id: ObjectId;
-  user: ObjectID; // Fully populated user object
-  tags: ObjectId[]; // Fully populated tags
+  user: ObjectId;
+  tags: ObjectId[];
 }
 
 /**
  * Represents a fully populated recipe from the database.
- * - `user`: The full `User` object instead of just an ID.
- * - `tags`: An array of populated `DatabaseTag` objects.
+ * - `user`: The full `DatabaseUser` object representing the user who created the recipe.
+ * - `tags`: An array of populated `DatabaseTag` objects associated with the recipe.
  */
 export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | 'tags'> {
-  user: DatabaseUser; // Fully populated user object
-  tags: DatabaseTag[]; // Fully populated tags
+  user: DatabaseUser;
+  tags: DatabaseTag[];
 }
 
-/* Interface for the request body when adding a new recipe.
- * - `body`: The recipe being added.
+/**
+ * Represents the request body for adding a new recipe.
+ * - `body`: Contains the `Recipe` object being added.
  */
 export interface AddRecipeRequest extends Request {
   body: Recipe;
 }
 
-/* Interface for the request body when adding a new calendar recipe.
- * - `body`: The calendar recipe being added.
+/**
+ * Represents the request body for adding a new recipe as a calendar event.
+ * - `body`: Contains the `RecipeCalendarEvent` object being added.
  */
 export interface AddCalendarRecipeRequest extends Request {
   body: RecipeCalendarEvent;
 }
 
+/**
+ * Represents the request body for updating a calendar recipe.
+ * - `body`: Contains `recipeID`, `addedToCalendar`, `start`, `end`, and `color` for the update.
+ */
 export interface UpdateCalendarRecipeRequest extends Request {
   body: {
     recipeID: ObjectId;
@@ -103,9 +122,9 @@ export interface UpdateCalendarRecipeRequest extends Request {
 }
 
 /**
- * Interface for the request query to find questions using a search string.
- * - `order`: The order in which to sort the recipe.
- * - `search`: The search string used to find recipe.
+ * Represents the request query to search for recipes.
+ * - `order`: The order in which to sort the recipes.
+ * - `search`: The search string used to filter recipes.
  */
 export interface FindRecipeRequest extends Request {
   params: {
@@ -117,6 +136,10 @@ export interface FindRecipeRequest extends Request {
   };
 }
 
+/**
+ * Represents recipe data for a post, including the recipe ID.
+ * - `_id`: The unique identifier of the recipe.
+ */
 export interface RecipeForPost extends Recipe {
   _id: ObjectId;
 }

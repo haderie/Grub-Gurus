@@ -12,7 +12,11 @@ import { Schema } from 'mongoose';
  * - 'certified': true if the user is a certified user, otherwise false.
  * - 'followers': represents the array of Users that follow this user.
  * - 'following': represents the array of Users this user follows.
+ * - `recipeBookPublic`: determines if the user's recipe book is public.
+ * - `privacySetting`: represents the privacy setting for the user's account. Can be either 'Public' or 'Private'.
+ * - `postsCreated`: an array of ObjectId references to posts created by this user.
  */
+
 const userSchema: Schema = new Schema(
   {
     username: {

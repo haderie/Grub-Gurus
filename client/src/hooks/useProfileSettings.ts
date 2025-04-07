@@ -310,8 +310,11 @@ const useProfileSettings = () => {
   };
 
   /**
-   *
-   *
+   * Function to check the privacy settings of a user and whether the current user is allowed
+   * to view their lists based on those settings. It checks the following conditions:
+   * - If the target user has a public profile, the lists are shown.
+   * - If the target user has a private profile, the current user must be following the target user to view the lists.
+   * - If the target user is the same as the current user, the lists are shown.
    */
   const handleCheckPrivacy = async () => {
     if (!username) return;
@@ -344,6 +347,12 @@ const useProfileSettings = () => {
     }
   };
 
+  /**
+   * Function to update the follow status of a user. It toggles the follow/unfollow state
+   * and updates the UI accordingly.
+   * - If the user successfully follows or unfollows the target user, the follow status is updated.
+   * - A success message is shown with the appropriate status (Followed/Unfollowed).
+   */
   const handleUpdateFollowers = async () => {
     if (!username) return;
     try {
@@ -367,13 +376,25 @@ const useProfileSettings = () => {
     }
   };
 
+  /**
+   * Function to check if the current user is following a specific user.
+   * It returns a boolean indicating the follow status.
+   *
+   * @param uname - The username of the user to check if the current user is following.
+   * @returns `true` if the current user is following the provided username, otherwise `false`.
+   */
   const checkIfFollowing = (uname: string) => {
     if (!username) return false; // Prevent undefined errors
     return userData?.following?.includes(uname);
   };
 
   /**
-   * Handler for updating the privacy setting of the user
+   * Handler for updating the privacy setting of the user's account.
+   * This function updates the privacy setting (either 'Public' or 'Private') of the current user.
+   * - If the privacy setting is successfully updated, a success message is shown.
+   * - If the update fails, an error message is displayed.
+   *
+   * @param newSetting - The new privacy setting to be applied ('Public' or 'Private').
    */
   const handleUpdatePrivacy = async (newSetting: 'Public' | 'Private') => {
     if (!username) return;

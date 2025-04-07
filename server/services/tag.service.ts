@@ -145,6 +145,14 @@ export const getTagCountMap = async (): Promise<Map<string, number> | null | { e
   }
 };
 
+/**
+ * Processes an array of tag IDs to retrieve the corresponding tag objects.
+ * This function takes an array of tag IDs, queries the database to find the tags with matching IDs,
+ * and returns the found tags. If there is an error during the process, it logs the error and returns an empty array.
+ *
+ * @param tagIds An array of ObjectId values representing the tags to be retrieved.
+ * @returns A promise that resolves to an array of Tag objects corresponding to the given tag IDs.
+ */
 export const processRecipeTags = async (tagIds: ObjectId[]): Promise<Tag[]> => {
   try {
     // Populate the tags by their ObjectId references

@@ -103,7 +103,7 @@ export const getFollowingPostList = async (username: string): Promise<PopulatedD
 };
 
 /**
- * Updates post information in the database.
+ * Updates post information regarding likes in the database.
  *
  * @param {ObjectId} postID - The ID of the post to update.
  * @param {string} usernmae - Username of user who liked the post.

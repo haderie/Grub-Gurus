@@ -15,7 +15,11 @@ import { Schema } from 'mongoose';
  *    - `'OVER'`: The game is finished.
  * - `revealed`: Boolean determining if the image has been revealed or not.
  * - `score`: The calculated score of the user based on number of attempts.
+ *    - `player1`: The score for the first player.
+ *    - `player2`: The score for the second player.
+ * - `currentPlayer`: The username of the player whose turn it is to make a guess.
  */
+
 const guessTheIngredientStateSchema = new Schema({
   player1: {
     type: String,

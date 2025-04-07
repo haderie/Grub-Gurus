@@ -4,6 +4,9 @@ import Input from '../baseComponents/input';
 import TextArea from '../baseComponents/textarea';
 import './index.css';
 
+/**
+ * NewRecipe component allows users to submit a new recipe.
+ */
 const NewRecipe = () => {
   const {
     title,

@@ -6,21 +6,6 @@ import { addQuestion } from '../services/questionService';
 import useUserContext from './useUserContext';
 import { Question, YouTubeVideo } from '../types/types';
 
-// interface YouTubeVideo {
-//   id: {
-//     videoId: string;
-//   };
-//   snippet: {
-//     title: string;
-//     description: string;
-//     thumbnails: {
-//       default: {
-//         url: string;
-//       };
-//     };
-//   };
-// }
-
 /**
  * Custom hook to handle question submission and form validation
  *
@@ -196,12 +181,9 @@ const useNewQuestion = () => {
     setText,
     tagNames,
     setTagNames,
-    // optInForAI,
-    // setOptInForAI,
     titleErr,
     textErr,
     tagErr,
-    // aiErr,
     postQuestion,
     videoUrl,
     setVideoUrl,

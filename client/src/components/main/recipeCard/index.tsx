@@ -7,7 +7,7 @@ import { PopulatedDatabaseRecipe } from '../../../types/types';
 import useRecipeCard from '../../../hooks/useRecipeCard';
 
 /**
- * RecipeCard component displays a single recipe with its name, views, and ingredients.
+ * RecipeCard component displays a single recipe.
  *
  * @param recipe: The recipe object to display.
  */
