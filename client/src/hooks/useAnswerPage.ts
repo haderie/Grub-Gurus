@@ -56,7 +56,6 @@ const useAnswerPage = () => {
           ansBy: 'Munch Master',
           ansDateTime: new Date(),
           comments: emptyComments,
-          isUserCertified: true,
         };
         await addAnswer(questionID, aiAnswer);
       }

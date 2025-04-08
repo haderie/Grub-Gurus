@@ -85,7 +85,6 @@ const useAnswerForm = () => {
       ansDateTime: new Date(),
       comments: [],
       youtubeVideoUrl: videoUrl,
-      isUserCertified: user.certified,
     };
 
     const res = await addAnswer(questionID, answer);
