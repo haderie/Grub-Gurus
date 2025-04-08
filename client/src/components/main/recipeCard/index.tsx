@@ -28,7 +28,20 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
   }
 
   return (
-    <Card sx={{ maxWidth: 800, mx: 'auto', mt: 2, p: 2, boxShadow: 3 }}>
+    <Card
+      sx={{
+        width: '600px',
+        height: '90vh',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        mx: 'auto',
+        mt: 2,
+        p: 2,
+        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+      }}>
       <CardContent>
         <Typography variant='h5' fontWeight='bold' color='#6A9C89' gutterBottom>
           {recipe.title}
