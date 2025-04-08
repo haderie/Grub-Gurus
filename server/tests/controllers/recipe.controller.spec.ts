@@ -31,9 +31,6 @@ const recipePost: DatabaseRecipe = {
   cookTime: 20,
   addedToCalendar: false,
   video: '',
-  color: '',
-  start: new Date(),
-  end: new Date(),
 };
 
 const calendarRecipeDataBase: DatabaseRecipe = {
@@ -48,9 +45,6 @@ const calendarRecipeDataBase: DatabaseRecipe = {
   cookTime: 40,
   addedToCalendar: true,
   video: '',
-  color: '',
-  start: new Date(),
-  end: new Date(),
 };
 
 const recipe: Recipe = {
@@ -64,9 +58,6 @@ const recipe: Recipe = {
   cookTime: 20,
   addedToCalendar: false,
   video: '',
-  color: '',
-  start: new Date(),
-  end: new Date(),
 };
 
 const calendarRecipe: RecipeCalendarEvent = {

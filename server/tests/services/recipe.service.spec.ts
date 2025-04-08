@@ -1,4 +1,4 @@
-import { DatabaseRecipe, RecipeCalendarEvent } from '@fake-stack-overflow/shared';
+import { DatabaseRecipe, RecipeCalendarEvent } from '../../types/types';
 import RecipeModel from '../../models/recipe.models';
 import {
   createCalendarRecipe,
