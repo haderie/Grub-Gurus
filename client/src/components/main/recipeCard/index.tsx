@@ -133,6 +133,11 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                   const localDate = new Date(year, month - 1, day); // Month is 0-based in JS Date
                   setSelectedDate(localDate);
                 }}
+                onKeyDown={e => e.preventDefault()}
+                onClick={e => {
+                  const input = e.currentTarget;
+                  if (input.showPicker) input.showPicker(); // Open calendar popup on click
+                }}
                 style={{
                   width: '100%',
                   padding: '10px',
@@ -151,6 +156,11 @@ const RecipeCard = ({ recipe }: { recipe: PopulatedDatabaseRecipe }) => {
                 type='time'
                 value={selectedTime}
                 onChange={e => setSelectedTime(e.target.value)}
+                onKeyDown={e => e.preventDefault()}
+                onClick={e => {
+                  const input = e.currentTarget;
+                  if (input.showPicker) input.showPicker();
+                }}
                 style={{
                   width: '100%',
                   padding: '10px',
