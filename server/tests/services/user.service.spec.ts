@@ -209,6 +209,7 @@ describe('updateUser', () => {
     recipeBookPublic: false,
     postsCreated: [],
     highScore: 0,
+    rankings: [],
   };
 
   const updates: Partial<User> = {

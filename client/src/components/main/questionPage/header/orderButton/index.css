@@ -1,8 +1,14 @@
 .btn {
-  background: #ffffff;
-  border: #000000 1px solid;
+  background: #FFF5E4;
+  border: none;
+  border-radius: 5px; /* Slightly rounded corners */
+  padding: 5px 5px; /* Better padding for comfortable clicking */
+  font-size: 14px;
+  color: #FFA725;
+  transition: all 0.3s ease-in-out;
 }
 
 .btn:hover {
-  background-color: #007bff;
+  background-color: #fff;
+
 }

@@ -22,10 +22,10 @@ const QuestionPage = () => {
       />
 
       {/* Questions List */}
-      <Box sx={{ marginTop: 2 }}>
+      <Box sx={{ marginTop: 1 }}>
         {qlist.length > 0 ? (
           qlist.map(q => (
-            <Box key={String(q._id)} sx={{ marginBottom: 2 }}>
+            <Box key={String(q._id)}>
               <QuestionView question={q} />
             </Box>
           ))

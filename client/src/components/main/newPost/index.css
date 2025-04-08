@@ -64,6 +64,5 @@ input[type='number'] {
 
 /* Optional: Hover effect for each tag item */
 .tag-item label:hover {
-  cursor: pointer;
   text-decoration: underline;
 }

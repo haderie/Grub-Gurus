@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './index.css';
 import { NavLink, useLocation } from 'react-router-dom';
 
@@ -8,18 +8,20 @@ import { NavLink, useLocation } from 'react-router-dom';
  * triggers corresponding functions when the menu items are clicked.
  */
 const SideBarNav = () => {
-  const [showOptions, setShowOptions] = useState<boolean>(false);
-  const [showExploreOptions, setShowExploreOptions] = useState<boolean>(false);
+  // const [showOptions, setShowOptions] = useState<boolean>(false);
+  // const [showExploreOptions, setShowExploreOptions] = useState<boolean>(false);
 
   const location = useLocation();
+  const showExploreOptions = location.pathname.startsWith('/explore');
+  const showMessagingOptions = location.pathname.startsWith('/messaging');
 
-  const toggleOptions = () => {
-    setShowOptions(!showOptions);
-  };
+  // const toggleOptions = () => {
+  //   setShowOptions(!showOptions);
+  // };
 
-  const toggleExploreOptions = () => {
-    setShowExploreOptions(!showExploreOptions);
-  };
+  // const toggleExploreOptions = () => {
+  //   setShowExploreOptions(!showExploreOptions);
+  // };
 
   const isActiveOption = (path: string) =>
     location.pathname === path ? 'message-option-selected ' : '';
@@ -36,8 +38,7 @@ const SideBarNav = () => {
       <NavLink
         to='/explore'
         id='menu_explore'
-        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
-        onClick={toggleExploreOptions}>
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
         Explore
       </NavLink>
       {showExploreOptions && (
@@ -57,11 +58,10 @@ const SideBarNav = () => {
       <NavLink
         to='/messaging'
         id='menu_messaging'
-        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}
-        onClick={toggleOptions}>
+        className={({ isActive }) => `menu_button ${isActive ? 'menu_selected' : ''}`}>
         Messaging
       </NavLink>
-      {showOptions && (
+      {showMessagingOptions && (
         <div className='additional-options'>
           <NavLink
             to='/messaging'

@@ -59,7 +59,7 @@ export const getPostList = async (): Promise<PopulatedDatabasePost[]> => {
       }),
     );
 
-    // Remove null values directly in filter()
+    // Remove null values and cast to the correct type
     return publicPosts.filter(post => post !== null) as PopulatedDatabasePost[];
   } catch (error) {
     throw new Error(`Posts could not be retrieved: ${error}`);
@@ -103,7 +103,7 @@ export const getFollowingPostList = async (username: string): Promise<PopulatedD
 };
 
 /**
- * Updates post information in the database.
+ * Updates post information regarding likes in the database.
  *
  * @param {ObjectId} postID - The ID of the post to update.
  * @param {string} usernmae - Username of user who liked the post.

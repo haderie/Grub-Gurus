@@ -10,15 +10,7 @@ import { updateCertifiedStatus } from '../services/userService';
 const NUM_RECIPES_FOR_CERTIFICATION = 5;
 
 /**
- * Custom hook to handle question submission and form validation
- *
- * @returns title - The current value of the title input.
- * @returns text - The current value of the text input.
- * @returns tagNames - The current value of the tags input.
- * @returns titleErr - Error message for the title field, if any.
- * @returns textErr - Error message for the text field, if any.
- * @returns tagErr - Error message for the tag field, if any.
- * @returns postQuestion - Function to validate the form and submit a new question.
+ * Custom hook to handle recipe submission and form validation
  */
 const useNewRecipe = () => {
   const navigate = useNavigate();
@@ -156,9 +148,7 @@ const useNewRecipe = () => {
   };
 
   /**
-   * Function to post a question to the server.
-   *
-   * @returns title - The current value of the title input.
+   * Function to post a recipe to the server.
    */
   const postRecipe = async () => {
     if (!validateForm()) return;
@@ -184,8 +174,6 @@ const useNewRecipe = () => {
       cookTime,
       video: videoUrl,
       addedToCalendar: false,
-      numOfLikes: 0,
-      views: [],
     };
 
     const res = await addRecipe(recipe);

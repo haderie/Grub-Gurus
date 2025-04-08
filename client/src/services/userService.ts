@@ -125,7 +125,7 @@ const updateBiography = async (
 };
 
 /**
- * Updates the user's biography.
+ * Updates the user's recipe book privacy setting.
  * @param username The unique username of the user
  * @param newRecipeBookPublic The new boolean indicating recipeBookPrivacy status
  * @returns A promise resolving to the updated user
@@ -184,7 +184,7 @@ const followUser = async (
 };
 
 /**
- * Updates the user's privacy settings.
+ * Updates the user's profile privacy settings.
  * @param username - The username of the user
  * @param privacySetting - The new privacy setting
  * @returns A promise resolving to the updated user
@@ -207,9 +207,9 @@ const updatePrivacy = async (
 };
 
 /**
- * Updates the user's privacy settings.
+ * Updates the user's saved posts.
  * @param username - The username of the user
- * @param privacySetting - The new privacy setting
+ * @param privacySetting - The new post.
  * @returns A promise resolving to the updated user
  * @throws Error if the request fails
  */
@@ -252,6 +252,23 @@ const updateHighScore = async (
   return res.data;
 };
 
+const updateRanking = async (
+  username: string,
+  postID: ObjectId,
+  ranking: number,
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.post(`${USER_API_URL}/rank-recipe`, {
+    username,
+    postID,
+    ranking,
+  });
+
+  if (res.status !== 200) {
+    throw new Error('Error when saving post');
+  }
+  return res.data;
+};
+
 export {
   getUsers,
   getUserByUsername,
@@ -266,4 +283,5 @@ export {
   updateCertifiedStatus,
   updateHighScore,
   savePost,
+  updateRanking,
 };

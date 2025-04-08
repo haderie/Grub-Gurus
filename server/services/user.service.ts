@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import PostModel from '../models/posts.model';
 import RecipeModel from '../models/recipe.models';
 import UserModel from '../models/users.model';
@@ -13,6 +14,7 @@ import {
   UserResponse,
   UsersPopulatedResponse,
 } from '../types/types';
+import TagModel from '../models/tags.model';
 
 /**
  * Saves a new user to the database.
@@ -41,6 +43,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       recipeBookPublic: result.recipeBookPublic,
       postsCreated: result.postsCreated,
       highScore: result.highScore,
+      rankings: result.rankings,
     };
 
     return safeUser;
@@ -63,7 +66,11 @@ export const getUserByUsername = async (username: string): Promise<UserPopulated
         {
           path: 'postsCreated',
           model: PostModel,
-          populate: { path: 'recipe', model: RecipeModel },
+          populate: {
+            path: 'recipe',
+            model: RecipeModel,
+            populate: { path: 'tags', model: TagModel },
+          },
         },
       ]);
     if (!user) {
@@ -275,5 +282,34 @@ export const unfollowUserService = async (
     return updatedUser;
   } catch (error) {
     return { error: `Error while unfollowing user: ${usernameUnfollowed}: ${error}` };
+  }
+};
+
+/**
+ * Updates the ranking of a recipe for a specific user.
+ * @param username The username of the user.
+ * @param recipeId The ID of the recipe being ranked.
+ * @param ranking The ranking assigned by the user.
+ * @returns The updated user document or an error object.
+ */
+export const updateRecipeRanking = async (
+  username: string,
+  postID: ObjectId,
+  ranking: number,
+): Promise<UserResponse> => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username }, // Find the user by username
+      { $set: { [`rankings.${postID}`]: ranking } },
+      { new: true },
+    ).select('-password');
+
+    if (!updatedUser) {
+      return { error: 'User not found' };
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error updating ranking: ${error}` };
   }
 };

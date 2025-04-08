@@ -4,10 +4,11 @@ import { getFollowingPosts } from '../services/postService';
 import useUserContext from './useUserContext';
 
 /**
- * Custom hook for managing the tag page's state and navigation.
+ * Custom hook for managing the state and data fetching for the following page.
+ * This hook fetches the posts from users that the current user is following and updates the state accordingly.
+ * It also provides a function to navigate to the home page with the selected tag as a URL parameter.
  *
- * @returns tlist - An array of tag data retrieved from the server
- * @returns clickTag - Function to navigate to the home page with the selected tag as a URL parameter.
+ * @returns qlist - An array of posts from users that the current user is following, retrieved from the server.
  */
 const useFollowingPage = () => {
   const [qlist, setQlist] = useState<PopulatedDatabasePost[]>([]);

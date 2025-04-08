@@ -8,7 +8,7 @@ import { addPost } from '../services/postService';
 import { getUserByUsername } from '../services/userService';
 
 /**
- * Custom hook to handle question submission and form validation
+ * Custom hook to handle post submission and form validation
  *
  * @returns title - The current value of the title input.
  * @returns text - The current value of the text input.
@@ -16,7 +16,7 @@ import { getUserByUsername } from '../services/userService';
  * @returns titleErr - Error message for the title field, if any.
  * @returns textErr - Error message for the text field, if any.
  * @returns tagErr - Error message for the tag field, if any.
- * @returns postQuestion - Function to validate the form and submit a new question.
+ * @returns createPost - Function to validate the form and submit a new question.
  */
 const useNewPost = () => {
   const navigate = useNavigate();
@@ -188,8 +188,6 @@ const useNewPost = () => {
       cookTime,
       video: videoUrl,
       addedToCalendar: false,
-      numOfLikes: 0,
-      views: [],
     };
 
     const post: Posts = {

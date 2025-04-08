@@ -100,6 +100,29 @@ export const T12_NAME = 'umami';
 export const T12_DESC =
   'Umami is the fifth basic taste, often described as savory or meaty. It is found in ingredients such as mushrooms, tomatoes, soy sauce, and Parmesan cheese, enhancing the depth of flavor in dishes.';
 
+export const T13_NAME = 'DR-Gluten-free';
+export const T13_DESC = 'Recipes that do not contain gluten.';
+export const T14_NAME = 'DR-Vegetarian';
+export const T14_DESC = 'Recipes that do not contain meat.';
+export const T15_NAME = 'DR-Vegan';
+export const T15_DESC = 'Recipes that do not contain any animal products.';
+export const T16_NAME = 'DR-Halal';
+export const T16_DESC = 'Recipes that follow halal dietary guidelines.';
+export const T17_NAME = 'MT-Breakfast';
+export const T17_DESC = 'Meals commonly eaten for breakfast.';
+export const T18_NAME = 'MT-Lunch';
+export const T18_DESC = 'Meals commonly eaten for lunch.';
+export const T19_NAME = 'MT-Dinner';
+export const T19_DESC = 'Meals commonly eaten for dinner.';
+export const T20_NAME = 'MT-Snacks';
+export const T20_DESC = 'Small meals or snacks.';
+export const T21_NAME = 'SL-Beginner';
+export const T21_DESC = 'Recipes suitable for beginners.';
+export const T22_NAME = 'SL-Intermediate';
+export const T22_DESC = 'Recipes for those with moderate cooking skills.';
+export const T23_NAME = 'SL-Advanced';
+export const T23_DESC = 'Recipes for advanced cooks.';
+
 export const C1_TEXT =
   'This explanation about React Router is really helpful! I never realized it was just a wrapper around history. Thanks!';
 export const C2_TEXT =

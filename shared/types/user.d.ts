@@ -34,6 +34,7 @@ export interface User extends UserCredentials {
   recipeBookPublic: boolean;
   postsCreated: Posts[];
   highScore: number;
+  rankings: Map;
 }
 
 /**
@@ -74,6 +75,7 @@ export interface UserRequest extends Request {
     recipeBookPublic: boolean;
     postsCreated: Posts[];
     highScore: number;
+    rankings: Map;
   };
 }
 
@@ -187,9 +189,10 @@ export interface UpdatePrivacyRequest extends Request {
 }
 
 /**
- * Express request for updating a user's privacy setting.
- * `username`: The username whose privacy setting is being updated (body).
- * `privacySetting`: The new privacy setting to be set (body).
+ * Express request for updating a user's saved posts.
+ * - `username`: The username whose saved posts are being updated (body).
+ * - `postID`: The ID of the post being saved or removed (body).
+ * - `action`: The action to perform on the post, either 'save' or 'remove' (body).
  */
 export interface UpdatePosts extends Request {
   body: {

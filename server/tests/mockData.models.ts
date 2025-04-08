@@ -197,6 +197,7 @@ export const user: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
+  rankings: [],
 };
 
 export const userFollowed: User = {
@@ -210,6 +211,7 @@ export const userFollowed: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
+  rankings: [],
 };
 
 export const safeUser: SafeDatabaseUser = {
@@ -223,6 +225,7 @@ export const safeUser: SafeDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
+  rankings: [],
 };
 
 export const safeUserFollowed: SafeDatabaseUser = {
@@ -236,11 +239,12 @@ export const safeUserFollowed: SafeDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
+  rankings: [],
 };
 
 export const sampleRecipe: DatabaseRecipe = {
   _id: new ObjectId(),
-  user,
+  user: safeUser._id,
   tags: [],
   title: 'Pesto Pasta',
   privacyPublic: true,
@@ -249,8 +253,7 @@ export const sampleRecipe: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
 };
 
 export const samplePost: DatabasePost = {

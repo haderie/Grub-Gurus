@@ -19,7 +19,7 @@ const GameCard = ({
   <Card sx={{ width: '100%', marginBottom: '20px', boxShadow: 3 }}>
     <CardContent>
       <Typography variant='h6' component='div'>
-        <strong>{game.gameType === 'Nim' ? 'Nim' : 'Guess The Ingredient'}</strong>
+        <strong>{game.gameType === 'Nim' ? 'The Last Bite' : 'Guess The Ingredient'}</strong>
         <br />
         <br />
         <strong> Game ID: </strong> {game.gameID}
