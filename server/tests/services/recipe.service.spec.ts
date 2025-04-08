@@ -1,9 +1,13 @@
-import { DatabaseRecipe, RecipeCalendarEvent } from '@fake-stack-overflow/shared';
+import { DatabaseRecipe, RecipeCalendarEvent } from '../../types/types';
 import RecipeModel from '../../models/recipe.models';
+import UserModel from '../../models/users.model';
+
 import {
   createCalendarRecipe,
   createRecipe,
   updateRecipeToCalendarRecipe,
+  getRecipesByUsername,
+  getRecipeByID,
 } from '../../services/recipe.service';
 import { sampleRecipe, user } from '../mockData.models';
 
@@ -21,14 +25,16 @@ describe('Recipe model', () => {
         user,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: false,
+        video: '',
+        color: '',
+        start: new Date(),
+        end: new Date(),
       };
 
       const result = (await createRecipe(recipe)) as DatabaseRecipe;
@@ -51,18 +57,68 @@ describe('Recipe model', () => {
         user,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: false,
+        video: '',
+        color: '',
+        start: new Date(),
+        end: new Date(),
       };
+
       const saveError = await createRecipe(recipe);
 
       expect('error' in saveError).toBe(true);
+    });
+  });
+
+  describe('getRecipesByUsername', () => {
+    test('should return recipes for a valid user', async () => {
+      mockingoose(UserModel).toReturn(user, 'findOne');
+      mockingoose(RecipeModel).toReturn([sampleRecipe], 'find');
+
+      const result = await getRecipesByUsername(user.username);
+      expect(result).toEqual([sampleRecipe]);
+    });
+
+    test('should return error if user not found', async () => {
+      mockingoose(UserModel).toReturn(null, 'findOne');
+
+      const result = await getRecipesByUsername('nonexistent');
+      expect('error' in result).toBe(true);
+    });
+
+    test('should return error if DB error occurs', async () => {
+      mockingoose(UserModel).toReturn(new Error('DB Error'), 'findOne');
+
+      const result = await getRecipesByUsername(user.username);
+      expect('error' in result).toBe(true);
+    });
+  });
+
+  describe('getRecipeByID', () => {
+    test('should return a recipe if found', async () => {
+      mockingoose(RecipeModel).toReturn(sampleRecipe, 'findOne');
+
+      const result = await getRecipeByID(sampleRecipe._id.toString());
+      expect(result).toEqual(sampleRecipe);
+    });
+
+    test('should return error if recipe not found', async () => {
+      mockingoose(RecipeModel).toReturn(null, 'findOne');
+
+      const result = await getRecipeByID('nonexistentID');
+      expect('error' in result).toBe(true);
+    });
+
+    test('should return error if DB error occurs', async () => {
+      mockingoose(RecipeModel).toReturn(new Error('DB Error'), 'findOne');
+
+      const result = await getRecipeByID(sampleRecipe._id.toString());
+      expect('error' in result).toBe(true);
     });
   });
 

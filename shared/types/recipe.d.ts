@@ -28,9 +28,10 @@ export interface Recipe {
   video?: string;
   tags: Tag[];
   cookTime: number;
-  numOfLikes: number;
-  views: string[];
   addedToCalendar: boolean;
+  color: string;
+  start: Date;
+  end: Date;
 }
 
 /**

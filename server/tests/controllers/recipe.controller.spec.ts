@@ -30,8 +30,10 @@ const recipePost: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
+  color: '',
+  start: new Date(),
+  end: new Date(),
 };
 
 const calendarRecipeDataBase: DatabaseRecipe = {
@@ -45,8 +47,10 @@ const calendarRecipeDataBase: DatabaseRecipe = {
   instructions: 'bake chicken at 350, add BBQ sauce, enjoy',
   cookTime: 40,
   addedToCalendar: true,
-  numOfLikes: 0,
-  views: [],
+  video: '',
+  color: '',
+  start: new Date(),
+  end: new Date(),
 };
 
 const recipe: Recipe = {
@@ -59,8 +63,10 @@ const recipe: Recipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
+  color: '',
+  start: new Date(),
+  end: new Date(),
 };
 
 const calendarRecipe: RecipeCalendarEvent = {
@@ -76,8 +82,6 @@ const calendarRecipe: RecipeCalendarEvent = {
   start: new Date(),
   end: new Date(),
   color: '#fffff',
-  numOfLikes: 0,
-  views: [],
 };
 
 const createRecipeSpy = jest.spyOn(util, 'createRecipe');
