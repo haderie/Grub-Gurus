@@ -41,13 +41,15 @@ const UsersListPage = (props: UserListPageProps) => {
     <div className='user-card-container'>
       <UsersListHeader userCount={userList.length} setUserFilter={setUserFilter} />
       <div id='users_list' className='users_list'>
-        {userList.map(user => (
-          <UserCardView
-            user={user}
-            key={user.username}
-            handleUserCardViewClickHandler={handleUserCardViewClickHandler}
-          />
-        ))}
+        {userList
+          .filter(user => user.username !== 'Munch Master')
+          .map(user => (
+            <UserCardView
+              user={user}
+              key={user.username}
+              handleUserCardViewClickHandler={handleUserCardViewClickHandler}
+            />
+          ))}
       </div>
       {(!userList.length || userList.length === 0) && (
         <div className='bold_title right_padding'>No Users Found</div>
