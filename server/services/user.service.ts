@@ -14,6 +14,7 @@ import {
   UserResponse,
   UsersPopulatedResponse,
 } from '../types/types';
+import TagModel from '../models/tags.model';
 
 /**
  * Saves a new user to the database.
@@ -64,7 +65,11 @@ export const getUserByUsername = async (username: string): Promise<UserPopulated
         {
           path: 'postsCreated',
           model: PostModel,
-          populate: { path: 'recipe', model: RecipeModel },
+          populate: {
+            path: 'recipe',
+            model: RecipeModel,
+            populate: { path: 'tags', model: TagModel },
+          },
         },
       ]);
     if (!user) {
@@ -286,7 +291,11 @@ export const unfollowUserService = async (
  * @param ranking The ranking assigned by the user.
  * @returns The updated user document or an error object.
  */
-export const updateRecipeRanking = async (username: string, postID: ObjectId, ranking: number) => {
+export const updateRecipeRanking = async (
+  username: string,
+  postID: ObjectId,
+  ranking: number,
+): Promise<UserResponse> => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
       { username }, // Find the user by username

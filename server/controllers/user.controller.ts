@@ -324,6 +324,11 @@ const userController = (socket: FakeSOSocket) => {
         throw new Error(updatedUser.error);
       }
 
+      // socket.emit('userUpdate', {
+      //   user: updatedUser,
+      //   type: 'updated',
+      // });
+
       res.status(200).json(updatedUser);
     } catch (error) {
       res.status(500).send(`Error when following ${req.body.usernameFollowed}: ${error}`);
@@ -331,8 +336,8 @@ const userController = (socket: FakeSOSocket) => {
   };
 
   /**
-   * Updates a user's profile privacy setting.
-   * @param req The request containing the username and profile privacy setting in the body.
+   * Updates a user's privacy setting.
+   * @param req The request containing the username and privacy setting in the body.
    * @param res The response, either confirming the update or returning an error.
    * @returns A promise resolving to void.
    */
@@ -421,12 +426,13 @@ const userController = (socket: FakeSOSocket) => {
         // Update user document with new posts and adjusted rankings
         await updateUser(username, {
           postsCreated: updatedPosts,
-        });
-
-        // Update user document with new posts and adjusted rankings
-        await updateUser(username, {
           rankings: Object.fromEntries(updatedRankings),
         });
+
+        // // Update user document with new posts and adjusted rankings
+        // await updateUser(username, {
+        //   rankings: Object.fromEntries(updatedRankings),
+        // });
 
         // Remove the user from the post's saves list
         await PostModel.findOneAndUpdate(
@@ -458,8 +464,27 @@ const userController = (socket: FakeSOSocket) => {
         res.status(400).send('Missing required fields.');
         return;
       }
+      const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
+      const updatedRankings = user.rankings;
+
+      const oldRanking = updatedRankings.get(postID.toString()); // or wherever you're getting the rank
+      updatedRankings.delete(postID.toString()); // or set to 0 if you prefer
 
       const updatedUser = await updateRecipeRanking(username, postID, ranking);
+
+      if (ranking === 0) {
+        for (const [id, rank] of updatedRankings.entries()) {
+          if (rank >= oldRanking + 1) {
+            updatedRankings.set(id, rank - 1);
+          }
+        }
+        // Update user document with new posts and adjusted rankings
+        const updatedRankUser = await updateUser(username, {
+          rankings: Object.fromEntries(updatedRankings),
+        });
+        res.status(200).json(updatedRankUser);
+        return;
+      }
 
       if ('error' in updatedUser) {
         res.status(400).send(updatedUser.error);
