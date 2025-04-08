@@ -292,8 +292,6 @@ async function recipeCreate(
     video,
     tags,
     cookTime,
-    numOfLikes,
-    views,
     addedToCalendar,
   });
 

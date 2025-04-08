@@ -7,6 +7,7 @@ import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
 import { getUserByUsername } from '../../services/userService';
+import useUserContext from '../../hooks/useUserContext';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -50,6 +51,7 @@ const ProfileSettings: React.FC = () => {
   } = useProfileSettings();
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
+  const { user: currentUser } = useUserContext();
 
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
@@ -86,6 +88,8 @@ const ProfileSettings: React.FC = () => {
       </div>
     );
   }
+
+  const currentUserFollows = userData?.followers?.includes(currentUser.username);
 
   return (
     <div>
@@ -126,16 +130,20 @@ const ProfileSettings: React.FC = () => {
                       <span
                         role='button'
                         onClick={() => {
-                          setListType('followers');
-                          setShowListPopup(true);
+                          if (userData.privacySetting === 'Public' || currentUserFollows) {
+                            setListType('followers');
+                            setShowListPopup(true);
+                          }
                         }}>
                         {userData.followers?.length || 0} <small>Followers</small>
                       </span>
                       <span
                         role='button'
                         onClick={() => {
-                          setListType('following');
-                          setShowListPopup(true);
+                          if (userData.privacySetting === 'Public' || currentUserFollows) {
+                            setListType('following');
+                            setShowListPopup(true);
+                          }
                         }}>
                         {userData.following?.length || 0} <small>Following</small>
                       </span>
@@ -220,7 +228,7 @@ const ProfileSettings: React.FC = () => {
                               {''}
                               {sortedItem?.title}
                               {''} {''} {''} {''}
-                              <i> {`---made by @${sortedItem.user}`}</i>
+                              {` - @${sortedItem.user}`}
                             </span>
                             {/* Rating Selector */}
                             {sortedItem.rating === 0 && canEditProfile && (
