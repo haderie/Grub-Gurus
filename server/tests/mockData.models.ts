@@ -254,9 +254,6 @@ export const sampleRecipe: DatabaseRecipe = {
   cookTime: 20,
   addedToCalendar: false,
   video: '',
-  color: '',
-  start: new Date(),
-  end: new Date(),
 };
 
 export const samplePost: DatabasePost = {

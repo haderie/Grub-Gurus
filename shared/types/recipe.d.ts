@@ -14,8 +14,6 @@ import { DatabaseUser } from './user';
  * - `video`: An optional URL to a video tutorial for the recipe.
  * - `tags`: An array of associated tags, either as strings or references to `Tag` documents.
  * - `cookTime`: The estimated cooking time in minutes.
- * - `numOfLikes`: The number of likes the recipe has received.
- * - `views`: An array of users who have viewed the recipe.
  * - `addedToCalendar`: A boolean indicating whether the recipe has been added to a calendar.
  */
 export interface Recipe {
@@ -29,9 +27,6 @@ export interface Recipe {
   tags: Tag[];
   cookTime: number;
   addedToCalendar: boolean;
-  color: string;
-  start: Date;
-  end: Date;
 }
 
 /**
