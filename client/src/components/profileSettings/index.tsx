@@ -15,24 +15,10 @@ import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
-import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '../../types/types';
-import PostView from '../main/postCard';
-import { updateCertifiedStatus } from '../../services/userService';
-import { getUserByUsername } from '../../services/userService';
+import { updateCertifiedStatus, getUserByUsername } from '../../services/userService';
+
 import useUserContext from '../../hooks/useUserContext';
 
-
-type SortedItem = {
-  item: PopulatedDatabasePost;
-  title: string;
-  rating: number;
-  username: string;
-};
-
-const isItem = (
-  obj: SortedItem,
-): obj is { item: PopulatedDatabasePost; title: string; rating: number; username: string } =>
-  (obj as { item: PopulatedDatabasePost }).item !== undefined;
 const ProfileSettings: React.FC = () => {
   const {
     userData,
@@ -69,9 +55,9 @@ const ProfileSettings: React.FC = () => {
     handleRatingChange,
     handleRemoveRating,
     sortedList,
-    isItem,
     recipeSaved,
     availableRatings,
+    isItem,
   } = useProfileSettings();
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
@@ -94,10 +80,6 @@ const ProfileSettings: React.FC = () => {
     hasBookBadge = userData?.postsCreated?.filter(post => post.recipe).length >= 5;
     hasSocialBadge = userData?.following?.length >= 5;
   }
-
-  const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set());
-  const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
 
   const handlePostClick = async (postId: string, username: string) => {
     const user = await getUserByUsername(username);

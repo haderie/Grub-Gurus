@@ -63,6 +63,7 @@ const userSchema: Schema = new Schema(
     highScore: {
       type: Number,
       default: 0,
+    },
     rankings: {
       type: Map,
       of: Number,

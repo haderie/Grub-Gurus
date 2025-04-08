@@ -71,12 +71,10 @@ const AnswerPage = () => {
       <Box>
         <VoteComponent question={question} />
       </Box>
-
       {/* Question Header Section */}
       <Box sx={{ marginBottom: 3 }}>
         <AnswerHeader ansCount={question.answers.length} title={question.title} />
       </Box>
-
       {/* Question Body Section */}
       <Box sx={{ marginBottom: 3 }}>
         <QuestionBody
@@ -87,20 +85,6 @@ const AnswerPage = () => {
           youtubeVideoUrl={question.youtubeVideoUrl}
         />
       </Box>
-
-      {/* Answer Sections */}
-      {sortAnswersByNewestAndCertified(question.answers).map(a => (
-        <AnswerView
-          key={String(a._id)}
-          text={a.text}
-          ansBy={a.ansBy}
-          meta={getMetaData(new Date(a.ansDateTime))}
-          comments={a.comments}
-          handleAddComment={(comment: Comment) =>
-            handleNewComment(comment, 'answer', String(a._id))
-          }
-          youtubeVideoUrl={a.youtubeVideoUrl}
-
       {/* Comment Section */}
       <Box sx={{ marginBottom: 3 }}>
         <CommentSection
@@ -108,9 +92,7 @@ const AnswerPage = () => {
           handleAddComment={(comment: Comment) => handleNewComment(comment, 'question', questionID)}
         />
       </Box>
-
       <Divider sx={{ marginY: 3 }} />
-
       {/* Call to Action Section */}
       <Box sx={{ marginBottom: 3 }}>
         <Typography
@@ -152,7 +134,7 @@ const AnswerPage = () => {
 
       {/* Answer Sections */}
       <Box>
-        {question.answers.map(a => (
+        {sortAnswersByNewestAndCertified(question.answers).map(a => (
           <Box key={String(a._id)} sx={{ marginBottom: 3 }}>
             <AnswerView
               text={a.text}

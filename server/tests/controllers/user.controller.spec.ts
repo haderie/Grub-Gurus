@@ -91,6 +91,7 @@ const mockCertifiedPopulatedUserJSONResponse = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   highScore: 0,
+  rankings: [],
 };
 
 const mockNewHighScorePopulatedUserJSONResponse = {

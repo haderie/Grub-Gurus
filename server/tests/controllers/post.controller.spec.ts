@@ -16,20 +16,6 @@ const mockPost = {
   saves: [],
 };
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const mockUser: User = {
-  username: 'user1',
-  password: 'password',
-  dateJoined: new Date('2024-12-03'),
-  certified: false,
-  followers: [],
-  following: [],
-  privacySetting: 'Public',
-  recipeBookPublic: false,
-  postsCreated: [],
-  highScore: 0,
-};
-
 // const mockTagResponse: DatabaseTag = {
 //   name: 'test-tag',
 //   description: 'Test description',
