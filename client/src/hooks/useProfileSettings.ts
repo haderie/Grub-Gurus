@@ -175,17 +175,13 @@ const useProfileSettings = () => {
     const rating = userRankings[id.toString()];
     if (rating !== undefined) {
       // Remove the rating from the used rankings set
-      setUsedRankings(prevUsed => {
-        const updatedUsed = new Set(prevUsed);
-        updatedUsed.delete(rating); // Remove the rating from the used set
-        return updatedUsed;
-      });
       if (!username) return;
 
       await updateRanking(username, id, 0);
       const updatedUser = await getUserByUsername(username);
 
       setUserRankings(updatedUser.rankings);
+      setUsedRankings(new Set(Object.values(currentUser.rankings || {})));
 
       await new Promise(resolve => {
         setUserData(updatedUser);
