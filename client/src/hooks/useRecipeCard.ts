@@ -30,8 +30,6 @@ const useAddRecipeToCalendar = () => {
       privacyPublic: true,
       description: '',
       tags: [],
-      numOfLikes: 0,
-      views: [],
       addedToCalendar: true,
       start: eventStart,
       end: eventEnd,

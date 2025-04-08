@@ -103,13 +103,11 @@ describe('Test recipeController', () => {
         user: undefined,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: false,
       };
 
@@ -153,13 +151,11 @@ describe('Test recipeController', () => {
         user: undefined,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: true,
       };
 

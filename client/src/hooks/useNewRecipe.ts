@@ -181,8 +181,6 @@ const useNewRecipe = () => {
       cookTime,
       video: videoUrl,
       addedToCalendar: false,
-      numOfLikes: 0,
-      views: [],
     };
 
     const res = await addRecipe(recipe);

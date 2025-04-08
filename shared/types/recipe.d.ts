@@ -29,9 +29,6 @@ export interface Recipe {
   tags: Tag[];
   cookTime: number;
   addedToCalendar: boolean;
-  color: string;
-  start: Date;
-  end: Date;
 }
 
 /**
