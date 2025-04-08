@@ -2,9 +2,11 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import Markdown from 'react-markdown';
 import { Box, Typography, Paper } from '@mui/material';
+import { FaCrown } from 'react-icons/fa';
 import CommentSection from '../../commentSection';
 import './index.css';
 import { Comment, DatabaseComment } from '../../../../types/types';
+import { getUsers } from '../../../../services/userService';
 
 /**
  * Interface representing the props for the AnswerView component.
@@ -23,6 +25,10 @@ interface AnswerProps {
   youtubeVideoUrl?: string;
   handleAddComment: (comment: Comment) => void;
 }
+
+const USER_LIST = await getUsers();
+const CERTIFIED_USER_LIST = USER_LIST.filter(user => user.certified === true);
+const CERTIFIED_USERNAME_LIST = CERTIFIED_USER_LIST.map(u => u.username);
 
 /**
  * AnswerView component that displays the content of an answer with the author's name and metadata.
@@ -80,6 +86,9 @@ const AnswerView = ({
       }}>
       <Typography variant='subtitle1' sx={{ fontWeight: 'bold', color: '#6A9C89' }}>
         {ansBy}
+        {CERTIFIED_USERNAME_LIST.includes(ansBy) && (
+          <FaCrown style={{ color: 'gold', marginLeft: '8px' }} />
+        )}
       </Typography>
       <Typography variant='body2' sx={{ color: '#3E3232' }}>
         {meta}

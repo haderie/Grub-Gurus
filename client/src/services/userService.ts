@@ -231,6 +231,27 @@ const savePost = async (
   return res.data;
 };
 
+/**
+ * Updates the user's high score.
+ * @param username The unique username of the user
+ * @param newHighScore The new high score to set for this user
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updateHighScore = async (
+  username: string,
+  newHighScore: number,
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updateHighScore`, {
+    username,
+    highScore: newHighScore,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error when updating high score');
+  }
+  return res.data;
+};
+
 export {
   getUsers,
   getUserByUsername,
@@ -243,5 +264,6 @@ export {
   updatePrivacy,
   updateRecipeBookPrivacy,
   updateCertifiedStatus,
+  updateHighScore,
   savePost,
 };

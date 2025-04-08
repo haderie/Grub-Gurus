@@ -87,6 +87,19 @@ const mockCertifiedPopulatedUserJSONResponse = {
   highScore: 0,
 };
 
+const mockNewHighScorePopulatedUserJSONResponse = {
+  _id: mockSafePopulatedUser._id.toString(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03').toISOString(),
+  certified: false,
+  followers: [],
+  following: [],
+  postsCreated: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  highScore: 100,
+};
+
 const saveUserSpy = jest.spyOn(util, 'saveUser');
 const loginUserSpy = jest.spyOn(util, 'loginUser');
 const updatedUserSpy = jest.spyOn(util, 'updateUser');
@@ -480,7 +493,7 @@ describe('Test userController', () => {
       };
 
       // Mock a successful updateUser call
-      updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      updatedUserSpy.mockResolvedValueOnce({ ...mockSafePopulatedUser, certified: true });
 
       const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
 
@@ -536,6 +549,75 @@ describe('Test userController', () => {
       updatedUserSpy.mockResolvedValueOnce({ error: 'Error updating user' });
 
       const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe('PATCH /updateHighScore', () => {
+    it('should successfully update high score given correct arguments', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        highScore: 0,
+      };
+
+      // Mock a successful updateUser call
+      updatedUserSpy.mockResolvedValueOnce({ ...mockSafePopulatedUser, highScore: 100 });
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockNewHighScorePopulatedUserJSONResponse);
+      // Ensure updateUser is called with the correct args
+      expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
+        highScore: 100,
+      });
+    });
+
+    it('should return 400 for request missing username', async () => {
+      const mockReqBody = {
+        highScore: 100,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid user body');
+    });
+
+    it('should return 400 for request with empty username', async () => {
+      const mockReqBody = {
+        username: '',
+        highScore: 100,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid user body');
+    });
+
+    it('should return 400 for request missing high score field', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid user body');
+    });
+
+    it('should return 500 if updateUser returns an error', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        highScore: 100,
+      };
+
+      // Simulate a DB error
+      updatedUserSpy.mockResolvedValueOnce({ error: 'Error updating user' });
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
 
       expect(response.status).toBe(500);
     });

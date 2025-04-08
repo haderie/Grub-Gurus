@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button } from '@mui/material';
 import { getMetaData } from '../../../tool';
 import AnswerView from './answer';
@@ -8,38 +8,7 @@ import QuestionBody from './questionBody';
 import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
 import useAnswerPage from '../../../hooks/useAnswerPage';
-
-/**
- * Gets the newest answer from a list, sorted by the answer date in descending order with certified having priority.
- *
- * @param {PopulatedDatabaseAnswer[]} alist - The list of answers to sort
- *
- * @returns {PopulatedDatabaseAnswer[]} - The sorted list of answers by certified status date, with certified first sorted by newest first then non-certified by newest
- */
-function sortAnswersByNewestAndCertified(
-  alist: PopulatedDatabaseAnswer[],
-): PopulatedDatabaseAnswer[] {
-  alist.sort((a, b) => {
-    // If one of the answers has a certified user and the other does, put the certified answer first
-    if (a.isUserCertified && !b.isUserCertified) {
-      return -1;
-    }
-    if (!a.isUserCertified && b.isUserCertified) {
-      return 1;
-    }
-
-    // If both answers have the same type of user (certified or non-certified), sort based on which is newer
-    if (a.ansDateTime > b.ansDateTime) {
-      return -1;
-    }
-    if (a.ansDateTime < b.ansDateTime) {
-      return 1;
-    }
-
-    return 0;
-  });
-  return alist;
-}
+import { getUsers } from '../../../services/userService';
 
 /**
  * AnswerPage component that displays the full content of a question along with its answers.
@@ -48,6 +17,49 @@ function sortAnswersByNewestAndCertified(
 const AnswerPage = () => {
   const { questionID, question, handleNewComment, handleNewAnswer, handleAIAnswer } =
     useAnswerPage();
+
+  const [certifiedUsernames, setCertifiedUsernames] = useState<string[]>([]); // State to hold certified usernames
+
+  // Fetch certified users asynchronously
+  useEffect(() => {
+    const fetchCertifiedUsers = async () => {
+      const userList = await getUsers(); // Fetch users
+      const certifiedUserList = userList.filter(user => user.certified === true); // Filter for certified users
+      const certifiedUsernameList = certifiedUserList.map(u => u.username); // Get the list of certified usernames
+      setCertifiedUsernames(certifiedUsernameList); // Update state
+    };
+
+    fetchCertifiedUsers(); // Call the async function
+  }, []); // Run once when the component mounts
+
+  // Function to sort answers
+  function sortAnswersByNewestAndCertified(
+    alist: PopulatedDatabaseAnswer[],
+  ): PopulatedDatabaseAnswer[] {
+    alist.sort((a, b) => {
+      const isACertified = certifiedUsernames.includes(a.ansBy); // Check if user is certified by username
+      const isBCertified = certifiedUsernames.includes(b.ansBy);
+
+      // If one of the answers has a certified user and the other does not, put the certified answer first
+      if (isACertified && !isBCertified) {
+        return -1;
+      }
+      if (!isACertified && isBCertified) {
+        return 1;
+      }
+
+      // If both answers have the same type of user (certified or non-certified), sort based on which is newer
+      if (a.ansDateTime > b.ansDateTime) {
+        return -1;
+      }
+      if (a.ansDateTime < b.ansDateTime) {
+        return 1;
+      }
+
+      return 0;
+    });
+    return alist;
+  }
 
   if (!question) {
     return null;

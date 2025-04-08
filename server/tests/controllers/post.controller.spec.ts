@@ -15,6 +15,7 @@ const mockUser: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
 };
 
 const mockRecipe: DatabaseRecipe = {

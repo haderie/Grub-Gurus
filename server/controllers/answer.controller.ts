@@ -82,8 +82,13 @@ const answerController = (socket: FakeSOSocket) => {
     }
   };
 
+  // const certifyAnswer = async (req: AddAnswerRequest, res: Response): Promise<void> => {
+
+  // }
+
   // add appropriate HTTP verbs and their endpoints to the router.
   router.post('/addAnswer', addAnswer);
+  // router.post('/certifyAnswer', certifyAnswer);
 
   return router;
 };

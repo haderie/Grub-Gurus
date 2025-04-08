@@ -17,6 +17,7 @@ import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
 import { PopulatedDatabasePost, PopulatedDatabaseRecipe } from '../../types/types';
 import PostView from '../main/postCard';
+import { updateCertifiedStatus } from '../../services/userService';
 
 type SortedItem = {
   item: PopulatedDatabasePost;
@@ -80,7 +81,10 @@ const ProfileSettings: React.FC = () => {
   let hasSocialBadge = false;
 
   if (userData) {
-    isCertified = userData?.postsCreated?.length >= 5;
+    isCertified = userData.certified === true || userData?.postsCreated?.length >= 5;
+    if (userData.certified !== true && userData.postsCreated.length >= 5) {
+      updateCertifiedStatus(userData.username);
+    }
     hasHeartBadge = userData?.postsCreated?.some(post => post.likes.length >= 5);
     hasBookBadge = userData?.postsCreated?.filter(post => post.recipe).length >= 5;
     hasSocialBadge = userData?.following?.length >= 5;
