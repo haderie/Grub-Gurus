@@ -458,8 +458,28 @@ const userController = (socket: FakeSOSocket) => {
         res.status(400).send('Missing required fields.');
         return;
       }
+      const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
+      const updatedRankings = user.rankings;
+
+      const oldRanking = updatedRankings.get(postID.toString()); // or wherever you're getting the rank
+      updatedRankings.delete(postID.toString()); // or set to 0 if you prefer
 
       const updatedUser = await updateRecipeRanking(username, postID, ranking);
+
+      if (ranking === 0) {
+        for (const [id, rank] of updatedRankings.entries()) {
+          if (rank >= oldRanking + 1) {
+            updatedRankings.set(id, rank - 1);
+          }
+        }
+
+        // Update user document with new posts and adjusted rankings
+        const updatedRankUser = await updateUser(username, {
+          rankings: Object.fromEntries(updatedRankings),
+        });
+        res.status(200).json(updatedRankUser);
+        return;
+      }
 
       if ('error' in updatedUser) {
         res.status(400).send(updatedUser.error);

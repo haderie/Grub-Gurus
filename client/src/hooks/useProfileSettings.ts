@@ -185,6 +185,8 @@ const useProfileSettings = () => {
       await updateRanking(username, id, 0);
       const updatedUser = await getUserByUsername(username);
 
+      setUserRankings(updatedUser.rankings);
+
       await new Promise(resolve => {
         setUserData(updatedUser);
         resolve(null);
@@ -197,13 +199,6 @@ const useProfileSettings = () => {
           return [...prevRankings, rating];
         }
         return prevRankings;
-      });
-
-      // Remove the rating from the selected rankings
-      setUserRankings(prevRankings => {
-        const updatedRankings = { ...prevRankings };
-        delete updatedRankings[id.toString()]; // Remove the ranking for the given ID
-        return updatedRankings;
       });
     }
   };

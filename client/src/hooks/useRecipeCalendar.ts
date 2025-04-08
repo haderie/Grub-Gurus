@@ -43,8 +43,6 @@ const useRecipeCalendar = () => {
     description: '',
     tags: [],
     addedToCalendar: true,
-    numOfLikes: 0,
-    views: [],
   });
 
   useEffect(() => {
@@ -94,12 +92,10 @@ const useRecipeCalendar = () => {
         description: '',
         tags: [],
         video: videoUrl,
-        views: [],
         addedToCalendar: recipeState.addedToCalendar,
         start: eventStart,
         end: eventEnd,
         color: selectedColor,
-        numOfLikes: 0,
       };
 
       try {
@@ -133,8 +129,6 @@ const useRecipeCalendar = () => {
         description: '',
         tags: [],
         addedToCalendar: true,
-        numOfLikes: 0,
-        views: [],
       });
       setSelectedTime('12:00');
     }

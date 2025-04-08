@@ -30,8 +30,7 @@ const recipePost: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
 };
 
 const calendarRecipeDataBase: DatabaseRecipe = {
@@ -45,8 +44,7 @@ const calendarRecipeDataBase: DatabaseRecipe = {
   instructions: 'bake chicken at 350, add BBQ sauce, enjoy',
   cookTime: 40,
   addedToCalendar: true,
-  numOfLikes: 0,
-  views: [],
+  video: '',
 };
 
 const recipe: Recipe = {
@@ -59,8 +57,7 @@ const recipe: Recipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
 };
 
 const calendarRecipe: RecipeCalendarEvent = {
@@ -76,8 +73,6 @@ const calendarRecipe: RecipeCalendarEvent = {
   start: new Date(),
   end: new Date(),
   color: '#fffff',
-  numOfLikes: 0,
-  views: [],
 };
 
 const createRecipeSpy = jest.spyOn(util, 'createRecipe');
@@ -99,13 +94,11 @@ describe('Test recipeController', () => {
         user: undefined,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: false,
       };
 
@@ -149,13 +142,11 @@ describe('Test recipeController', () => {
         user: undefined,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: true,
       };
 
