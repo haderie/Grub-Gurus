@@ -513,7 +513,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 400 for request with empty username', async () => {
@@ -525,7 +525,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 400 for request missing certified field', async () => {
@@ -536,7 +536,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 500 if updateUser returns an error', async () => {
@@ -558,7 +558,7 @@ describe('Test userController', () => {
     it('should successfully update high score given correct arguments', async () => {
       const mockReqBody = {
         username: mockUser.username,
-        highScore: 0,
+        highScore: 100,
       };
 
       // Mock a successful updateUser call
@@ -582,7 +582,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 400 for request with empty username', async () => {
@@ -594,7 +594,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 400 for request missing high score field', async () => {
@@ -605,7 +605,7 @@ describe('Test userController', () => {
       const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
 
       expect(response.status).toBe(400);
-      expect(response.text).toEqual('Invalid user body');
+      expect(response.text).toEqual('Invalid request');
     });
 
     it('should return 500 if updateUser returns an error', async () => {
@@ -614,12 +614,13 @@ describe('Test userController', () => {
         highScore: 100,
       };
 
-      // Simulate a DB error
+      // Simulate a DB error by returning an object with an error property
       updatedUserSpy.mockResolvedValueOnce({ error: 'Error updating user' });
 
       const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
 
       expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when updating user high score');
     });
   });
 

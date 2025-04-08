@@ -73,23 +73,3 @@ export const addAnswerToQuestion = async (
     return { error: 'Error when adding answer to question' };
   }
 };
-
-// export const updateAnswer = async (
-//   ansBy: string,
-//   updates: Partial<Answer>,
-// ): Promise<AnswerResponse> => {
-//   try {
-//     const updatedAnswer: Answer | null = await AnswerModel.findOneAndUpdate(
-//       { ansBy },
-//       { $set: updates },
-//       { new: true },
-//     );
-//     if (!updatedAnswer) {
-//       throw Error('Error updating user');
-//     }
-
-//     return updatedAnswer;
-//   } catch (error) {
-//     return { error: `Error when updating answer: ${error}` };
-//   }
-// };

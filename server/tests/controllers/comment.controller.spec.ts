@@ -97,7 +97,6 @@ describe('POST /addComment', () => {
       ansBy: 'dummyUserId',
       ansDateTime: new Date('2024-06-03'),
       comments: [mockComment._id],
-      isUserCertified: false,
     });
 
     popDocSpy.mockResolvedValueOnce({
@@ -106,7 +105,6 @@ describe('POST /addComment', () => {
       ansBy: 'dummyUserId',
       ansDateTime: new Date('2024-06-03'),
       comments: [mockComment],
-      isUserCertified: false,
     });
 
     const response = await supertest(app).post('/comment/addComment').send(mockReqBody);

@@ -297,8 +297,8 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
-  const isCertificationInputValid = (req: UpdateHighScore): boolean =>
-    !!req.body.highScore && !!req.body.username && req.body.username !== '';
+  const isCertificationInputValid = (req: UpdateCertification): boolean =>
+    !!req.body.certified && !!req.body.username && req.body.username !== '';
 
   /**
    * Updates a user's certification status.
@@ -307,7 +307,7 @@ const userController = (socket: FakeSOSocket) => {
    * @returns A promise resolving to void.
    */
   const updateCertifiedStatus = async (req: UpdateCertification, res: Response): Promise<void> => {
-    if (!isCertificationInputValid) {
+    if (!isCertificationInputValid(req)) {
       res.status(400).send('Invalid request');
       return;
     }
@@ -344,7 +344,7 @@ const userController = (socket: FakeSOSocket) => {
    * @returns A promise resolving to void.
    */
   const updateHighScore = async (req: UpdateHighScore, res: Response): Promise<void> => {
-    if (!isHighScoreInputValid) {
+    if (!isHighScoreInputValid(req)) {
       res.status(400).send('Invalid request');
       return;
     }

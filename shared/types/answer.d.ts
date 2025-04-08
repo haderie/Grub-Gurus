@@ -15,7 +15,6 @@ export interface Answer {
   ansDateTime: Date;
   comments: Comment[];
   youtubeVideoUrl?: string;
-  isUserCertified: boolean;
 }
 
 /**
