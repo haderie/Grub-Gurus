@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Button,
+  Chip,
   // TextField
 } from '@mui/material';
 import RecipeCard from '../recipeCard/index';
@@ -34,27 +35,46 @@ const RecipeBook = ({ recipes }: RecipeBookProps) => {
         {/* Left Sidebar: Recipe Names */}
         <div className='recipe-list'>
           <h2 className=''>Recipes</h2>
-          {/* <TextField
-            id='searchBarss'
-            size='small'
-            placeholder='Search recipes...'
-            value={val}
-            variant='outlined'
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDownRecipe}
-          /> */}
           <div className=''>
             {recipes.map(recipe => (
               <div
+                style={{
+                  display: 'flex',
+                  gap: '6px',
+                  marginTop: '4px',
+                  flexWrap: 'wrap',
+                  alignContent: 'center',
+                }}
                 key={recipe._id.toString()}
                 className={`recipe-list-card ${selectedRecipe?._id === recipe._id}`}
                 onClick={() => setSelectedRecipe(recipe)}>
                 <Button
                   className='w-full text-left'
-                  sx={{ color: '#FFF5E4', textAlign: 'left', fontSize: '14px' }}
+                  sx={{ color: '#FFF5E4', textAlign: 'left', fontSize: '13px' }}
                   onClick={() => setSelectedRecipe(recipe)}>
                   {recipe.title}
                 </Button>
+                <div className='text-xs text-gray-300 mt-1'>
+                  {recipe.tags?.slice(0, 2).map((tag, index) => (
+                    <span key={index} className='mr-1'>
+                      <Chip
+                        key={String(tag._id)}
+                        label={tag.name}
+                        color='primary'
+                        variant='outlined'
+                        sx={{
+                          'mt': 2,
+                          'color': '#FFF5E4',
+                          'font-size': '10px',
+                          'borderColor': '#FFF5E4',
+                          '&:hover': {
+                            backgroundColor: '#FFA725',
+                          },
+                        }}
+                      />
+                    </span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
