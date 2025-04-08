@@ -42,6 +42,7 @@ export const saveUser = async (user: User): Promise<UserResponse> => {
       privacySetting: result.privacySetting,
       recipeBookPublic: result.recipeBookPublic,
       postsCreated: result.postsCreated,
+      highScore: result.highScore,
       rankings: result.rankings,
     };
 

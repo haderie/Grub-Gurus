@@ -185,7 +185,6 @@ async function answerCreate(
     ansBy: ansBy,
     ansDateTime: ansDateTime,
     comments: comments,
-    isUserCertified: isUserCertified,
   };
   return await AnswerModel.create(answerDetail);
 }
@@ -258,6 +257,7 @@ async function userCreate(
     privacySetting: 'Public',
     recipeBookPublic: false,
     postsCreated: [],
+    highScore: 0,
     rankings: [],
   };
 

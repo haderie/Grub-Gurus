@@ -60,6 +60,10 @@ const userSchema: Schema = new Schema(
       ref: 'Post',
       default: [],
     },
+    highScore: {
+      type: Number,
+      default: 0,
+    },
     rankings: {
       type: Map,
       of: Number,

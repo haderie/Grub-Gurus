@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { getMetaData } from '../../../tool';
 import AnswerView from './answer';
 import AnswerHeader from './header';
-import { Comment } from '../../../types/types';
+import { Comment, PopulatedDatabaseAnswer } from '../../../types/types';
 import QuestionBody from './questionBody';
 import VoteComponent from '../voteComponent';
 import CommentSection from '../commentSection';
 import useAnswerPage from '../../../hooks/useAnswerPage';
+import { getUsers } from '../../../services/userService';
 
 /**
  * AnswerPage component that displays the full content of a question along with its answers.
@@ -16,6 +17,49 @@ import useAnswerPage from '../../../hooks/useAnswerPage';
 const AnswerPage = () => {
   const { questionID, question, handleNewComment, handleNewAnswer, handleAIAnswer } =
     useAnswerPage();
+
+  const [certifiedUsernames, setCertifiedUsernames] = useState<string[]>([]); // State to hold certified usernames
+
+  // Fetch certified users asynchronously
+  useEffect(() => {
+    const fetchCertifiedUsers = async () => {
+      const userList = await getUsers(); // Fetch users
+      const certifiedUserList = userList.filter(user => user.certified === true); // Filter for certified users
+      const certifiedUsernameList = certifiedUserList.map(u => u.username); // Get the list of certified usernames
+      setCertifiedUsernames(certifiedUsernameList); // Update state
+    };
+
+    fetchCertifiedUsers(); // Call the async function
+  }, []); // Run once when the component mounts
+
+  // Function to sort answers
+  function sortAnswersByNewestAndCertified(
+    alist: PopulatedDatabaseAnswer[],
+  ): PopulatedDatabaseAnswer[] {
+    alist.sort((a, b) => {
+      const isACertified = certifiedUsernames.includes(a.ansBy); // Check if user is certified by username
+      const isBCertified = certifiedUsernames.includes(b.ansBy);
+
+      // If one of the answers has a certified user and the other does not, put the certified answer first
+      if (isACertified && !isBCertified) {
+        return -1;
+      }
+      if (!isACertified && isBCertified) {
+        return 1;
+      }
+
+      // If both answers have the same type of user (certified or non-certified), sort based on which is newer
+      if (a.ansDateTime > b.ansDateTime) {
+        return -1;
+      }
+      if (a.ansDateTime < b.ansDateTime) {
+        return 1;
+      }
+
+      return 0;
+    });
+    return alist;
+  }
 
   if (!question) {
     return null;
@@ -27,12 +71,10 @@ const AnswerPage = () => {
       <Box>
         <VoteComponent question={question} />
       </Box>
-
       {/* Question Header Section */}
       <Box sx={{ marginBottom: 3 }}>
         <AnswerHeader ansCount={question.answers.length} title={question.title} />
       </Box>
-
       {/* Question Body Section */}
       <Box sx={{ marginBottom: 3 }}>
         <QuestionBody
@@ -43,7 +85,6 @@ const AnswerPage = () => {
           youtubeVideoUrl={question.youtubeVideoUrl}
         />
       </Box>
-
       {/* Comment Section */}
       <Box sx={{ marginBottom: 3 }}>
         <CommentSection
@@ -51,9 +92,7 @@ const AnswerPage = () => {
           handleAddComment={(comment: Comment) => handleNewComment(comment, 'question', questionID)}
         />
       </Box>
-
       <Divider sx={{ marginY: 3 }} />
-
       {/* Call to Action Section */}
       <Box sx={{ marginBottom: 3 }}>
         <Typography
@@ -95,7 +134,7 @@ const AnswerPage = () => {
 
       {/* Answer Sections */}
       <Box>
-        {question.answers.map(a => (
+        {sortAnswersByNewestAndCertified(question.answers).map(a => (
           <Box key={String(a._id)} sx={{ marginBottom: 3 }}>
             <AnswerView
               text={a.text}

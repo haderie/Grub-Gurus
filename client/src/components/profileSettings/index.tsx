@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import { FaRegUserCircle, FaUnlockAlt, FaLock } from 'react-icons/fa';
+import {
+  FaRegUserCircle,
+  FaUnlockAlt,
+  FaLock,
+  FaCrown,
+  FaHeart,
+  FaBook,
+  FaHandshake,
+} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Markdown from 'react-markdown';
 import useProfileSettings from '../../hooks/useProfileSettings';
 import useUserRecipes from '../../hooks/useUserRecipes';
 import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
-import { getUserByUsername } from '../../services/userService';
+import { updateCertifiedStatus, getUserByUsername } from '../../services/userService';
+
 import useUserContext from '../../hooks/useUserContext';
 
 const ProfileSettings: React.FC = () => {
@@ -45,9 +55,9 @@ const ProfileSettings: React.FC = () => {
     handleRatingChange,
     handleRemoveRating,
     sortedList,
-    isItem,
     recipeSaved,
     availableRatings,
+    isItem,
   } = useProfileSettings();
   const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
@@ -55,6 +65,21 @@ const ProfileSettings: React.FC = () => {
 
   const [showListPopup, setShowListPopup] = useState(false);
   const [listType, setListType] = useState<'followers' | 'following' | null>(null);
+
+  let isCertified = false;
+  let hasHeartBadge = false;
+  let hasBookBadge = false;
+  let hasSocialBadge = false;
+
+  if (userData) {
+    isCertified = userData.certified === true || userData?.postsCreated?.length >= 5;
+    if (userData.certified !== true && userData.postsCreated.length >= 5) {
+      updateCertifiedStatus(userData.username);
+    }
+    hasHeartBadge = userData?.postsCreated?.some(post => post.likes.length >= 5);
+    hasBookBadge = userData?.postsCreated?.filter(post => post.recipe).length >= 5;
+    hasSocialBadge = userData?.following?.length >= 5;
+  }
 
   const handlePostClick = async (postId: string, username: string) => {
     const user = await getUserByUsername(username);
@@ -150,8 +175,35 @@ const ProfileSettings: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
+                {isCertified && (
+                  <p className='certified-user-message'>
+                    <FaCrown style={{ color: 'gold', marginRight: '8px' }} /> Certified User
+                  </p>
+                )}
+                <div className='badges-panel'>
+                  {' '}
+                  <Markdown> **Badges:** </Markdown>
+                  {hasHeartBadge && (
+                    <div className='badge'>
+                      <FaHeart style={{ color: 'red' }} /> Heart badge: Post with 5+ likes!
+                    </div>
+                  )}
+                  {hasBookBadge && (
+                    <div className='badge'>
+                      <FaBook style={{ color: '#1E90FF' }} /> Book Badge: Saved 5 recipes!
+                    </div>
+                  )}
+                  {hasSocialBadge && (
+                    <div className='badge'>
+                      <FaHandshake style={{ color: '734F96' }} /> Social Badge: Followed 5 gurus!
+                    </div>
+                  )}
+                  {!hasHeartBadge && !hasBookBadge && !hasSocialBadge && (
+                    <div className='no-badge-label'>No badges yet</div>
+                  )}
+                </div>
                 <p className='biography'>{userData.biography || 'No biography yet.'}</p>
+                <p className='high-score-display'>High Score: {userData.highScore}</p>
                 <hr className='separator' style={{ marginTop: '30px' }} />
               </div>
             ) : (

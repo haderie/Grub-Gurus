@@ -146,6 +146,23 @@ const updateRecipeBookPrivacy = async (
 };
 
 /**
+ * Updates the user's certified status.
+ * @param username The unique username of the user
+ * @returns A promise resolving to the updated user
+ * @throws Error if the request fails
+ */
+const updateCertifiedStatus = async (username: string): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updateCertifiedStatus`, {
+    username,
+    certified: true,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error when updating certification');
+  }
+  return res.data;
+};
+
+/**
  * Follow a user by username
  * @param username - The unique username of the user
  * @param userToFollow - The username of the user to follow
@@ -215,12 +232,26 @@ const savePost = async (
 };
 
 /**
- * Updates the user's privacy settings.
- * @param username - The username of the user
- * @param privacySetting - The new privacy setting
+ * Updates the user's high score.
+ * @param username The unique username of the user
+ * @param newHighScore The new high score to set for this user
  * @returns A promise resolving to the updated user
  * @throws Error if the request fails
  */
+const updateHighScore = async (
+  username: string,
+  newHighScore: number,
+): Promise<SafePopulatedDatabaseUser> => {
+  const res = await api.patch(`${USER_API_URL}/updateHighScore`, {
+    username,
+    highScore: newHighScore,
+  });
+  if (res.status !== 200) {
+    throw new Error('Error when updating high score');
+  }
+  return res.data;
+};
+
 const updateRanking = async (
   username: string,
   postID: ObjectId,
@@ -235,7 +266,6 @@ const updateRanking = async (
   if (res.status !== 200) {
     throw new Error('Error when saving post');
   }
-
   return res.data;
 };
 
@@ -250,6 +280,8 @@ export {
   followUser,
   updatePrivacy,
   updateRecipeBookPrivacy,
+  updateCertifiedStatus,
+  updateHighScore,
   savePost,
   updateRanking,
 };

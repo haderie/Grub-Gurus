@@ -15,6 +15,7 @@ const mockUser: User = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
   rankings: [],
 };
 
@@ -28,6 +29,7 @@ const mockSafeUser: SafeDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
   rankings: [],
 };
 
@@ -41,6 +43,7 @@ const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   postsCreated: [],
+  highScore: 0,
   rankings: [],
 };
 
@@ -59,6 +62,7 @@ const mockUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  highScore: 0,
   rankings: [],
 };
 
@@ -72,6 +76,35 @@ const mockPopulatedUserJSONResponse = {
   postsCreated: [],
   privacySetting: 'Public',
   recipeBookPublic: false,
+  highScore: 0,
+  rankings: [],
+};
+
+const mockCertifiedPopulatedUserJSONResponse = {
+  _id: mockSafePopulatedUser._id.toString(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03').toISOString(),
+  certified: true,
+  followers: [],
+  following: [],
+  postsCreated: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  highScore: 0,
+  rankings: [],
+};
+
+const mockNewHighScorePopulatedUserJSONResponse = {
+  _id: mockSafePopulatedUser._id.toString(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03').toISOString(),
+  certified: false,
+  followers: [],
+  following: [],
+  postsCreated: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  highScore: 100,
   rankings: [],
 };
 
@@ -457,6 +490,145 @@ describe('Test userController', () => {
       expect(response.text).toContain(
         'Error when updating user biography: Error: Error updating user',
       );
+    });
+  });
+
+  describe('PATCH /updateCertifiedStatus', () => {
+    it('should successfully update certficiation given correct arguments', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        certified: true,
+      };
+
+      // Mock a successful updateUser call
+      updatedUserSpy.mockResolvedValueOnce({ ...mockSafePopulatedUser, certified: true });
+
+      const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockCertifiedPopulatedUserJSONResponse);
+      // Ensure updateUser is called with the correct args
+      expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
+        certified: true,
+      });
+    });
+
+    it('should return 400 for request missing username', async () => {
+      const mockReqBody = {
+        certified: true,
+      };
+
+      const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 400 for request with empty username', async () => {
+      const mockReqBody = {
+        username: '',
+        certified: true,
+      };
+
+      const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 400 for request missing certified field', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+      };
+
+      const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 500 if updateUser returns an error', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        certified: true,
+      };
+
+      // Simulate a DB error
+      updatedUserSpy.mockResolvedValueOnce({ error: 'Error updating user' });
+
+      const response = await supertest(app).patch('/user/updateCertifiedStatus').send(mockReqBody);
+
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe('PATCH /updateHighScore', () => {
+    it('should successfully update high score given correct arguments', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        highScore: 100,
+      };
+
+      // Mock a successful updateUser call
+      updatedUserSpy.mockResolvedValueOnce({ ...mockSafePopulatedUser, highScore: 100 });
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockNewHighScorePopulatedUserJSONResponse);
+      // Ensure updateUser is called with the correct args
+      expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
+        highScore: 100,
+      });
+    });
+
+    it('should return 400 for request missing username', async () => {
+      const mockReqBody = {
+        highScore: 100,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 400 for request with empty username', async () => {
+      const mockReqBody = {
+        username: '',
+        highScore: 100,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 400 for request missing high score field', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+      };
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(400);
+      expect(response.text).toEqual('Invalid request');
+    });
+
+    it('should return 500 if updateUser returns an error', async () => {
+      const mockReqBody = {
+        username: mockUser.username,
+        highScore: 100,
+      };
+
+      // Simulate a DB error by returning an object with an error property
+      updatedUserSpy.mockResolvedValueOnce({ error: 'Error updating user' });
+
+      const response = await supertest(app).patch('/user/updateHighScore').send(mockReqBody);
+
+      expect(response.status).toBe(500);
+      expect(response.text).toContain('Error when updating user high score');
     });
   });
 

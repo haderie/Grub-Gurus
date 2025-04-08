@@ -20,4 +20,14 @@ const addAnswer = async (qid: string, ans: Answer): Promise<PopulatedDatabaseAns
   return res.data;
 };
 
+// const certifyAnswer = async (username: string): Promise<PopulatedDatabaseAnswer> => {
+//   const data = { username };
+
+//   const res = await api.patch(`${ANSWER_API_URL}/certifyAnswer`, data);
+//   if (res.status !== 200) {
+//     throw new Error('Error while creating a new answer');
+//   }
+//   return res.data;
+// };
+
 export default addAnswer;

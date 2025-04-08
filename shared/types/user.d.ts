@@ -33,6 +33,7 @@ export interface User extends UserCredentials {
   privacySetting: 'Public' | 'Private';
   recipeBookPublic: boolean;
   postsCreated: Posts[];
+  highScore: number;
   rankings: Map;
 }
 
@@ -73,6 +74,7 @@ export interface UserRequest extends Request {
     privacySetting: 'Public' | 'Private';
     recipeBookPublic: boolean;
     postsCreated: Posts[];
+    highScore: number;
     rankings: Map;
   };
 }
@@ -135,6 +137,30 @@ export interface UpdateRecipeBookPrivacy extends Request {
   body: {
     username: string;
     recipeBookPublic: boolean;
+  };
+}
+
+/**
+ * Express request for updating a user's certification status.
+ * - `username`: The username whose certification status is being updated (body).
+ * - `certified`: The new certification status.
+ */
+export interface UpdateCertification extends Request {
+  body: {
+    username: string;
+    certified: boolean;
+  };
+}
+
+/**
+ * Express request for updating a user's high score.
+ * - `username`: The username whose high score is being updated (body).
+ * - `highScore`: The new high score.
+ */
+export interface UpdateHighScore extends Request {
+  body: {
+    username: string;
+    highScore: number;
   };
 }
 

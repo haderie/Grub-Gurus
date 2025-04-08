@@ -11,6 +11,8 @@ import {
   UpdateRecipeBookPrivacy,
   SafePopulatedDatabaseUser,
   UpdatePosts,
+  UpdateCertification,
+  UpdateHighScore,
 } from '../types/types';
 import {
   deleteUserByUsername,
@@ -86,6 +88,7 @@ const userController = (socket: FakeSOSocket) => {
       privacySetting: 'Public',
       certified: requestUser.certified ?? false,
       recipeBookPublic: requestUser.recipeBookPublic ?? false,
+      highScore: requestUser.highScore,
       rankings: requestUser.rankings,
     };
 
@@ -296,6 +299,80 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
+  const isCertificationInputValid = (req: UpdateCertification): boolean =>
+    !!req.body.certified && !!req.body.username && req.body.username !== '';
+
+  /**
+   * Updates a user's certification status.
+   * @param req The request containing the username and certified status boolean in the body.
+   * @param res The response, either confirming the update or returning an error.
+   * @returns A promise resolving to void.
+   */
+  const updateCertifiedStatus = async (req: UpdateCertification, res: Response): Promise<void> => {
+    if (!isCertificationInputValid(req)) {
+      res.status(400).send('Invalid request');
+      return;
+    }
+    try {
+      // Validate that request has username and certification status
+      const { username, certified } = req.body;
+
+      // Call the same updateUser(...) service used by resetPassword
+      const updatedUser = await updateUser(username, { certified });
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      // Emit socket event for real-time updates
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when updating user certification status: ${error}`);
+    }
+  };
+
+  const isHighScoreInputValid = (req: UpdateHighScore): boolean =>
+    !!req.body.highScore && !!req.body.username && req.body.username !== '';
+
+  /**
+   * Updates a user's high score.
+   * @param req The request containing the username and certified status boolean in the body.
+   * @param res The response, either confirming the update or returning an error.
+   * @returns A promise resolving to void.
+   */
+  const updateHighScore = async (req: UpdateHighScore, res: Response): Promise<void> => {
+    if (!isHighScoreInputValid(req)) {
+      res.status(400).send('Invalid request');
+      return;
+    }
+    try {
+      // Validate that request has username and certification status
+      const { username, highScore } = req.body;
+
+      // Call the same updateUser(...) service used by resetPassword
+      const updatedUser = await updateUser(username, { highScore });
+
+      if ('error' in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
+
+      // Emit socket event for real-time updates
+      socket.emit('userUpdate', {
+        user: updatedUser,
+        type: 'updated',
+      });
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).send(`Error when updating user high score: ${error}`);
+    }
+  };
+
   /**
    * Updates a user's following list.
    * @param req The request containing the current user and new user to follow
@@ -323,11 +400,6 @@ const userController = (socket: FakeSOSocket) => {
       if ('error' in updatedUser) {
         throw new Error(updatedUser.error);
       }
-
-      // socket.emit('userUpdate', {
-      //   user: updatedUser,
-      //   type: 'updated',
-      // });
 
       res.status(200).json(updatedUser);
     } catch (error) {
@@ -505,6 +577,8 @@ const userController = (socket: FakeSOSocket) => {
   router.delete('/deleteUser/:username', deleteUser);
   router.patch('/updateBiography', updateBiography);
   router.patch('/updateRecipeBookPrivacy', updateRecipeBookPrivacy);
+  router.patch('/updateCertifiedStatus', updateCertifiedStatus);
+  router.patch('/updateHighScore', updateHighScore);
   router.patch('/followUser', updateFollowingList);
   router.patch('/updatePrivacy', updatePrivacy);
   router.patch('/savePost', savePosts);
