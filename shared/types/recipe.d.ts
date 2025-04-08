@@ -16,6 +16,7 @@ import { DatabaseUser } from './user';
  * - `cookTime`: The estimated cooking time in minutes.
  * - `addedToCalendar`: A boolean indicating whether the recipe has been added to a calendar.
  */
+
 export interface Recipe {
   user: User;
   title: string;

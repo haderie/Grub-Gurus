@@ -32,9 +32,6 @@ describe('Recipe model', () => {
         cookTime: 20,
         addedToCalendar: false,
         video: '',
-        color: '',
-        start: new Date(),
-        end: new Date(),
       };
 
       const result = (await createRecipe(recipe)) as DatabaseRecipe;
@@ -64,9 +61,6 @@ describe('Recipe model', () => {
         cookTime: 20,
         addedToCalendar: false,
         video: '',
-        color: '',
-        start: new Date(),
-        end: new Date(),
       };
 
       const saveError = await createRecipe(recipe);
@@ -81,7 +75,7 @@ describe('Recipe model', () => {
       mockingoose(RecipeModel).toReturn([sampleRecipe], 'find');
 
       const result = await getRecipesByUsername(user.username);
-      expect(result).toEqual([sampleRecipe]);
+      expect(result).toEqual([{ ...sampleRecipe, color: '#ff0000', start: null, end: null }]);
     });
 
     test('should return error if user not found', async () => {
@@ -104,7 +98,7 @@ describe('Recipe model', () => {
       mockingoose(RecipeModel).toReturn(sampleRecipe, 'findOne');
 
       const result = await getRecipeByID(sampleRecipe._id.toString());
-      expect(result).toEqual(sampleRecipe);
+      expect(result).toEqual({ ...sampleRecipe, color: '#ff0000', start: null, end: null });
     });
 
     test('should return error if recipe not found', async () => {
@@ -159,13 +153,11 @@ describe('Recipe model', () => {
         user,
         tags: [],
         title: 'Pesto Pasta',
-        views: [],
         privacyPublic: true,
         ingredients: ['pasta, pesto, parmesean, olive oil'],
         description: 'a delicious dish',
         instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
         cookTime: 20,
-        numOfLikes: 0,
         addedToCalendar: false,
         start: new Date(),
         end: new Date(),
