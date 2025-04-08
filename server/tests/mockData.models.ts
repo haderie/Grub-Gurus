@@ -244,7 +244,7 @@ export const safeUserFollowed: SafeDatabaseUser = {
 
 export const sampleRecipe: DatabaseRecipe = {
   _id: new ObjectId(),
-  user,
+  user: safeUser._id,
   tags: [],
   title: 'Pesto Pasta',
   privacyPublic: true,
@@ -253,8 +253,10 @@ export const sampleRecipe: DatabaseRecipe = {
   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
   cookTime: 20,
   addedToCalendar: false,
-  numOfLikes: 0,
-  views: [],
+  video: '',
+  color: '',
+  start: new Date(),
+  end: new Date(),
 };
 
 export const samplePost: DatabasePost = {
