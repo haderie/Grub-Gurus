@@ -75,7 +75,7 @@ export interface UserRequest extends Request {
     recipeBookPublic: boolean;
     postsCreated: Posts[];
     highScore: number;
-    rankings: Map;
+    rankings: object;
   };
 }
 

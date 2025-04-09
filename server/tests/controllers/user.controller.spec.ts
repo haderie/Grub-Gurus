@@ -2,7 +2,12 @@ import supertest from 'supertest';
 import mongoose from 'mongoose';
 import { app } from '../../app';
 import * as util from '../../services/user.service';
-import { SafeDatabaseUser, SafePopulatedDatabaseUser, User } from '../../types/types';
+import {
+  PopulatedDatabasePost,
+  SafeDatabaseUser,
+  SafePopulatedDatabaseUser,
+  User,
+} from '../../types/types';
 import PostModel from '../../models/posts.model';
 
 const mockUser: User = {
@@ -746,7 +751,7 @@ describe('Test userController', () => {
 
       const response = await supertest(app).patch('/user/updatePrivacy').send({
         username: mockUser.username,
-        privacySetting: 'Private',
+        privacySetting: 'Public',
       });
 
       expect(response.status).toBe(500);
@@ -827,21 +832,45 @@ describe('Test userController', () => {
       expect(response.body).toEqual({ message: 'Post saved successfully.' });
     });
 
-    // it('should successfully remove a post', async () => {
-    //   getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
-    //   updatedUserSpy.mockResolvedValueOnce(mockSafePopulatedUser);
-    //   jest.spyOn(PostModel, 'findById').mockResolvedValue(mockPost);
-    //   jest.spyOn(PostModel, 'findOneAndUpdate').mockResolvedValue(mockPost);
+    it('should successfully remove a post', async () => {
+      const mockPost1 = {
+        _id: mockPostID,
+        username: 'user1',
+        recipe: new mongoose.Types.ObjectId(),
+        text: 'Test post',
+        datePosted: new Date(),
+        likes: [],
+        saves: ['user1'],
+      };
 
-    //   const response = await supertest(app).patch('/user/savePost').send({
-    //     username: 'user1',
-    //     postID: mockPostID.toString(),
-    //     action: 'remove',
-    //   });
+      const mockPostUser: SafePopulatedDatabaseUser = {
+        _id: new mongoose.Types.ObjectId(),
+        username: 'user1',
+        dateJoined: new Date('2024-12-03'),
+        certified: false,
+        followers: [],
+        following: [],
+        privacySetting: 'Public',
+        recipeBookPublic: false,
+        postsCreated: [mockPost1],
+        highScore: 0,
+        rankings: {},
+      };
 
-    //   expect(response.status).toBe(200);
-    //   expect(response.body).toEqual({ message: 'Post saved successfully.' });
-    // });
+      getUserByUsernameSpy.mockResolvedValueOnce(mockPostUser);
+      updatedUserSpy.mockResolvedValueOnce(mockPostUser);
+      jest.spyOn(PostModel, 'findById').mockResolvedValue(mockPost1);
+      jest.spyOn(PostModel, 'findOneAndUpdate').mockResolvedValue(mockPost1);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'remove',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: 'Post removed successfully.' });
+    });
 
     it('should return 400 for invalid action', async () => {
       getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
@@ -888,106 +917,196 @@ describe('Test userController', () => {
       expect(response.status).toBe(500);
       expect(response.text).toContain('Error when saving or removing post');
     });
-  });
-});
 
-describe('POST /rank-recipe', () => {
-  it('should successfully update ranking when ranking is non-zero', async () => {
-    getUserByUsernameSpy.mockResolvedValueOnce({
-      ...mockSafePopulatedUser,
-      rankings: new Map([['recipe123', 2]]),
+    it('should return 404 if the user is not found', async () => {
+      // Mock getUserByUsername to return null (simulating user not found)
+
+      getUserByUsernameSpy.mockResolvedValueOnce({ error: 'User not found' });
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'userNotFound',
+        postID: 'post123',
+        action: 'save',
+      });
+
+      expect(response.status).toBe(404);
+      expect(response.text).toBe('User not found');
     });
 
-    updateRecipeRankingSpy.mockResolvedValueOnce({
-      ...mockSafeUser,
-      rankings: { recipe123: 3 },
+    it('should return 404 if the post is not found', async () => {
+      // Mock getUserByUsername to return null (simulating user not found)
+
+      getUserByUsernameSpy.mockResolvedValueOnce(mockSafePopulatedUser);
+      findByIdSpy.mockResolvedValueOnce(null);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'userNotFound',
+        postID: 'post123',
+        action: 'save',
+      });
+
+      expect(response.status).toBe(404);
+      expect(response.text).toBe('Post not found');
     });
 
-    const response = await supertest(app).post('/user/rank-recipe').send({
-      username: mockUser.username,
-      postID: 'recipe123',
-      ranking: 3,
+    it('should adjust rankings when a post is removed and rankings need to be shifted', async () => {
+      const mockPostID2 = new mongoose.Types.ObjectId();
+
+      const mockPost1: PopulatedDatabasePost = {
+        _id: mockPostID,
+        username: 'post1',
+        recipe: new mongoose.Types.ObjectId(),
+        text: 'Test post',
+        datePosted: new Date(),
+        likes: [],
+        saves: ['user1'],
+      };
+
+      const mockPost2: PopulatedDatabasePost = {
+        _id: mockPostID2,
+        username: 'post2',
+        recipe: new mongoose.Types.ObjectId(),
+        text: 'Test post',
+        datePosted: new Date(),
+        likes: [],
+        saves: ['user1'],
+      };
+
+      const mockPostUser: SafePopulatedDatabaseUser = {
+        _id: new mongoose.Types.ObjectId(),
+        username: 'user1',
+        dateJoined: new Date('2024-12-03'),
+        certified: false,
+        followers: [],
+        following: [],
+        privacySetting: 'Public',
+        recipeBookPublic: false,
+        postsCreated: [mockPost1, mockPost2], // Corrected this to use post IDs
+        highScore: 0,
+        rankings: {
+          [mockPostID.toString()]: 1,
+          [mockPostID2.toString()]: 2,
+        },
+      };
+
+      getUserByUsernameSpy.mockResolvedValueOnce(mockPostUser);
+      updatedUserSpy.mockResolvedValueOnce(mockPostUser);
+      jest.spyOn(PostModel, 'findById').mockResolvedValue(mockPost1);
+      jest.spyOn(PostModel, 'findOneAndUpdate').mockResolvedValue(mockPost1);
+
+      const response = await supertest(app).patch('/user/savePost').send({
+        username: 'user1',
+        postID: mockPostID.toString(),
+        action: 'remove',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: 'Post removed successfully.' });
     });
-
-    expect(response.status).toBe(200);
-    expect(response.body.rankings.recipe123).toBe(3);
-    expect(updateRecipeRankingSpy).toHaveBeenCalledWith(mockUser.username, 'recipe123', 3);
-  });
-
-  it('should remove ranking and adjust others if ranking is 0', async () => {
-    const rankingsMap = new Map([
-      ['recipe123', 2],
-      ['recipe456', 3],
-    ]);
-
-    getUserByUsernameSpy.mockResolvedValueOnce({
-      ...mockSafePopulatedUser,
-      rankings: rankingsMap,
-    });
-
-    updateRecipeRankingSpy.mockResolvedValueOnce({
-      ...mockSafeUser,
-    });
-
-    updatedUserSpy.mockResolvedValueOnce({
-      ...mockSafePopulatedUser,
-      rankings: {
-        recipe456: 2, // adjusted from 3 to 2
-      },
-    });
-
-    const response = await supertest(app).post('/user/rank-recipe').send({
-      username: mockUser.username,
-      postID: 'recipe123',
-      ranking: 0,
-    });
-
-    expect(response.status).toBe(200);
-    expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
-      rankings: {
-        recipe456: 2,
-      },
-    });
-  });
-
-  it('should return 400 if required fields are missing', async () => {
-    const response = await supertest(app).post('/user/rank-recipe').send({
-      username: mockUser.username,
-      ranking: 2,
-    });
-
-    expect(response.status).toBe(400);
-    expect(response.text).toMatch(/Missing required fields/);
-  });
-
-  it('should return 400 if updateRecipeRanking returns an error', async () => {
-    getUserByUsernameSpy.mockResolvedValueOnce({
-      ...mockSafePopulatedUser,
-      rankings: new Map(),
-    });
-
-    updateRecipeRankingSpy.mockResolvedValueOnce({ error: 'Invalid ranking' });
-
-    const response = await supertest(app).post('/user/rank-recipe').send({
-      username: mockUser.username,
-      postID: 'recipe123',
-      ranking: 5,
-    });
-
-    expect(response.status).toBe(400);
-    expect(response.text).toMatch(/Invalid ranking/);
   });
 
-  it('should return 500 on unexpected server error', async () => {
-    getUserByUsernameSpy.mockRejectedValueOnce(new Error('DB down'));
+  describe('POST /rank-recipe', () => {
+    it('should successfully update ranking when ranking is non-zero', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        rankings: new Map([['recipe123', 2]]),
+      });
 
-    const response = await supertest(app).post('/user/rank-recipe').send({
-      username: mockUser.username,
-      postID: 'recipe123',
-      ranking: 1,
+      updateRecipeRankingSpy.mockResolvedValueOnce({
+        ...mockSafeUser,
+        rankings: { recipe123: 3 },
+      });
+
+      const response = await supertest(app).post('/user/rank-recipe').send({
+        username: mockUser.username,
+        postID: 'recipe123',
+        ranking: 3,
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.rankings.recipe123).toBe(3);
+      expect(updateRecipeRankingSpy).toHaveBeenCalledWith(mockUser.username, 'recipe123', 3);
+    });
+    it('should remove ranking and adjust others if ranking is 0', async () => {
+      // Use an object for rankings instead of a Map
+      const rankings = {
+        recipe123: 2,
+        recipe456: 3,
+      };
+
+      // Mock the user data with object-based rankings
+      getUserByUsernameSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        rankings,
+      });
+
+      updateRecipeRankingSpy.mockResolvedValueOnce({
+        ...mockSafeUser,
+      });
+
+      // Mock the updated user with adjusted rankings
+      updatedUserSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        rankings: {
+          recipe456: 2, // adjusted from 3 to 2
+        },
+      });
+
+      // Send the request with postID 'recipe123' and ranking 0
+      const response = await supertest(app).post('/user/rank-recipe').send({
+        username: mockUser.username,
+        postID: 'recipe123',
+        ranking: 0,
+      });
+
+      // Assertions
+      expect(response.status).toBe(200);
+      expect(updatedUserSpy).toHaveBeenCalledWith(mockUser.username, {
+        rankings: {
+          recipe456: 2, // We expect this to be adjusted after 'recipe123' is removed
+        },
+      });
     });
 
-    expect(response.status).toBe(500);
-    expect(response.text).toMatch(/Error ranking recipe: Error: DB down/);
+    it('should return 400 if required fields are missing', async () => {
+      const response = await supertest(app).post('/user/rank-recipe').send({
+        username: mockUser.username,
+        ranking: 2,
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toMatch(/Missing required fields/);
+    });
+
+    it('should return 400 if updateRecipeRanking returns an error', async () => {
+      getUserByUsernameSpy.mockResolvedValueOnce({
+        ...mockSafePopulatedUser,
+        rankings: new Map(),
+      });
+
+      updateRecipeRankingSpy.mockResolvedValueOnce({ error: 'Invalid ranking' });
+
+      const response = await supertest(app).post('/user/rank-recipe').send({
+        username: mockUser.username,
+        postID: 'recipe123',
+        ranking: 5,
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.text).toMatch(/Invalid ranking/);
+    });
+
+    it('should return 500 on unexpected server error', async () => {
+      getUserByUsernameSpy.mockRejectedValueOnce(new Error('DB down'));
+
+      const response = await supertest(app).post('/user/rank-recipe').send({
+        username: mockUser.username,
+        postID: 'recipe123',
+        ranking: 1,
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.text).toMatch(/Error ranking recipe: Error: DB down/);
+    });
   });
 });
