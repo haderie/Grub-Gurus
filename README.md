@@ -3,7 +3,28 @@ The individual and team project for this class are designed to mirror the experi
 
 ## Getting Started
 
-Run `npm install` in the root directory to install all dependencies for the `client`, `server`, and `shared` folders.
+Environment Variables (.env): 
+Server
+	REACT_APP_SERVER_URL = http://localhost:8000
+	REACT_APP_API_KEY = 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
+Client
+	MONGODB_URI = mongodb://127.0.0.1:27017
+	CLIENT_URL =  http://localhost:3000
+	PORT = 8000
+
+Setup Commands:
+Pull or fork from the Github repo located at: https://github.com/neu-cs4530/spring25-team-project-spring25-project-group-206.git 
+
+Once on your local computer:
+Add .env files to both the _client_ and _server_ directories (information above).
+
+Run from terminal:	
+`npm install` in the root directory to install all dependencies for the `client`, `server`, and `shared` folders.
+`npm run start`, in both the _client_ and _server_ directories
+
+Deployed website URL: 
+https://cs4530-s25-206.onrender.com 
+
 
 { : .note } Refer to [IP1](https://neu-se.github.io/CS4530-Spring-2025/assignments/ip1) and [IP2](https://neu-se.github.io/CS4530-Spring-2025/assignments/ip2) for further instructions related to setting up MongoDB, setting environment variables, and running the client and server.
 
