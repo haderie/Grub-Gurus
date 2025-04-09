@@ -182,6 +182,9 @@ const ProfileSettings: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                <p className='biography'>{userData.biography || 'No biography yet.'}</p>
+                <hr className='separator' style={{ marginTop: '30px' }} />
+
                 {isCertified && (
                   <p className='certified-user-message'>
                     <FaCrown style={{ color: 'gold', marginRight: '8px' }} /> Certified User
@@ -209,7 +212,6 @@ const ProfileSettings: React.FC = () => {
                     <div className='no-badge-label'>No badges yet</div>
                   )}
                 </div>
-                <p className='biography'>{userData.biography || 'No biography yet.'}</p>
                 <p className='high-score-display'>High Score: {userData.highScore}</p>
                 <hr className='separator' style={{ marginTop: '30px' }} />
               </div>

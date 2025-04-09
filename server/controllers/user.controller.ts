@@ -450,9 +450,9 @@ const userController = (socket: FakeSOSocket) => {
       const { username, postID, action } = req.body; // Assuming `action` is either 'save' or 'remove'
 
       // Fetch the user
-      const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
+      const user = await getUserByUsername(username);
 
-      if (!user) {
+      if ('error' in user) {
         res.status(404).send('User not found');
         return;
       }
@@ -468,8 +468,13 @@ const userController = (socket: FakeSOSocket) => {
       if (action === 'save') {
         // Add post to the user's postsCreated if they are saving
         const updatedPosts = [...user.postsCreated, postID];
-        await updateUser(username, {
+        const updatedUser = await updateUser(username, {
           postsCreated: updatedPosts,
+        });
+
+        socket.emit('userUpdate', {
+          user: updatedUser,
+          type: 'updated',
         });
 
         // Add the user to the post's saves list
@@ -480,31 +485,30 @@ const userController = (socket: FakeSOSocket) => {
         );
       } else if (action === 'remove') {
         // Remove post from the user's postsCreated if they are removing
-        // Remove post from the user's postsCreated if they are removing
         const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
 
         // Remove the ranking associated with the deleted post
-        const removedRank = user.rankings.get(postID.toString());
-        const updatedRankings = user.rankings;
-        updatedRankings.delete(postID.toString());
-        // delete user.rankings[postID.toString()];
+        const rankings = user.rankings as { [key: string]: number };
+        const removedRank = rankings[postID.toString()];
+        delete rankings[postID.toString()];
 
-        for (const [id, rank] of updatedRankings.entries()) {
-          if (rank > removedRank) {
-            updatedRankings.set(id, rank - 1);
+        if (removedRank !== undefined) {
+          for (const id in rankings) {
+            if (rankings[id] > removedRank) {
+              rankings[id] -= 1;
+            }
           }
         }
 
-        // Update user document with new posts and adjusted rankings
-        await updateUser(username, {
+        const updatedUser = await updateUser(username, {
           postsCreated: updatedPosts,
-          rankings: Object.fromEntries(updatedRankings),
+          rankings,
         });
 
-        // // Update user document with new posts and adjusted rankings
-        // await updateUser(username, {
-        //   rankings: Object.fromEntries(updatedRankings),
-        // });
+        socket.emit('userUpdate', {
+          user: updatedUser,
+          type: 'updated',
+        });
 
         // Remove the user from the post's saves list
         await PostModel.findOneAndUpdate(
@@ -537,22 +541,24 @@ const userController = (socket: FakeSOSocket) => {
         return;
       }
       const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
-      const updatedRankings = user.rankings;
 
-      const oldRanking = updatedRankings.get(postID.toString()); // or wherever you're getting the rank
-      updatedRankings.delete(postID.toString()); // or set to 0 if you prefer
+      const rankings = user.rankings as { [key: string]: number };
+      const oldRanking = rankings[postID.toString()]; // or wherever you're getting the rank
+      delete rankings[postID.toString()]; // or set to 0 if you prefer
 
       const updatedUser = await updateRecipeRanking(username, postID, ranking);
 
       if (ranking === 0) {
-        for (const [id, rank] of updatedRankings.entries()) {
-          if (rank > oldRanking) {
-            updatedRankings.set(id, rank - 1);
+        // Loop through the object and adjust the ranks
+        for (const id in rankings) {
+          if (rankings[id] > oldRanking) {
+            rankings[id] -= 1; // Decrease rank by 1
           }
         }
+
         // Update user document with new posts and adjusted rankings
         const updatedRankUser = await updateUser(username, {
-          rankings: Object.fromEntries(updatedRankings),
+          rankings,
         });
         res.status(200).json(updatedRankUser);
         return;

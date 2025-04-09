@@ -2,7 +2,16 @@ import mongoose from 'mongoose';
 import supertest from 'supertest';
 import { app } from '../../app';
 import * as util from '../../services/recipe.service';
-import { DatabaseRecipe, Recipe, User, RecipeCalendarEvent } from '../../types/types';
+import * as databaseUtil from '../../utils/database.util';
+
+import {
+  DatabaseRecipe,
+  Recipe,
+  User,
+  RecipeCalendarEvent,
+  PopulatedDatabaseRecipe,
+  SafePopulatedDatabaseUser,
+} from '../../types/types';
 
 const mockUser: User = {
   username: 'user1',
@@ -15,24 +24,38 @@ const mockUser: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockUserId = new mongoose.Types.ObjectId();
 
-// const recipePost: DatabaseRecipe = {
-//   _id: new mongoose.Types.ObjectId(),
-//   user: mockUserId,
-//   tags: [],
-//   title: 'Pesto Pasta',
-//   privacyPublic: true,
-//   ingredients: ['pasta, pesto, parmesean, olive oil'],
-//   description: 'a delicious dish',
-//   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
-//   cookTime: 20,
-//   addedToCalendar: false,
-//   video: '',
-// };
+const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
+  _id: new mongoose.Types.ObjectId(),
+  username: 'user1',
+  dateJoined: new Date('2024-12-03'),
+  certified: false,
+  followers: [],
+  following: [],
+  privacySetting: 'Public',
+  recipeBookPublic: false,
+  postsCreated: [],
+  highScore: 0,
+  rankings: {},
+};
+
+const recipePost: PopulatedDatabaseRecipe = {
+  _id: new mongoose.Types.ObjectId(),
+  user: mockSafePopulatedUser,
+  tags: [],
+  title: 'Pesto Pasta',
+  privacyPublic: true,
+  ingredients: ['pasta, pesto, parmesean, olive oil'],
+  description: 'a delicious dish',
+  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+  cookTime: 20,
+  addedToCalendar: false,
+  video: '',
+};
 
 const calendarRecipeDataBase: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),
@@ -79,16 +102,50 @@ const calendarRecipe: RecipeCalendarEvent = {
 const createRecipeSpy = jest.spyOn(util, 'createRecipe');
 const createCalendarRecipeSpy = jest.spyOn(util, 'createCalendarRecipe');
 const updateRecipeSpy = jest.spyOn(util, 'updateRecipeToCalendarRecipe');
+const getRecipesByUsername = jest.spyOn(util, 'getRecipesByUsername');
 
 describe('Test recipeController', () => {
-  describe('POST /addRecipe', () => {
-    // test('should add a recipe successfully', async () => {
-    //   createRecipeSpy.mockResolvedValue(recipePost);
+  describe('GET /recipe/getRecipes/:username', () => {
+    it('should return 200 and list of recipes for a valid username', async () => {
+      // Mock a valid response for getRecipesByUsername
 
-    //   const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
-    //   expect(response.status).toBe(200);
-    //   expect(response.body.title).toEqual('Pesto Pasta');
-    // });
+      getRecipesByUsername.mockResolvedValueOnce([recipePost]);
+
+      // Make the request to fetch recipes for the user
+      const response = await supertest(app).get('/recipe/getRecipes/user1');
+
+      expect(response.status).toBe(200);
+      // expect(response.body).toEqual([recipePost]); // Should match the mock response
+    });
+
+    it('should return 500 if there is an error fetching recipes', async () => {
+      // Mock an error for getRecipesByUsername
+      getRecipesByUsername.mockRejectedValueOnce({ error: 'Error fetching recipe' });
+
+      // Make the request to fetch recipes for the user
+      const response = await supertest(app).get('/recipe/getRecipes/user1');
+
+      expect(response.status).toBe(500);
+    });
+  });
+
+  describe('POST /addRecipe', () => {
+    test('should add a recipe successfully', async () => {
+      jest.spyOn(util, 'createRecipe').mockResolvedValueOnce(calendarRecipeDataBase);
+      jest.spyOn(databaseUtil, 'populateDocument').mockResolvedValueOnce(recipePost);
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
+      expect(response.status).toBe(200);
+      expect(response.body.title).toEqual('Pesto Pasta');
+    });
+    test('should return 500 if error occurs in addRecipe while saving recipe', async () => {
+      jest
+        .spyOn(databaseUtil, 'populateDocument')
+        .mockResolvedValueOnce({ error: 'Error while populating' });
+
+      const response = await supertest(app).post('/recipe/addRecipe').send(recipe);
+      expect(response.status).toBe(500);
+    });
 
     test('should return 400 if recipe body is invalid', async () => {
       const mockInvalidRecipe = {

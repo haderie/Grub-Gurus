@@ -1,4 +1,4 @@
-import { GameMove, GuessMove } from '@fake-stack-overflow/shared';
+import { GameMove, GuessMove } from '../../../types/types';
 import GuessTheIngredientGame from '../../../services/games/guess';
 
 describe('GuessTheIngredientGame', () => {

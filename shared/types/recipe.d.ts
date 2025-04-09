@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { Request } from 'express';
 import { DatabaseTag, Tag } from './tag';
-import { DatabaseUser } from './user';
+import { SafePopulatedDatabaseUser } from './user';
 
 /**
  * Represents a recipe.
@@ -86,9 +86,15 @@ export interface DatabaseRecipe extends Omit<Recipe, 'user' | 'tags'> {
  * - `tags`: An array of populated `DatabaseTag` objects associated with the recipe.
  */
 export interface PopulatedDatabaseRecipe extends Omit<DatabaseRecipe, 'user' | 'tags'> {
-  user: DatabaseUser;
+  user: SafePopulatedDatabaseUser;
   tags: DatabaseTag[];
 }
+
+/**
+ * Represents a possible response when fetching recipe data.
+ * - Either a `DatabaseRecipe` object or an error message.
+ */
+export type PopulatedDatabaseRecipesResponse = PopulatedDatabaseRecipe[] | { error: string };
 
 /**
  * Represents the request body for adding a new recipe.

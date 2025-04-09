@@ -65,8 +65,7 @@ const userSchema: Schema = new Schema(
       default: 0,
     },
     rankings: {
-      type: Map,
-      of: Number,
+      type: Object,
       default: {},
     },
   },
