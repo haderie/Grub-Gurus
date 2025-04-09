@@ -209,7 +209,7 @@ describe('User model', () => {
       recipeBookPublic: false,
       postsCreated: [],
       highScore: 0,
-      rankings: [],
+      rankings: {},
     };
 
     const updates: Partial<User> = {
@@ -525,7 +525,8 @@ describe('User model', () => {
       const result = await updateRecipeRanking(mockUser.username, postID, ranking);
 
       if ('username' in result) {
-        expect(result.rankings[postID.toString()]).toBe(ranking);
+        const rank = result.rankings as { [key: string]: number };
+        expect(rank[postID.toString()]).toBe(ranking);
       } else {
         throw new Error('Expected a user object but got an error.');
       }

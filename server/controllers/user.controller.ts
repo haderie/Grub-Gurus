@@ -488,7 +488,7 @@ const userController = (socket: FakeSOSocket) => {
         const updatedPosts = user.postsCreated.filter(p => p._id.toString() !== postID.toString());
 
         // Remove the ranking associated with the deleted post
-        const { rankings } = user;
+        const rankings = user.rankings as { [key: string]: number };
         const removedRank = rankings[postID.toString()];
         delete rankings[postID.toString()];
 
@@ -542,7 +542,7 @@ const userController = (socket: FakeSOSocket) => {
       }
       const user = (await getUserByUsername(username)) as SafePopulatedDatabaseUser;
 
-      const { rankings } = user;
+      const rankings = user.rankings as { [key: string]: number };
       const oldRanking = rankings[postID.toString()]; // or wherever you're getting the rank
       delete rankings[postID.toString()]; // or set to 0 if you prefer
 

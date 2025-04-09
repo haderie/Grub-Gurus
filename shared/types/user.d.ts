@@ -34,7 +34,7 @@ export interface User extends UserCredentials {
   recipeBookPublic: boolean;
   postsCreated: Posts[];
   highScore: number;
-  rankings: Map;
+  rankings: { [key: string]: number };
 }
 
 /**
@@ -75,7 +75,7 @@ export interface UserRequest extends Request {
     recipeBookPublic: boolean;
     postsCreated: Posts[];
     highScore: number;
-    rankings: object;
+    rankings: { [key: string]: number };
   };
 }
 

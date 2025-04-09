@@ -73,7 +73,9 @@ const useProfileSettings = () => {
     setSelectedOption(event.target.value as 'recipes' | 'posts');
   };
 
-  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
+  const [userRankings, setUserRankings] = useState<{ [key: string]: number }>(
+    (userData?.rankings as { [key: string]: number }) || {},
+  );
   const [availableRankings, setAvailableRankings] = useState<number[]>([]);
   const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set(Object.values({})));
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
@@ -88,7 +90,7 @@ const useProfileSettings = () => {
         const data = await getUserByUsername(username);
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
-        setUserRankings(data.rankings);
+        setUserRankings((data.rankings as { [key: string]: number }) || {});
         setUsedRankings(new Set(Object.values(data.rankings || {})));
         setIsRecipePublic(data.recipeBookPublic);
       } catch (error) {
@@ -130,7 +132,8 @@ const useProfileSettings = () => {
       selectedList = [];
       break;
   }
-
+  console.log(userRankings);
+  console.log(userData);
   const sortedList: SortedItem[] =
     selectedOption === 'posts'
       ? selectedList
@@ -159,7 +162,7 @@ const useProfileSettings = () => {
 
       // Re-fetch updated user
       const updatedUser = await getUserByUsername(username);
-      setUserRankings(userData?.rankings);
+      setUserRankings(userData?.rankings as { [key: string]: number });
       await new Promise(resolve => {
         setUserData(updatedUser);
         resolve(null);
@@ -184,13 +187,12 @@ const useProfileSettings = () => {
       await updateRanking(username, id, 0);
       const updatedUser = await getUserByUsername(username);
 
-      setUserRankings(updatedUser.rankings);
-      setUsedRankings(new Set(Object.values(updatedUser.rankings || {})));
-
       await new Promise(resolve => {
         setUserData(updatedUser);
         resolve(null);
       });
+      setUserRankings(updatedUser.rankings as { [key: string]: number });
+      setUsedRankings(new Set(Object.values(updatedUser.rankings || {})));
     }
   };
   /**

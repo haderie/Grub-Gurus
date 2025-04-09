@@ -73,6 +73,7 @@ export const getUserByUsername = async (username: string): Promise<UserPopulated
           },
         },
       ]);
+
     if (!user) {
       throw Error('User not found');
     }

@@ -21,7 +21,7 @@ const mockUser: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockSafeUser: SafeDatabaseUser = {
@@ -35,7 +35,7 @@ const mockSafeUser: SafeDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
@@ -49,7 +49,7 @@ const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockUpdatedUser = {
@@ -1009,7 +1009,7 @@ describe('Test userController', () => {
     it('should successfully update ranking when ranking is non-zero', async () => {
       getUserByUsernameSpy.mockResolvedValueOnce({
         ...mockSafePopulatedUser,
-        rankings: new Map([['recipe123', 2]]),
+        rankings: { recipe123: 2 },
       });
 
       updateRecipeRankingSpy.mockResolvedValueOnce({
@@ -1081,7 +1081,7 @@ describe('Test userController', () => {
     it('should return 400 if updateRecipeRanking returns an error', async () => {
       getUserByUsernameSpy.mockResolvedValueOnce({
         ...mockSafePopulatedUser,
-        rankings: new Map(),
+        rankings: {},
       });
 
       updateRecipeRankingSpy.mockResolvedValueOnce({ error: 'Invalid ranking' });
