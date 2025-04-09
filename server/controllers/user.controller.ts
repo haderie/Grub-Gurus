@@ -299,11 +299,6 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
-  /**
-   * Determines if the request is valid for a certification status update
-   * @param req the request of the update
-   * @returns whether the request was valid or not
-   */
   const isCertificationInputValid = (req: UpdateCertification): boolean =>
     !!req.body.certified && !!req.body.username && req.body.username !== '';
 
@@ -341,11 +336,6 @@ const userController = (socket: FakeSOSocket) => {
     }
   };
 
-  /**
-   * Determines if the request given is valid for a high score update
-   * @param req the request to check the validity of
-   * @returns whether the reqest was valid
-   */
   const isHighScoreInputValid = (req: UpdateHighScore): boolean =>
     !!req.body.highScore && !!req.body.username && req.body.username !== '';
 

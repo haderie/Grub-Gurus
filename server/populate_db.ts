@@ -39,6 +39,16 @@ import {
   A6_TXT,
   A7_TXT,
   A8_TXT,
+  T1_NAME,
+  T1_DESC,
+  T2_NAME,
+  T2_DESC,
+  T3_NAME,
+  T3_DESC,
+  T4_NAME,
+  T4_DESC,
+  T5_NAME,
+  T5_DESC,
   T6_NAME,
   T6_DESC,
   T7_NAME,
@@ -85,12 +95,8 @@ import {
   C8_TEXT,
   C9_TEXT,
   C10_TEXT,
-  Q8_DESC,
-  Q8_TXT,
-  Q5A_TXT,
-  Q6A_TXT,
-  Q7A_TXT,
-  Q8A_TXT,
+  C11_TEXT,
+  C12_TEXT,
 } from './data/posts_strings';
 import CommentModel from './models/comments.model';
 import UserModel from './models/users.model';
@@ -164,12 +170,14 @@ async function answerCreate(
   ansBy: string,
   ansDateTime: Date,
   comments: Comment[],
+  isUserCertified: boolean,
 ): Promise<DatabaseAnswer> {
   if (
     text === '' ||
     ansBy === '' ||
     ansDateTime == null ||
-    comments == null
+    comments == null ||
+    isUserCertified == null
   )
     throw new Error('Invalid Answer Format');
   const answerDetail: Answer = {
@@ -390,18 +398,18 @@ const populate = async () => {
       'I am an elephant lover.',
     );
     await userCreate('Munch Master', 'munch123', new Date(), "I'm a helpful recipe bot :)");
-    await userCreate('josh', '1234', new Date(), "I'm a student at NU");
-    await userCreate('hareg', 'hareg123', new Date(), "I'm a student at Northeastern");
-    await userCreate('libby', 'libby123', new Date(), "I'm go to NU");
-    await userCreate('nandini', 'nandini123', new Date(), "I go to Northeastern");
 
+    const t1 = await tagCreate(T1_NAME, T1_DESC);
+    const t2 = await tagCreate(T2_NAME, T2_DESC);
+    const t3 = await tagCreate(T3_NAME, T3_DESC);
+    const t4 = await tagCreate(T4_NAME, T4_DESC);
+    const t5 = await tagCreate(T5_NAME, T5_DESC);
     const t6 = await tagCreate(T6_NAME, T6_DESC);
     const t7 = await tagCreate(T7_NAME, T7_DESC);
     const t8 = await tagCreate(T8_NAME, T8_DESC);
     const t9 = await tagCreate(T9_NAME, T9_DESC);
     const t10 = await tagCreate(T10_NAME, T10_DESC);
     const t11 = await tagCreate(T11_NAME, T11_DESC);
-    const t12 = await tagCreate(T12_NAME, T12_DESC);
     const DR_GLUTEN_FREE = await tagCreate(T13_NAME, T13_DESC);
     const DR_VEGETARIAN = await tagCreate(T14_NAME, T14_DESC);
     const DR_VEGAN = await tagCreate(T15_NAME, T15_DESC);
@@ -414,118 +422,67 @@ const populate = async () => {
     const SL_INTERMEDIATE = await tagCreate(T22_NAME, T22_DESC);
     const SL_ADVANCED = await tagCreate(T23_NAME, T23_DESC);
 
-    const r1 = await recipeCreate(
-      u1,
-      'Spaghetti Carbonara',
-      true,
-      ['Spaghetti', 'Eggs', 'Parmesan Cheese', 'Pancetta', 'Black Pepper', 'Salt'],
-      'A classic Italian pasta dish.',
-      '1. Cook pasta. 2. Mix eggs and cheese. 3. Fry pancetta. 4. Combine everything.',
-      null,
-      [MT_DINNER, SL_INTERMEDIATE],
-      20,
-      100,
-      [],
-      false,
-    );
+    // const r1 = await recipeCreate(
+    //   u1, // Replace with actual user object
+    //   'Spaghetti Carbonara',
+    //   true,
+    //   ['Spaghetti', 'Eggs', 'Parmesan Cheese', 'Pancetta', 'Black Pepper', 'Salt'],
+    //   'A classic Italian pasta dish.',
+    //   '1. Cook pasta. 2. Mix eggs and cheese. 3. Fry pancetta. 4. Combine everything.',
+    //   null,
+    //   [MT_DINNER, SL_INTERMEDIATE],
+    //   20,
+    //   100,
+    //   [],
+    //   false,
+    // );
 
-    const r2 = await recipeCreate(
-      u1,
-      'Avocado Toast',
-      true,
-      ['Bread', 'Avocado', 'Salt', 'Pepper', 'Lemon Juice', 'Chili Flakes'],
-      'A quick and healthy breakfast option.',
-      '1. Toast bread. 2. Mash avocado. 3. Spread on toast and season.',
-      null,
-      [MT_BREAKFAST, DR_VEGAN, SL_BEGINNER],
-      5,
-      200,
-      [],
-      false,
-    );
+    // const r2 = await recipeCreate(
+    //   u1,
+    //   'Avocado Toast',
+    //   true,
+    //   ['Bread', 'Avocado', 'Salt', 'Pepper', 'Lemon Juice', 'Chili Flakes'],
+    //   'A quick and healthy breakfast option.',
+    //   '1. Toast bread. 2. Mash avocado. 3. Spread on toast and season.',
+    //   null,
+    //   [MT_BREAKFAST, DR_VEGAN, SL_BEGINNER],
+    //   5,
+    //   200,
+    //   [],
+    //   false,
+    // );
 
-    const r3 = await recipeCreate(
-      u2,
-      'Chocolate Chip Cookies',
-      false,
-      ['Flour', 'Butter', 'Sugar', 'Eggs', 'Chocolate Chips', 'Vanilla Extract'],
-      'Classic chewy chocolate chip cookies.',
-      '1. Mix ingredients. 2. Shape dough. 3. Bake.',
-      null,
-      [MT_SNACKS, SL_BEGINNER],
-      30,
-      150,
-      [],
-      true,
-    );
+    // await recipeCreate(
+    //   u2,
+    //   'Chocolate Chip Cookies',
+    //   false,
+    //   ['Flour', 'Butter', 'Sugar', 'Eggs', 'Chocolate Chips', 'Vanilla Extract'],
+    //   'Classic chewy chocolate chip cookies.',
+    //   '1. Mix ingredients. 2. Shape dough. 3. Bake.',
+    //   null,
+    //   [MT_SNACKS, SL_BEGINNER],
+    //   30,
+    //   150,
+    //   [],
+    //   true,
+    // );
 
-    const r4 = await recipeCreate(
-      u3,
-      'Grilled Chicken Salad',
-      true,
-      ['Chicken Breast', 'Lettuce', 'Tomatoes', 'Cucumber', 'Olive Oil', 'Lemon Juice'],
-      'A fresh and protein-packed meal.',
-      '1. Grill chicken. 2. Chop veggies. 3. Toss with dressing.',
-      null,
-      [MT_LUNCH, DR_HALAL, SL_INTERMEDIATE],
-      15,
-      180,
-      [],
-      false,
-    );
+    // await recipeCreate(
+    //   u3,
+    //   'Grilled Chicken Salad',
+    //   true,
+    //   ['Chicken Breast', 'Lettuce', 'Tomatoes', 'Cucumber', 'Olive Oil', 'Lemon Juice'],
+    //   'A fresh and protein-packed meal.',
+    //   '1. Grill chicken. 2. Chop veggies. 3. Toss with dressing.',
+    //   null,
+    //   [MT_LUNCH, DR_HALAL, SL_INTERMEDIATE],
+    //   15,
+    //   180,
+    //   [],
+    //   false,
+    // );
 
-    const r5 = await recipeCreate(
-      u1,
-      'Caprese Salad',
-      true,
-      ['Tomato', 'Mozzarella Cheese', 'Basil', 'Salt', 'Pepper', 'Olive Oil', 'Balsamic Vinegar'],
-      'A refreshing summer salad.',
-      '1. Cut tomato, mozzarella, and basil. 2. Layer the tomatoes and mozzarella. 3. Add dressings and seasonings.',
-      null,
-      [DR_VEGETARIAN, DR_GLUTEN_FREE, SL_BEGINNER],
-      5,
-      20,
-      [],
-      false,
-    );
-
-    const r6 = await recipeCreate(
-      u1,
-      'Three Bean Chili',
-      true,
-      ['Diced tomatoes', 'Pinto Beans', 'Black Beans', 'Chili Beans', 'Green Onion', 'Chili Powder'],
-      'An easy dinner.',
-      '1. Combine canned ingredients. 2. Cut up and add green onion. 3. Add spices.',
-      null,
-      [MT_DINNER, DR_VEGAN, SL_BEGINNER],
-      5,
-      200,
-      [],
-      false,
-    );
-
-    const r7 = await recipeCreate(
-      u1,
-      'Smores',
-      true,
-      ['Graham Crackers', 'Chocolate', 'Marshmallow'],
-      'A fun treat for all ages!',
-      '1. Heat the marshmallow to the texture you like. 2. Place on graham cracker. 3. Add chocolate. 4. Sandwich with another graham cracker',
-      null,
-      [MT_SNACKS, SL_BEGINNER],
-      5,
-      200,
-      [],
-      false,
-    );
-
-    await postCreate(u1.username, r1, 'Check this out');
-    await postCreate(u2.username, r2, 'New recipe!');
-    await postCreate(u3.username, r3, 'Thought I would share');
-    await postCreate(u1.username, r4, 'Enjoy!');
-    await postCreate(u1.username, r5, '');
-    await postCreate(u1.username, r6, '');
-    await postCreate(u1.username, r7, '');
+    // await postCreate(u1.username, r1, 'check this out');
 
     const c1 = await commentCreate(C1_TEXT, 'sana', new Date('2023-12-12T03:30:00'));
     const c2 = await commentCreate(C2_TEXT, 'ihba001', new Date('2023-12-01T15:24:19'));
@@ -537,107 +494,95 @@ const populate = async () => {
     const c8 = await commentCreate(C8_TEXT, 'alia', new Date('2023-12-19T18:20:59'));
     const c9 = await commentCreate(C9_TEXT, 'ihba001', new Date('2022-02-20T03:00:00'));
     const c10 = await commentCreate(C10_TEXT, 'abhi3241', new Date('2023-02-10T11:24:30'));
+    const c11 = await commentCreate(C11_TEXT, 'Joji John', new Date('2023-03-18T01:02:15'));
+    const c12 = await commentCreate(C12_TEXT, 'abaya', new Date('2023-04-10T14:28:01'));
 
-    const a1 = await answerCreate(A1_TXT, 'hamkalo', new Date('2023-11-20T03:24:42'), [c1]);
-    const a2 = await answerCreate(A2_TXT, 'azad', new Date('2023-11-23T08:24:00'), [c2]);
-    const a3 = await answerCreate(A3_TXT, 'abaya', new Date('2023-11-18T09:24:00'), [c3]);
-    const a4 = await answerCreate(A4_TXT, 'alia', new Date('2023-11-12T03:30:00'), [c4]);
-    const a5 = await answerCreate(A5_TXT, 'sana', new Date('2023-11-01T15:24:19'), [c5]);
-    const a6 = await answerCreate(A6_TXT, 'abhi3241', new Date('2023-02-19T18:20:59'), [c6]);
+    const a1 = await answerCreate(A1_TXT, 'hamkalo', new Date('2023-11-20T03:24:42'), [c1], false);
+    const a2 = await answerCreate(A2_TXT, 'azad', new Date('2023-11-23T08:24:00'), [c2], false);
+    const a3 = await answerCreate(A3_TXT, 'abaya', new Date('2023-11-18T09:24:00'), [c3], false);
+    const a4 = await answerCreate(A4_TXT, 'alia', new Date('2023-11-12T03:30:00'), [c4], false);
+    const a5 = await answerCreate(A5_TXT, 'sana', new Date('2023-11-01T15:24:19'), [c5], false);
+    const a6 = await answerCreate(A6_TXT, 'abhi3241', new Date('2023-02-19T18:20:59'), [c6], false);
     const a7 = await answerCreate(
       A7_TXT,
       'mackson3332',
       new Date('2023-02-22T17:19:00'),
       [c7],
+      false,
     );
-    const a8 = await answerCreate(A8_TXT, 'ihba001', new Date('2023-03-22T21:17:53'), [c1, c2]);
-    const q5a = await answerCreate(Q5A_TXT, 'josh', new Date('2023-03-22T21:17:53'), [c8]);
-    const q6a = await answerCreate(Q6A_TXT, 'libby', new Date('2023-03-22T21:17:53'), [c5]);
-    const q7a = await answerCreate(Q7A_TXT, 'hareg', new Date('2023-03-22T21:17:53'), [c4]);
-    const q8a = await answerCreate(Q8A_TXT, 'nandini', new Date('2023-03-22T21:17:53'), [c6]);
+    const a8 = await answerCreate(A8_TXT, 'ihba001', new Date('2023-03-22T21:17:53'), [c8], false);
 
     await questionCreate(
       Q1_DESC,
       Q1_TXT,
-      [t6],
+      [t1, t2],
       [a1, a2],
       'Joji John',
       new Date('2022-01-20T03:00:00'),
       ['sana', 'abaya', 'alia'],
-      [c1],
+      [c9],
     );
     await questionCreate(
       Q2_DESC,
       Q2_TXT,
-      [t6],
+      [t3, t4, t2],
       [a3, a4, a5],
       'saltyPeter',
       new Date('2023-01-10T11:24:30'),
       ['mackson3332'],
-      [c2],
+      [c10],
     );
     await questionCreate(
       Q3_DESC,
       Q3_TXT,
-      [t6],
+      [t5, t6],
       [a6, a7],
       'monkeyABC',
       new Date('2023-02-18T01:02:15'),
       ['monkeyABC', 'elephantCDE'],
-      [],
+      [c11],
     );
     await questionCreate(
       Q4_DESC,
       Q4_TXT,
-      [t6],
+      [t3, t4, t5],
       [a8],
       'elephantCDE',
       new Date('2023-03-10T14:28:01'),
       [],
-      [],
+      [c12],
     );
 
     await questionCreate(
       Q5_DESC,
       Q5_TXT,
       [SL_BEGINNER],
-      [q5a],
+      [],
       'elephantCDE',
       new Date('2023-03-10T14:28:01'),
       [],
-      [],
+      [c12],
     );
 
     await questionCreate(
       Q6_DESC,
       Q6_TXT,
       [SL_BEGINNER],
-      [q6a],
+      [],
       'elephantCDE',
       new Date('2023-03-10T14:28:01'),
       [],
-      [],
+      [c12],
     );
     await questionCreate(
       Q7_DESC,
       Q7_TXT,
       [SL_BEGINNER],
-      [q7a],
+      [],
       'elephantCDE',
       new Date('2023-03-10T14:28:01'),
       [],
-      [],
-    );
-
-    await questionCreate(
-      Q8_DESC,
-      Q8_TXT,
-      [SL_BEGINNER],
-      [q8a],
-      'elephantCDE',
-      new Date('2023-03-10T14:28:01'),
-      [],
-      [],
+      [c12],
     );
 
     console.log('Database populated');
