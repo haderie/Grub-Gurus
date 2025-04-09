@@ -8,6 +8,7 @@ import {
   loginUser,
   saveUser,
   unfollowUserService,
+  updateRecipeRanking,
   updateUser,
 } from '../../services/user.service';
 import {
@@ -481,5 +482,50 @@ describe('unfollowUserService', () => {
 
     mockFindOneReturn.mockRestore();
     mockFindOneAndUpdateReturn.mockRestore();
+  });
+});
+
+describe('updateRecipeRanking', () => {
+  const mockUser = {
+    _id: new mongoose.Types.ObjectId(),
+    username: 'testuser',
+    rankings: {},
+  };
+
+  const postID = new mongoose.Types.ObjectId();
+  const ranking = 1;
+
+  it('should return an error if database update fails', async () => {
+    mockingoose(UserModel).toReturn(new Error('Error updating object'), 'findOneAndUpdate');
+
+    const result = await updateRecipeRanking(mockUser.username, postID, ranking);
+
+    expect('error' in result).toBe(true);
+    expect(result).toHaveProperty('error');
+  });
+
+  it('should return an error if user is not found', async () => {
+    mockingoose(UserModel).toReturn(null, 'findOneAndUpdate');
+
+    const result = await updateRecipeRanking(mockUser.username, postID, ranking);
+
+    expect(result).toEqual({ error: 'User not found' });
+  });
+
+  it('should update the ranking if user is found', async () => {
+    const updatedUser = {
+      ...mockUser,
+      rankings: { [postID.toString()]: ranking },
+    };
+
+    mockingoose(UserModel).toReturn(updatedUser, 'findOneAndUpdate');
+
+    const result = await updateRecipeRanking(mockUser.username, postID, ranking);
+
+    if ('username' in result) {
+      expect(result.rankings.get(postID.toString())).toBe(ranking);
+    } else {
+      throw new Error('Expected a user object but got an error.');
+    }
   });
 });
