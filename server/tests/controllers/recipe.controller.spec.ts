@@ -24,7 +24,7 @@ const mockUser: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockUserId = new mongoose.Types.ObjectId();
@@ -40,7 +40,7 @@ const mockSafePopulatedUser: SafePopulatedDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const recipePost: PopulatedDatabaseRecipe = {

@@ -68,7 +68,7 @@ const mockUserJSONResponse = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockPopulatedUserJSONResponse = {
@@ -82,7 +82,7 @@ const mockPopulatedUserJSONResponse = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockCertifiedPopulatedUserJSONResponse = {
@@ -96,7 +96,7 @@ const mockCertifiedPopulatedUserJSONResponse = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 const mockNewHighScorePopulatedUserJSONResponse = {
@@ -110,7 +110,7 @@ const mockNewHighScorePopulatedUserJSONResponse = {
   privacySetting: 'Public',
   recipeBookPublic: false,
   highScore: 100,
-  rankings: [],
+  rankings: {},
 };
 
 const saveUserSpy = jest.spyOn(util, 'saveUser');
