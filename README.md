@@ -3,28 +3,28 @@ The individual and team project for this class are designed to mirror the experi
 
 ## Getting Started
 
-- Environment Variables (.env): 
+- Environment Variables (.env):
   - Server
   - REACT_APP_SERVER_URL = http://localhost:8000
   - REACT_APP_API_KEY = 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
 - Client
+
   - MONGODB_URI = mongodb://127.0.0.1:27017
-  - CLIENT_URL =  http://localhost:3000
+  - CLIENT_URL = http://localhost:3000
   - PORT = 8000
 
 - Setup Commands:
-- Pull or fork from the Github repo located at: https://github.com/neu-cs4530/spring25-team-project-spring25-project-group-206.git 
+- Pull or fork from the Github repo located at: https://github.com/neu-cs4530/spring25-team-project-spring25-project-group-206.git
 
 - Once on your local computer:
 - Add .env files to both the _client_ and _server_ directories (information above).
 
-Run from terminal:	
+Run from terminal:
+
 - `npm install` in the root directory to install all dependencies for the `client`, `server`, and `shared` folders.
 - `npm run start`, in both the _client_ and _server_ directories
-  
-- Deployed website URL: 
-  - https://cs4530-s25-206.onrender.com 
-
+- Deployed website URL:
+  - https://cs4530-s25-206.onrender.com
 
 { : .note } Refer to [IP1](https://neu-se.github.io/CS4530-Spring-2025/assignments/ip1) and [IP2](https://neu-se.github.io/CS4530-Spring-2025/assignments/ip2) for further instructions related to setting up MongoDB, setting environment variables, and running the client and server.
 
@@ -82,7 +82,7 @@ A class diagram for the schema definition is shown below:
 ### `/user`
 
 | Endpoint                 | Method | Description                                         |
-| ------------------------ | ------ | ------------------------------                      
+| ------------------------ | ------ | --------------------------------------------------- |
 | /signup                  | POST   | Create a new user account                           |
 | /login                   | POST   | Log in as a user                                    |
 | /resetPassword           | PATCH  | Reset user password                                 |
@@ -125,12 +125,12 @@ A class diagram for the schema definition is shown below:
 
 ### `/recipe`
 
-| Endpoint                 | Method | Description                           |
-| -------------------------| ------ | --------------------------------------|
-| /getRecipes/:username    | GET    | Gets recipes given a user's username  |
-| /addRecipe               | POST   | Creates a new recipe                  |
-| /addCalendarRecipe       | POST   | Creates a new calendar recipe         |
-| /updateRecipeForCalendar | PATCH  | Updates a calendar recipe             |
+| Endpoint                 | Method | Description                          |
+| ------------------------ | ------ | ------------------------------------ |
+| /getRecipes/:username    | GET    | Gets recipes given a user's username |
+| /addRecipe               | POST   | Creates a new recipe                 |
+| /addCalendarRecipe       | POST   | Creates a new calendar recipe        |
+| /updateRecipeForCalendar | PATCH  | Updates a calendar recipe            |
 
 ## Running Stryker Mutation Testing
 
