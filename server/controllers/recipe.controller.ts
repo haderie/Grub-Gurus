@@ -154,7 +154,7 @@ const recipeController = (socket: FakeSOSocket) => {
     }
   };
 
-  router.get('/getrecipes/:username', getRecipes);
+  router.get('/getRecipes/:username', getRecipes);
   router.post('/addRecipe', addRecipe);
   router.post('/addCalendarRecipe', addCalendarRecipe);
   router.patch('/updateRecipeForCalendar', updateRecipeForCalendar);

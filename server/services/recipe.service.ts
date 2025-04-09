@@ -8,6 +8,7 @@ import {
   RecipeCalendarEvent,
   SafePopulatedDatabaseUser,
   DatabaseTag,
+  PopulatedDatabaseRecipesResponse,
 } from '../types/types';
 import TagModel from '../models/tags.model';
 import PostModel from '../models/posts.model';
@@ -20,7 +21,9 @@ import PostModel from '../models/posts.model';
  * @param {string} username - The username of the user to find.
  * @returns {Promise<PopulatedDatabaseRecipe>} - Resolves with the found recipe objects or an error message.
  */
-export const getRecipesByUsername = async (username: string) => {
+export const getRecipesByUsername = async (
+  username: string,
+): Promise<PopulatedDatabaseRecipesResponse> => {
   try {
     const user: SafePopulatedDatabaseUser | null = await UserModel.findOne({ username }).select(
       '-password',
@@ -50,6 +53,7 @@ export const getRecipesByUsername = async (username: string) => {
         },
       ])
       .lean();
+
     return recipes;
   } catch (error) {
     return { error: `Error occurred when finding recipes: ${error}` };
