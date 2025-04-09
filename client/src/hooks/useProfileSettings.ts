@@ -132,8 +132,6 @@ const useProfileSettings = () => {
       selectedList = [];
       break;
   }
-  console.log(userRankings);
-  console.log(userData);
   const sortedList: SortedItem[] =
     selectedOption === 'posts'
       ? selectedList
