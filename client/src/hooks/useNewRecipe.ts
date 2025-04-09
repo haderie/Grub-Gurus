@@ -176,7 +176,7 @@ const useNewRecipe = () => {
     const res = await addRecipe(recipe);
 
     if (res && res._id) {
-      navigate('/explore');
+      navigate(`/user/${user.username}`);
     }
   };
 

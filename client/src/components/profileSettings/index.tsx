@@ -8,6 +8,7 @@ import RecipeBook from '../main/recipeBook';
 import ProfileEdit from './profileEdit';
 import { getUserByUsername } from '../../services/userService';
 import useUserContext from '../../hooks/useUserContext';
+import CreateRecipeButton from '../main/createRecipeButton';
 
 const ProfileSettings: React.FC = () => {
   const {
@@ -269,7 +270,10 @@ const ProfileSettings: React.FC = () => {
                         {recipesLoading ? (
                           <p>Loading recipes...</p>
                         ) : (
-                          <RecipeBook recipes={recipeSaved} />
+                          <>
+                            <CreateRecipeButton />
+                            <RecipeBook recipes={recipeSaved} />
+                          </>
                         )}
                       </div>
                     </>

@@ -1,6 +1,7 @@
 import './index.css';
 import React from 'react';
 import { Box, Button, TextField, CircularProgress, Typography, Stack, Chip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import useNewPost from '../../../hooks/useNewPost';
 
 /**
@@ -31,6 +32,7 @@ const NewPost = () => {
     searchYouTube,
     loading,
   } = useNewPost();
+  const navigate = useNavigate();
 
   const predefinedTags = [
     'DR-Gluten-free',
@@ -307,6 +309,9 @@ const NewPost = () => {
           sx={{ backgroundColor: '#6A9C89', color: '#FFF5E4', borderRadius: '5px' }}
           onClick={createPost}>
           Create Post
+        </Button>
+        <Button variant='contained' color='error' onClick={() => navigate(`/explore`)}>
+          Cancel
         </Button>
         <Typography variant='caption' sx={{ color: 'red', fontWeight: 'bold', fontSize: '12px' }}>
           * Indicates mandatory fields
