@@ -89,6 +89,7 @@ const useProfileSettings = () => {
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
         setUserRankings(data.rankings);
+        setUsedRankings(new Set(Object.values(data.rankings || {})));
         setIsRecipePublic(data.recipeBookPublic);
       } catch (error) {
         setErrorMessage('Error fetching user profile');
@@ -147,6 +148,7 @@ const useProfileSettings = () => {
       : [];
 
   useEffect(() => {
+    console.log(sortedList.length);
     const totalItems = sortedList.length; // Get the number of items
     setAvailableRankings(Array.from({ length: totalItems }, (_, i) => i + 1)); // Generate rankings from 1 to totalItems
   }, [sortedList.length]); // Recalculate whenever sortedList changes
