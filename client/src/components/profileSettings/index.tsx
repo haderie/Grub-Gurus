@@ -50,7 +50,7 @@ const ProfileSettings: React.FC = () => {
     recipeSaved,
     availableRatings,
   } = useProfileSettings();
-  const { loading: recipesLoading, recipes } = useUserRecipes(userData?.username ?? '');
+  const { loading: recipesLoading } = useUserRecipes(userData?.username ?? '');
   const navigate = useNavigate();
   const { user: currentUser } = useUserContext();
 

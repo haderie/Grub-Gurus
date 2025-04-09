@@ -8,7 +8,6 @@ import {
   RecipeCalendarEvent,
   SafePopulatedDatabaseUser,
   DatabaseTag,
-  PopulatedDatabaseRecipe,
 } from '../types/types';
 import TagModel from '../models/tags.model';
 import PostModel from '../models/posts.model';

@@ -80,7 +80,7 @@ const useProfileSettings = () => {
     new Set(Object.values(currentUser.rankings || {})),
   );
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
-  const { loading: recipesLoading, recipes } = useUserRecipes(userData?.username ?? '');
+  const { recipes } = useUserRecipes(userData?.username ?? '');
 
   useEffect(() => {
     if (!username) return;
@@ -122,7 +122,6 @@ const useProfileSettings = () => {
       );
 
       recipeSaved = [...saved, ...additional];
-      break;
       break;
     }
     case 'posts': {
