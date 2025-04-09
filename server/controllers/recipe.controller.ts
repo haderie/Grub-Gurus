@@ -10,7 +10,6 @@ import {
   AddRecipeRequest,
   FakeSOSocket,
   Recipe,
-  RecipeForPost,
   UpdateCalendarRecipeRequest,
 } from '../types/types';
 import { populateDocument } from '../utils/database.util';

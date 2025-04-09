@@ -18,6 +18,7 @@ import {
   SafePopulatedDatabaseUser,
 } from '../types/types';
 import useUserContext from './useUserContext';
+import useUserRecipes from './useUserRecipes';
 
 type SortedItem = {
   item: PopulatedDatabasePost;
@@ -79,6 +80,7 @@ const useProfileSettings = () => {
     new Set(Object.values(currentUser.rankings || {})),
   );
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
+  const { loading: recipesLoading, recipes } = useUserRecipes(userData?.username ?? '');
 
   useEffect(() => {
     if (!username) return;
@@ -111,10 +113,19 @@ const useProfileSettings = () => {
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
 
   switch (selectedOption) {
-    case 'recipes':
-      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
+    case 'recipes': {
+      const saved = userData?.postsCreated?.map(post => post.recipe) || [];
+      const savedIds = new Set(saved.map(r => r._id.toString()));
+
+      const additional = recipes.filter(
+        r => !savedIds.has(r._id.toString()) && r.addedToCalendar === false,
+      );
+
+      recipeSaved = [...saved, ...additional];
       break;
-    case 'posts':
+      break;
+    }
+    case 'posts': {
       selectedList =
         userData?.postsCreated?.map(p => ({
           title: p?.recipe?.title,
@@ -122,6 +133,7 @@ const useProfileSettings = () => {
           user: p.username,
         })) || [];
       break;
+    }
     default:
       selectedList = [];
       break;

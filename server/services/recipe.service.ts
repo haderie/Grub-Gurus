@@ -7,7 +7,11 @@ import {
   RecipeResponse,
   RecipeCalendarEvent,
   SafePopulatedDatabaseUser,
+  DatabaseTag,
+  PopulatedDatabaseRecipe,
 } from '../types/types';
+import TagModel from '../models/tags.model';
+import PostModel from '../models/posts.model';
 
 // /**
 
@@ -22,12 +26,31 @@ export const getRecipesByUsername = async (username: string) => {
     const user: SafePopulatedDatabaseUser | null = await UserModel.findOne({ username }).select(
       '-password',
     );
-
     if (!user) {
       throw new Error('User not found');
     }
 
-    const recipes = await RecipeModel.find({ user: user._id }).lean();
+    const recipes = await RecipeModel.find({ user: user._id })
+      .populate<{
+        tags: DatabaseTag[];
+        user: SafePopulatedDatabaseUser;
+      }>([
+        { path: 'tags', model: TagModel },
+        {
+          path: 'user',
+          model: UserModel,
+          populate: {
+            path: 'postsCreated',
+            model: PostModel,
+            populate: {
+              path: 'recipe',
+              model: RecipeModel,
+              populate: { path: 'tags', model: TagModel },
+            },
+          },
+        },
+      ])
+      .lean();
     return recipes;
   } catch (error) {
     return { error: `Error occurred when finding recipes: ${error}` };
