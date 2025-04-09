@@ -90,6 +90,7 @@ const useProfileSettings = () => {
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
         setUserRankings(data.rankings);
+        setIsRecipePublic(data.recipeBookPublic);
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -99,13 +100,7 @@ const useProfileSettings = () => {
     };
 
     fetchUserData();
-  }, [username, currentUser.username, currentUser.recipeBookPublic]);
-
-  useEffect(() => {
-    if (userData?.recipeBookPublic !== undefined) {
-      setIsRecipePublic(userData.recipeBookPublic);
-    }
-  }, [userData?.recipeBookPublic]);
+  }, [username, currentUser.username]);
 
   let selectedList: { title: string; post: PopulatedDatabasePost; user: string }[] = [];
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
@@ -309,44 +304,6 @@ const useProfileSettings = () => {
   };
 
   /**
-   * Function to check the privacy settings of a user and whether the current user is allowed
-   * to view their lists based on those settings. It checks the following conditions:
-   * - If the target user has a public profile, the lists are shown.
-   * - If the target user has a private profile, the current user must be following the target user to view the lists.
-   * - If the target user is the same as the current user, the lists are shown.
-   */
-  const handleCheckPrivacy = async () => {
-    if (!username) return;
-    try {
-      const targetUser = await getUserByUsername(username);
-      const targetUserFollowers = targetUser.followers;
-
-      if (targetUser.username === currentUser.username) {
-        setShowLists(true);
-      }
-
-      if (targetUser.privacySetting === 'Public') {
-        setShowLists(true);
-      }
-      if (
-        targetUser.privacySetting === 'Private' &&
-        targetUserFollowers?.find(name => name === currentUser.username)
-      ) {
-        setShowLists(true);
-      }
-      if (
-        targetUser.privacySetting === 'Private' &&
-        !targetUserFollowers?.find(name => name === currentUser.username)
-      ) {
-        setShowLists(false);
-      }
-    } catch (error) {
-      setErrorMessage('Failed to check if this user follows the target user.');
-      setSuccessMessage(null);
-    }
-  };
-
-  /**
    * Function to update the follow status of a user. It toggles the follow/unfollow state
    * and updates the UI accordingly.
    * - If the user successfully follows or unfollows the target user, the follow status is updated.
@@ -442,7 +399,6 @@ const useProfileSettings = () => {
     handleUpdateBiography,
     handleDeleteUser,
     handleUpdateFollowers,
-    handleCheckPrivacy,
     isFollowing,
     handleUpdatePrivacy,
     isRecipePublic,

@@ -39,7 +39,6 @@ const ProfileEdit = ({
   handleUpdateBiography,
   handleDeleteUser,
   handleUpdatePrivacy,
-  handleCheckPrivacy,
 }: {
   userData: SafePopulatedDatabaseUser | null;
   newBio: string;
@@ -66,7 +65,6 @@ const ProfileEdit = ({
   handleUpdateBiography: () => void;
   handleDeleteUser: () => void;
   handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
-  handleCheckPrivacy: () => void;
 }) => {
   // eslint-disable-next-line
   const handleCloseProfileEdit = () => {
@@ -131,7 +129,7 @@ const ProfileEdit = ({
                   const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
                   setPrivacySetting(newSetting);
                   await handleUpdatePrivacy(newSetting);
-                  await handleCheckPrivacy();
+                  // await handleCheckPrivacy();
                 }}>
                 {userData.privacySetting === 'Public' ? (
                   <LockOpenIcon fontSize='small' />
