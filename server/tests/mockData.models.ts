@@ -10,24 +10,24 @@ import {
   SafeDatabaseUser,
   User,
 } from '../types/types';
-import { T10_DESC, T12_DESC, T13_DESC } from '../data/posts_strings';
+import { T1_DESC, T2_DESC, T3_DESC } from '../data/posts_strings';
 
 export const tag1: DatabaseTag = {
   _id: new ObjectId('507f191e810c19729de860ea'),
   name: 'react',
-  description: T10_DESC,
+  description: T1_DESC,
 };
 
 export const tag2: DatabaseTag = {
   _id: new ObjectId('65e9a5c2b26199dbcc3e6dc8'),
   name: 'javascript',
-  description: T12_DESC,
+  description: T2_DESC,
 };
 
 export const tag3: DatabaseTag = {
   _id: new ObjectId('65e9b4b1766fca9451cba653'),
   name: 'android',
-  description: T13_DESC,
+  description: T3_DESC,
 };
 
 export const com1: DatabaseComment = {
