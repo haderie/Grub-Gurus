@@ -12,6 +12,8 @@ import { getFollowingPostList, getPostList, likePost, savePost } from '../servic
 import { createRecipe } from '../services/recipe.service';
 import { processTags } from '../services/tag.service';
 import PostModel from '../models/posts.model';
+import RecipeModel from '../models/recipe.models';
+import TagModel from '../models/tags.model';
 
 const postController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -31,7 +33,7 @@ const postController = (socket: FakeSOSocket) => {
         ...post.recipe,
         tags: await processTags(post.recipe.tags),
       };
-      const savedRecipe = (await createRecipe(recipeWithTags)) as DatabaseRecipe;
+      const savedRecipe = await createRecipe(recipeWithTags);
 
       if ('error' in savedRecipe) {
         throw new Error('Cannot save recipe');
@@ -51,7 +53,15 @@ const postController = (socket: FakeSOSocket) => {
         throw new Error(savedPost.error);
       }
 
-      const populatedPost = await PostModel.findById(savedPost._id).populate('recipe');
+      const populatedPost = await PostModel.findById(savedPost._id).populate<{
+        recipe: DatabaseRecipe;
+      }>([
+        {
+          path: 'recipe',
+          model: RecipeModel,
+          populate: { path: 'tags', model: TagModel },
+        },
+      ]);
 
       if (!populatedPost) {
         throw new Error('Post not found after saving');
