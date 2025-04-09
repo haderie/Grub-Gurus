@@ -1,11 +1,12 @@
-import useNewRecipe from '../../../hooks/useNewRecipe';
-import Form from '../baseComponents/form';
-import Input from '../baseComponents/input';
-import TextArea from '../baseComponents/textarea';
 import './index.css';
+import React from 'react';
+import { Box, Button, TextField, CircularProgress, Typography, Stack, Chip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import useNewRecipe from '../../../hooks/useNewRecipe';
+import useUserContext from '../../../hooks/useUserContext';
 
 /**
- * NewRecipe component allows users to submit a new recipe.
+ * NewRecipe component allows users to create a new recipe.
  */
 const NewRecipe = () => {
   const {
@@ -33,6 +34,8 @@ const NewRecipe = () => {
     loading,
     setVideoResults,
   } = useNewRecipe();
+  const navigate = useNavigate();
+  const { user } = useUserContext();
 
   const predefinedTags = [
     'DR-Gluten-free',
@@ -49,128 +52,278 @@ const NewRecipe = () => {
   ];
 
   return (
-    <Form>
-      <Input
-        title={'Recipe Title'}
-        hint={'Limit title to 100 characters or less'}
-        id={'formTitleInput'}
-        val={title}
-        setState={setTitle}
-        err={titleErr}
-      />
-      <TextArea
-        title={'Recipe description'}
-        hint={'Add basic description of recipe'}
-        id={'formTextInput'}
-        val={description}
-        setState={setDescription}
-        err={textErr}
+    <Box
+      sx={{
+        maxWidth: 600,
+        mx: 'auto',
+        mt: 4,
+        p: 3,
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 3,
+      }}>
+      <Typography variant='h5' fontWeight='bold' gutterBottom>
+        Create a New Recipe
+      </Typography>
+
+      {/* Recipe Title */}
+      <TextField
+        label='Recipe Title*'
+        fullWidth
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89', // Custom border color
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89', // Custom label color on focus
+          },
+        }}
+        margin='normal'
+        helperText={
+          title.length > 100
+            ? 'Title cannot exceed 100 characters.'
+            : 'Limit title to 100 characters or less.'
+        }
+        value={title}
+        onChange={e => setTitle(e.target.value.length <= 100 ? e.target.value : title)}
+        error={title.length > 100 || !!titleErr}
       />
 
-      <Input
-        title={'Attach Video (Optional)'}
-        hint={'Search for a YouTube video'}
-        id={'videoSearchInput'}
-        val={searchTerm}
-        setState={setSearchTerm}
-        mandatory={false}
+      {/* Recipe Description */}
+      <TextField
+        label='Recipe Description*'
+        fullWidth
+        multiline
+        rows={2}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89',
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89',
+          },
+        }}
+        margin='normal'
+        helperText='Provide a short description for your recipe.'
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+        error={!!textErr}
       />
-      <button type='button' onClick={searchYouTube} disabled={loading}>
-        {loading ? 'SEARCHING...' : 'Search'}
-      </button>
 
+      {/* Video Search */}
+      <Stack direction='row' spacing={2} alignItems='center' mt={2}>
+        <TextField
+          label='Attach Video (Optional)'
+          fullWidth
+          helperText='Search for a YouTube video.'
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': {
+                borderColor: '#6A9C89',
+              },
+            },
+            '& .MuiInputLabel-root.Mui-focused': {
+              color: '#6A9C89',
+            },
+          }}
+        />
+        <Button
+          variant='contained'
+          sx={{
+            'backgroundColor': '#FFA725',
+            'color': '#FFF5E4',
+            '&:disabled': {
+              backgroundColor: '#E6A100',
+            },
+          }}
+          onClick={searchYouTube}
+          disabled={loading}>
+          {loading ? <CircularProgress size={20} /> : 'Search'}
+        </Button>
+      </Stack>
+
+      {/* Video Search Results */}
       {videoResults.length > 0 && (
-        <div className='video-results'>
+        <Stack spacing={2} mt={2}>
           {videoResults.map(video => (
-            <div key={video.id.videoId} className='video-item'>
-              <img src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />
-              <p>{video.snippet.title}</p>
-              <button
-                onClick={() => {
-                  setSearchTerm(`https://www.youtube.com/watch?v=${video.id.videoId}`); // Set the video URL
-                  setVideoUrl(`https://www.youtube.com/watch?v=${video.id.videoId}`);
-                  setVideoResults([]); // Clear the video results after selection
-                }}>
-                Select Video
-              </button>
-            </div>
+            <Box
+              key={video.id.videoId}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                bgcolor: '#f5f5f5',
+                p: 2,
+                borderRadius: 2,
+              }}>
+              <img
+                src={video.snippet.thumbnails.default.url}
+                alt={video.snippet.title}
+                style={{ width: 80, height: 50, marginRight: 12 }}
+              />
+              <Box>
+                <Typography variant='body2'>{video.snippet.title}</Typography>
+                <Button
+                  variant='contained'
+                  size='small'
+                  sx={{ mt: 1, backgroundColor: '#FFA725', color: '#FFF5E4' }}
+                  onClick={() => {
+                    setSearchTerm(`https://www.youtube.com/watch?v=${video.id.videoId}`);
+                    setVideoUrl(`https://www.youtube.com/watch?v=${video.id.videoId}`);
+                    setVideoResults([]);
+                  }}>
+                  Select Video
+                </Button>
+              </Box>
+            </Box>
           ))}
-        </div>
+        </Stack>
       )}
 
-      <TextArea
-        title={'Recipe Ingredients'}
-        hint={'Add keywords separated by whitespace and comma, e.g. hi , bye'}
-        id={'formTextInput'}
-        val={ingredientNames}
-        setState={setIngredientNames}
-        err={textErr}
+      {/* Recipe Ingredients */}
+      <TextField
+        label='Recipe Ingredients'
+        fullWidth
+        margin='normal'
+        helperText='Add ingredients separated by commas.'
+        value={ingredientNames}
+        onChange={e => setIngredientNames(e.target.value)}
+        error={!!textErr}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89', // Custom border color
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89', // Custom label color on focus
+          },
+        }}
       />
 
-      <TextArea
-        title={'Recipe Instructions'}
-        hint={'Add instructions for the recipe'}
-        id={'formTextInput'}
-        val={instructions}
-        setState={setInstructions}
-        err={textErr}
+      {/* Recipe Instructions */}
+      <TextField
+        label='Recipe Instructions'
+        fullWidth
+        multiline
+        rows={4}
+        margin='normal'
+        helperText='Provide detailed instructions.'
+        value={instructions}
+        onChange={e => setInstructions(e.target.value)}
+        error={!!textErr}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89', // Custom border color
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89', // Custom label color on focus
+          },
+        }}
       />
-      <div className='input_title'>{'Cook time*'}</div>
-      {<div className='input_hint'>{'Add cook time number'}</div>}
-      <input
+
+      {/* Cook Time */}
+      <TextField
+        label='Cook Time (in minutes)*'
+        fullWidth
         type='number'
-        title='Recipe CookTime'
-        id={'formTextInput'}
-        className='input_input'
+        margin='normal'
         value={cookTime === 0 ? '' : cookTime}
         onChange={e => setCookTime(e.target.value ? Number(e.target.value) : 0)}
+        error={!!textErr}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89',
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89',
+          },
+        }}
       />
-      {textErr && <div className='input_error'>{textErr}</div>}
 
-      <div className='tag-container'>
-        <Input
-          title={'Tags'}
-          hint={'Add keywords separated by whitespace'}
-          id={'formTagInput'}
-          val={tagNames}
-          setState={setTagNames}
-          err={tagErr}
-        />
+      {/* Tags */}
+      <TextField
+        label='Tags*'
+        fullWidth
+        margin='normal'
+        helperText='Add tags separated by commas.'
+        value={tagNames}
+        onChange={e => setTagNames(e.target.value)}
+        error={!!tagErr}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#6A9C89',
+            },
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#6A9C89',
+          },
+        }}
+      />
 
-        {/* Show predefined tags as suggestions */}
-        {predefinedTags.length > 0 && (
-          <ul className='tag-suggestions'>
-            {predefinedTags.map(tag => (
-              <div key={tag} className='tag-item'>
-                <label>
-                  <input
-                    type='checkbox'
-                    checked={tagNames.includes(tag)}
-                    onChange={() => {
-                      setTagNames(prev =>
-                        prev.includes(tag) ? prev.replace(` ${tag}`, '') : `${prev} ${tag}`,
-                      );
-                    }}
-                  />
-                  {tag}
-                </label>
-              </div>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      <div className='btn_indicator_container'>
-        <button
-          className='form_postBtn'
-          onClick={() => {
-            postRecipe();
-          }}>
-          Post Recipe
-        </button>
-        <div className='mandatory_indicator'>* indicates mandatory fields</div>
-      </div>
-    </Form>
+      {/* Predefined Tags as Chips */}
+      <Box mt={2}>
+        <Typography variant='body2' sx={{ fontStyle: 'italic', marginBottom: 1 }}>
+          Suggested Tags:
+        </Typography>
+        <Stack
+          direction='row'
+          spacing={0.5} // Adjust spacing for better fit
+          flexWrap='wrap'
+          justifyContent='start' // Align tags nicely
+          sx={{ gap: '4px', marginRight: '2px' }}>
+          {predefinedTags.map(tag => (
+            <Chip
+              key={tag}
+              label={tag}
+              variant={tagNames.includes(tag) ? 'filled' : 'outlined'}
+              onClick={() =>
+                setTagNames(prev =>
+                  prev.includes(tag) ? prev.replace(` ${tag}`, '') : `${prev} ${tag}`,
+                )
+              }
+              sx={{
+                'backgroundColor': tagNames.includes(tag) ? '#FFF5E4' : 'transparent',
+                'color': '#FFA725',
+                'borderColor': '#FFA725',
+                '&:hover': {
+                  backgroundColor: '#FFE5C2',
+                },
+              }}
+            />
+          ))}
+        </Stack>
+      </Box>
+      {/* Recipe Button */}
+      <Stack direction='row' alignItems='center' justifyContent='space-between' mt={3}>
+        <Button
+          variant='contained'
+          color='primary'
+          sx={{ backgroundColor: '#6A9C89', color: '#FFF5E4', borderRadius: '5px' }}
+          onClick={postRecipe}>
+          Create Recipe
+        </Button>
+        <Button
+          variant='contained'
+          color='error'
+          onClick={() => navigate(`/user/${user.username}`)}>
+          Cancel
+        </Button>
+        <Typography variant='caption' sx={{ color: 'red', fontWeight: 'bold', fontSize: '12px' }}>
+          * Indicates mandatory fields
+        </Typography>
+      </Stack>
+    </Box>
   );
 };
 

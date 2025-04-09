@@ -12,6 +12,8 @@ import {
   Recipe,
   UpdateCalendarRecipeRequest,
 } from '../types/types';
+import { populateDocument } from '../utils/database.util';
+import { processTags } from '../services/tag.service';
 
 const recipeController = (socket: FakeSOSocket) => {
   const router = express.Router();
@@ -70,14 +72,26 @@ const recipeController = (socket: FakeSOSocket) => {
       return;
     }
 
+    const recipe: Recipe = req.body; // Destructure the post fields from the request body
     try {
-      const result = await createRecipe(req.body);
+      const recipeWithTags = {
+        ...recipe,
+        tags: await processTags(recipe.tags),
+      };
+
+      const result = await createRecipe(recipeWithTags);
 
       if ('error' in result) {
         throw new Error(result.error);
       }
 
-      res.status(200).json(result);
+      const populatedRecipe = await populateDocument(result._id.toString(), 'recipe');
+
+      if ('error' in result) {
+        throw new Error('Error adding recipe');
+      }
+
+      res.status(200).json(populatedRecipe);
     } catch (error) {
       res.status(500).send(`Error when saving recipe: ${error}`);
     }
@@ -104,7 +118,7 @@ const recipeController = (socket: FakeSOSocket) => {
 
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).send(`Error when saving recipe: ${error}`);
+      res.status(500).send(`Error when adding recipe to calendar: ${error}`);
     }
   };
 

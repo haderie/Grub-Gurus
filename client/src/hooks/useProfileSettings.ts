@@ -18,6 +18,7 @@ import {
   SafePopulatedDatabaseUser,
 } from '../types/types';
 import useUserContext from './useUserContext';
+import useUserRecipes from './useUserRecipes';
 
 type SortedItem = {
   item: PopulatedDatabasePost;
@@ -79,6 +80,7 @@ const useProfileSettings = () => {
     new Set(Object.values(currentUser.rankings || {})),
   );
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
+  const { recipes } = useUserRecipes(userData?.username ?? '');
 
   useEffect(() => {
     if (!username) return;
@@ -111,10 +113,18 @@ const useProfileSettings = () => {
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
 
   switch (selectedOption) {
-    case 'recipes':
-      recipeSaved = userData?.postsCreated?.map(post => post.recipe) || [];
+    case 'recipes': {
+      const saved = userData?.postsCreated?.map(post => post.recipe) || [];
+      const savedIds = new Set(saved.map(r => r._id.toString()));
+
+      const additional = recipes.filter(
+        r => !savedIds.has(r._id.toString()) && r.addedToCalendar === false,
+      );
+
+      recipeSaved = [...saved, ...additional];
       break;
-    case 'posts':
+    }
+    case 'posts': {
       selectedList =
         userData?.postsCreated?.map(p => ({
           title: p?.recipe?.title,
@@ -122,6 +132,7 @@ const useProfileSettings = () => {
           user: p.username,
         })) || [];
       break;
+    }
     default:
       selectedList = [];
       break;
@@ -175,17 +186,13 @@ const useProfileSettings = () => {
     const rating = userRankings[id.toString()];
     if (rating !== undefined) {
       // Remove the rating from the used rankings set
-      setUsedRankings(prevUsed => {
-        const updatedUsed = new Set(prevUsed);
-        updatedUsed.delete(rating); // Remove the rating from the used set
-        return updatedUsed;
-      });
       if (!username) return;
 
       await updateRanking(username, id, 0);
       const updatedUser = await getUserByUsername(username);
 
       setUserRankings(updatedUser.rankings);
+      setUsedRankings(new Set(Object.values(currentUser.rankings || {})));
 
       await new Promise(resolve => {
         setUserData(updatedUser);

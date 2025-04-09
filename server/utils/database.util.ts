@@ -1,14 +1,14 @@
 import {
   DatabaseComment,
   DatabaseMessage,
-  DatabaseRecipe,
   DatabaseTag,
   DatabaseUser,
   MessageInChat,
   PopulatedDatabaseAnswer,
   PopulatedDatabaseChat,
-  PopulatedDatabasePost,
   PopulatedDatabaseQuestion,
+  PopulatedDatabaseRecipe,
+  SafePopulatedDatabaseUser,
 } from '../types/types';
 import AnswerModel from '../models/answers.model';
 import QuestionModel from '../models/questions.model';
@@ -47,13 +47,31 @@ const populateQuestion = async (questionID: string): Promise<PopulatedDatabaseQu
 /**
  * Fetches and populates a post document with its related recipe.
  *
- * @param {string} postID - The ID of the post to fetch.
- * @returns {Promise<PopulatedDatabasePost | null>} - The populated post document, or null if not found.
+ * @param {string} recipeID - The ID of the post to fetch.
+ * @returns {Promise<PopulatedDatabaseRecipe | null>} - The populated post document, or null if not found.
  */
-const populatePost = async (postID: string): Promise<PopulatedDatabasePost | null> => {
-  const result = await PostModel.findOne({ _id: postID }).populate<{
-    recipe: DatabaseRecipe;
-  }>({ path: 'recipe', model: RecipeModel });
+const populateRecipe = async (recipeID: string): Promise<PopulatedDatabaseRecipe | null> => {
+  const result = await RecipeModel.findOne({ _id: recipeID })
+    .populate<{
+      tags: DatabaseTag[];
+      user: SafePopulatedDatabaseUser;
+    }>([
+      { path: 'tags', model: TagModel },
+      {
+        path: 'user',
+        model: UserModel,
+        populate: {
+          path: 'postsCreated',
+          model: PostModel,
+          populate: {
+            path: 'recipe',
+            model: RecipeModel,
+            populate: { path: 'tags', model: TagModel },
+          },
+        },
+      },
+    ])
+    .lean<PopulatedDatabaseRecipe>();
 
   return result;
 };
@@ -135,12 +153,12 @@ const populateChat = async (chatID: string): Promise<PopulatedDatabaseChat | nul
 // eslint-disable-next-line import/prefer-default-export
 export const populateDocument = async (
   id: string,
-  type: 'question' | 'answer' | 'chat' | 'post',
+  type: 'question' | 'answer' | 'chat' | 'post' | 'recipe',
 ): Promise<
   | PopulatedDatabaseAnswer
   | PopulatedDatabaseChat
   | PopulatedDatabaseQuestion
-  | PopulatedDatabasePost
+  | PopulatedDatabaseRecipe
   | { error: string }
 > => {
   try {
@@ -160,8 +178,8 @@ export const populateDocument = async (
       case 'chat':
         result = await populateChat(id);
         break;
-      case 'post':
-        result = await populatePost(id);
+      case 'recipe':
+        result = await populateRecipe(id);
         break;
       default:
         throw new Error('Invalid type provided.');

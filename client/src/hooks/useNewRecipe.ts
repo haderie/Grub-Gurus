@@ -183,7 +183,7 @@ const useNewRecipe = () => {
     }
 
     if (res && res._id) {
-      navigate('/explore');
+      navigate(`/user/${user.username}`);
     }
   };
 
