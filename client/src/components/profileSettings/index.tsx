@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import {
   FaRegUserCircle,
@@ -31,7 +31,6 @@ const ProfileSettings: React.FC = () => {
     successMessage,
     errorMessage,
     showConfirmation,
-    showLists,
     pendingAction,
     canEditProfile,
     selectedOption,
@@ -369,7 +368,6 @@ const ProfileSettings: React.FC = () => {
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
             setPrivacySetting={setPrivacySetting}
-            showLists={showLists}
             handleUpdatePrivacy={handleUpdatePrivacy}
             toggleRecipeBookVisibility={toggleRecipeBookVisibility}
           />

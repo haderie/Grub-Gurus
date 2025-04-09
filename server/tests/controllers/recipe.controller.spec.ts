@@ -20,19 +20,19 @@ const mockUser: User = {
 
 const mockUserId = new mongoose.Types.ObjectId();
 
-const recipePost: DatabaseRecipe = {
-  _id: new mongoose.Types.ObjectId(),
-  user: mockUserId,
-  tags: [],
-  title: 'Pesto Pasta',
-  privacyPublic: true,
-  ingredients: ['pasta, pesto, parmesean, olive oil'],
-  description: 'a delicious dish',
-  instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
-  cookTime: 20,
-  addedToCalendar: false,
-  video: '',
-};
+// const recipePost: DatabaseRecipe = {
+//   _id: new mongoose.Types.ObjectId(),
+//   user: mockUserId,
+//   tags: [],
+//   title: 'Pesto Pasta',
+//   privacyPublic: true,
+//   ingredients: ['pasta, pesto, parmesean, olive oil'],
+//   description: 'a delicious dish',
+//   instructions: 'cook pasta, add pesto, stir, add cheese, enjoy',
+//   cookTime: 20,
+//   addedToCalendar: false,
+//   video: '',
+// };
 
 const calendarRecipeDataBase: DatabaseRecipe = {
   _id: new mongoose.Types.ObjectId(),

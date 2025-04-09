@@ -54,7 +54,6 @@ const useProfileSettings = () => {
   const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>(
     currentUser.privacySetting,
   );
-  const [showLists, setShowLists] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -374,7 +373,6 @@ const useProfileSettings = () => {
     newPassword,
     confirmNewPassword,
     privacySetting,
-    showLists,
     setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,

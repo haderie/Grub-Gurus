@@ -44,7 +44,6 @@ const ProfileEdit = ({
   newBio: string;
   newPassword: string;
   confirmNewPassword: string;
-  showLists: boolean;
   successMessage: string | null;
   errorMessage: string | null;
   showConfirmation: boolean;
