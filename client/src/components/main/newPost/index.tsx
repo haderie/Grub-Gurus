@@ -187,7 +187,7 @@ const NewPost = () => {
         label='Recipe Ingredients'
         fullWidth
         margin='normal'
-        helperText='Add ingredients separated by commas.'
+        helperText='Add ingredients separated by commas and a whitespace. e.g "eggs , bread"'
         value={ingredientNames}
         onChange={e => setIngredientNames(e.target.value)}
         error={!!textErr}
@@ -229,11 +229,22 @@ const NewPost = () => {
       {/* Cook Time */}
       <TextField
         label='Cook Time (in minutes)*'
+        helperText='Please enter a positive number. Any non-numeric or negative values will reset the cook time to 0.'
         fullWidth
         type='number'
         margin='normal'
         value={cookTime === 0 ? '' : cookTime}
-        onChange={e => setCookTime(e.target.value ? Number(e.target.value) : 0)}
+        onChange={e => {
+          const newValue = e.target.value;
+          const parsedValue = Number(newValue);
+
+          // Check if it's a valid number and ensure it's non-negative
+          if (!Number.isNaN(parsedValue) && parsedValue >= 0) {
+            setCookTime(parsedValue);
+          } else {
+            setCookTime(0); // Default to 0 if not a valid number or negative
+          }
+        }}
         error={!!textErr}
         sx={{
           '& .MuiOutlinedInput-root': {
@@ -252,7 +263,7 @@ const NewPost = () => {
         label='Tags*'
         fullWidth
         margin='normal'
-        helperText='Add tags separated by commas.'
+        helperText='Add tags separated by commas and a whitespace. e.g "eggs , bread"'
         value={tagNames}
         onChange={e => setTagNames(e.target.value)}
         error={!!tagErr}

@@ -197,7 +197,7 @@ export const user: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 export const userFollowed: User = {
@@ -211,7 +211,7 @@ export const userFollowed: User = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 export const safeUser: SafeDatabaseUser = {
@@ -225,7 +225,7 @@ export const safeUser: SafeDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 export const safeUserFollowed: SafeDatabaseUser = {
@@ -239,7 +239,7 @@ export const safeUserFollowed: SafeDatabaseUser = {
   recipeBookPublic: false,
   postsCreated: [],
   highScore: 0,
-  rankings: [],
+  rankings: {},
 };
 
 export const sampleRecipe: DatabaseRecipe = {
