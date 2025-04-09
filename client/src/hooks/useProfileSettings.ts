@@ -76,9 +76,7 @@ const useProfileSettings = () => {
 
   const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(
-    new Set(Object.values(currentUser.rankings || {})),
-  );
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set(Object.values({})));
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
   const { recipes } = useUserRecipes(userData?.username ?? '');
 
@@ -107,7 +105,7 @@ const useProfileSettings = () => {
     if (userData?.recipeBookPublic !== undefined) {
       setIsRecipePublic(userData.recipeBookPublic);
     }
-  }, [userData]);
+  }, [userData?.recipeBookPublic]);
 
   let selectedList: { title: string; post: PopulatedDatabasePost; user: string }[] = [];
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
@@ -192,20 +190,11 @@ const useProfileSettings = () => {
       const updatedUser = await getUserByUsername(username);
 
       setUserRankings(updatedUser.rankings);
-      setUsedRankings(new Set(Object.values(currentUser.rankings || {})));
+      setUsedRankings(new Set(Object.values(updatedUser.rankings || {})));
 
       await new Promise(resolve => {
         setUserData(updatedUser);
         resolve(null);
-      });
-
-      // Return the rating to the available rankings list
-      setAvailableRankings(prevRankings => {
-        // Only add the rating if it is not already in the available list
-        if (!prevRankings.includes(rating)) {
-          return [...prevRankings, rating];
-        }
-        return prevRankings;
       });
     }
   };
@@ -222,14 +211,22 @@ const useProfileSettings = () => {
   const toggleRecipeBookVisibility = async () => {
     if (!username) return;
 
-    const updatedUser = await updateRecipeBookPrivacy(username, !isRecipePublic);
+    try {
+      const updatedUser = await updateRecipeBookPrivacy(username, !isRecipePublic);
 
-    // Ensure state updates occur sequentially after the API call completes
-    await new Promise(resolve => {
-      setUserData(updatedUser); // Update the user data
-      resolve(null); // Resolve the promise
-    });
-    setIsRecipePublic(prevState => !prevState);
+      // Ensure state updates occur sequentially after the API call completes
+      await new Promise(resolve => {
+        setUserData(updatedUser); // Update the user data
+        resolve(null); // Resolve the promise
+      });
+      setIsRecipePublic(prevState => !prevState);
+
+      setSuccessMessage('Recipe Book privacy updated!');
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage('Failed to update Recipe Book setting.');
+      setSuccessMessage(null);
+    }
   };
 
   /**

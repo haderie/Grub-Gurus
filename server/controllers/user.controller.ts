@@ -546,7 +546,7 @@ const userController = (socket: FakeSOSocket) => {
 
       if (ranking === 0) {
         for (const [id, rank] of updatedRankings.entries()) {
-          if (rank >= oldRanking + 1) {
+          if (rank > oldRanking) {
             updatedRankings.set(id, rank - 1);
           }
         }

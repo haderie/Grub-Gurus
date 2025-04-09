@@ -143,9 +143,11 @@ const ProfileEdit = ({
             <Typography>
               <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}{' '}
               <IconButton onClick={toggleRecipeBookVisibility}>
-                {userData.recipeBookPublic
-                  ? 'Make Recipe Book Private'
-                  : 'Make Recipe Book Public'}{' '}
+                {userData.recipeBookPublic ? (
+                  <LockOpenIcon fontSize='small' />
+                ) : (
+                  <LockIcon fontSize='small' />
+                )}{' '}
               </IconButton>
             </Typography>
 
