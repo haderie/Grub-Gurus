@@ -39,13 +39,11 @@ const ProfileEdit = ({
   handleUpdateBiography,
   handleDeleteUser,
   handleUpdatePrivacy,
-  handleCheckPrivacy,
 }: {
   userData: SafePopulatedDatabaseUser | null;
   newBio: string;
   newPassword: string;
   confirmNewPassword: string;
-  showLists: boolean;
   successMessage: string | null;
   errorMessage: string | null;
   showConfirmation: boolean;
@@ -66,7 +64,6 @@ const ProfileEdit = ({
   handleUpdateBiography: () => void;
   handleDeleteUser: () => void;
   handleUpdatePrivacy: (newSetting: 'Public' | 'Private') => void;
-  handleCheckPrivacy: () => void;
 }) => {
   // eslint-disable-next-line
   const handleCloseProfileEdit = () => {
@@ -131,7 +128,7 @@ const ProfileEdit = ({
                   const newSetting = userData.privacySetting === 'Public' ? 'Private' : 'Public';
                   setPrivacySetting(newSetting);
                   await handleUpdatePrivacy(newSetting);
-                  await handleCheckPrivacy();
+                  // await handleCheckPrivacy();
                 }}>
                 {userData.privacySetting === 'Public' ? (
                   <LockOpenIcon fontSize='small' />
@@ -143,9 +140,11 @@ const ProfileEdit = ({
             <Typography>
               <strong>Recipe Book Privacy:</strong> {userData.recipeBookPublic}{' '}
               <IconButton onClick={toggleRecipeBookVisibility}>
-                {userData.recipeBookPublic
-                  ? 'Make Recipe Book Private'
-                  : 'Make Recipe Book Public'}{' '}
+                {userData.recipeBookPublic ? (
+                  <LockOpenIcon fontSize='small' />
+                ) : (
+                  <LockIcon fontSize='small' />
+                )}{' '}
               </IconButton>
             </Typography>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import {
   FaRegUserCircle,
@@ -31,7 +31,6 @@ const ProfileSettings: React.FC = () => {
     successMessage,
     errorMessage,
     showConfirmation,
-    showLists,
     pendingAction,
     canEditProfile,
     selectedOption,
@@ -50,7 +49,6 @@ const ProfileSettings: React.FC = () => {
     handleUpdateFollowers,
     isFollowing,
     handleUpdatePrivacy,
-    handleCheckPrivacy,
     isRecipePublic,
     toggleRecipeBookVisibility,
     handleRatingChange,
@@ -91,14 +89,14 @@ const ProfileSettings: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const checkPrivacy = async () => {
-      if (userData) {
-        await handleCheckPrivacy();
-      }
-    };
-    checkPrivacy();
-  }, [userData, handleCheckPrivacy]);
+  // useEffect(() => {
+  //   const checkPrivacy = async () => {
+  //     if (userData) {
+  //       await handleCheckPrivacy();
+  //     }
+  //   };
+  //   checkPrivacy();
+  // }, [userData, handleCheckPrivacy]);
 
   const handleEditProfileClick = () => {
     setEditBioMode(true);
@@ -156,7 +154,11 @@ const ProfileSettings: React.FC = () => {
                       <span
                         role='button'
                         onClick={() => {
-                          if (userData.privacySetting === 'Public' || currentUserFollows) {
+                          if (
+                            userData.privacySetting === 'Public' ||
+                            currentUserFollows ||
+                            canEditProfile
+                          ) {
                             setListType('followers');
                             setShowListPopup(true);
                           }
@@ -166,7 +168,11 @@ const ProfileSettings: React.FC = () => {
                       <span
                         role='button'
                         onClick={() => {
-                          if (userData.privacySetting === 'Public' || currentUserFollows) {
+                          if (
+                            userData.privacySetting === 'Public' ||
+                            currentUserFollows ||
+                            canEditProfile
+                          ) {
                             setListType('following');
                             setShowListPopup(true);
                           }
@@ -362,9 +368,7 @@ const ProfileSettings: React.FC = () => {
             handleUpdateBiography={handleUpdateBiography}
             handleDeleteUser={handleDeleteUser}
             setPrivacySetting={setPrivacySetting}
-            showLists={showLists}
             handleUpdatePrivacy={handleUpdatePrivacy}
-            handleCheckPrivacy={handleCheckPrivacy}
             toggleRecipeBookVisibility={toggleRecipeBookVisibility}
           />
         )}

@@ -54,7 +54,6 @@ const useProfileSettings = () => {
   const [privacySetting, setPrivacySetting] = useState<'Public' | 'Private'>(
     currentUser.privacySetting,
   );
-  const [showLists, setShowLists] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -76,9 +75,7 @@ const useProfileSettings = () => {
 
   const [userRankings, setUserRankings] = useState<{ [key: string]: number }>({});
   const [availableRankings, setAvailableRankings] = useState<number[]>([]);
-  const [usedRankings, setUsedRankings] = useState<Set<number>>(
-    new Set(Object.values(currentUser.rankings || {})),
-  );
+  const [usedRankings, setUsedRankings] = useState<Set<number>>(new Set(Object.values({})));
   const availableRatings = availableRankings.filter(rating => !usedRankings.has(rating));
   const { recipes } = useUserRecipes(userData?.username ?? '');
 
@@ -92,6 +89,7 @@ const useProfileSettings = () => {
         setUserData(data);
         setIsFollowing(data.followers.includes(currentUser.username));
         setUserRankings(data.rankings);
+        setIsRecipePublic(data.recipeBookPublic);
       } catch (error) {
         setErrorMessage('Error fetching user profile');
         setUserData(null);
@@ -101,13 +99,7 @@ const useProfileSettings = () => {
     };
 
     fetchUserData();
-  }, [username, currentUser.username, currentUser.recipeBookPublic]);
-
-  useEffect(() => {
-    if (userData?.recipeBookPublic !== undefined) {
-      setIsRecipePublic(userData.recipeBookPublic);
-    }
-  }, [userData]);
+  }, [username, currentUser.username]);
 
   let selectedList: { title: string; post: PopulatedDatabasePost; user: string }[] = [];
   let recipeSaved: PopulatedDatabaseRecipe[] = [];
@@ -192,20 +184,11 @@ const useProfileSettings = () => {
       const updatedUser = await getUserByUsername(username);
 
       setUserRankings(updatedUser.rankings);
-      setUsedRankings(new Set(Object.values(currentUser.rankings || {})));
+      setUsedRankings(new Set(Object.values(updatedUser.rankings || {})));
 
       await new Promise(resolve => {
         setUserData(updatedUser);
         resolve(null);
-      });
-
-      // Return the rating to the available rankings list
-      setAvailableRankings(prevRankings => {
-        // Only add the rating if it is not already in the available list
-        if (!prevRankings.includes(rating)) {
-          return [...prevRankings, rating];
-        }
-        return prevRankings;
       });
     }
   };
@@ -222,14 +205,22 @@ const useProfileSettings = () => {
   const toggleRecipeBookVisibility = async () => {
     if (!username) return;
 
-    const updatedUser = await updateRecipeBookPrivacy(username, !isRecipePublic);
+    try {
+      const updatedUser = await updateRecipeBookPrivacy(username, !isRecipePublic);
 
-    // Ensure state updates occur sequentially after the API call completes
-    await new Promise(resolve => {
-      setUserData(updatedUser); // Update the user data
-      resolve(null); // Resolve the promise
-    });
-    setIsRecipePublic(prevState => !prevState);
+      // Ensure state updates occur sequentially after the API call completes
+      await new Promise(resolve => {
+        setUserData(updatedUser); // Update the user data
+        resolve(null); // Resolve the promise
+      });
+      setIsRecipePublic(prevState => !prevState);
+
+      setSuccessMessage('Recipe Book privacy updated!');
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage('Failed to update Recipe Book setting.');
+      setSuccessMessage(null);
+    }
   };
 
   /**
@@ -312,44 +303,6 @@ const useProfileSettings = () => {
   };
 
   /**
-   * Function to check the privacy settings of a user and whether the current user is allowed
-   * to view their lists based on those settings. It checks the following conditions:
-   * - If the target user has a public profile, the lists are shown.
-   * - If the target user has a private profile, the current user must be following the target user to view the lists.
-   * - If the target user is the same as the current user, the lists are shown.
-   */
-  const handleCheckPrivacy = async () => {
-    if (!username) return;
-    try {
-      const targetUser = await getUserByUsername(username);
-      const targetUserFollowers = targetUser.followers;
-
-      if (targetUser.username === currentUser.username) {
-        setShowLists(true);
-      }
-
-      if (targetUser.privacySetting === 'Public') {
-        setShowLists(true);
-      }
-      if (
-        targetUser.privacySetting === 'Private' &&
-        targetUserFollowers?.find(name => name === currentUser.username)
-      ) {
-        setShowLists(true);
-      }
-      if (
-        targetUser.privacySetting === 'Private' &&
-        !targetUserFollowers?.find(name => name === currentUser.username)
-      ) {
-        setShowLists(false);
-      }
-    } catch (error) {
-      setErrorMessage('Failed to check if this user follows the target user.');
-      setSuccessMessage(null);
-    }
-  };
-
-  /**
    * Function to update the follow status of a user. It toggles the follow/unfollow state
    * and updates the UI accordingly.
    * - If the user successfully follows or unfollows the target user, the follow status is updated.
@@ -420,7 +373,6 @@ const useProfileSettings = () => {
     newPassword,
     confirmNewPassword,
     privacySetting,
-    showLists,
     setPrivacySetting,
     setNewPassword,
     setConfirmNewPassword,
@@ -445,7 +397,6 @@ const useProfileSettings = () => {
     handleUpdateBiography,
     handleDeleteUser,
     handleUpdateFollowers,
-    handleCheckPrivacy,
     isFollowing,
     handleUpdatePrivacy,
     isRecipePublic,
