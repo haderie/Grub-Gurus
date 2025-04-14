@@ -10,7 +10,7 @@ const MODEL_NAME = 'google/gemma-2-2b-it';
  * @returns - The AI-generated response.
  */
 const getAIResponse = async (message: string, apiKey: string): Promise<string> => {
-  const url = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
+  const url = `https://router.huggingface.co/hf-inference/models/${MODEL_NAME}`;
 
   const headers = {
     Authorization: `Bearer ${apiKey}`,
