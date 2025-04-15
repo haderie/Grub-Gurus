@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Constants for utilizing the Hugging Face AI model
-const MODEL_NAME = 'google/gemma-2-2b-it';
+const MODEL_NAME = 'mistralai/Mistral-7B-Instruct-v0.3';
 
 /**
  * Calls the Hugging Face API to get a response for the given message.
@@ -10,7 +10,7 @@ const MODEL_NAME = 'google/gemma-2-2b-it';
  * @returns - The AI-generated response.
  */
 const getAIResponse = async (message: string, apiKey: string): Promise<string> => {
-  const url = `https://router.huggingface.co/hf-inference/models/${MODEL_NAME}`;
+  const url = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
 
   const headers = {
     Authorization: `Bearer ${apiKey}`,
