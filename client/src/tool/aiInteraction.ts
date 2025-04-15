@@ -31,9 +31,9 @@ without asking follow-up questions if asked for a recipe or cooking advice in re
 
     const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-		return generatedText
+    return generatedText;
   } catch (err) {
-    	return 'The Munch Master could not understand your message :(';
+    return 'The Munch Master could not understand your message :(';
   }
 };
 
