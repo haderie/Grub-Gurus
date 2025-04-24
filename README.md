@@ -2,7 +2,7 @@
 Our project, Grub Gurus, is a food-focused recipe-sharing platform that combines StackOverflow-style Q&A features with social media elements. It aims to create a centralized space where users can save recipes, ask and answer cooking-related questions, and plan meals. A scrollable feed allows users to engage with posts in a social format, including the ability to embed YouTube videos to showcase full recipes or specific cooking techniques, making the platform both informative and interactive.
 
 ### Deployed website URL:
-  - https://cs4530-s25-206.onrender.com
+  - https://grub-gurus.onrender.com/
 
 ## Getting Started
 
@@ -152,3 +152,33 @@ npm run stryker
 ```sh
 node --max-old-space-size=4096 ./node_modules/.bin/stryker run
 ```
+## Contributors
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/haderie">
+        <img src="https://github.com/haderie.png" width="50" />
+      </a><br/>
+      <sub><strong>Hareg Aderie</strong></sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/NGoyal18">
+        <img src="https://github.com/NGoyal18.png" width="50" />
+      </a><br/>
+      <sub><strong>Nandini Goyal</strong></sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/ibbymcc">
+        <img src="https://github.com/ibbymcc.png" width="50" />
+      </a><br/>
+      <sub><strong>Elizabeth McCaffrey</strong></sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/mcdonald-josh">
+        <img src="https://github.com/mcdonald-josh.png" width="50" />
+      </a><br/>
+      <sub><strong>Josh McDonald</strong></sub>
+    </td>
+  </tr>
+</table>
+
