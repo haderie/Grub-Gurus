@@ -168,8 +168,8 @@ node --max-old-space-size=4096 ./node_modules/.bin/stryker run
       <sub><strong>Nandini Goyal</strong></sub>
     </td>
     <td align="center">
-      <a href="https://github.com/ibbymcc">
-        <img src="https://github.com/ibbymcc.png" width="50" />
+      <a href="https://github.com/libbymcc">
+        <img src="https://github.com/libbymcc.png" width="50" />
       </a><br/>
       <sub><strong>Elizabeth McCaffrey</strong></sub>
     </td>
